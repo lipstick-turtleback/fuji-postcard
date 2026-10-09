@@ -50,10 +50,27 @@
     transform:translate(-50%,-50%);
     background:radial-gradient(closest-side, rgba(255,249,235,.9), rgba(255,249,235,.3) 46%, rgba(255,249,235,0) 74%);
   }
+  /* seigaiha — 青海波, the overlapping wave scale.
+     The tile is 64×64 and the fan centres sit on a centred rectangular
+     lattice: (0,0) (64,0) (0,64) (64,64) and (32,32). Rows fall every
+     32px and each row is offset by half a column, so every arc cut by one
+     edge of the tile is finished by its twin on the opposite edge. The
+     repeat is then invisible at any zoom — no seam, no step, no half-fan.
+     Kept far below the ink so it reads as texture, not decoration. */
+  .bg-seigaiha{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='%233a3226' stroke-opacity='.075' stroke-width='1'%3E%3Ccircle cx='0' cy='0' r='30'/%3E%3Ccircle cx='0' cy='0' r='22.5'/%3E%3Ccircle cx='0' cy='0' r='15'/%3E%3Ccircle cx='0' cy='0' r='7.5'/%3E%3Ccircle cx='64' cy='0' r='30'/%3E%3Ccircle cx='64' cy='0' r='22.5'/%3E%3Ccircle cx='64' cy='0' r='15'/%3E%3Ccircle cx='64' cy='0' r='7.5'/%3E%3Ccircle cx='0' cy='64' r='30'/%3E%3Ccircle cx='0' cy='64' r='22.5'/%3E%3Ccircle cx='0' cy='64' r='15'/%3E%3Ccircle cx='0' cy='64' r='7.5'/%3E%3Ccircle cx='64' cy='64' r='30'/%3E%3Ccircle cx='64' cy='64' r='22.5'/%3E%3Ccircle cx='64' cy='64' r='15'/%3E%3Ccircle cx='64' cy='64' r='7.5'/%3E%3Ccircle cx='32' cy='32' r='30'/%3E%3Ccircle cx='32' cy='32' r='22.5'/%3E%3Ccircle cx='32' cy='32' r='15'/%3E%3Ccircle cx='32' cy='32' r='7.5'/%3E%3C/g%3E%3C/svg%3E");
+    background-size:64px 64px;
+    background-repeat:repeat;
+    -webkit-mask-image:radial-gradient(115% 88% at 50% 44%, #000 0%, rgba(0,0,0,.55) 52%, transparent 86%);
+            mask-image:radial-gradient(115% 88% at 50% 44%, #000 0%, rgba(0,0,0,.55) 52%, transparent 86%);
+  }
+  /* paper fibre. the turbulence region is pinned to exactly the tile box
+     (filterUnits=userSpaceOnUse) and stitched, so the noise wraps across
+     all four edges instead of being cropped out of a larger field. */
   .bg-grain{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
-    background-size:190px 190px;
-    opacity:.15;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='180' height='180'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch' seed='11'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size:180px 180px;
+    opacity:.13;
     mix-blend-mode:multiply;
   }
   .bg-vig{background:radial-gradient(132% 102% at 50% 38%, transparent 50%, rgba(78,66,48,.17) 100%);}
@@ -302,9 +319,18 @@
             mask-image:radial-gradient(circle at var(--sx) var(--sy),
       #000 0 11%, rgba(0,0,0,.55) 27%, transparent 51%);
   }
+  /* two glitter beds, each generated from a turbulence field pinned to its
+     own tile box and stitched, so the sparkle never lines up with a seam */
+  .foil-sparkle{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='200' height='200'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch' seed='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size:200px 200px;
+  }
+  .foil-sparkle2{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='150' height='150'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='2' stitchTiles='stitch' seed='29'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size:150px 150px;
+  }
   .foil-sparkle,
   .foil-sparkle2{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
     background-repeat:repeat;
     filter:contrast(700%) brightness(230%);
     mix-blend-mode:color-dodge;
@@ -314,23 +340,23 @@
             mask-image:radial-gradient(circle at var(--sx) var(--sy),
       #000 0 6%, rgba(0,0,0,.45) 19%, transparent 37%);
   }
-  .foil-sparkle{background-size:170px 170px;}
-  .foil-sparkle2{background-size:112px 112px;}
   .foil-sheen{
     background:linear-gradient(var(--sheen),
       transparent calc(var(--band) - 30%),
       rgba(255,255,255,.17) var(--band),
       transparent calc(var(--band) + 30%));
+    filter:blur(9px);
     mix-blend-mode:screen;
-    opacity:calc(.10 + var(--spec) * .26);
+    opacity:calc(.06 + var(--spec) * .16);
   }
   .foil-glint{
     background:linear-gradient(var(--sheen),
       transparent calc(var(--band) - 2.6%),
       rgba(255,255,255,.42) var(--band),
       transparent calc(var(--band) + 2.6%));
+    filter:blur(5px);
     mix-blend-mode:overlay;
-    opacity:calc(var(--spec) * var(--spec) * .55);
+    opacity:calc(var(--spec) * var(--spec) * .30);
   }
   .foil-spot{
     background:radial-gradient(circle at var(--sx) var(--sy),
@@ -416,6 +442,7 @@
 
 <div class="bg" aria-hidden="true">
   <span class="bg-wall"></span>
+  <span class="bg-seigaiha"></span>
   <span class="bg-pool"></span>
   <span class="bg-grain"></span>
   <span class="bg-vig"></span>
@@ -440,42 +467,97 @@
     <div class="face front">
       <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
         <defs>
+          <!-- sky: zenith indigo down to a low gold. the last two stops are
+               deliberately close so the light gathers at the horizon. -->
           <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0"    stop-color="#22305c"/>
-            <stop offset="0.28" stop-color="#4a5a86"/>
-            <stop offset="0.52" stop-color="#8f7a86"/>
-            <stop offset="0.72" stop-color="#d08a63"/>
-            <stop offset="0.88" stop-color="#f0b478"/>
-            <stop offset="1"    stop-color="#f8d9a4"/>
+            <stop offset="0"    stop-color="#1b2547"/>
+            <stop offset="0.20" stop-color="#33456e"/>
+            <stop offset="0.40" stop-color="#68688a"/>
+            <stop offset="0.56" stop-color="#a67e79"/>
+            <stop offset="0.70" stop-color="#d6905f"/>
+            <stop offset="0.84" stop-color="#f0b678"/>
+            <stop offset="0.94" stop-color="#f9dcab"/>
+            <stop offset="1"    stop-color="#fbe7c6"/>
+          </linearGradient>
+
+          <!-- aerial perspective: the air itself thickens toward the water -->
+          <linearGradient id="air" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#ffd9a8" stop-opacity="0"/>
+            <stop offset=".62" stop-color="#ffd2a0" stop-opacity=".10"/>
+            <stop offset="1"   stop-color="#f6d3ac" stop-opacity=".30"/>
           </linearGradient>
 
           <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0"    stop-color="#ffe9b8" stop-opacity=".95"/>
-            <stop offset="0.45" stop-color="#ffcf8f" stop-opacity=".45"/>
-            <stop offset="1"    stop-color="#ffbf7d" stop-opacity="0"/>
+            <stop offset="0"    stop-color="#fff3d2" stop-opacity=".92"/>
+            <stop offset="0.22" stop-color="#ffdda4" stop-opacity=".52"/>
+            <stop offset="0.52" stop-color="#ffc98d" stop-opacity=".22"/>
+            <stop offset="1"    stop-color="#ffb87c" stop-opacity="0"/>
+          </radialGradient>
+
+          <!-- clouds at dawn: lit from underneath, so the warmth sits on
+               the lower edge and the shade on the upper -->
+          <linearGradient id="cloudWarm" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#a9b0c4" stop-opacity=".42"/>
+            <stop offset=".55" stop-color="#e7c6ae" stop-opacity=".70"/>
+            <stop offset="1"   stop-color="#ffe3c2" stop-opacity=".92"/>
+          </linearGradient>
+          <linearGradient id="cloudCool" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#9aa4bc" stop-opacity=".38"/>
+            <stop offset="1"   stop-color="#f0d3b6" stop-opacity=".78"/>
+          </linearGradient>
+
+          <radialGradient id="sunDisc" cx="0.42" cy="0.38" r="0.72">
+            <stop offset="0"   stop-color="#fff8e4"/>
+            <stop offset=".62" stop-color="#ffe6b4"/>
+            <stop offset="1"   stop-color="#ffcf92"/>
           </radialGradient>
 
           <linearGradient id="fujiBody" x1="0.15" y1="0" x2="0.9" y2="1">
-            <stop offset="0"    stop-color="#5b5f8f"/>
-            <stop offset="0.45" stop-color="#3f4670"/>
-            <stop offset="1"    stop-color="#2a2f4f"/>
+            <stop offset="0"    stop-color="#666c9b"/>
+            <stop offset="0.42" stop-color="#474e7c"/>
+            <stop offset="0.76" stop-color="#343b62"/>
+            <stop offset="1"    stop-color="#2b3154"/>
           </linearGradient>
 
-          <linearGradient id="snow" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#fdfbf6"/>
-            <stop offset="1" stop-color="#d9e2ef"/>
+          <!-- the terminator: one soft sweep instead of a hard vertical seam -->
+          <linearGradient id="terminator" gradientUnits="userSpaceOnUse" x1="300" y1="180" x2="486" y2="420">
+            <stop offset="0"    stop-color="#141a30" stop-opacity=".62"/>
+            <stop offset="0.46" stop-color="#161c34" stop-opacity=".46"/>
+            <stop offset="0.78" stop-color="#1b2140" stop-opacity=".14"/>
+            <stop offset="1"    stop-color="#1b2140" stop-opacity="0"/>
+          </linearGradient>
+
+          <linearGradient id="snow" x1="0.1" y1="0" x2="0.72" y2="1">
+            <stop offset="0"    stop-color="#ffffff"/>
+            <stop offset="0.46" stop-color="#f4f7fb"/>
+            <stop offset="1"    stop-color="#dbe4f0"/>
+          </linearGradient>
+
+          <linearGradient id="snowShade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#aab8cf" stop-opacity="0"/>
+            <stop offset="1" stop-color="#8fa0bd" stop-opacity=".55"/>
           </linearGradient>
 
           <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0"    stop-color="#e9c79b"/>
-            <stop offset="0.18" stop-color="#c3b3a8"/>
-            <stop offset="0.55" stop-color="#7f8fae"/>
-            <stop offset="1"    stop-color="#54628a"/>
+            <stop offset="0"    stop-color="#e6c8a4"/>
+            <stop offset="0.10" stop-color="#c2b4ac"/>
+            <stop offset="0.34" stop-color="#8593b2"/>
+            <stop offset="0.68" stop-color="#606d95"/>
+            <stop offset="1"    stop-color="#4b5680"/>
+          </linearGradient>
+
+          <linearGradient id="glitter" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"    stop-color="#ffe3b8" stop-opacity="0"/>
+            <stop offset="0.30" stop-color="#ffe9c6" stop-opacity=".22"/>
+            <stop offset="0.50" stop-color="#fff3d8" stop-opacity=".40"/>
+            <stop offset="0.70" stop-color="#ffe9c6" stop-opacity=".22"/>
+            <stop offset="1"    stop-color="#ffe3b8" stop-opacity="0"/>
           </linearGradient>
 
           <linearGradient id="shore" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#252b45"/>
-            <stop offset="1" stop-color="#141828"/>
+            <stop offset="0"    stop-color="#2b3252"/>
+            <stop offset="0.45" stop-color="#1d2338"/>
+            <stop offset="1"    stop-color="#12162a"/>
           </linearGradient>
 
           <linearGradient id="paperEdge" x1="0" y1="0" x2="1" y2="1">
@@ -483,15 +565,62 @@
             <stop offset="1" stop-color="#efe7d6"/>
           </linearGradient>
 
-          <filter id="grain" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7" result="n"/>
+          <filter id="grain" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="1.05" numOctaves="3" seed="7" result="n"/>
             <feColorMatrix in="n" type="saturate" values="0"/>
-            <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
+            <feComponentTransfer><feFuncA type="linear" slope="0.42" intercept="-0.04"/></feComponentTransfer>
           </filter>
 
-          <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+          <!-- age: a slow field thresholded into sparse, soft-edged patina -->
+          <filter id="fox" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="0.011 0.014" numOctaves="4" seed="23" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 0.46
+                      0 0 0 0 0.33
+                      0 0 0 0 0.20
+                      0 0 0 -3.4 1.42"/>
+            <feGaussianBlur stdDeviation="1.1"/>
+          </filter>
+          <!-- finer, denser field for the handling wear of a carried card */
+          <filter id="speckle" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="0.42" numOctaves="2" seed="41" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 0.38
+                      0 0 0 0 0.28
+                      0 0 0 0 0.17
+                      0 0 0 -5.2 2.05"/>
+          </filter>
+
+          <!-- filter regions are pinned in user space: a blur that runs out
+               of room leaves a hard rectangular edge, and nothing here
+               should ever have a rectangular edge -->
+          <filter id="soft" filterUnits="userSpaceOnUse" x="-40" y="-40" width="980" height="680">
             <feGaussianBlur stdDeviation="7"/>
           </filter>
+          <filter id="mist" filterUnits="userSpaceOnUse" x="-60" y="180" width="1020" height="300">
+            <feGaussianBlur stdDeviation="9"/>
+          </filter>
+          <filter id="cloudSoft" filterUnits="userSpaceOnUse" x="-60" y="-60" width="1020" height="520">
+            <feGaussianBlur stdDeviation="4.2"/>
+          </filter>
+          <filter id="bloom" filterUnits="userSpaceOnUse" x="440" y="26" width="360" height="360">
+            <feGaussianBlur stdDeviation="14"/>
+          </filter>
+          <filter id="rim" filterUnits="userSpaceOnUse" x="300" y="40" width="600" height="480">
+            <feGaussianBlur stdDeviation="3.6"/>
+          </filter>
+          <filter id="edgeWear" filterUnits="userSpaceOnUse" x="300" y="170" width="320" height="140">
+            <feGaussianBlur stdDeviation="2.4"/>
+          </filter>
+          <filter id="tiny" filterUnits="userSpaceOnUse" x="-20" y="-20" width="940" height="640">
+            <feGaussianBlur stdDeviation="1.4"/>
+          </filter>
+
+          <linearGradient id="rimLight" gradientUnits="userSpaceOnUse" x1="470" y1="150" x2="740" y2="400">
+            <stop offset="0"   stop-color="#ffe2b0" stop-opacity=".80"/>
+            <stop offset=".42" stop-color="#ffc48c" stop-opacity=".40"/>
+            <stop offset="1"   stop-color="#ffab74" stop-opacity="0"/>
+          </linearGradient>
 
           <!-- the mountain, reused for fill + reflection + clipping -->
           <path id="fujiPath" d="M150 404
@@ -510,11 +639,21 @@
           </linearGradient>
 
           <linearGradient id="reflFade" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0"   stop-color="#ffffff" stop-opacity=".62"/>
-            <stop offset="0.6" stop-color="#ffffff" stop-opacity=".22"/>
-            <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset="0"    stop-color="#ffffff" stop-opacity=".50"/>
+            <stop offset="0.34" stop-color="#ffffff" stop-opacity=".26"/>
+            <stop offset="0.68" stop-color="#ffffff" stop-opacity=".10"/>
+            <stop offset="1"    stop-color="#ffffff" stop-opacity="0"/>
           </linearGradient>
           <mask id="reflMask"><rect x="0" y="404" width="900" height="146" fill="url(#reflFade)"/></mask>
+
+          <!-- the rays are cut off by nothing but distance from the lamp -->
+          <radialGradient id="rayFall" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0"   stop-color="#ffffff" stop-opacity=".9"/>
+            <stop offset=".30" stop-color="#ffffff" stop-opacity=".55"/>
+            <stop offset=".68" stop-color="#ffffff" stop-opacity=".16"/>
+            <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
+          </radialGradient>
+          <mask id="rayMask"><circle cx="620" cy="206" r="330" fill="url(#rayFall)"/></mask>
 
           <!-- hot-stamped metal for the wordmark -->
           <linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="90" y1="548" x2="90" y2="592">
@@ -555,87 +694,139 @@
           <!-- sky -->
           <rect x="0" y="0" width="900" height="410" fill="url(#sky)"/>
 
-          <!-- sun + rays -->
-          <g class="rays" opacity=".16" stroke="#ffe3b8" stroke-width="4.5" stroke-linecap="round">
-            <line x1="620" y1="206" x2="830" y2="206"/>
-            <line x1="620" y1="206" x2="814" y2="126"/>
-            <line x1="620" y1="206" x2="768" y2="58"/>
-            <line x1="620" y1="206" x2="700" y2="12"/>
-            <line x1="620" y1="206" x2="620" y2="-4"/>
-            <line x1="620" y1="206" x2="540" y2="12"/>
-            <line x1="620" y1="206" x2="472" y2="58"/>
-            <line x1="620" y1="206" x2="426" y2="126"/>
-            <line x1="620" y1="206" x2="410" y2="206"/>
+          <!-- sun + rays. the rays are lines that never end: the mask
+               lets them thin out with distance, the way light does. -->
+          <g class="rays" mask="url(#rayMask)" opacity=".26" fill="none"
+             stroke="#ffe8c6" stroke-linecap="round">
+            <line x1="620" y1="206" x2="960" y2="206" stroke-width="3.4"/>
+            <line x1="620" y1="206" x2="926" y2="90"  stroke-width="2.2"/>
+            <line x1="620" y1="206" x2="836" y2="-6"  stroke-width="3"/>
+            <line x1="620" y1="206" x2="700" y2="-70" stroke-width="1.8"/>
+            <line x1="620" y1="206" x2="620" y2="-90" stroke-width="2.6"/>
+            <line x1="620" y1="206" x2="540" y2="-70" stroke-width="1.6"/>
+            <line x1="620" y1="206" x2="404" y2="-6"  stroke-width="2.8"/>
+            <line x1="620" y1="206" x2="314" y2="90"  stroke-width="1.8"/>
+            <line x1="620" y1="206" x2="280" y2="206" stroke-width="3"/>
+            <line x1="620" y1="206" x2="314" y2="322" stroke-width="1.6"/>
+            <line x1="620" y1="206" x2="404" y2="418" stroke-width="2.2"/>
+            <line x1="620" y1="206" x2="540" y2="482" stroke-width="1.4"/>
+            <line x1="620" y1="206" x2="700" y2="482" stroke-width="1.4"/>
+            <line x1="620" y1="206" x2="836" y2="418" stroke-width="2"/>
+            <line x1="620" y1="206" x2="926" y2="322" stroke-width="1.6"/>
           </g>
-          <circle class="glow" cx="620" cy="206" r="150" fill="url(#sunGlow)"/>
-          <circle cx="620" cy="206" r="40" fill="#ffe3ae"/>
-          <circle cx="620" cy="206" r="40" fill="none" stroke="#fff3d4" stroke-width="1.2" opacity=".7"/>
-          <circle cx="620" cy="206" r="54" fill="none" stroke="#ffd9a0" stroke-width="1" opacity=".35"/>
-          <circle cx="620" cy="206" r="70" fill="none" stroke="#ffd9a0" stroke-width="1" opacity=".2"/>
+          <circle cx="620" cy="206" r="96" fill="#ffd9a0" opacity=".30" filter="url(#bloom)"/>
+          <circle class="glow" cx="620" cy="206" r="176" fill="url(#sunGlow)"/>
+          <circle cx="620" cy="206" r="38" fill="url(#sunDisc)"/>
+          <circle cx="620" cy="206" r="38" fill="none" stroke="#fff8e6" stroke-width="1.1" opacity=".55"/>
+          <circle cx="620" cy="206" r="52" fill="none" stroke="#ffdda8" stroke-width=".9" opacity=".18"/>
 
-          <!-- high clouds -->
-          <g class="cloud-a" opacity=".55" fill="#f3d9c4">
-            <path d="M60 96 C140 84 236 88 300 98 C356 107 340 118 268 118 C170 118 92 112 60 106 Z"/>
-            <path d="M470 66 C540 58 604 62 646 70 C684 77 672 86 606 86 C536 86 492 80 470 74 Z" opacity=".7"/>
+          <!-- high clouds: thin, wind-combed, lit from below -->
+          <g class="cloud-a" filter="url(#cloudSoft)">
+            <path d="M46 100 C132 86 244 88 316 100 C368 109 348 121 262 120 C150 119 74 114 46 108 Z"
+                  fill="url(#cloudCool)" opacity=".62"/>
+            <path d="M64 112 C150 104 246 106 306 114 C348 120 330 128 250 127 C156 126 92 122 64 118 Z"
+                  fill="#ffe6c8" opacity=".30"/>
+            <path d="M452 62 C528 54 600 58 648 68 C688 76 670 86 600 85 C520 84 476 78 452 72 Z"
+                  fill="url(#cloudCool)" opacity=".45"/>
           </g>
-          <g class="cloud-b" opacity=".45" fill="#f6e0cb">
-            <path d="M560 140 C650 130 742 134 796 143 C842 151 828 160 748 160 C656 160 592 154 560 148 Z"/>
+          <g class="cloud-b" filter="url(#cloudSoft)">
+            <path d="M556 146 C652 134 754 138 812 149 C860 158 842 169 752 168 C650 167 588 160 556 154 Z"
+                  fill="url(#cloudWarm)" opacity=".55"/>
+            <path d="M700 128 C760 122 812 126 848 133 C878 139 866 147 812 146 C748 145 716 140 700 135 Z"
+                  fill="url(#cloudCool)" opacity=".32"/>
           </g>
 
-          <!-- distant ridges -->
-          <path d="M0 404 L0 336 C56 328 116 352 172 378 C214 396 246 402 276 404 Z" fill="#6f7fa4" opacity=".85"/>
-          <path d="M900 404 L900 322 C838 328 782 352 730 380 C700 396 676 402 654 404 Z" fill="#66769c" opacity=".8"/>
-          <path d="M0 404 L0 366 C74 360 150 380 214 396 C246 403 268 404 290 404 Z" fill="#57668c" opacity=".7"/>
-          <path d="M900 404 L900 358 C846 358 792 376 744 392 C718 400 698 403 678 404 Z" fill="#4e5c82" opacity=".65"/>
+          <!-- distant ridges, each one lighter than the last: air in the way -->
+          <path d="M0 404 L0 336 C56 328 116 352 172 378 C214 396 246 402 276 404 Z" fill="#7484a8" opacity=".8"/>
+          <path d="M900 404 L900 322 C838 328 782 352 730 380 C700 396 676 402 654 404 Z" fill="#6b7ba1" opacity=".76"/>
+          <path d="M0 404 L0 366 C74 360 150 380 214 396 C246 403 268 404 290 404 Z" fill="#5d6c92" opacity=".62"/>
+          <path d="M900 404 L900 358 C846 358 792 376 744 392 C718 400 698 403 678 404 Z" fill="#54628a" opacity=".56"/>
 
           <!-- Mount Fuji -->
           <use href="#fujiPath" fill="url(#fujiBody)"/>
           <g clip-path="url(#clipFuji)">
-            <!-- shaded left flank -->
-            <path d="M150 404 C268 386 356 296 404 196 C412 178 420 168 428 160 L452 158 L452 404 Z"
-                  fill="#232842" opacity=".55"/>
-            <!-- lit right flank -->
+            <!-- the shadow side: one graded sweep, no seam where it ends -->
+            <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
+            <!-- the lit side, warmed by the low sun -->
             <path d="M452 158 L466 152 L478 162 C486 170 494 182 502 200 C548 296 636 386 754 404 L452 404 Z"
-                  fill="#7d7f9e" opacity=".22"/>
-            <!-- snow cap -->
-            <path d="M352 128 H548 V230
-                     C528 246 512 224 494 240
-                     C476 256 460 232 442 246
-                     C424 260 408 234 390 248
-                     C374 260 362 240 352 232 Z" fill="url(#snow)"/>
-            <!-- snow streaks -->
-            <g fill="#e6eef8" opacity=".42">
-              <path d="M366 244 C369 260 371 272 373 284 C376 270 379 256 381 246 Z"/>
-              <path d="M392 248 C395 268 397 284 400 300 C403 282 407 264 409 250 Z"/>
-              <path d="M420 246 C423 264 425 276 427 290 C430 274 434 258 436 248 Z"/>
-              <path d="M450 244 C454 270 457 290 460 312 C464 288 468 264 471 246 Z"/>
-              <path d="M484 242 C487 258 489 270 491 282 C494 268 497 254 500 244 Z"/>
-              <path d="M512 240 C515 254 517 264 519 274 C522 262 525 250 528 242 Z"/>
-              <path d="M536 236 C538 246 540 254 541 262 C544 252 546 244 548 238 Z"/>
+                  fill="#8d92b4" opacity=".16"/>
+            <!-- the sun grazes the right shoulder: a rim of warm light -->
+            <path d="M440 152 L478 162 C486 170 494 182 502 200 C548 296 636 386 754 404"
+                  fill="none" stroke="url(#rimLight)" stroke-width="4.4"
+                  stroke-linecap="round" filter="url(#rim)"/>
+
+            <!-- snow cap. the edge is a snowline, not a saw: it hangs into
+                 the gullies and climbs back over every ridge it crosses -->
+            <path d="M336 126 H564 V206
+                     C560 220 552 236 542 238
+                     C532 240 528 222 518 222
+                     C508 222 504 248 492 250
+                     C480 252 476 230 466 230
+                     C456 230 452 254 440 256
+                     C428 258 424 234 414 234
+                     C404 234 400 250 388 248
+                     C376 246 348 226 336 218 Z" fill="url(#snow)"/>
+            <!-- the melt edge casts a hairline onto the rock below it -->
+            <path d="M564 206 C560 220 552 236 542 238 C532 240 528 222 518 222
+                     C508 222 504 248 492 250 C480 252 476 230 466 230
+                     C456 230 452 254 440 256 C428 258 424 234 414 234
+                     C404 234 400 250 388 248 C376 246 348 226 336 218"
+                  fill="none" stroke="#7f8fab" stroke-opacity=".45" stroke-width="2.4"
+                  filter="url(#edgeWear)"/>
+            <!-- residual snow left in the gullies, on the fall lines -->
+            <g fill="#eef3fa" opacity=".30" filter="url(#tiny)">
+              <path d="M486 254 C489 272 491 286 493 300 C496 286 499 272 501 256 Z"/>
+              <path d="M436 260 C438 274 440 284 441 296 C444 284 446 272 448 262 Z"/>
+              <path d="M536 242 C538 252 539 260 540 270 C542 260 544 250 546 244 Z"/>
+              <path d="M392 252 C394 262 395 270 396 280 C398 270 400 260 402 254 Z"/>
             </g>
-            <!-- summit crater shading -->
-            <path d="M440 152 L452 158 L466 152 L462 166 L446 168 Z" fill="#8fa2bd" opacity=".5"/>
-            <!-- ridges -->
-            <g fill="none" stroke="#ffffff" stroke-opacity=".13" stroke-width="1.4">
-              <path d="M452 160 C472 232 494 302 528 384"/>
-              <path d="M440 158 C420 242 388 322 348 398"/>
-              <path d="M478 164 C506 240 540 316 588 392"/>
+            <!-- summit crater: a shallow bowl, lit on the far rim -->
+            <path d="M440 152 L452 158 L466 152 L478 162 L470 172 L448 174 Z" fill="#93a6c2" opacity=".42"/>
+            <path d="M440 152 C448 158 462 158 478 162" fill="none" stroke="#fdfbf6" stroke-opacity=".5" stroke-width="1.4"/>
+            <!-- fall lines down the cone -->
+            <g fill="none" stroke="#ffffff" stroke-opacity=".10" stroke-width="1.3">
+              <path d="M452 162 C472 234 494 304 528 386"/>
+              <path d="M440 160 C420 244 388 324 348 398"/>
+              <path d="M478 166 C506 242 540 318 588 392"/>
+              <path d="M462 164 C470 250 480 330 494 400"/>
+              <path d="M428 168 C404 250 372 326 322 396"/>
             </g>
-            <!-- foot mist -->
-            <path d="M150 404 C280 392 380 398 452 392 C540 386 640 396 754 404 Z" fill="#f4dcc0" opacity=".18"/>
+            <g fill="none" stroke="#161c30" stroke-opacity=".16" stroke-width="1.6">
+              <path d="M446 166 C432 246 410 320 372 396"/>
+              <path d="M470 168 C486 248 508 322 540 394"/>
+            </g>
           </g>
 
-          <!-- mist band crossing the mountain -->
-          <g class="mist" opacity=".5">
-            <path d="M120 300 C240 290 360 296 480 302 C600 308 720 302 820 296
-                     C860 294 872 316 820 322 C700 334 560 328 440 322
-                     C320 316 200 322 120 316 C88 313 88 303 120 300 Z" fill="#f7e3c8"/>
+          <!-- the far shore of the lake: a line of trees at the foot of the mountain -->
+          <path d="M0 402 C120 398 240 400 360 398 C500 396 640 401 760 398 C820 396 870 400 900 398
+                   L900 407 L0 407 Z" fill="#252b47" opacity=".75"/>
+          <g fill="#20263e" opacity=".8">
+            <path d="M196 402 l3 -7 l3 7 z M214 402 l2.5 -6 l2.5 6 z M232 402 l3 -8 l3 8 z
+                     M252 402 l2.5 -6 l2.5 6 z M560 402 l3 -7 l3 7 z M578 402 l2.5 -6 l2.5 6 z
+                     M596 402 l3 -8 l3 8 z M618 402 l2.5 -6 l2.5 6 z M640 402 l3 -7 l3 7 z"/>
           </g>
+
+          <!-- mist at the foot, and a band crossing the cone: both blurred,
+               both drifting, neither one a hard stripe -->
+          <g class="mist" filter="url(#mist)" opacity=".42">
+            <path d="M120 306 C250 296 372 302 486 308 C600 314 716 308 812 302
+                     C848 300 858 320 812 326 C694 336 556 330 438 324
+                     C322 318 204 324 124 318 C96 316 96 308 120 306 Z" fill="#f7e6cf"/>
+          </g>
+          <g class="mist" filter="url(#mist)" opacity=".30" style="animation-duration:31s">
+            <path d="M150 386 C280 378 386 384 462 380 C552 375 648 384 752 390
+                     C784 392 780 402 742 402 L170 402 C138 402 128 392 150 386 Z" fill="#f4dcc0"/>
+          </g>
+
+          <!-- the air itself, thickening toward the water -->
+          <rect x="0" y="150" width="900" height="256" fill="url(#air)"/>
 
           <!-- low clouds in front -->
-          <g class="cloud-c" opacity=".5" fill="#f8e6cf">
-            <path d="M200 356 C300 348 400 352 470 358 C530 363 520 372 430 372 C320 372 244 366 200 362 Z"/>
-            <path d="M600 344 C676 338 742 342 786 348 C822 353 812 362 742 362 C660 362 626 354 600 350 Z" opacity=".8"/>
+          <g class="cloud-c" filter="url(#cloudSoft)" opacity=".5">
+            <path d="M196 358 C300 348 404 352 476 359 C536 365 522 375 428 374 C316 373 240 367 196 364 Z"
+                  fill="url(#cloudWarm)"/>
+            <path d="M596 346 C676 339 744 343 790 350 C828 356 816 366 742 365 C656 364 622 356 596 352 Z"
+                  fill="url(#cloudWarm)" opacity=".8"/>
           </g>
 
           <!-- birds -->
@@ -652,54 +843,75 @@
           <!-- lake -->
           <rect x="0" y="404" width="900" height="146" fill="url(#lake)"/>
           <g clip-path="url(#clipLake)">
-            <!-- mirrored mountain, compressed + faded -->
+            <!-- mirrored mountain, compressed and cut into bands by the water -->
             <g mask="url(#reflMask)">
-              <g transform="matrix(1 0 0 -0.72 0 695)">
-                <use href="#fujiPath" fill="#2c3355"/>
-                <path d="M352 128 H548 V230
-                         C528 246 512 224 494 240
-                         C476 256 460 232 442 246
-                         C424 260 408 234 390 248
-                         C374 260 362 240 352 232 Z" fill="#cfd9e8"/>
+              <g transform="matrix(1 0 0 -0.55 0 626.2)">
+                <use href="#fujiPath" fill="#333b60"/>
+                <path d="M336 126 H564 V206
+                         C560 220 552 236 542 238 C532 240 528 222 518 222
+                         C508 222 504 248 492 250 C480 252 476 230 466 230
+                         C456 230 452 254 440 256 C428 258 424 234 414 234
+                         C404 234 400 250 388 248 C376 246 348 226 336 218 Z" fill="#c3cfe2"/>
               </g>
             </g>
-            <!-- sun column -->
-            <rect x="466" y="404" width="308" height="146" fill="url(#sunColumn)"/>
-            <!-- ripples -->
-            <g stroke="#f2e6d4" stroke-width="1.6" stroke-linecap="round" fill="none">
-              <path class="ripple" d="M470 418 h70 M580 418 h48 M660 418 h34"/>
-              <path class="ripple" d="M430 434 h96 M560 434 h70 M672 434 h40"/>
-              <path class="ripple" d="M380 452 h110 M520 452 h86 M648 452 h58"/>
-              <path class="ripple" d="M300 472 h130 M462 472 h104 M606 472 h74"/>
-              <path class="ripple" d="M210 494 h150 M398 494 h120 M556 494 h96"/>
-              <path class="ripple" d="M120 518 h170 M326 518 h140 M508 518 h118"/>
-              <path class="ripple" d="M60 538 h190 M286 538 h150 M474 538 h130"/>
+
+            <!-- the glitter path: narrow at the far shore, opening as it
+                 comes in, and never a solid sheet of light -->
+            <path d="M594 404 H646 L742 550 H498 Z" fill="url(#glitter)" opacity=".55" filter="url(#soft)"/>
+            <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
+              <path d="M600 411 h40"  stroke-width="2.4" opacity=".55"/>
+              <path d="M586 419 h26 M624 419 h30" stroke-width="2.2" opacity=".5"/>
+              <path d="M572 429 h44 M632 429 h26" stroke-width="2.4" opacity=".46"/>
+              <path d="M560 441 h30 M604 441 h52" stroke-width="2.6" opacity=".42"/>
+              <path d="M548 455 h52 M618 455 h34" stroke-width="2.8" opacity=".38"/>
+              <path d="M534 471 h38 M592 471 h60" stroke-width="3" opacity=".34"/>
+              <path d="M520 489 h60 M600 489 h44" stroke-width="3.2" opacity=".3"/>
+              <path d="M506 509 h44 M572 509 h70" stroke-width="3.4" opacity=".26"/>
+              <path d="M494 531 h70 M586 531 h52" stroke-width="3.6" opacity=".22"/>
             </g>
-            <g stroke="#3f4a6d" stroke-width="1.2" stroke-linecap="round" fill="none" opacity=".35">
-              <path class="ripple" d="M180 444 h120 M340 466 h96 M240 504 h140"/>
+
+            <!-- ripples: a pale crest always paired with a darker trough -->
+            <g stroke="#f2e6d4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".5">
+              <path class="ripple" d="M470 420 h64 M566 420 h44 M648 420 h30"/>
+              <path class="ripple" d="M418 438 h88 M540 438 h62 M640 438 h36"/>
+              <path class="ripple" d="M356 458 h104 M498 458 h78 M614 458 h50"/>
+              <path class="ripple" d="M272 480 h126 M436 480 h98 M574 480 h68"/>
+              <path class="ripple" d="M176 504 h146 M362 504 h114 M516 504 h84"/>
+              <path class="ripple" d="M84 530 h168 M296 530 h132 M470 530 h96"/>
+            </g>
+            <g stroke="#39446a" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".38">
+              <path class="ripple" d="M180 448 h112 M336 470 h92 M232 512 h132 M600 464 h96 M664 496 h112"/>
             </g>
           </g>
 
-          <!-- torii -->
+          <!-- torii — every member mirrored exactly about x = 230 -->
           <g>
-            <g fill="#c8452f" stroke="#8f2f20" stroke-width=".8" stroke-opacity=".5">
-              <path d="M186 524 L194 430 L204 430 L198 524 Z"/>
-              <path d="M288 524 L280 430 L270 430 L276 524 Z"/>
-              <rect x="231" y="436" width="12" height="24" rx="1.5"/>
-              <rect x="176" y="458" width="122" height="10" rx="2"/>
-              <path d="M172 434 C204 427 256 427 288 434 L288 444 C256 437 204 437 172 444 Z"/>
-              <path d="M162 418 C198 408 262 408 298 418 L298 428 C262 418 198 418 162 428 Z"/>
+            <!-- cast shadow on the water -->
+            <ellipse cx="230" cy="527" rx="74" ry="6" fill="#101426" opacity=".26"/>
+            <g fill="#c8452f" stroke="#8f2f20" stroke-width=".8" stroke-opacity=".45">
+              <path d="M171 524 L177 428 L188 428 L185 524 Z"/>
+              <path d="M289 524 L283 428 L272 428 L275 524 Z"/>
+              <rect x="225" y="432" width="10" height="24" rx="1"/>
+              <rect x="168" y="456" width="124" height="10" rx="2"/>
+              <path d="M164 429 C194 421 266 421 296 429 L296 438 C266 430 194 430 164 438 Z"/>
+              <path d="M158 420 C190 410 270 410 302 420 L302 429 C270 419 190 419 158 429 Z"/>
             </g>
-            <g fill="#8f2f20" opacity=".45">
-              <path d="M186 524 L194 430 L197 430 L190 524 Z"/>
-              <path d="M288 524 L280 430 L277 430 L284 524 Z"/>
+            <!-- shaded inner edges -->
+            <g fill="#8f2f20" opacity=".42">
+              <path d="M171 524 L177 428 L180 428 L174 524 Z"/>
+              <path d="M289 524 L283 428 L280 428 L286 524 Z"/>
             </g>
-            <g fill="#c8452f" opacity=".2">
-              <path d="M186 526 L192 596 L202 596 L196 526 Z"/>
-              <path d="M288 526 L282 596 L272 596 L278 526 Z"/>
-              <rect x="176" y="528" width="122" height="8" rx="2"/>
+            <!-- lit outer edges, catching the low sun -->
+            <g fill="#f08a5e" opacity=".5">
+              <path d="M185 524 L188 428 L186 428 L182.5 524 Z"/>
+              <path d="M275 524 L272 428 L274 428 L277.5 524 Z"/>
             </g>
-            <path d="M170 528 C200 534 258 534 292 528" stroke="#f2e6d4" stroke-opacity=".28"
+            <g fill="#c8452f" opacity=".18">
+              <path d="M171 526 L175 592 L186 592 L185 526 Z"/>
+              <path d="M289 526 L285 592 L274 592 L275 526 Z"/>
+              <rect x="168" y="528" width="124" height="8" rx="2"/>
+            </g>
+            <path d="M168 528 C198 534 262 534 292 528" stroke="#f2e6d4" stroke-opacity=".3"
                   stroke-width="1.6" fill="none"/>
           </g>
 
@@ -855,8 +1067,8 @@
           <!-- paper grain + vignette -->
           <rect x="0" y="0" width="900" height="600" filter="url(#grain)" opacity=".13"
                 style="mix-blend-mode:multiply"/>
-          <rect x="0" y="0" width="900" height="600" fill="none" stroke="#000" stroke-opacity=".18"
-                stroke-width="26" filter="url(#soft)"/>
+          <rect x="0" y="0" width="900" height="600" fill="none" stroke="#080c18" stroke-opacity=".30"
+                stroke-width="34" filter="url(#soft)"/>
         </g>
 
         <!-- deckled card edge -->
@@ -1008,7 +1220,7 @@
   <figure class="label">
     <figcaption>
       <p class="lt">Mount Fuji at dawn, from Kawaguchi-ko</p>
-      <p class="la">Hanga Studio · 2025</p>
+      <p class="la">Hanga Studio · 2026</p>
       <p class="lm">Holographic laminate over ink on washi</p>
       <p class="ld"><span>900 × 600</span><span>Ed. 01</span></p>
     </figcaption>
@@ -1036,7 +1248,7 @@
   <span class="pip" aria-hidden="true"></span>
   <span>Hanga Studio</span>
   <span class="pip" aria-hidden="true"></span>
-  <span>MMXXV</span>
+  <span>MMXXVI</span>
 </footer>
 
 <script>
