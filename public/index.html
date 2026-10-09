@@ -1094,9 +1094,9 @@ kbd {
                was bent; none of it is drawn as a line -->
           <linearGradient id="crease" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0"   stop-color="#0b1020" stop-opacity="0"/>
-            <stop offset=".34" stop-color="#0b1020" stop-opacity=".055"/>
-            <stop offset=".50" stop-color="#fff6e2" stop-opacity=".065"/>
-            <stop offset=".66" stop-color="#0b1020" stop-opacity=".032"/>
+            <stop offset=".30" stop-color="#0b1020" stop-opacity=".038"/>
+            <stop offset=".50" stop-color="#fff6e2" stop-opacity=".045"/>
+            <stop offset=".70" stop-color="#0b1020" stop-opacity=".02"/>
             <stop offset="1"   stop-color="#0b1020" stop-opacity="0"/>
           </linearGradient>
           <radialGradient id="cornerWear" cx=".5" cy=".5" r=".5">
@@ -1668,14 +1668,15 @@ kbd {
                     letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>
             </g>
           </g>
-          <!-- cancellation rings -->
-          <g transform="translate(742 128) rotate(-14)" fill="none" stroke="#4a5570" opacity=".5">
+          <!-- cancellation rings: a postmark straddles the corner of the
+               stamp it killed, it does not sit beside it -->
+          <g transform="translate(792 110) rotate(-14)" fill="none" stroke="#3f4a63" opacity=".55">
             <circle r="34" stroke-width="1.6"/>
             <circle r="28" stroke-width="1"/>
             <path d="M-28 -8 H28 M-28 0 H28 M-28 8 H28" stroke-width="1"/>
-            <text x="0" y="-14" text-anchor="middle" fill="#4a5570" stroke="none" font-size="8"
+            <text x="0" y="-14" text-anchor="middle" fill="#3f4a63" stroke="none" font-size="8"
                   letter-spacing="1.4" font-family="Georgia,serif">TOKYO</text>
-            <text x="0" y="22" text-anchor="middle" fill="#4a5570" stroke="none" font-size="7.5"
+            <text x="0" y="22" text-anchor="middle" fill="#3f4a63" stroke="none" font-size="7.5"
                   letter-spacing="1" font-family="Georgia,serif">24.5.12</text>
           </g>
 
@@ -1708,7 +1709,7 @@ kbd {
             <ellipse cx="892" cy="592" rx="40" ry="30"/>
           </g>
           <g transform="rotate(-13 450 300)">
-            <rect x="296" y="-80" width="15" height="760" fill="url(#crease)"/>
+            <rect x="292" y="-80" width="24" height="760" fill="url(#crease)"/>
           </g>
 
           <!-- paper grain, film grain, vignette -->
@@ -1749,6 +1750,39 @@ kbd {
             <feComponentTransfer><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
           </filter>
           <clipPath id="clipCard2"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
+
+          <!-- the same age as the front, a shade stronger: this is the side
+               that was handled, written on and posted. ids are suffixed so
+               they cannot collide with the front artwork on the same page -->
+          <filter id="foxB" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="0.055 0.048" numOctaves="4" seed="71" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 0.44
+                      0 0 0 0 0.31
+                      0 0 0 0 0.18
+                      0 0 0 -5.4 2.25"/>
+            <feGaussianBlur stdDeviation="1.1"/>
+          </filter>
+          <filter id="filmB" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="1.7" numOctaves="2" seed="83" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>
+          </filter>
+          <filter id="tinyB" filterUnits="userSpaceOnUse" x="-20" y="-20" width="940" height="640">
+            <feGaussianBlur stdDeviation="1.4"/>
+          </filter>
+          <linearGradient id="creaseB" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"   stop-color="#6a5c46" stop-opacity="0"/>
+            <stop offset=".30" stop-color="#6a5c46" stop-opacity=".035"/>
+            <stop offset=".50" stop-color="#fffdf6" stop-opacity=".12"/>
+            <stop offset=".70" stop-color="#6a5c46" stop-opacity=".025"/>
+            <stop offset="1"   stop-color="#6a5c46" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="cornerWearB" cx=".5" cy=".5" r=".5">
+            <stop offset="0"   stop-color="#7d6c50" stop-opacity="0"/>
+            <stop offset=".62" stop-color="#7d6c50" stop-opacity=".055"/>
+            <stop offset="1"   stop-color="#fdf8ec" stop-opacity=".16"/>
+          </radialGradient>
         </defs>
 
         <g clip-path="url(#clipCard2)">
@@ -1856,8 +1890,25 @@ kbd {
                   font-family="Georgia,serif">PAR AVION · BY AIR MAIL</text>
           </g>
 
+          <!-- age, then grain -->
+          <rect x="0" y="0" width="900" height="600" filter="url(#foxB)" opacity=".055"
+                style="mix-blend-mode:multiply"/>
+          <rect x="7" y="7" width="886" height="586" rx="6" fill="none" stroke="#6d5c44"
+                stroke-opacity=".10" stroke-width="5" filter="url(#tinyB)"/>
+          <g fill="url(#cornerWearB)">
+            <ellipse cx="8" cy="8" rx="42" ry="32"/>
+            <ellipse cx="892" cy="8" rx="42" ry="32"/>
+            <ellipse cx="8" cy="592" rx="42" ry="32"/>
+            <ellipse cx="892" cy="592" rx="42" ry="32"/>
+          </g>
+          <g transform="rotate(-13 450 300)">
+            <rect x="606" y="-80" width="30" height="760" fill="url(#creaseB)"/>
+          </g>
+
           <rect x="0" y="0" width="900" height="600" filter="url(#grain2)" opacity=".12"
                 style="mix-blend-mode:multiply"/>
+          <rect x="0" y="0" width="900" height="600" filter="url(#filmB)" opacity=".07"
+                style="mix-blend-mode:overlay"/>
         </g>
         <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="#f8f3e8" stroke-opacity=".5" stroke-width="2"/>
       </svg>

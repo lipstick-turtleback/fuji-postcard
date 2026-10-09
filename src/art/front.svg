@@ -163,9 +163,9 @@
                was bent; none of it is drawn as a line -->
           <linearGradient id="crease" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0"   stop-color="#0b1020" stop-opacity="0"/>
-            <stop offset=".34" stop-color="#0b1020" stop-opacity=".055"/>
-            <stop offset=".50" stop-color="#fff6e2" stop-opacity=".065"/>
-            <stop offset=".66" stop-color="#0b1020" stop-opacity=".032"/>
+            <stop offset=".30" stop-color="#0b1020" stop-opacity=".038"/>
+            <stop offset=".50" stop-color="#fff6e2" stop-opacity=".045"/>
+            <stop offset=".70" stop-color="#0b1020" stop-opacity=".02"/>
             <stop offset="1"   stop-color="#0b1020" stop-opacity="0"/>
           </linearGradient>
           <radialGradient id="cornerWear" cx=".5" cy=".5" r=".5">
@@ -737,14 +737,15 @@
                     letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>
             </g>
           </g>
-          <!-- cancellation rings -->
-          <g transform="translate(742 128) rotate(-14)" fill="none" stroke="#4a5570" opacity=".5">
+          <!-- cancellation rings: a postmark straddles the corner of the
+               stamp it killed, it does not sit beside it -->
+          <g transform="translate(792 110) rotate(-14)" fill="none" stroke="#3f4a63" opacity=".55">
             <circle r="34" stroke-width="1.6"/>
             <circle r="28" stroke-width="1"/>
             <path d="M-28 -8 H28 M-28 0 H28 M-28 8 H28" stroke-width="1"/>
-            <text x="0" y="-14" text-anchor="middle" fill="#4a5570" stroke="none" font-size="8"
+            <text x="0" y="-14" text-anchor="middle" fill="#3f4a63" stroke="none" font-size="8"
                   letter-spacing="1.4" font-family="Georgia,serif">TOKYO</text>
-            <text x="0" y="22" text-anchor="middle" fill="#4a5570" stroke="none" font-size="7.5"
+            <text x="0" y="22" text-anchor="middle" fill="#3f4a63" stroke="none" font-size="7.5"
                   letter-spacing="1" font-family="Georgia,serif">24.5.12</text>
           </g>
 
@@ -777,7 +778,7 @@
             <ellipse cx="892" cy="592" rx="40" ry="30"/>
           </g>
           <g transform="rotate(-13 450 300)">
-            <rect x="296" y="-80" width="15" height="760" fill="url(#crease)"/>
+            <rect x="292" y="-80" width="24" height="760" fill="url(#crease)"/>
           </g>
 
           <!-- paper grain, film grain, vignette -->
