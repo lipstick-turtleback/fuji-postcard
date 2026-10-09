@@ -636,13 +636,24 @@
           <g class="boat">
             <g fill="#1b2036">
               <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
-              <path d="M624 481 C628 477 634 477 638 481 L640 499 L622 499 Z"/>
+              <!-- the body leans into the stroke and one arm is out on the
+                   pole: a silhouette is read entirely by its outline, and a
+                   rectangle with a hat on it reads as a person-shaped gap -->
+              <path d="M623 499 L625 482 C628 477.5 634 476.5 638 480 L641 499 Z"/>
+              <path d="M635 485 C640 484 645 481.5 649 478" stroke="#1b2036" stroke-width="2.8"
+                    stroke-linecap="round" fill="none"/>
               <circle cx="631" cy="475" r="4"/>
               <path d="M619 473 L643 473 L631 464 Z"/>
-              <path d="M646 470 L648.5 471 L662 502 L659 503.5 Z"/>
+              <!-- the pole goes into the water and is seen to, which is the
+                   only thing that says the boat is being poled at all -->
+              <path d="M646 470 L648.5 471 L666 519 L663 520.5 Z"/>
             </g>
             <path d="M600 512 C618 517 646 517 662 512" stroke="#f2e6d4" stroke-opacity=".3"
                   stroke-width="1.4" fill="none"/>
+            <g stroke="#f2e6d4" stroke-opacity=".26" stroke-width="1.2" fill="none" stroke-linecap="round">
+              <path d="M657 521 C661 522.6 669 522.6 673 521"/>
+              <path d="M660 525 C663 526.2 669 526.2 672 525"/>
+            </g>
           </g>
 
           <!-- the near bank. one irregular waterline, then the small things
