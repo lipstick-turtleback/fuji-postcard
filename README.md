@@ -48,6 +48,8 @@ scripts/
   check.mjs            validate the built page without a browser
   test-score.mjs       verify the composition as data
   test-contrast.mjs    keep the palette above WCAG AA
+  test-layout.mjs      drive headless Chrome at real window sizes
+  perf.mjs             measure frame times over CDP
   serve.mjs            dependency-free static server
 public/
   index.html           the built page (committed, so it can be opened directly)
@@ -65,7 +67,7 @@ npm run dev        # build, then serve on http://localhost:5173
 npm run check      # fail if the built file is stale, then validate it
 npm run lint       # biome over the JS (scripts/ and src/script/)
 npm run fmt        # prettier over CSS, JSON and Markdown
-npm test           # build + check + score + contrast + lint + format check
+npm test           # build + check + score + contrast + layout + lint + format check
 npm run perf       # real frame times in headless Chrome over CDP, no dependencies
 ```
 
@@ -126,6 +128,15 @@ another note of the same voice, and that at least 70 of the 80 bars are
 distinct, which is what "through-composed" has to mean if it means anything.
 Those are mistakes you can only hear, and by the time you hear them you have
 listened to four and a half minutes.
+
+`scripts/test-layout.mjs` drives a real headless Chrome over CDP at seven
+window sizes and fails if the card is not fully in view, the page scrolls
+sideways, the plate drifts off 3:2, or any control is not completely inside the
+viewport. It exists because on a 1180×900 laptop window every button on the page
+sat 101 px below the fold while the card was in it, and the page looked like a
+page that simply needed scrolling. A caption and a colophon may scroll; the
+controls may not. If Chrome is not installed the test says so and passes — a
+missing browser is not a broken page.
 
 Headless Chrome cannot verify the audio itself: its `AudioContext` clock never
 advances, so nothing scheduled is ever rendered. What is verified is that the

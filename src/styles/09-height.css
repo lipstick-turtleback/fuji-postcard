@@ -12,10 +12,27 @@
    Nothing here tries to squeeze the footer above the fold as well; a page
    with a caption, a console and a colophon is allowed to scroll a little. The
    floor is for a phone turned sideways: below it the cap would be shrinking
-   the plate past the point where the picture reads at all. */
+   the plate past the point where the picture reads at all.
+
+   One thing is not allowed to scroll: the controls. Measured on a 1180x900
+   window the console sat 101 px below the fold, and on a 1440x700 one 144 px
+   below - every button on the page was off screen while the card was in it.
+   So on a low window the console is ordered ahead of the caption. The caption
+   is something you read afterwards; the buttons are the reason you are here. */
 @media (max-height: 900px) {
   :root {
-    --col: min(940px, 100%, max(340px, (100vh - 260px) * 1.5));
+    --col: min(
+      940px,
+      100%,
+      max(
+        340px,
+        /* 292, measured: the card's top edge sits at 206 px on this
+           breakpoint, and the console needs 84 px below the card - its own
+           35 px, the plinth's 28 px of padding and the 21 px gap. Anything
+           less and the buttons fall off the bottom of the window. */
+          (100vh - 292px) * 1.5
+      )
+    );
   }
   body {
     padding-top: 30px;
@@ -26,11 +43,23 @@
   .masthead {
     margin-bottom: 30px;
   }
+  .console {
+    order: -1;
+  }
 }
 
 @media (max-height: 760px) {
   :root {
-    --col: min(940px, 100%, max(300px, (100vh - 205px) * 1.5));
+    --col: min(
+      940px,
+      100%,
+      max(
+        300px,
+        /* 272 on this one: the tighter masthead margins bring the card's top
+           edge up to 184 px, so the same 84 px of console costs 24 px less. */
+          (100vh - 272px) * 1.5
+      )
+    );
   }
   body {
     padding-top: 24px;
