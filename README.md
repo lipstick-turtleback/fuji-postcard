@@ -96,7 +96,7 @@ The numbers on this machine, 4-second samples:
 | Rendering                 | mean    | median  | frames over 33 ms |
 | ------------------------- | ------- | ------- | ----------------- |
 | Enhance on                | 38.9 ms | 33.4 ms | 239 / 240         |
-| Enhance off (the default) | 17.6 ms | 16.7 ms | 14 / 240          |
+| Enhance off (the default) | 18.1 ms | 16.7 ms | 20 / 240          |
 
 The laminate is the whole cost, and the shape of the cost is worth knowing
 before anyone tries to optimise it: `mix-blend-mode` has to read the backdrop,
@@ -104,7 +104,11 @@ so a single blended layer anywhere inside the card forces the whole 1880×1270
 subtree to be re-composited every frame. Removing four of the five foil layers
 changes nothing. Freezing the gradients changes nothing. Holding the card still
 changes nothing. Only the presence or absence of the blend matters. The paper
-grain and the drifting water are nearly free by comparison — about 2 ms each —
+grain and the drifting water are nearly free by comparison — about 2 ms each — and the rule was
+confirmed a second time from the other direction: seven hand-drawn foxing
+blooms cost 19.6 ms with `mix-blend-mode: multiply` and 18.1 ms without it,
+which is the entire difference between a comfortable 55 fps and 42 late frames
+out of 240.
 but they are what stand between 45 fps and a locked 60, so Enhance carries them
 too.
 
