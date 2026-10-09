@@ -81,7 +81,25 @@ const refs = [
   ...html.matchAll(/href="#([^"]+)"/g),
   ...html.matchAll(/xlink:href="#([^"]+)"/g),
 ];
+// aria-labelledby and aria-describedby take space-separated id lists, not one
+// id, so they need their own pass. A typo in one of them is invisible: the
+// element simply stops having a name and nothing else complains.
+for (const m of html.matchAll(/aria-(?:labelledby|describedby)="([^"]*)"/g))
+  for (const name of m[1].trim().split(/\s+/))
+    if (!ids.has(name)) fail(m.index, `aria reference to missing id "${name}"`);
 for (const r of refs) if (!ids.has(r[1])) fail(r.index, `reference to missing id "#${r[1]}"`);
+
+/* ---- every picture has to say what it is ------------------------------- */
+// The artwork is the page. An <svg> with no <title> is invisible to a screen
+// reader and unnamed in whatever opens an exported plate.
+for (const m of html.matchAll(/<svg\b[^>]*>/g)) {
+  const end = html.indexOf('</svg>', m.index);
+  const body = html.slice(m.index, end === -1 ? html.length : end);
+  if (!/<title\b/.test(body)) fail(m.index, '<svg> has no <title>');
+  if (!/<desc\b/.test(body)) fail(m.index, '<svg> has no <desc>');
+  if (!/aria-labelledby=/.test(m[0]))
+    fail(m.index, '<svg> <title> is not wired to aria-labelledby');
+}
 
 /* ---- an id nothing points to is artwork that quietly stopped existing --- */
 // anything that can name an id: CSS selectors, querySelector/closest
@@ -90,6 +108,10 @@ const named = new Set();
 for (const r of refs) named.add(r[1]);
 for (const r of html.matchAll(/#([A-Za-z][\w-]*)/g)) named.add(r[1]);
 for (const r of html.matchAll(/getElementById\(\s*['"]([^'"]+)['"]/g)) named.add(r[1]);
+// aria-labelledby / aria-describedby are references too. Without this the
+// rule reports a perfectly good <desc> as artwork that stopped existing.
+for (const m of html.matchAll(/aria-(?:labelledby|describedby)="([^"]*)"/g))
+  for (const name of m[1].trim().split(/\s+/)) named.add(name);
 const unused = [...ids].filter(([name]) => !named.has(name));
 
 /* ---- every advertised keyboard shortcut actually exists ----------------- */
