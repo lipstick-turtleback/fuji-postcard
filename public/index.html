@@ -1351,7 +1351,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           <!-- the torii's reflection: a shallow band of water, so the
                mirror is compressed and gone within a few tens of units -->
           <linearGradient id="toriiReflFade" gradientUnits="userSpaceOnUse" x1="0" y1="524" x2="0" y2="578">
-            <stop offset="0"   stop-color="#fff" stop-opacity=".9"/>
+            <stop offset="0"   stop-color="#fff" stop-opacity="1"/>
             <stop offset=".5"  stop-color="#fff" stop-opacity=".42"/>
             <stop offset="1"   stop-color="#fff" stop-opacity="0"/>
           </linearGradient>
@@ -1726,7 +1726,13 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                  waterline and compressed by the viewing angle. the water
                  breaks it into bands, so the bands are drawn over it in
                  the colour of the water, not left out of the drawing -->
-            <g mask="url(#toriiReflMask)" filter="url(#tiny)" opacity=".62"
+            <!-- Stronger than it looks like it should be, because the band of
+                 water between the gate and the near shore is only fourteen
+                 units deep: the whole reflection has to say itself in that.
+                 Measured at the post bases, y=528: the water there was
+                 (64,57,77) with the old .62 and reads (60,41,50) - red, not
+                 merely shadowed - once the fade starts at full strength. -->
+            <g mask="url(#toriiReflMask)" filter="url(#tiny)" opacity=".8"
                style="mix-blend-mode:multiply">
               <use href="#toriiBody" transform="translate(0 786) scale(1 -0.5)"/>
             </g>
@@ -1735,6 +1741,14 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             </g>
             <path d="M168 528 C198 534 262 534 292 528" stroke="#f2e6d4" stroke-opacity=".34"
                   stroke-width="1.6" fill="none"/>
+            <!-- where each post meets the water: one tight ring each, because
+                 the lake is being disturbed by something standing in it -->
+            <g stroke="#e6dcc8" fill="none" stroke-linecap="round">
+              <path d="M170 524 C174 526.4 186 526.4 190 524" stroke-opacity=".3" stroke-width="1.1"/>
+              <path d="M270 524 C274 526.4 286 526.4 290 524" stroke-opacity=".3" stroke-width="1.1"/>
+              <path d="M174 528.5 C178 530 184 530 188 528.5" stroke-opacity=".16" stroke-width=".9"/>
+              <path d="M274 528.5 C278 530 284 530 288 528.5" stroke-opacity=".16" stroke-width=".9"/>
+            </g>
           </g>
 
           <!-- boat -->
