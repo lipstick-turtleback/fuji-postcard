@@ -57,10 +57,13 @@
           <!-- The lit flank fades in from the centre line instead of starting
                there. It used to be a flat fill closed by a straight edge down
                x=452, which put a hard vertical tone break exactly where the
-               eye travels the most — the summit. -->
-          <linearGradient id="litSide" gradientUnits="userSpaceOnUse" x1="446" y1="200" x2="640" y2="360">
+               eye travels the most — the summit. The fade has to run along x
+               alone and start at zero on that edge; a diagonal gradient still
+               reaches full strength at the bottom of the edge and the seam
+               comes straight back. -->
+          <linearGradient id="litSide" gradientUnits="userSpaceOnUse" x1="452" y1="0" x2="556" y2="0">
             <stop offset="0"   stop-color="#8d92b4" stop-opacity="0"/>
-            <stop offset=".38" stop-color="#8d92b4" stop-opacity=".16"/>
+            <stop offset=".55" stop-color="#8d92b4" stop-opacity=".16"/>
             <stop offset="1"   stop-color="#8d92b4" stop-opacity=".16"/>
           </linearGradient>
 
