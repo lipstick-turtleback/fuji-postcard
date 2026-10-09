@@ -1,0 +1,50 @@
+/* ---------- short windows ----------
+   The card is the exhibit, so on a low window it gets the height. Measured
+   at the sizes people actually have, the page is 1,162 px tall no matter how
+   wide the screen is: on a 1440×900 laptop 405 px of it is below the fold,
+   on a 1366×768 one 537 px. The card is 940 px wide, so it is 627 px tall,
+   and the bottom third of the picture — the lake, the boat, the birds — sits
+   off screen along with every control.
+
+   The card is 3:2, so a width cap derived from the viewport height keeps the
+   whole plate in view. The vertical rhythm tightens with it, because the
+   masthead and the plinth were spaced for a wall, not for a laptop.
+   Nothing here tries to squeeze the footer above the fold as well; a page
+   with a caption, a console and a colophon is allowed to scroll a little. The
+   floor is for a phone turned sideways: below it the cap would be shrinking
+   the plate past the point where the picture reads at all. */
+@media (max-height: 900px) {
+  :root {
+    --col: min(940px, 100%, max(340px, (100vh - 260px) * 1.5));
+  }
+  body {
+    padding-top: 30px;
+  }
+  .topbar {
+    margin-bottom: 34px;
+  }
+  .masthead {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-height: 760px) {
+  :root {
+    --col: min(940px, 100%, max(300px, (100vh - 205px) * 1.5));
+  }
+  body {
+    padding-top: 24px;
+  }
+  .topbar {
+    margin-bottom: 26px;
+  }
+  .masthead {
+    margin-bottom: 22px;
+  }
+  .plinth {
+    padding-top: 14px;
+  }
+  .footer {
+    margin-top: 34px;
+  }
+}
