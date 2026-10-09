@@ -113,3 +113,9 @@ tile box, because the default region crops the tile and shows a seam; the
 mountain's reflection is the mountain itself, mirrored and clipped _inside_
 the mirrored space so the reflected snow cannot spill outside the reflected
 body; and the water is three slow drifts that are deliberately never in step.
+
+The laminate over the artwork is `soft-light`, not `color-dodge`. Dodge
+divides the backdrop by its complement, so a saturated band over dark ink
+does not tint it — it erases it, and the branch went from `#3a2a2c` to a
+khaki no laminate could account for. The control was the same artwork
+rendered with the foil hidden.
