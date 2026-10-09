@@ -1794,8 +1794,13 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                  as "texture", and texture with no cause reads as noise. -->
           </g>
 
-          <!-- torii — every member mirrored exactly about x = 230 -->
-          <g>
+          <!-- torii — every member mirrored exactly about x = 230.
+               The whole group is lifted 30 units because it was standing 14
+               units off the near shore: a gate in a lake you can almost step
+               to. The mask, the fade and the reflection are all in this
+               group's own space, so they come with it and nothing else had to
+               move. -->
+          <g transform="translate(0 -30)">
             <!-- contact shadow where the posts meet the water -->
             <ellipse cx="230" cy="526" rx="68" ry="4.5" fill="#101426" opacity=".22" filter="url(#tiny)"/>
             <g id="toriiBody" fill="#c8452f" stroke="#8f2f20" stroke-width=".8" stroke-opacity=".45">
@@ -1930,18 +1935,22 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <path d="M406 549 L418 548" stroke-width="2.2"/>
           </g>
 
-          <!-- two ducks, and the wake each one trails -->
+          <!-- Two ducks in open water. They used to sit hard against the
+               torii's right post, which made them look like part of the
+               gate, and put them in the shallowest, least interesting part of
+               the lake. Out here they are between the gate and the boatman,
+               where the water is widest. -->
           <g fill="#141a2c" stroke="#141a2c">
-            <use href="#duck" transform="translate(296 536)"/>
-            <use href="#duck" transform="translate(322 541) scale(.84)"/>
+            <use href="#duck" transform="translate(392 519)"/>
+            <use href="#duck" transform="translate(418 525) scale(.84)"/>
           </g>
           <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
-            <path d="M286 539 h22 M314 544 h18"/>
+            <path d="M382 522 h22 M410 528 h18"/>
           </g>
           <!-- and what the water keeps of them -->
           <g fill="#141a2c" opacity=".16">
-            <ellipse cx="296" cy="541" rx="7.5" ry="1.7"/>
-            <ellipse cx="322" cy="546" rx="6.2" ry="1.4"/>
+            <ellipse cx="392" cy="524" rx="7.5" ry="1.7"/>
+            <ellipse cx="418" cy="530" rx="6.2" ry="1.4"/>
           </g>
 
           <!-- the heron: still, and the only tall thing on the right -->
