@@ -15,8 +15,9 @@
     "check": "node scripts/build.mjs --check && node scripts/check.mjs",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "fmt": "prettier --write \"src/**/*.{css,svg,html}\" \"*.{json,md}\" \".github/**/*.{yml,yaml}\"",
-    "test": "npm run build && npm run check && biome check ."
+    "fmt": "prettier --write \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
+    "fmt:check": "prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
+    "test": "npm run build && npm run check && biome check . && prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\""
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",

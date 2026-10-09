@@ -15,14 +15,14 @@ it behaves the same.
 
 ## What it does
 
-| | |
-|---|---|
-| **Move the pointer** | the card tilts in 3D and the holographic lamination is re-lit by a real lighting model — the sheen angle, the specular band and the sparkle are computed from the lamp position, not animated on a loop |
-| **`F` / click the card** | turn it over: the back is a real postcard, addressed and stamped |
-| **`S` / Save the plate** | serialises the live SVG out of the DOM and downloads it as a standalone `.svg` |
-| **`M` / Play** | a ~5-minute soundtrack: koto-ish plucks on the D hirajōshi scale, a lake drone, a dotted-eighth delay, all synthesised |
-| **Laminate on/off** | toggles the foil layer |
-| **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely |
+| Interaction                  | What happens                                                                                                                                       |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Move the pointer**         | the card tilts in 3D and the laminate is re-lit by a real lighting model — sheen, specular band and sparkle are computed from the lamp, not looped |
+| **`F`** or click the card    | turn it over: the back is a real postcard, addressed and stamped                                                                                   |
+| **`S`** or Save the plate    | serialises the live SVG out of the DOM and downloads it as a standalone `.svg`                                                                     |
+| **`M`** or Play              | a ~5-minute soundtrack: koto-ish plucks on the D hirajōshi scale, a lake drone, a dotted-eighth delay                                              |
+| **Laminate on/off**          | toggles the foil layer                                                                                                                             |
+| **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely                                                                                         |
 
 ## The repository
 
@@ -90,6 +90,6 @@ tiles on a 64 px lattice whose fan centres sit so that an arc cut at one edge
 is finished by its twin at the opposite edge; the paper fibre and the foil
 sparkle are `feTurbulence` fields with the filter region pinned to exactly the
 tile box, because the default region crops the tile and shows a seam; the
-mountain's reflection is the mountain itself, mirrored and clipped *inside*
+mountain's reflection is the mountain itself, mirrored and clipped _inside_
 the mirrored space so the reflected snow cannot spill outside the reflected
 body; and the water is three slow drifts that are deliberately never in step.

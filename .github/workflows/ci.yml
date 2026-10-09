@@ -15,7 +15,5 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run build
-      # fails if the committed single file has drifted from src/
-      - run: npm run check
-      - run: npx biome check .
+      # build, staleness of the committed page, page validator, Biome, Prettier
+      - run: npm test

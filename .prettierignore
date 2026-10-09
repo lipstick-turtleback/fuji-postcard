@@ -3,3 +3,7 @@ node_modules
 package-lock.json
 src/art
 *.svg
+
+# the shell carries whole-line build markers (@CSS@, @SVG_FRONT@ …);
+# a formatter that re-indents them, or adds a ";" after @CSS@, breaks the build
+src/template.html
