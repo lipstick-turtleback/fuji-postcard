@@ -24,15 +24,63 @@ const LAMP = [-0.3, -0.22, 0.85]; // point light, in card-widths, upper-left, in
 const EYE = [0, 0, 2.6]; // the viewer
 const HALF = unit(LAMP.map((v, i) => v / Math.hypot(...LAMP) + (i === 2 ? 1 : 0)));
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- rendering quality ----------
+     Measured, not guessed (scripts/perf.mjs): one mix-blend-mode layer
+     anywhere inside the card costs about 20 ms a frame, because blending
+     has to read the backdrop and the card is a 1880×1270 subtree. It does
+     not matter how many blended layers there are, how simple the gradients
+     are, or whether the card is standing still — the presence of the blend
+     is the whole cost. With the laminate gone the same page runs at twice
+     the frame rate.
+
+     So the laminate is the quality switch, and "off" is not just a hidden
+     layer: it is the calm rendering. The sway and the drifting water stop
+     with it, because a page that is going to be still should be still. */
+const QUALITY_KEY = 'fuji.quality';
+const storedQuality = (() => {
+  try {
+    return localStorage.getItem(QUALITY_KEY);
+  } catch {
+    return null; // private mode, or storage disabled
+  }
+})();
+const weakDevice =
+  (navigator.hardwareConcurrency || 8) <= 4 ||
+  (navigator.deviceMemory ? navigator.deviceMemory <= 4 : false);
+let foilOn = storedQuality !== null ? storedQuality === 'on' : !weakDevice;
+let autoDropped = false;
+
+const foilBtn = document.getElementById('foilBtn');
+const foilLabel = document.getElementById('foilLabel');
+
+function setQuality(on, reason) {
+  foilOn = on;
+  card.style.setProperty('--foil', on ? '1' : '0');
+  document.documentElement.dataset.quality = on ? 'full' : 'calm';
+  foilLabel.textContent = on
+    ? 'Laminate on'
+    : reason === 'auto'
+      ? 'Laminate off · smooth'
+      : 'Laminate off';
+  foilBtn.setAttribute('aria-pressed', String(on));
+  foilBtn.title = on
+    ? 'Holographic laminate: the rainbow pool, the glitter and the sheen. The most expensive thing on the page.'
+    : 'Calm rendering: no laminate, no sway, no drifting water. About twice the frame rate.';
+  wake();
+}
 let touchOff = 0;
 let running = false;
-// frame() is a hoisted declaration, so the loop can be started from anywhere
-const wake = () => {
+// Both wake() and frame() are hoisted declarations: the quality control is
+// wired up before them in the file and calls wake() during setup, and a
+// const arrow here would be in its temporal dead zone at that moment —
+// which took the whole script down, tilt and flip and export included.
+function wake() {
   if (!running) {
     running = true;
     requestAnimationFrame(frame);
   }
-};
+}
 
 let rx = 0,
   ry = 0,
@@ -102,12 +150,36 @@ function toLocal(v, ca, sa, cb, sb) {
   return [x, cb * y + sb * z, -sb * y + cb * z];
 }
 
+/* A second of sampling is better than a guess about the machine. The mean
+   frame time is the wrong statistic here: the distribution is bimodal —
+   frames land on a vsync boundary or they miss it entirely — so a page
+   dropping half its frames can still report a mean of 24 ms. What matters
+   is how many frames missed. */
+let probeFrames = 0;
+let probeLate = 0;
+let probeLast = 0;
+
 function frame(now) {
+  // If nobody has chosen, feel the machine for a second and drop to the
+  // calm rendering if the frames are actually bad. Detection by core count
+  // is a guess; this is a measurement.
+  if (foilOn && storedQuality === null && !autoDropped) {
+    if (probeLast) {
+      // 24 ms is a missed 60 Hz vsync with room for clock jitter
+      if (probeFrames > 15 && now - probeLast > 24) probeLate++;
+      if (++probeFrames > 105) {
+        autoDropped = true;
+        if (probeLate / (probeFrames - 16) > 0.2) setQuality(false, 'auto');
+      }
+    }
+    probeLast = now;
+  }
+
   // pointer steers the card; when the pointer is away it keeps a slow 3-5 degree sway
   if (hovering) {
     tgtX = -hy * 12;
     tgtY = hx * 16;
-  } else if (!reduce) {
+  } else if (!reduce && foilOn) {
     const t = now / 1000;
     tgtX = Math.sin(t * 0.29) * 3.2 + Math.sin(t * 0.13 + 1.2) * 1.6;
     tgtY = Math.sin(t * 0.21 + 0.5) * 4.2 + Math.sin(t * 0.09) * 1.8;
@@ -186,17 +258,19 @@ function frame(now) {
   if (settled) running = false;
   else requestAnimationFrame(frame);
 }
+
+// Applied here rather than where it is declared: it calls wake(), and wake()
+// reads `running`, which is not initialised until further down the file.
+setQuality(foilOn, storedQuality === 'off' ? 'user' : storedQuality === null ? 'auto' : 'user');
 wake();
 
-// holographic lamination toggle
-const foilBtn = document.getElementById('foilBtn');
-const foilLabel = document.getElementById('foilLabel');
-let foilOn = true;
 foilBtn.addEventListener('click', () => {
-  foilOn = !foilOn;
-  card.style.setProperty('--foil', foilOn ? '1' : '0');
-  foilLabel.textContent = foilOn ? 'Laminate on' : 'Laminate off';
-  foilBtn.setAttribute('aria-pressed', String(foilOn));
+  setQuality(!foilOn, 'user');
+  try {
+    localStorage.setItem(QUALITY_KEY, foilOn ? 'on' : 'off');
+  } catch {
+    /* the choice just will not be remembered */
+  }
 });
 
 // Export the face you are looking at as a standalone .svg. The back is a

@@ -2,7 +2,7 @@
   "name": "fuji-postcard",
   "version": "1.0.0",
   "private": true,
-  "description": "Mount Fuji at dawn, drawn in vectors — one self-contained postcard page.",
+  "description": "Mount Fuji at dawn, drawn in vectors \u2014 one self-contained postcard page.",
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -17,7 +17,8 @@
     "lint:fix": "biome check --write .",
     "fmt": "prettier --write \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
     "fmt:check": "prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
-    "test": "npm run build && npm run check && node scripts/test-score.mjs && node scripts/test-contrast.mjs && biome check . && prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\""
+    "test": "npm run build && npm run check && node scripts/test-score.mjs && node scripts/test-contrast.mjs && biome check . && prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
+    "perf": "node scripts/perf.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",

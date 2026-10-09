@@ -115,8 +115,13 @@ for (const m of readme.matchAll(/\*\*`([A-Za-z])`\*\*/g)) {
 // exports as a still image, silently.
 const styleBlock = html.slice(html.indexOf('<style>'), html.indexOf('</style>'));
 const animClasses = new Set();
-for (const m of styleBlock.matchAll(/\.([A-Za-z][\w-]*)[^{}]*\{[^}]*\banimation(-name)?\b/g))
-  animClasses.add(m[1]);
+for (const rule of styleBlock.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+  const [, selector, body] = rule;
+  const decl = /\banimation(-name)?\s*:\s*([^;}]*)/.exec(body);
+  // "animation: none" turns motion off; it does not make a class animated
+  if (!decl || /^\s*none\b/.test(decl[2])) continue;
+  for (const cls of selector.matchAll(/\.([A-Za-z][\w-]*)/g)) animClasses.add(cls[1]);
+}
 const reStart = html.indexOf('/@keyframes|');
 if (reStart < 0) {
   fail(0, 'the export filter regex was not found — did card.js change?');
