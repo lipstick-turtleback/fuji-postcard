@@ -980,9 +980,20 @@
           <g transform="translate(792 110) rotate(-14)" fill="none" stroke="#3f4a63" opacity=".55">
             <circle r="34" stroke-width="1.6"/>
             <circle r="28" stroke-width="1"/>
-            <!-- wavy, not straight: a cancellation is rolled, not ruled -->
-            <path d="M-28 -8 q7 -3 14 0 t14 0 t14 0 M-28 0 q7 -3 14 0 t14 0 t14 0 M-28 8 q7 -3 14 0 t14 0 t14 0"
+            <!-- Wavy, not straight: a cancellation is rolled, not ruled. The
+                 killer lines cross the whole inner circle. They used to stop
+                 two thirds of the way, which left the right half of the mark
+                 un-inked and made the whole thing look drawn rather than
+                 stamped. -->
+            <path d="M-28 -8 q7 -3 14 0 t14 0 t14 0 t14 0
+                     M-28 0 q7 -3 14 0 t14 0 t14 0 t14 0
+                     M-28 8 q7 -3 14 0 t14 0 t14 0 t14 0"
                   stroke-width="1"/>
+            <!-- a hand-struck mark takes too much ink on one side. one
+                 heavier arc over the upper-left of the outer ring, and the
+                 ring stops being a perfect circle drawn by a program -->
+            <path d="M-33.4 -6 A34 34 0 0 1 20 -27.2" stroke-width="2.4" stroke-opacity=".5"
+                  stroke-linecap="round"/>
             <text x="0" y="-14" text-anchor="middle" fill="#3f4a63" stroke="none" font-size="8"
                   letter-spacing="1.4" font-family="Georgia,serif">TOKYO</text>
             <text x="0" y="22" text-anchor="middle" fill="#3f4a63" stroke="none" font-size="7.5"
