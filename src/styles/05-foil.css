@@ -34,8 +34,12 @@
     #b06bff,
     #ff6b81
   );
-  mix-blend-mode: color-dodge;
-  opacity: calc(var(--spec) * 0.32);
+  /* soft-light, not color-dodge. dodge divides the backdrop by its
+     complement, so a saturated band over dark ink does not tint it, it
+     erases it: the branch went from #3a2a2c to a khaki no laminate could
+     explain. soft-light keeps the ink and still carries the colour. */
+  mix-blend-mode: soft-light;
+  opacity: calc(var(--spec) * 0.5);
   -webkit-mask-image: radial-gradient(
     circle at var(--sx) var(--sy),
     #000 0 11%,
@@ -63,8 +67,8 @@
 .foil-sparkle2 {
   background-repeat: repeat;
   filter: contrast(700%) brightness(230%);
-  mix-blend-mode: color-dodge;
-  opacity: calc(var(--spec) * 0.85);
+  mix-blend-mode: soft-light;
+  opacity: calc(var(--spec) * 1.1);
   -webkit-mask-image: radial-gradient(
     circle at var(--sx) var(--sy),
     #000 0 6%,
