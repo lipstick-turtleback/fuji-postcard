@@ -1490,15 +1490,24 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <rect x="140" y="523" width="184" height="58" fill="url(#toriiReflFade)"/>
           </mask>
 
+          <!-- The snowline is where snow stops and rock starts, and it does
+               not do that at regular intervals. The old edge had seven lobes
+               all about 26 units wide alternating between y=222 and y=250 -
+               the same wave, seven times, which is a fence and not a melting
+               edge. The lobes here run 10 to 26 units wide and reach down to
+               anywhere between 214 and 258. -->
           <path id="snowCapPath" d="M336 126 H564 V206
-                   C560 220 552 236 542 238
-                   C532 240 528 222 518 222
-                   C508 222 504 248 492 250
-                   C480 252 476 230 466 230
-                   C456 230 452 254 440 256
-                   C428 258 424 234 414 234
-                   C404 234 400 250 388 248
-                   C376 246 348 226 336 218 Z"/>
+                   C562 216 558 228 554 232
+                   C548 236 542 218 536 214
+                   C528 210 524 238 518 244
+                   C510 250 500 226 492 222
+                   C484 218 478 246 470 252
+                   C462 258 458 234 452 230
+                   C444 226 440 254 428 258
+                   C418 261 416 240 410 236
+                   C402 231 396 250 384 248
+                   C372 246 372 232 360 228
+                   C350 225 344 222 336 218 Z"/>
           <clipPath id="clipFuji"><use href="#fujiPath"/></clipPath>
           <clipPath id="clipLake"><rect x="0" y="404" width="900" height="146"/></clipPath>
           <clipPath id="clipCard"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
@@ -1680,15 +1689,27 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
               </g>
             </g>
 
+            <!-- The dark fall lines belong under the snow. They are gullies in
+                 the rock, and where the snow has filled them they do not stay
+                 dark - drawn on top of the cap they were two grey scratches
+                 running up the white face and stopping dead at the crater. The
+                 pale ones above stay, because a snow-filled gully does catch
+                 the light. -->
+            <g fill="none" stroke="#161c30" stroke-opacity=".16" stroke-width="1.6">
+              <path d="M446 166 C432 246 410 320 372 396"/>
+              <path d="M470 168 C486 248 508 322 540 394"/>
+            </g>
             <!-- snow cap. the edge is a snowline, not a saw: it hangs into
                  the gullies and climbs back over every ridge it crosses -->
             <use href="#snowCapPath" fill="url(#snow)"/>
             <use href="#snowCapPath" fill="url(#snowShade)"/>
             <!-- the melt edge casts a hairline onto the rock below it -->
-            <path d="M564 206 C560 220 552 236 542 238 C532 240 528 222 518 222
-                     C508 222 504 248 492 250 C480 252 476 230 466 230
-                     C456 230 452 254 440 256 C428 258 424 234 414 234
-                     C404 234 400 250 388 248 C376 246 348 226 336 218"
+            <path d="M564 208 C562 218 558 230 554 234 C548 238 542 220 536 216
+                     C528 212 524 240 518 246 C510 252 500 228 492 224
+                     C484 220 478 248 470 254 C462 260 458 236 452 232
+                     C444 228 440 256 428 260 C418 263 416 242 410 238
+                     C402 233 396 252 384 250 C372 248 372 234 360 230
+                     C350 227 344 224 336 220"
                   fill="none" stroke="#7f8fab" stroke-opacity=".45" stroke-width="2.4"
                   filter="url(#edgeWear)"/>
             <!-- snow left standing in the two gullies that face the sun.
@@ -1698,9 +1719,20 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
               <path d="M466 250 C470 268 473 284 476 302 C481 284 485 268 489 252 Z"/>
               <path d="M520 246 C523 260 525 272 527 286 C531 272 535 258 539 248 Z"/>
             </g>
-            <!-- summit crater: a shallow bowl, lit on the far rim -->
-            <path d="M440 152 L452 158 L466 152 L478 162 L470 172 L448 174 Z" fill="#93a6c2" opacity=".42"/>
-            <path d="M440 152 C448 158 462 158 478 162" fill="none" stroke="#fdfbf6" stroke-opacity=".5" stroke-width="1.4"/>
+            <!-- Summit crater: a shallow bowl, lit on the far rim. It used to
+                 be six points joined by straight lines, and at the apex of the
+                 whole composition a straight line and a sharp corner read as a
+                 cut gem rather than as the top of a volcano. Every edge here is
+                 a curve, the bowl is wider than it is tall because we see it
+                 nearly side-on, and the far rim takes the light while the near
+                 rim keeps a shadow. -->
+            <path d="M437 156 C443 149 456 146 468 149 C478 152 483 158 479 165
+                     C474 173 458 177 445 173 C435 170 431 162 437 156 Z"
+                  fill="#93a6c2" opacity=".42"/>
+            <path d="M437 156 C444 149 457 146 469 150" fill="none" stroke="#fdfbf6"
+                  stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M446 173 C456 176 469 174 477 168" fill="none" stroke="#5f6d8c"
+                  stroke-opacity=".3" stroke-width="1.2" stroke-linecap="round"/>
             <!-- fall lines down the cone -->
             <g fill="none" stroke="#ffffff" stroke-opacity=".10" stroke-width="1.3">
               <path d="M452 162 C472 234 494 304 528 386"/>
@@ -1708,10 +1740,6 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
               <path d="M478 166 C506 242 540 318 588 392"/>
               <path d="M462 164 C470 250 480 330 494 400"/>
               <path d="M428 168 C404 250 372 326 322 396"/>
-            </g>
-            <g fill="none" stroke="#161c30" stroke-opacity=".16" stroke-width="1.6">
-              <path d="M446 166 C432 246 410 320 372 396"/>
-              <path d="M470 168 C486 248 508 322 540 394"/>
             </g>
           </g>
 
