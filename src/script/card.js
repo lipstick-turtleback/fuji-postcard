@@ -1,5 +1,6 @@
 const card = document.getElementById('card');
 const goldShine = document.getElementById('goldShine');
+const edgeGlint = document.getElementById('edgeGlint');
 const wmShine = document.getElementById('wmShine');
 
 /* =============================================================
@@ -98,6 +99,14 @@ let rx = 0,
 let hovering = false,
   hx = 0,
   hy = 0;
+/* Where the ray is along the plate, 0..1. It used to be derived from the
+   specular point - where the lamp's reflection crosses the card plane - and
+   that only ever travels a narrow band, so the gold lettering caught a
+   highlight across about a tenth of its width. The pointer's own position
+   across the card covers the whole width, so that is what drives it now.
+   Card rotation is added on top: tilting a gilded frame walks the light
+   along it, and here it should do the same. */
+let glint = 0.5;
 let turn = 0,
   turnFrom = 0,
   turnTo = 0,
@@ -276,11 +285,20 @@ function frame(now) {
 
   card.style.transform = `rotateY(${(turn + ry).toFixed(3)}deg) rotateX(${rx.toFixed(3)}deg)`;
 
-  // the hot-stamped wordmark catches the same highlight
-  goldShine.setAttribute(
-    'gradientTransform',
-    `translate(${((sx / 100) * 900 - 450).toFixed(1)} 0)`,
-  );
+  // One ray travelling the full width of the plate. The gradient band is 210
+  // units wide, so it runs from fully off the left edge (translate -210) to
+  // fully off the right (translate 900) and crosses every gilded thing on the
+  // bottom edge on the way: the lettering, and the rule under it, which share
+  // this one gradient and so light up at the same place.
+  const glintTarget = (hovering ? hx + 0.5 : 0.5) + ry / 240;
+  glint += (glintTarget - glint) * 0.08;
+  const g = Math.max(0, Math.min(1, glint));
+  goldShine.setAttribute('gradientTransform', `translate(${(g * 1110 - 210).toFixed(1)} 0)`);
+  // The frame is gilded too. A gradient cannot follow a perimeter, so the
+  // glint is a dash on a stroke that goes all the way round, and moving
+  // stroke-dashoffset walks it around the card. The dash pattern sums to the
+  // rect's ~2,916-unit perimeter, so one pass of g is exactly one lap.
+  edgeGlint.setAttribute('stroke-dashoffset', (2916 * (0.5 - g)).toFixed(1));
   wmShine.setAttribute('opacity', Math.min(0.92, spec * 1.5).toFixed(3));
 
   // with reduced motion there is no sway to keep alive: once the card has
