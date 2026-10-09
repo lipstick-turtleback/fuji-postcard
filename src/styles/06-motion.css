@@ -17,17 +17,38 @@
   }
 }
 
-.mist {
-  animation: mist 24s ease-in-out infinite alternate;
+/* The mist does not travel, it breathes. Two bands — the one across the
+   mountain's shoulders and the one lying on the water — at periods that
+   share no common factor, so they are never in step and the scene never
+   visibly repeats. The amplitude is deliberately below the threshold of
+   "did that just move": a few pixels of drift and a tenth of opacity over
+   more than a minute. Anything faster stops being weather and starts being
+   an animation. */
+.mist-a {
+  animation: mist-a 78s ease-in-out infinite alternate;
 }
-@keyframes mist {
+@keyframes mist-a {
   from {
-    transform: translateX(-14px);
-    opacity: 0.42;
+    transform: translate(-9px, 0);
+    opacity: 0.84;
   }
   to {
-    transform: translateX(16px);
-    opacity: 0.62;
+    transform: translate(11px, -3px);
+    opacity: 1;
+  }
+}
+
+.mist-b {
+  animation: mist-b 103s ease-in-out infinite alternate;
+}
+@keyframes mist-b {
+  from {
+    transform: translate(12px, 1px);
+    opacity: 0.78;
+  }
+  to {
+    transform: translate(-10px, -2px);
+    opacity: 1;
   }
 }
 
@@ -241,7 +262,8 @@
   .cloud-a,
   .cloud-b,
   .cloud-c,
-  .mist,
+  .mist-a,
+  .mist-b,
   .petal,
   .ripple,
   .boat,

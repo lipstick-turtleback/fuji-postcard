@@ -39,11 +39,6 @@
             <stop offset=".70" stop-color="#6a5c46" stop-opacity=".025"/>
             <stop offset="1"   stop-color="#6a5c46" stop-opacity="0"/>
           </linearGradient>
-          <radialGradient id="cornerWearB" cx=".5" cy=".5" r=".5">
-            <stop offset="0"   stop-color="#7d6c50" stop-opacity="0"/>
-            <stop offset=".62" stop-color="#7d6c50" stop-opacity=".055"/>
-            <stop offset="1"   stop-color="#fdf8ec" stop-opacity=".16"/>
-          </radialGradient>
         </defs>
 
         <g clip-path="url(#clipCard2)">
@@ -161,12 +156,6 @@
                 style="mix-blend-mode:multiply"/>
           <rect x="7" y="7" width="886" height="586" rx="6" fill="none" stroke="#6d5c44"
                 stroke-opacity=".10" stroke-width="5" filter="url(#tinyB)"/>
-          <g fill="url(#cornerWearB)">
-            <ellipse cx="8" cy="8" rx="42" ry="32"/>
-            <ellipse cx="892" cy="8" rx="42" ry="32"/>
-            <ellipse cx="8" cy="592" rx="42" ry="32"/>
-            <ellipse cx="892" cy="592" rx="42" ry="32"/>
-          </g>
           <g transform="rotate(-13 450 300)">
             <rect x="606" y="-80" width="30" height="760" fill="url(#creaseB)"/>
           </g>
