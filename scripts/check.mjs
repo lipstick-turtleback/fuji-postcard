@@ -97,7 +97,8 @@ for (const m of html.matchAll(/<svg\b[^>]*>/g)) {
   const body = html.slice(m.index, end === -1 ? html.length : end);
   if (!/<title\b/.test(body)) fail(m.index, '<svg> has no <title>');
   if (!/<desc\b/.test(body)) fail(m.index, '<svg> has no <desc>');
-  if (!/aria-labelledby=/.test(m[0])) fail(m.index, '<svg> <title> is not wired to aria-labelledby');
+  if (!/aria-labelledby=/.test(m[0]))
+    fail(m.index, '<svg> <title> is not wired to aria-labelledby');
 }
 
 /* ---- an id nothing points to is artwork that quietly stopped existing --- */

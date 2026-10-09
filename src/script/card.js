@@ -1,6 +1,8 @@
 const card = document.getElementById('card');
 const goldShine = document.getElementById('goldShine');
 const edgeGlint = document.getElementById('edgeGlint');
+const rails = [...document.querySelectorAll('#edgeGlint .rail')];
+const railsV = [...document.querySelectorAll('#edgeGlint .rail-v')];
 const wmShine = document.getElementById('wmShine');
 
 /* =============================================================
@@ -106,7 +108,10 @@ let hovering = false,
    across the card covers the whole width, so that is what drives it now.
    Card rotation is added on top: tilting a gilded frame walks the light
    along it, and here it should do the same. */
-let glint = 0.5;
+let glint = 0.5,
+  glintY = 0.5;
+const glintTargetX = () => (hovering ? hx + 0.5 : 0.5) + ry / 240;
+const glintTargetY = () => (hovering ? hy + 0.5 : 0.5) + rx / 160;
 let turn = 0,
   turnFrom = 0,
   turnTo = 0,
@@ -290,15 +295,25 @@ function frame(now) {
   // fully off the right (translate 900) and crosses every gilded thing on the
   // bottom edge on the way: the lettering, and the rule under it, which share
   // this one gradient and so light up at the same place.
-  const glintTarget = (hovering ? hx + 0.5 : 0.5) + ry / 240;
-  glint += (glintTarget - glint) * 0.08;
-  const g = Math.max(0, Math.min(1, glint));
-  goldShine.setAttribute('gradientTransform', `translate(${(g * 1110 - 210).toFixed(1)} 0)`);
-  // The frame is gilded too. A gradient cannot follow a perimeter, so the
-  // glint is a dash on a stroke that goes all the way round, and moving
-  // stroke-dashoffset walks it around the card. The dash pattern sums to the
-  // rect's ~2,916-unit perimeter, so one pass of g is exactly one lap.
-  edgeGlint.setAttribute('stroke-dashoffset', (2916 * (0.5 - g)).toFixed(1));
+  glint += (glintTargetX() - glint) * 0.08;
+  glintY += (glintTargetY() - glintY) * 0.08;
+  // One number, one ray. Everything gilded on the plate is lit by this single
+  // position, so the highlight on the lettering, the one on the rule under it
+  // and the ones on the frame all sit at the same x. Deriving them from
+  // separate mappings is how they ended up travelling in opposite directions.
+  const rayX = Math.max(0, Math.min(1, glint)) * 900;
+  const rayY = Math.max(0, Math.min(1, glintY)) * 600;
+  // the gradient band is 210 wide, so its centre is at translate + 105
+  goldShine.setAttribute('gradientTransform', `translate(${(rayX - 105).toFixed(1)} 0)`);
+  // The frame is gilded, and this is the same ray, not a second one. Each
+  // side of the frame is its own straight path drawn in the +x or +y
+  // direction, so offsetting a dash by -X puts the glint at exactly x=X -
+  // the bottom glint sits under the lit part of the inscription and the top
+  // one directly above it. Offsetting by -Y does the same down the sides.
+  // each rail starts at 16 and its dash is 170 long, so the dash centre sits at
+  // 16 + p + 85 - which equals rayX when the offset is 101 - rayX
+  for (const r of rails) r.setAttribute('stroke-dashoffset', (101 - rayX).toFixed(1));
+  for (const r of railsV) r.setAttribute('stroke-dashoffset', (101 - rayY).toFixed(1));
   wmShine.setAttribute('opacity', Math.min(0.92, spec * 1.5).toFixed(3));
 
   // with reduced motion there is no sway to keep alive: once the card has

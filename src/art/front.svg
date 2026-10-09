@@ -304,10 +304,16 @@
                bright dash on a stroke that goes all the way round: the script
                moves stroke-dashoffset and the glint walks the frame. The second,
                fainter dash is the far side of the same ray. -->
-          <linearGradient id="gildEdge" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="900" y2="600">
-            <stop offset="0"   stop-color="#fff3d2"/>
-            <stop offset=".5"  stop-color="#f6d79a"/>
-            <stop offset="1"   stop-color="#e9c27e"/>
+          <!-- The frame is hot-stamped with the same metal as the lettering,
+               so it is drawn with the same kind of gradient. It runs top to
+               bottom rather than across, because that is how a lamp above a
+               gilded frame falls: the top rule catches most of it, the bottom
+               rule is in the shadow of the picture. -->
+          <linearGradient id="goldFrame" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="600">
+            <stop offset="0"   stop-color="#fdf4d2"/>
+            <stop offset=".3"  stop-color="#dcb458"/>
+            <stop offset=".62" stop-color="#b5883c"/>
+            <stop offset="1"   stop-color="#8e6524"/>
           </linearGradient>
 
           <!-- the torii's reflection: a shallow band of water, so the
@@ -1122,10 +1128,30 @@
 
         <!-- deckled card edge -->
         <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="url(#paperEdge)" stroke-opacity=".15" stroke-width="1.1"/>
-        <!-- Perimeter of this rect is ~2,916 units, so the two dashes
-             (150 + 1,308 + 90 + 1,368) go round it exactly once and the glint
-             does not stutter at the seam. -->
-        <rect id="edgeGlint" x="4" y="4" width="892" height="592" rx="5" fill="none"
-              stroke="url(#gildEdge)" stroke-width="1.3" stroke-opacity=".5"
-              stroke-dasharray="150 1308 90 1368" stroke-linecap="round" stroke-dashoffset="0"/>
+        <!-- The frame is gilded, and the light on it is the same ray that
+             crosses the lettering - so it has to sit at the same x, not walk
+             around the perimeter on its own schedule. One straight path per
+             side, each drawn in the +x or +y direction, so a dashoffset of -X
+             puts the glint at exactly x=X on both the top and the bottom at
+             once, and the same for y down the sides. The bottom glint lands
+             under the lit part of the inscription; the top one is directly
+             above it. -->
+        <!-- Two concentric gilded rules, the way a printed plate is framed.
+             Without them the travelling glint was a bright dash floating on
+             bare paper - a highlight off nothing. The metal has to be there
+             first, and the ray then rides on top of it, exactly as the
+             lettering is #gold with #goldShine over it. -->
+        <g fill="none" stroke="url(#goldFrame)">
+          <rect x="14" y="14" width="872" height="572" rx="4"
+                stroke-width="1.6" stroke-opacity=".55"/>
+          <rect x="21" y="21" width="858" height="558" rx="3"
+                stroke-width=".7" stroke-opacity=".3"/>
+        </g>
+        <g id="edgeGlint" fill="none" stroke="url(#goldShine)" stroke-width="2"
+           stroke-linecap="round">
+          <path class="rail" d="M16 14 H884" stroke-dasharray="170 698" stroke-dashoffset="0"/>
+          <path class="rail" d="M16 586 H884" stroke-dasharray="170 698" stroke-dashoffset="0"/>
+          <path class="rail-v" d="M14 16 V584" stroke-dasharray="170 398" stroke-dashoffset="0"/>
+          <path class="rail-v" d="M886 16 V584" stroke-dasharray="170 398" stroke-dashoffset="0"/>
+        </g>
       </svg>
