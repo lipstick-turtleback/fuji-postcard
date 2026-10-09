@@ -719,7 +719,18 @@
           </g>
 
           <!-- lake -->
-          <rect x="0" y="404" width="900" height="146" fill="url(#lake)"/>
+          <!-- The water's edge at the far shore was the top of a rectangle,
+               so it was one dead straight line for 900 units - the only truly
+               straight horizontal on the card, and the one a lake is least
+               likely to have. The edge now wanders by three units. It never
+               goes above y=404, because that is where the reflection clip
+               starts, and a reflection cut off above the waterline would be
+               a seam. (No angle brackets in these comments: the tag-balance
+               check counts them, which is a fair price for catching real
+               imbalance.) -->
+          <path d="M0 405 C80 404 160 407 240 405 C330 404 420 407 510 405
+                   C600 404 690 407 780 405 C840 404 870 406 900 405
+                   L900 550 L0 550 Z" fill="url(#lake)"/>
           <g clip-path="url(#clipLake)">
             <!-- mirrored mountain, compressed and cut into bands by the water.
                  the clip is applied inside the mirrored space, so the snow
