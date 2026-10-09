@@ -55,21 +55,28 @@ down the left edge.
 1. **Every mark has a cause.** If you cannot say what the viewer is seeing a
    _picture of_, delete it. This is the single most productive rule in the
    project; most of the improvements have been subtractions.
-2. **Light is computed, not looped.** The sheen, the specular band and the
+2. **Nothing repeats at even intervals.** Regularity reads as made, not as
+   seen, and it is the single most common defect in this artwork. The sun's
+   rays were sixteen spokes at exactly 22.5°; the birds were one path stamped
+   out at three sizes; the far tree line was twenty-four identical isoceles
+   triangles sharing one straight baseline. Varying the _size_ of a repeated
+   thing is not enough — spacing, proportion and alignment each have to vary
+   on their own, and the gaps are what make a cluster legible.
+3. **Light is computed, not looped.** The sheen, the specular band and the
    sparkle come from a lighting model driven by pointer position. A CSS
    animation that fakes a highlight is a loop, and loops are detectable.
-3. **The effects are opt-in.** One switch — Enhance — carries the holographic
+4. **The effects are opt-in.** One switch — Enhance — carries the holographic
    laminate and its glow, the card's sway, the falling petals, the drifting
    water and the paper grain. It is **off by default**, because one
    `mix-blend-mode` layer over the card roughly halves the frame rate. What
    stays on regardless is the artwork itself: the sun, its bloom, the mist.
    Those are not effects bolted onto the picture.
-4. **Nothing may be broken to make something look better.** Flip, export,
+5. **Nothing may be broken to make something look better.** Flip, export,
    audio, keyboard shortcuts and reduced-motion must all keep working after
    every change, verified rather than assumed.
-5. **The exported plate is the full artwork.** A saved `.svg` is always the
+6. **The exported plate is the full artwork.** A saved `.svg` is always the
    whole drawing, whatever the page is currently rendering.
-6. **Zero dependencies is a feature worth defending.** The build, the checks
+7. **Zero dependencies is a feature worth defending.** The build, the checks
    and the perf harness are all plain Node with no packages.
 
 ## How it is put together
@@ -146,7 +153,7 @@ find the cause before touching it.
 > paper is a hundred years old: foxing, a cut edge, one crease, and lettering
 > along the bottom edge like a fine print. Everything expensive is opt-in and
 > off by default. No dependencies, no network requests, one file. Restraint is
-> the quality bar: every mark must have a cause, motion must be weather rather
-> than animation, and when in doubt delete. Verify with headless renders,
-> structural checks, a CDP perf harness and page exceptions — never by looking
-> at one screenshot and hoping.
+> the quality bar: every mark must have a cause, nothing may repeat at even
+> intervals, motion must be weather rather than animation, and when in doubt
+> delete. Verify with headless renders, structural checks, a CDP perf harness
+> and page exceptions — never by looking at one screenshot and hoping.
