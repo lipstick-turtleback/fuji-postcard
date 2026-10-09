@@ -708,19 +708,35 @@
                    C852 542 878 546 900 544"
                 fill="none" stroke="#e6dcc8" stroke-opacity=".20" stroke-width="1.4"/>
 
-          <!-- stones, each with the thin lit edge the water leaves on top -->
-          <g fill="#151b2d">
-            <ellipse cx="132" cy="553" rx="12" ry="4.6"/>
-            <ellipse cx="152" cy="556" rx="6.5" ry="2.6"/>
-            <ellipse cx="466" cy="551" rx="9" ry="3.4"/>
-            <ellipse cx="700" cy="550" rx="7.5" ry="3"/>
-            <ellipse cx="868" cy="549" rx="10" ry="3.8"/>
+          <!-- Stones. Pure black ellipses on a dark bank read as holes, so
+               each one is a shade lighter than the sand it sits in, flattened
+               and not quite symmetrical, with the thin lit arc the water leaves
+               along its top and a contact shadow where it meets the wet sand.
+               Four, not five: the fifth was filler. -->
+          <!-- The shadow has to hug the base. Sitting a unit or two lower it
+               separated from the stone and read as a second, darker stone
+               underneath. -->
+          <g fill="#0f1424" opacity=".5">
+            <ellipse cx="133" cy="554.5" rx="13" ry="2.8"/>
+            <ellipse cx="467" cy="552.5" rx="10" ry="2.2"/>
+            <ellipse cx="701" cy="551.5" rx="8.5" ry="1.9"/>
+            <ellipse cx="869" cy="551" rx="11" ry="2.3"/>
           </g>
-          <g fill="none" stroke="#7e88a4" stroke-opacity=".45" stroke-width="1.1">
-            <path d="M121 552 C126 548 139 548 143 552"/>
-            <path d="M458 550 C462 547 471 547 474 550"/>
-            <path d="M693 549 C697 546 704 546 707 549"/>
-            <path d="M859 548 C864 545 873 545 877 548"/>
+          <g fill="#242e49">
+            <path d="M120 553 C122 548 129 546 136 547 C143 548 147 551 146 554
+                     C138 556 127 556 120 553 Z"/>
+            <path d="M458 551 C461 547 469 546 475 549 C477 551 475 553 470 553
+                     C464 554 459 553 458 551 Z"/>
+            <path d="M694 550 C696 547 703 546 708 548 C710 550 708 552 703 552
+                     C698 553 695 552 694 550 Z"/>
+            <path d="M858 549 C861 545 870 544 877 547 C880 549 878 552 872 552
+                     C865 553 860 552 858 549 Z"/>
+          </g>
+          <g fill="none" stroke="#8d97b3" stroke-opacity=".5" stroke-width="1">
+            <path d="M122 550 C127 546.5 138 546 145 549.5"/>
+            <path d="M459 549 C463 546.5 471 546.2 475 548.5"/>
+            <path d="M695 548 C698 546 704 545.8 708 547.5"/>
+            <path d="M860 546 C865 543.8 873 543.6 877 546"/>
           </g>
 
           <!-- a length of driftwood with one chip beside it, and the low
@@ -729,13 +745,6 @@
           <g stroke="#1a2033" fill="none" stroke-linecap="round">
             <path d="M330 551 C352 547 378 549 400 546" stroke-width="3.6"/>
             <path d="M406 549 L418 548" stroke-width="2.2"/>
-          </g>
-          <g fill="#1b2135" opacity=".92">
-            <path d="M196 550 C199 544 204 541 209 543 C211 537 218 535 222 539
-                     C226 534 233 535 235 540 C241 537 247 540 248 545
-                     C253 544 257 547 257 550 Z"/>
-            <path d="M556 549 C559 544 564 542 568 544 C571 539 577 538 580 542
-                     C584 538 590 539 592 543 C597 542 601 545 601 549 Z"/>
           </g>
 
           <!-- two ducks, and the wake each one trails -->
@@ -766,28 +775,64 @@
             <path d="M766 552 C769 553.2 774 553.2 777 552"/>
           </g>
 
-          <!-- grass and reeds, in clusters of different weight -->
-          <g class="sway-a" stroke="#0f1322" stroke-width="1.7" fill="#0f1322">
-            <use href="#tuft" transform="translate(24 566) scale(1.15)"/>
-            <use href="#tuft" transform="translate(104 560) scale(.9)"/>
-            <use href="#tuft" transform="translate(176 556) scale(.8)"/>
+          <!-- The whole stand lifts 10 units so it roots at the waterline and
+               stops growing through the inscription rule. The rule is printed on the
+               paper; the grass is in the scene, and the scene sits above the lettering. -->
+          <g transform="translate(0 -10)">
+          <!-- Grass and reeds grow in stands, not at intervals. The left bank
+               has a dense one that thins as it runs right; the right bank has a
+               smaller one; between them the shore is bare, which is what a shore
+               somebody walks along looks like. Each stand has a back row, a
+               little lighter and taller, and a front row - the overlap is what
+               makes it read as growth rather than a row of stick figures. Three
+               sway phases, so the clumps are never in step. -->
+          <g fill="#161d31" stroke="#161d31" stroke-linecap="round">
+            <use href="#reed" transform="translate(20 566) scale(1.02)"/>
+            <use href="#reed" transform="translate(46 564) rotate(-5) scale(.88)"/>
+            <use href="#reed" transform="translate(98 562) rotate(3) scale(.82)"/>
+            <use href="#tuft" transform="translate(34 568) scale(.9)"/>
+            <use href="#tuft" transform="translate(72 566) scale(1.02)"/>
+            <use href="#tuft" transform="translate(116 562) scale(.78)"/>
           </g>
-          <g class="sway-b" stroke="#0f1322" stroke-width="2" fill="#0f1322">
-            <use href="#reed" transform="translate(46 570) scale(1.1)"/>
-            <use href="#reed" transform="translate(66 572) rotate(4) scale(.86)"/>
-            <use href="#reed" transform="translate(84 568) rotate(-6) scale(.7)"/>
+          <g class="sway-a" fill="#0f1322" stroke="#0f1322" stroke-linecap="round">
+            <use href="#reed" transform="translate(30 572) rotate(4) scale(1.15)"/>
+            <use href="#reed" transform="translate(60 574) rotate(-3) scale(.95)"/>
+            <use href="#reed" transform="translate(110 568) rotate(-6) scale(.9)"/>
+            <use href="#tuft" transform="translate(12 576) scale(1.05)"/>
+            <use href="#tuft" transform="translate(26 578) scale(.8)"/>
+            <use href="#tuft" transform="translate(40 576) scale(1.12)"/>
+            <use href="#tuft" transform="translate(54 578) scale(.72)"/>
+            <use href="#tuft" transform="translate(68 574) scale(.92)"/>
+            <use href="#tuft" transform="translate(84 572) scale(.76)"/>
+            <use href="#tuft" transform="translate(96 570) scale(.88)"/>
+            <use href="#tuft" transform="translate(124 566) scale(.66)"/>
+            <use href="#tuft" transform="translate(140 562) scale(.58)"/>
           </g>
-          <g class="sway-b" stroke="#0f1322" stroke-width="1.9" fill="#0f1322" style="animation-delay:-5s">
-            <use href="#reed" transform="translate(834 556) scale(.95)"/>
-            <use href="#reed" transform="translate(852 558) rotate(5) scale(.78)"/>
+          <g class="sway-b" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-5s">
+            <use href="#reed" transform="translate(838 558) scale(.95)"/>
+            <use href="#reed" transform="translate(858 560) rotate(5) scale(.76)"/>
+            <use href="#tuft" transform="translate(802 560) scale(.9)"/>
+            <use href="#tuft" transform="translate(818 562) scale(.7)"/>
+            <use href="#tuft" transform="translate(830 564) scale(.85)"/>
+            <use href="#tuft" transform="translate(848 566) scale(.6)"/>
           </g>
-          <g class="sway-a" stroke="#0f1322" stroke-width="1.6" fill="#0f1322" style="animation-delay:-3.5s">
-            <use href="#tuft" transform="translate(806 552) scale(.95)"/>
-            <use href="#tuft" transform="translate(884 552) scale(1.05)"/>
-            <use href="#tuft" transform="translate(640 552) scale(.7)"/>
-            <use href="#tuft" transform="translate(500 553) scale(.62)"/>
+          <g class="sway-b" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-2.5s">
+            <use href="#reed" transform="translate(876 556) rotate(-4) scale(.88)"/>
+            <use href="#tuft" transform="translate(864 562) scale(.74)"/>
+            <use href="#tuft" transform="translate(884 558) scale(.98)"/>
+            <use href="#tuft" transform="translate(896 560) scale(.7)"/>
           </g>
-
+          <!-- three survivors out in the open, which is what keeps the bare
+               stretch from reading as an omission -->
+          <g class="sway-a" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-7.5s">
+            <use href="#tuft" transform="translate(206 556) scale(.62)"/>
+            <use href="#tuft" transform="translate(474 552) scale(.46)"/>
+            <use href="#tuft" transform="translate(642 552) scale(.54)"/>
+          </g>
+          </g>
           <!-- petals that have already reached the water -->
           <g fill="#f4c3d0" opacity=".75">
             <ellipse cx="238" cy="524" rx="5" ry="1.7"/>
