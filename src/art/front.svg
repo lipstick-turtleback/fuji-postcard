@@ -865,12 +865,12 @@
               <path d="M772 100 L772 84 C790 80 806 88 822 94 C832 98 838 100 840 100 Z" fill="#7fa8c6"/>
               <path d="M786 100 C800 96 812 82 820 66 C828 82 840 96 840 100 Z" fill="#3f5d86"/>
               <!-- the flank the sun is on, a shade lighter than the other -->
-              <path d="M820 66 C828 82 840 96 840 100 L820 100 Z" fill="#47688f"/>
+              <path d="M820 66 C828 82 840 96 840 100 L826 100 C825 88 823 76 820 66 Z" fill="#47688f"/>
               <!-- and the snow, which ends in a scalloped snowline the way
                    the real mountain's does, not in a cut diamond -->
               <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C818.6 83 816.2 79.4 813.8 82 L812 82 Z"
                     fill="#f4f8fc"/>
-              <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 L820 66 Z" fill="#dfe8f2"/>
+              <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C821 74 820 66 Z" fill="#dfe8f2"/>
               <circle cx="796" cy="60" r="7" fill="#f2c14e"/>
               <text x="806" y="112" text-anchor="middle" fill="#3f5d86" font-size="9"
                     letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>
