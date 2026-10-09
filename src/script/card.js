@@ -269,7 +269,7 @@ function frame(now) {
   // the hot-stamped wordmark catches the same highlight
   goldShine.setAttribute(
     'gradientTransform',
-    `translate(${((sx / 100) * 900 - 187).toFixed(1)} 0)`,
+    `translate(${((sx / 100) * 900 - 450).toFixed(1)} 0)`,
   );
   wmShine.setAttribute('opacity', Math.min(0.92, spec * 1.5).toFixed(3));
 

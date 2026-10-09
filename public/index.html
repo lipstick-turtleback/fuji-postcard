@@ -1333,7 +1333,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <stop offset=".74" stop-color="#eed488"/>
             <stop offset="1"   stop-color="#7c5518"/>
           </linearGradient>
-          <linearGradient id="goldShine" gradientUnits="userSpaceOnUse" x1="90" y1="0" x2="284" y2="0">
+          <linearGradient id="goldShine" gradientUnits="userSpaceOnUse" x1="110" y1="0" x2="790" y2="0">
             <stop offset="0"   stop-color="#ffffff" stop-opacity="0"/>
             <stop offset=".43" stop-color="#ffffff" stop-opacity="0"/>
             <stop offset=".5"  stop-color="#fffdf0" stop-opacity=".95"/>
@@ -1757,9 +1757,14 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           <!-- the near bank. one irregular waterline, then the small things
                that live on it: wet sand, stones, driftwood, grass, reeds,
                two ducks in the shallows and a heron standing at the edge. -->
+          <!-- Everything in the bank sits 14 units higher than it did. The plate
+               inscription along the bottom edge needs a foreground deep enough to
+               hold it, and the bank was too thin: the small line of type was
+               sitting on the card's own border. -->
+          <g transform="translate(0 -14)">
           <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
                    C450 541 520 549 596 545 C670 541 740 548 812 544
-                   C852 542 878 546 900 544 L900 600 L0 600 Z" fill="url(#shore)"/>
+                   C852 542 878 546 900 544 L900 620 L0 620 Z" fill="url(#shore)"/>
           <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
                    C450 541 520 549 596 545 C670 541 740 548 812 544
                    C852 542 878 546 900 544 L900 556 C878 558 852 554 812 556
@@ -1860,6 +1865,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           </g>
           <g stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none">
             <path d="M232 527 h13 M406 539 h12 M534 523 h11 M662 537 h13"/>
+          </g>
           </g>
 
           <!-- cherry branch, top-left -->
@@ -1995,19 +2001,37 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                   letter-spacing="1" font-family="Georgia,serif">24.5.12</text>
           </g>
 
-          <!-- hot-stamped wordmark, lower left -->
+          <!-- The plate inscription, along the whole bottom edge, the way a
+               fine print is lettered: the old name of the mountain at left,
+               the title in the middle, its height at right, the place beneath,
+               and a hairline rule with diamond terminals holding the three
+               apart. It is deliberately small and low in contrast — a mark,
+               not a caption. Nothing here is invented: 富嶽 (Fugaku) is the
+               classical name Hokusai lettered on his own Fuji prints, and
+               3,776 m is the height of the mountain. -->
           <g font-family="Georgia,'Times New Roman',serif">
+            <g stroke="url(#gold)" opacity=".38" fill="none">
+              <path d="M118 552 H782" stroke-width=".7"/>
+              <path d="M106 552 l4 -3.4 4 3.4 -4 3.4 z M786 552 l4 -3.4 4 3.4 -4 3.4 z"
+                    stroke="none" fill="url(#gold)" opacity=".55"/>
+            </g>
             <g fill="#0b0f1c" opacity=".55" transform="translate(1 1.2)">
-              <text x="98" y="570" font-size="16" letter-spacing="4.8">MT. FUJI</text>
-              <text x="99" y="588" font-size="8.5" letter-spacing="2.8">KAWAGUCHI-KO · JAPAN</text>
+              <text x="118" y="574" font-size="12.5" letter-spacing="2.4">富嶽</text>
+              <text x="450" y="574" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
+              <text x="782" y="574" text-anchor="end" font-size="9.5" letter-spacing="2.2">3,776 M</text>
+              <text x="450" y="588" text-anchor="middle" font-size="7.6" letter-spacing="3.2">KAWAGUCHI-KO · JAPAN</text>
             </g>
             <g fill="url(#gold)">
-              <text x="98" y="570" font-size="16" letter-spacing="4.8">MT. FUJI</text>
-              <text x="99" y="588" font-size="8.5" letter-spacing="2.8">KAWAGUCHI-KO · JAPAN</text>
+              <text x="118" y="574" font-size="12.5" letter-spacing="2.4" opacity=".82">富嶽</text>
+              <text x="450" y="574" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
+              <text x="782" y="574" text-anchor="end" font-size="9.5" letter-spacing="2.2" opacity=".82">3,776 M</text>
+              <text x="450" y="588" text-anchor="middle" font-size="7.6" letter-spacing="3.2" opacity=".78">KAWAGUCHI-KO · JAPAN</text>
             </g>
             <g id="wmShine" fill="url(#goldShine)" opacity="0">
-              <text x="98" y="570" font-size="16" letter-spacing="4.8">MT. FUJI</text>
-              <text x="99" y="588" font-size="8.5" letter-spacing="2.8">KAWAGUCHI-KO · JAPAN</text>
+              <text x="118" y="574" font-size="12.5" letter-spacing="2.4">富嶽</text>
+              <text x="450" y="574" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
+              <text x="782" y="574" text-anchor="end" font-size="9.5" letter-spacing="2.2">3,776 M</text>
+              <text x="450" y="588" text-anchor="middle" font-size="7.6" letter-spacing="3.2">KAWAGUCHI-KO · JAPAN</text>
             </g>
           </g>
 
@@ -2528,7 +2552,7 @@ function frame(now) {
   // the hot-stamped wordmark catches the same highlight
   goldShine.setAttribute(
     'gradientTransform',
-    `translate(${((sx / 100) * 900 - 187).toFixed(1)} 0)`,
+    `translate(${((sx / 100) * 900 - 450).toFixed(1)} 0)`,
   );
   wmShine.setAttribute('opacity', Math.min(0.92, spec * 1.5).toFixed(3));
 
