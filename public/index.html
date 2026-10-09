@@ -1177,6 +1177,17 @@ kbd {
             <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
           </linearGradient>
 
+          <!-- the torii's reflection: a shallow band of water, so the
+               mirror is compressed and gone within a few tens of units -->
+          <linearGradient id="toriiReflFade" gradientUnits="userSpaceOnUse" x1="0" y1="524" x2="0" y2="578">
+            <stop offset="0"   stop-color="#fff" stop-opacity=".9"/>
+            <stop offset=".5"  stop-color="#fff" stop-opacity=".42"/>
+            <stop offset="1"   stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+          <mask id="toriiReflMask" maskUnits="userSpaceOnUse" x="140" y="523" width="184" height="58">
+            <rect x="140" y="523" width="184" height="58" fill="url(#toriiReflFade)"/>
+          </mask>
+
           <clipPath id="clipFuji"><use href="#fujiPath"/></clipPath>
           <clipPath id="clipLake"><rect x="0" y="404" width="900" height="146"/></clipPath>
           <clipPath id="clipCard"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
@@ -1343,25 +1354,47 @@ kbd {
             </g>
           </g>
 
-          <!-- the far shore of the lake: a line of trees at the foot of the mountain -->
-          <path d="M0 402 C120 398 240 400 360 398 C500 396 640 401 760 398 C820 396 870 400 900 398
-                   L900 407 L0 407 Z" fill="#252b47" opacity=".75"/>
-          <g fill="#20263e" opacity=".8">
-            <path d="M196 402 l3 -7 l3 7 z M214 402 l2.5 -6 l2.5 6 z M232 402 l3 -8 l3 8 z
-                     M252 402 l2.5 -6 l2.5 6 z M560 402 l3 -7 l3 7 z M578 402 l2.5 -6 l2.5 6 z
-                     M596 402 l3 -8 l3 8 z M618 402 l2.5 -6 l2.5 6 z M640 402 l3 -7 l3 7 z"/>
+          <!-- the far shore of the lake: a line of trees at the foot of
+               the mountain. it runs the whole width with gaps, and the
+               heights are never repeated twice in a row -->
+          <path d="M0 403 C60 401 110 402 168 400 C240 398 300 401 372 399
+                   C450 397 520 402 596 400 C670 398 740 401 812 399
+                   C852 398 878 401 900 400 L900 407 L0 407 Z" fill="#252b47" opacity=".75"/>
+          <g fill="#20263e" opacity=".85">
+            <path d="M40 401.5 l2.4 -6 l2.4 6 z     M62 401.5 l2 -5 l2 5 z
+                     M88 401.5 l2.6 -7 l2.6 7 z     M132 401.5 l2 -5 l2 5 z
+                     M158 401.5 l2.4 -6.5 l2.4 6.5 z M196 401.5 l3 -8 l3 8 z
+                     M214 401.5 l2.5 -6 l2.5 6 z    M232 401.5 l3 -8.5 l3 8.5 z
+                     M252 401.5 l2.5 -6 l2.5 6 z    M286 401.5 l2 -5 l2 5 z
+                     M318 401.5 l2.6 -7 l2.6 7 z    M352 401.5 l2 -4.5 l2 4.5 z
+                     M560 401.5 l3 -7.5 l3 7.5 z    M578 401.5 l2.5 -6 l2.5 6 z
+                     M596 401.5 l3 -8.5 l3 8.5 z    M618 401.5 l2.5 -6 l2.5 6 z
+                     M640 401.5 l3 -7 l3 7 z        M668 401.5 l2 -5 l2 5 z
+                     M700 401.5 l2.6 -6.5 l2.6 6.5 z M742 401.5 l2 -5 l2 5 z
+                     M786 401.5 l2.4 -6 l2.4 6 z    M830 401.5 l2 -4.5 l2 4.5 z
+                     M868 401.5 l2.4 -6 l2.4 6 z"/>
           </g>
+          <!-- a distant tree line mirrors as a smudge, not as trees -->
+          <path d="M0 407 H900 V413 C700 415 300 415 0 413 Z" fill="#1d2338" opacity=".26"
+                filter="url(#tiny)"/>
 
           <!-- mist at the foot, and a band crossing the cone: both blurred,
                both drifting, neither one a hard stripe -->
-          <g class="mist" filter="url(#mist)" opacity=".42">
-            <path d="M120 306 C250 296 372 302 486 308 C600 314 716 308 812 302
-                     C848 300 858 320 812 326 C694 336 556 330 438 324
-                     C322 318 204 324 124 318 C96 316 96 308 120 306 Z" fill="#f7e6cf"/>
+          <!-- each band is two masses of different length and height,
+               never one long lens: a single lens blurs into a stripe -->
+          <g class="mist" filter="url(#mist)" opacity=".40">
+            <path d="M120 306 C210 298 300 303 386 307 C470 311 540 306 604 302
+                     C640 300 646 316 606 322 C520 330 420 326 330 322
+                     C240 318 160 322 122 318 C98 316 98 308 120 306 Z" fill="#f7e6cf"/>
+            <path d="M470 330 C560 324 660 328 742 334 C776 337 770 348 726 350
+                     C640 353 540 349 476 344 C448 342 446 333 470 330 Z"
+                  fill="#f7e6cf" opacity=".7"/>
           </g>
-          <g class="mist" filter="url(#mist)" opacity=".30" style="animation-duration:31s">
-            <path d="M150 386 C280 378 386 384 462 380 C552 375 648 384 752 390
-                     C784 392 780 402 742 402 L170 402 C138 402 128 392 150 386 Z" fill="#f4dcc0"/>
+          <g class="mist" filter="url(#mist)" opacity=".28" style="animation-duration:31s">
+            <path d="M150 386 C250 379 340 384 420 381 C480 379 520 384 560 388
+                     C580 390 574 400 540 401 L180 401 C148 401 132 392 150 386 Z" fill="#f4dcc0"/>
+            <path d="M596 390 C660 385 720 389 768 394 C788 396 782 402 752 402
+                     L610 402 C588 401 580 393 596 390 Z" fill="#f4dcc0" opacity=".8"/>
           </g>
 
           <!-- the air itself, thickening toward the water -->
@@ -1409,7 +1442,8 @@ kbd {
             <!-- the glitter path: narrow at the far shore, opening as it
                  comes in, and never a solid sheet of light -->
             <g class="water-b">
-              <path d="M594 404 H646 L742 550 H498 Z" fill="url(#glitter)" opacity=".46" filter="url(#soft)"/>
+              <path d="M594 404 H646 C678 452 706 504 742 550 Q620 561 498 550 C536 502 566 452 594 404 Z"
+                    fill="url(#glitter)" opacity=".42" filter="url(#soft)"/>
               <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
                 <path d="M600 411 h40"  stroke-width="2.4" opacity=".55"/>
                 <path d="M586 419 h26 M624 419 h30" stroke-width="2.2" opacity=".5"/>
@@ -1441,7 +1475,7 @@ kbd {
           <g>
             <!-- contact shadow where the posts meet the water -->
             <ellipse cx="230" cy="526" rx="68" ry="4.5" fill="#101426" opacity=".22" filter="url(#tiny)"/>
-            <g fill="#c8452f" stroke="#8f2f20" stroke-width=".8" stroke-opacity=".45">
+            <g id="toriiBody" fill="#c8452f" stroke="#8f2f20" stroke-width=".8" stroke-opacity=".45">
               <path d="M171 524 L177 428 L188 428 L185 524 Z"/>
               <path d="M289 524 L283 428 L272 428 L275 524 Z"/>
               <rect x="225" y="432" width="10" height="24" rx="1"/>
@@ -1459,11 +1493,16 @@ kbd {
               <path d="M185 524 L188 428 L186 428 L182.5 524 Z"/>
               <path d="M275 524 L272 428 L274 428 L277.5 524 Z"/>
             </g>
-            <!-- reflection: broken into the same bands as the rest of the water -->
-            <g stroke="#8f2f20" stroke-linecap="round" fill="none" opacity=".34">
-              <path d="M177 530 h9 M175 538 h11 M178 546 h8" stroke-width="4.4"/>
-              <path d="M283 530 h9 M285 538 h11 M282 546 h8" stroke-width="4.4"/>
-              <path d="M196 534 h68" stroke-width="2.6" opacity=".5"/>
+            <!-- the reflection is the gate itself: mirrored about the
+                 waterline and compressed by the viewing angle. the water
+                 breaks it into bands, so the bands are drawn over it in
+                 the colour of the water, not left out of the drawing -->
+            <g mask="url(#toriiReflMask)" filter="url(#tiny)" opacity=".62"
+               style="mix-blend-mode:multiply">
+              <use href="#toriiBody" transform="translate(0 786) scale(1 -0.5)"/>
+            </g>
+            <g stroke="#98a1bb" stroke-linecap="round" fill="none" opacity=".3">
+              <path d="M170 533 h120 M176 543 h108" stroke-width="2.4"/>
             </g>
             <path d="M168 528 C198 534 262 534 292 528" stroke="#f2e6d4" stroke-opacity=".34"
                   stroke-width="1.6" fill="none"/>
