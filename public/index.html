@@ -1045,16 +1045,6 @@ kbd {
                       0 0 0 -3.4 1.42"/>
             <feGaussianBlur stdDeviation="1.1"/>
           </filter>
-          <!-- finer, denser field for the handling wear of a carried card -->
-          <filter id="speckle" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
-            <feTurbulence type="fractalNoise" baseFrequency="0.42" numOctaves="2" seed="41" result="n"/>
-            <feColorMatrix in="n" type="matrix"
-              values="0 0 0 0 0.38
-                      0 0 0 0 0.28
-                      0 0 0 0 0.17
-                      0 0 0 -5.2 2.05"/>
-          </filter>
-
           <!-- filter regions are pinned in user space: a blur that runs out
                of room leaves a hard rectangular edge, and nothing here
                should ever have a rectangular edge -->
@@ -1075,6 +1065,9 @@ kbd {
           </filter>
           <filter id="edgeWear" filterUnits="userSpaceOnUse" x="300" y="170" width="320" height="140">
             <feGaussianBlur stdDeviation="2.4"/>
+          </filter>
+          <filter id="gully" filterUnits="userSpaceOnUse" x="120" y="150" width="700" height="300">
+            <feGaussianBlur stdDeviation="4.5"/>
           </filter>
           <filter id="tiny" filterUnits="userSpaceOnUse" x="-20" y="-20" width="940" height="640">
             <feGaussianBlur stdDeviation="1.4"/>
@@ -1188,6 +1181,15 @@ kbd {
             <rect x="140" y="523" width="184" height="58" fill="url(#toriiReflFade)"/>
           </mask>
 
+          <path id="snowCapPath" d="M336 126 H564 V206
+                   C560 220 552 236 542 238
+                   C532 240 528 222 518 222
+                   C508 222 504 248 492 250
+                   C480 252 476 230 466 230
+                   C456 230 452 254 440 256
+                   C428 258 424 234 414 234
+                   C404 234 400 250 388 248
+                   C376 246 348 226 336 218 Z"/>
           <clipPath id="clipFuji"><use href="#fujiPath"/></clipPath>
           <clipPath id="clipLake"><rect x="0" y="404" width="900" height="146"/></clipPath>
           <clipPath id="clipCard"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
@@ -1312,17 +1314,36 @@ kbd {
                   fill="none" stroke="url(#rimLight)" stroke-width="4.4"
                   stroke-linecap="round" filter="url(#rim)"/>
 
+            <!-- Fuji's fall lines. The gullies are the mountain's whole
+                 character: they radiate from the summit craters to the
+                 foot, and with the sun at the upper right each one is
+                 shadowed on its left flank and lit on its right.
+                 Drawn under the snow so the snowline cuts them off. -->
+            <g clip-path="url(#clipFuji)" filter="url(#gully)">
+              <g fill="#222846">
+                <path d="M376 247 L420 247 L268 398 L256 398 Z" opacity=".13"/>
+                <path d="M393 252 L431 252 L342 376 L330 376 Z" opacity=".10"/>
+                <path d="M414 244 L464 244 L411 402 L397 402 Z" opacity=".12"/>
+                <path d="M441 247 L475 247 L477 356 L463 356 Z" opacity=".08"/>
+                <path d="M455 256 L501 256 L540 400 L528 400 Z" opacity=".11"/>
+                <path d="M481 246 L519 246 L610 372 L598 372 Z" opacity=".09"/>
+                <path d="M499 251 L541 251 L679 394 L665 394 Z" opacity=".12"/>
+              </g>
+              <g fill="#b3bdd0">
+                <path d="M420 247 L438 247 L276 398 L268 398 Z" opacity=".09"/>
+                <path d="M431 252 L446 252 L349 376 L342 376 Z" opacity=".07"/>
+                <path d="M464 244 L481 244 L418 402 L411 402 Z" opacity=".10"/>
+                <path d="M475 247 L494 247 L486 356 L477 356 Z" opacity=".06"/>
+                <path d="M501 256 L522 256 L549 400 L540 400 Z" opacity=".09"/>
+                <path d="M519 246 L542 246 L620 372 L610 372 Z" opacity=".07"/>
+                <path d="M541 251 L561 251 L688 394 L679 394 Z" opacity=".10"/>
+              </g>
+            </g>
+
             <!-- snow cap. the edge is a snowline, not a saw: it hangs into
                  the gullies and climbs back over every ridge it crosses -->
-            <path d="M336 126 H564 V206
-                     C560 220 552 236 542 238
-                     C532 240 528 222 518 222
-                     C508 222 504 248 492 250
-                     C480 252 476 230 466 230
-                     C456 230 452 254 440 256
-                     C428 258 424 234 414 234
-                     C404 234 400 250 388 248
-                     C376 246 348 226 336 218 Z" fill="url(#snow)"/>
+            <use href="#snowCapPath" fill="url(#snow)"/>
+            <use href="#snowCapPath" fill="url(#snowShade)"/>
             <!-- the melt edge casts a hairline onto the rock below it -->
             <path d="M564 206 C560 220 552 236 542 238 C532 240 528 222 518 222
                      C508 222 504 248 492 250 C480 252 476 230 466 230
@@ -1330,12 +1351,12 @@ kbd {
                      C404 234 400 250 388 248 C376 246 348 226 336 218"
                   fill="none" stroke="#7f8fab" stroke-opacity=".45" stroke-width="2.4"
                   filter="url(#edgeWear)"/>
-            <!-- residual snow left in the gullies, on the fall lines -->
-            <g fill="#eef3fa" opacity=".30" filter="url(#tiny)">
-              <path d="M486 254 C489 272 491 286 493 300 C496 286 499 272 501 256 Z"/>
-              <path d="M436 260 C438 274 440 284 441 296 C444 284 446 272 448 262 Z"/>
-              <path d="M536 242 C538 252 539 260 540 270 C542 260 544 250 546 244 Z"/>
-              <path d="M392 252 C394 262 395 270 396 280 C398 270 400 260 402 254 Z"/>
+            <!-- snow left standing in the two gullies that face the sun.
+                 the fall lines themselves are already drawn under the cap;
+                 this is only the bright residue at their head -->
+            <g fill="#eef3fa" opacity=".22" filter="url(#gully)">
+              <path d="M466 250 C470 268 473 284 476 302 C481 284 485 268 489 252 Z"/>
+              <path d="M520 246 C523 260 525 272 527 286 C531 272 535 258 539 248 Z"/>
             </g>
             <!-- summit crater: a shallow bowl, lit on the far rim -->
             <path d="M440 152 L452 158 L466 152 L478 162 L470 172 L448 174 Z" fill="#93a6c2" opacity=".42"/>
@@ -1761,7 +1782,7 @@ kbd {
         </g>
 
         <!-- deckled card edge -->
-        <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="#f8f3e8" stroke-opacity=".5" stroke-width="2"/>
+        <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="url(#paperEdge)" stroke-opacity=".55" stroke-width="2"/>
       </svg>
 
       <div class="foil" aria-hidden="true">

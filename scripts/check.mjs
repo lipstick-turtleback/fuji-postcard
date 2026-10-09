@@ -83,6 +83,15 @@ const refs = [
 ];
 for (const r of refs) if (!ids.has(r[1])) fail(r.index, `reference to missing id "#${r[1]}"`);
 
+/* ---- an id nothing points to is artwork that quietly stopped existing --- */
+// anything that can name an id: CSS selectors, querySelector/closest
+// strings, and getElementById
+const named = new Set();
+for (const r of refs) named.add(r[1]);
+for (const r of html.matchAll(/#([A-Za-z][\w-]*)/g)) named.add(r[1]);
+for (const r of html.matchAll(/getElementById\(\s*['"]([^'"]+)['"]/g)) named.add(r[1]);
+const unused = [...ids].filter(([name]) => !named.has(name));
+
 /* ---- the file must stay self-contained --------------------------------- */
 for (const d of html.matchAll(/(?:src|href)="(?!#)([^"]*)"/g)) {
   if (/^(https?:)?\/\//.test(d[1]) || !d[1].startsWith('data:'))
@@ -96,4 +105,6 @@ if (problems.length) {
   console.error(`check: ${problems.length} problem(s)\n${problems.join('\n')}`);
   process.exit(1);
 }
+for (const [name, index] of unused)
+  console.log(`check: note — id "${name}" defined at ${at(index)} is never referenced`);
 console.log(`check: ${file} — ${html.split('\n').length} lines, no problems`);
