@@ -461,24 +461,67 @@
                drawn by a program; crepuscular rays come in bundles with dark
                gaps between them, so some of these are 7 degrees apart and the
                widest gap is 36. -->
+          <!-- Sun and rays. The lines never end: the mask lets them thin out
+               with distance, the way light does. The angles are deliberately
+               uneven. Sixteen spokes at exactly 22.5 degrees is a starburst
+               drawn by a program; crepuscular rays come in bundles with dark
+               gaps between them, so some of these are 7 degrees apart and the
+               widest gap is 36.
+
+               Each ray is drawn three times - wide and faint, medium, narrow
+               and brightest - because a single stroke has a hard edge and a
+               constant width, and up close that reads as a ruler-drawn stripe
+               rather than as light. Three steps across the width give it a
+               falloff. Deliberately not a blur filter: a blurred group over
+               this much of the card is the cost the calm rendering cannot pay. -->
           <g class="rays" mask="url(#rayMask)" opacity=".26" fill="none"
              stroke="#ffe8c6" stroke-linecap="round">
-            <line x1="620" y1="206" x2="1085" y2="271" stroke-width="3.4"/>
-            <line x1="620" y1="206" x2="1048" y2="161" stroke-width="2.0"/>
-            <line x1="620" y1="206" x2="1055" y2="56" stroke-width="2.8"/>
-            <line x1="620" y1="206" x2="955" y2="-12" stroke-width="1.6"/>
-            <line x1="620" y1="206" x2="960" y2="-89" stroke-width="2.4"/>
-            <line x1="620" y1="206" x2="817" y2="-165" stroke-width="1.8"/>
-            <line x1="620" y1="206" x2="710" y2="-255" stroke-width="3.0"/>
-            <line x1="620" y1="206" x2="516" y2="-211" stroke-width="1.5"/>
-            <line x1="620" y1="206" x2="347" y2="-87" stroke-width="2.2"/>
-            <line x1="620" y1="206" x2="180" y2="72" stroke-width="2.9"/>
-            <line x1="620" y1="206" x2="226" y2="319" stroke-width="1.6"/>
-            <line x1="620" y1="206" x2="386" y2="505" stroke-width="2.4"/>
-            <line x1="620" y1="206" x2="605" y2="626" stroke-width="1.5"/>
-            <line x1="620" y1="206" x2="878" y2="575" stroke-width="2.6"/>
-            <line x1="620" y1="206" x2="1007" y2="370" stroke-width="1.8"/>
-</g>
+            <line x1="620" y1="206" x2="1085" y2="271" stroke-width="9.9" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="1048" y2="161" stroke-width="5.8" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="1055" y2="56" stroke-width="8.1" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="955" y2="-12" stroke-width="4.6" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="960" y2="-89" stroke-width="7.0" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="817" y2="-165" stroke-width="5.2" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="710" y2="-255" stroke-width="8.7" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="516" y2="-211" stroke-width="4.3" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="347" y2="-87" stroke-width="6.4" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="180" y2="72" stroke-width="8.4" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="226" y2="319" stroke-width="4.6" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="386" y2="505" stroke-width="7.0" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="605" y2="626" stroke-width="4.3" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="878" y2="575" stroke-width="7.5" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="1007" y2="370" stroke-width="5.2" stroke-opacity="0.16"/>
+            <line x1="620" y1="206" x2="1085" y2="271" stroke-width="5.8" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="1048" y2="161" stroke-width="3.4" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="1055" y2="56" stroke-width="4.8" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="955" y2="-12" stroke-width="2.7" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="960" y2="-89" stroke-width="4.1" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="817" y2="-165" stroke-width="3.1" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="710" y2="-255" stroke-width="5.1" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="516" y2="-211" stroke-width="2.5" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="347" y2="-87" stroke-width="3.7" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="180" y2="72" stroke-width="4.9" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="226" y2="319" stroke-width="2.7" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="386" y2="505" stroke-width="4.1" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="605" y2="626" stroke-width="2.5" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="878" y2="575" stroke-width="4.4" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="1007" y2="370" stroke-width="3.1" stroke-opacity="0.3"/>
+            <line x1="620" y1="206" x2="1085" y2="271" stroke-width="3.4" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="1048" y2="161" stroke-width="2.0" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="1055" y2="56" stroke-width="2.8" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="955" y2="-12" stroke-width="1.6" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="960" y2="-89" stroke-width="2.4" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="817" y2="-165" stroke-width="1.8" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="710" y2="-255" stroke-width="3.0" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="516" y2="-211" stroke-width="1.5" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="347" y2="-87" stroke-width="2.2" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="180" y2="72" stroke-width="2.9" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="226" y2="319" stroke-width="1.6" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="386" y2="505" stroke-width="2.4" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="605" y2="626" stroke-width="1.5" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="878" y2="575" stroke-width="2.6" stroke-opacity="0.55"/>
+            <line x1="620" y1="206" x2="1007" y2="370" stroke-width="1.8" stroke-opacity="0.55"/>
+          </g>
           <circle cx="620" cy="206" r="96" fill="#ffd9a0" opacity=".30" filter="url(#bloom)"/>
           <circle class="glow" cx="620" cy="206" r="176" fill="url(#sunGlow)"/>
           <circle cx="620" cy="206" r="38" fill="url(#sunDisc)"/>
