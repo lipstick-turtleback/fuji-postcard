@@ -1,0 +1,21 @@
+name: build and check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  page:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # fails if the committed single file has drifted from src/
+      - run: npm run check
+      - run: npx biome check .
