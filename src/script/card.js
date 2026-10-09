@@ -68,6 +68,11 @@ function setEnhance(on, reason) {
       ? 'Enhance off · smooth'
       : 'Enhance off';
   enhanceBtn.setAttribute('aria-pressed', String(on));
+  status.textContent = on
+    ? 'Enhance on: laminate, glow and motion.'
+    : reason === 'auto'
+      ? 'Enhance turned itself off to keep the page smooth.'
+      : 'Enhance off.';
   enhanceBtn.title = on
     ? 'On: holographic laminate and its glow, the card swaying, petals and water moving, paper grain. The most expensive thing on the page.'
     : 'Off: the print on its own — no laminate, no glow, no grain, no motion but the mist. About twice the frame rate.';
@@ -112,8 +117,13 @@ measure();
 if ('ResizeObserver' in window) new ResizeObserver(measure).observe(card);
 else addEventListener('resize', measure);
 
+const status = document.getElementById('status');
+
 const flip = () => {
   flipped = !flipped;
+  status.textContent = flipped
+    ? 'The card is showing its back: the message and the address.'
+    : 'The card is showing the picture.';
   turnFrom = turn;
   turnTo = flipped ? 180 : 0;
   turnT0 = performance.now();

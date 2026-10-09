@@ -1,4 +1,15 @@
-      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
+           aria-labelledby="ttlBack"
+           aria-describedby="dscBack">
+        <title id="ttlBack">The back of the postcard</title>
+        <desc id="dscBack">A printed correspondence card, aged. Across the top: POST CARD,
+          CORRESPONDENCE CARD · 郵便はがき. At left, a handwritten message: "Wish you were here. The
+          mountain showed itself for only a moment at dawn — then the cloud came back, and everyone
+          applauded anyway. See you in autumn." Below it, blank address rules, a small line drawing of
+          Fuji, and KAWAGUCHI-KO · 35.4387° N, 138.7265° E. At right, the address block: TO, Hana Sato,
+          4-12-3 Kitazawa, Setagaya-ku, Tokyo 155-0031, Japan, and a postal code box reading 〒155-0031.
+          In the top right corner a 84-yen NIPPON stamp carrying the same mountain is cancelled with a
+          circular mark: KAWAGUCHIKO, 24.5.12. Par avion stripes run along the bottom edge.</desc>
         <defs>
           <linearGradient id="backPaper" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0"   stop-color="#fbf6ec"/>

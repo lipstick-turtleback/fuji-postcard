@@ -1,4 +1,17 @@
-      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
+           aria-labelledby="ttlFront"
+           aria-describedby="dscFront">
+        <title id="ttlFront">Mount Fuji at dawn, from Kawaguchi-ko</title>
+        <desc id="dscFront">A print in the woodblock manner. Fuji stands in blue shadow with a scalloped
+          snowline; a low sun to the right throws pale rays across a sky that runs from deep blue to
+          orange. Bands of mist lie across the middle of the mountain and it is mirrored, broken into
+          horizontal bands, in the still lake below. A cherry branch with blossoms enters from the top
+          left. A red torii stands in the water at left, its reflection a short red smear; two ducks
+          swim near it. A boatman in a conical hat poles across the lake at right and a heron stands at
+          the near shore. Reeds grow in dense stands and stones lie along the dark bank in the
+          foreground. A vertical paper strip at left carries the title 富士山 and the place 河口湖 above
+          a red seal. A stamp cancelled TOKYO sits at the top right. Lettering along the bottom edge
+          reads 富嶽, MT. FUJI, 3,776 M, KAWAGUCHI-KO · JAPAN.</desc>
         <defs>
           <!-- sky: zenith indigo down to a low gold. the last two stops are
                deliberately close so the light gathers at the horizon. -->
