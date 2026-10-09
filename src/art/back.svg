@@ -154,8 +154,11 @@
           <!-- age, then grain -->
           <rect x="0" y="0" width="900" height="600" filter="url(#foxB)" opacity=".055"
                 style="mix-blend-mode:multiply"/>
-          <rect x="7" y="7" width="886" height="586" rx="6" fill="none" stroke="#6d5c44"
-                stroke-opacity=".10" stroke-width="5" filter="url(#tinyB)"/>
+          <!-- widened and halved, matching the front: narrow and strong it read
+               as a line drawn round the card, wide and faint it reads as the
+               edge of the paper being dirtier than the middle -->
+          <rect x="9" y="9" width="882" height="582" rx="7" fill="none" stroke="#6d5c44"
+                stroke-opacity=".055" stroke-width="11" filter="url(#tinyB)"/>
           <g transform="rotate(-13 450 300)">
             <rect x="606" y="-80" width="30" height="760" fill="url(#creaseB)"/>
           </g>

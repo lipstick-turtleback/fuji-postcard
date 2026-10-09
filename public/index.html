@@ -1185,9 +1185,13 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <stop offset="1"    stop-color="#12162a"/>
           </linearGradient>
 
+          <!-- The cut edge of the paper. The gradient used to run bright at the
+               top-left to pale at the bottom-right, which put almost all of its
+               light along the left side of the card and read as a line drawn
+               down the page rather than as an edge. It is flatter now. -->
           <linearGradient id="paperEdge" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#fffdf8"/>
-            <stop offset="1" stop-color="#efe7d6"/>
+            <stop offset="0" stop-color="#fdf8ee"/>
+            <stop offset="1" stop-color="#f2ead9"/>
           </linearGradient>
 
           <filter id="grain" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
@@ -2041,8 +2045,12 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                 style="mix-blend-mode:multiply"/>
           <rect x="0" y="0" width="900" height="600" filter="url(#fox)" opacity=".115"
                 style="mix-blend-mode:multiply"/>
-          <rect x="7" y="7" width="886" height="586" rx="6" fill="none" stroke="#6d5c44"
-                stroke-opacity=".085" stroke-width="5" filter="url(#tiny)"/>
+          <!-- Edge soiling, widened from 5 units to 11 and halved in strength.
+               Narrow and strong, it sat hard against the cut edge and read as a
+               dark line running the length of the card; wide and faint, it reads
+               as the edge of the paper being dirtier than the middle. -->
+          <rect x="9" y="9" width="882" height="582" rx="7" fill="none" stroke="#6d5c44"
+                stroke-opacity=".05" stroke-width="11" filter="url(#tiny)"/>
           <g transform="rotate(-13 450 300)">
             <rect x="292" y="-80" width="24" height="760" fill="url(#crease)"/>
           </g>
@@ -2057,7 +2065,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
         </g>
 
         <!-- deckled card edge -->
-        <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="url(#paperEdge)" stroke-opacity=".55" stroke-width="2"/>
+        <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="url(#paperEdge)" stroke-opacity=".15" stroke-width="1.1"/>
       </svg>
 
       <div class="foil" aria-hidden="true">
@@ -2228,8 +2236,11 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           <!-- age, then grain -->
           <rect x="0" y="0" width="900" height="600" filter="url(#foxB)" opacity=".055"
                 style="mix-blend-mode:multiply"/>
-          <rect x="7" y="7" width="886" height="586" rx="6" fill="none" stroke="#6d5c44"
-                stroke-opacity=".10" stroke-width="5" filter="url(#tinyB)"/>
+          <!-- widened and halved, matching the front: narrow and strong it read
+               as a line drawn round the card, wide and faint it reads as the
+               edge of the paper being dirtier than the middle -->
+          <rect x="9" y="9" width="882" height="582" rx="7" fill="none" stroke="#6d5c44"
+                stroke-opacity=".055" stroke-width="11" filter="url(#tinyB)"/>
           <g transform="rotate(-13 450 300)">
             <rect x="606" y="-80" width="30" height="760" fill="url(#creaseB)"/>
           </g>
