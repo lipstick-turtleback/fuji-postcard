@@ -93,8 +93,8 @@ The numbers on this machine, 4-second samples:
 
 | Rendering                 | mean    | median  | frames over 33 ms |
 | ------------------------- | ------- | ------- | ----------------- |
-| Enhance on                | 38.4 ms | 33.4 ms | 237 / 240         |
-| Enhance off (the default) | 16.7 ms | 16.7 ms | 0 / 240           |
+| Enhance on                | 38.9 ms | 33.4 ms | 239 / 240         |
+| Enhance off (the default) | 17.6 ms | 16.7 ms | 14 / 240          |
 
 The laminate is the whole cost, and the shape of the cost is worth knowing
 before anyone tries to optimise it: `mix-blend-mode` has to read the backdrop,

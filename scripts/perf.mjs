@@ -152,7 +152,11 @@ clearInterval(sweep);
 
 const quality = await send('Runtime.evaluate', {
   expression:
-    'document.documentElement.dataset.quality + " | " + document.getElementById("foilLabel").textContent',
+    '(() => {' +
+    '  const label = document.getElementById("enhanceLabel");' +
+    '  if (!label) return "NO ENHANCE BUTTON - the harness is out of date";' +
+    '  return (document.documentElement.dataset.enhance || "?") + " | " + label.textContent;' +
+    '})()',
   returnByValue: true,
 });
 console.log(`                     rendering: ${quality.result.value}`);
