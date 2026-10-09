@@ -43,6 +43,7 @@ src/
 scripts/
   build.mjs            concatenate the parts into public/index.html
   check.mjs            validate the built page without a browser
+  test-score.mjs       verify the composition as data
   serve.mjs            dependency-free static server
 public/
   index.html           the built page (committed, so it can be opened directly)
@@ -60,7 +61,7 @@ npm run dev        # build, then serve on http://localhost:5173
 npm run check      # fail if the built file is stale, then validate it
 npm run lint       # biome over the JS (scripts/ and src/script/)
 npm run fmt        # prettier over CSS, JSON and Markdown
-npm test           # build + check + lint
+npm test           # build + check + score test + lint + format check
 ```
 
 `npm run check` is the interesting one. Browsers are forgiving about exactly
@@ -70,6 +71,20 @@ it, and the artwork just stops rendering. The checker reports the line —
 unterminated and malformed comments, unbalanced tags, duplicate `id`s,
 references to ids that do not exist, and any external `src`/`href`/`url()`,
 which would break the offline property (and the SVG export) outright.
+
+`npm run test` also runs `scripts/test-score.mjs`, which lifts the score out
+of the soundtrack IIFE and evaluates it as plain data — no DOM, no Web Audio.
+It checks the form (80 bars, ten eight-bar phrases, ~4 min 50 s), that every
+pitch is in D hirajōshi, that no note starts outside its bar or overlaps
+another note of the same voice, and that at least 70 of the 80 bars are
+distinct, which is what "through-composed" has to mean if it means anything.
+Those are mistakes you can only hear, and by the time you hear them you have
+listened to four and a half minutes.
+
+Headless Chrome cannot verify the audio itself: its `AudioContext` clock never
+advances, so nothing scheduled is ever rendered. What is verified is that the
+graph builds, the context resumes, the play button toggles, and the scheduler
+is bounded.
 
 ## Deploying to Vercel
 
