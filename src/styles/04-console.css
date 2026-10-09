@@ -81,9 +81,6 @@ button:focus-visible {
   outline: 1px solid var(--ink);
   outline-offset: 4px;
 }
-.ico {
-  display: none;
-}
 .dot {
   width: 6px;
   height: 6px;

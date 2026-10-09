@@ -24,6 +24,15 @@ const LAMP = [-0.3, -0.22, 0.85]; // point light, in card-widths, upper-left, in
 const EYE = [0, 0, 2.6]; // the viewer
 const HALF = unit(LAMP.map((v, i) => v / Math.hypot(...LAMP) + (i === 2 ? 1 : 0)));
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let touchOff = 0;
+let running = false;
+// frame() is a hoisted declaration, so the loop can be started from anywhere
+const wake = () => {
+  if (!running) {
+    running = true;
+    requestAnimationFrame(frame);
+  }
+};
 
 let rx = 0,
   ry = 0,
@@ -46,13 +55,17 @@ const measure = () => {
   cardH = r.height;
 };
 measure();
-addEventListener('resize', measure);
+// the card is sized by clamp() and the viewport, so it also changes when the
+// layout around it does — a resize listener misses that
+if ('ResizeObserver' in window) new ResizeObserver(measure).observe(card);
+else addEventListener('resize', measure);
 
 const flip = () => {
   flipped = !flipped;
   turnFrom = turn;
   turnTo = flipped ? 180 : 0;
   turnT0 = performance.now();
+  wake();
 };
 card.addEventListener('click', flip);
 document.getElementById('flip').addEventListener('click', flip);
@@ -65,9 +78,20 @@ card.addEventListener('pointermove', (e) => {
   hovering = true;
   hx = (e.clientX - r.left) / r.width - 0.5;
   hy = (e.clientY - r.top) / r.height - 0.5;
+  wake();
+  // a finger does not "leave": without this the card stays where it was
+  // touched and never returns to its idle sway
+  if (e.pointerType !== 'mouse') {
+    clearTimeout(touchOff);
+    touchOff = setTimeout(() => {
+      hovering = false;
+      wake();
+    }, 1200);
+  }
 });
 card.addEventListener('pointerleave', () => {
   hovering = false;
+  wake();
 });
 
 // world -> card frame.  R = rotateY(ry) . rotateX(rx), so R^T = Rx(-b) . Ry(-a)
@@ -155,9 +179,14 @@ function frame(now) {
   );
   wmShine.setAttribute('opacity', Math.min(0.92, spec * 1.5).toFixed(3));
 
-  requestAnimationFrame(frame);
+  // with reduced motion there is no sway to keep alive: once the card has
+  // come to rest and nothing is turning it, stop asking for frames
+  const settled =
+    reduce && !hovering && turnT0 < 0 && Math.abs(rx - tgtX) < 0.01 && Math.abs(ry - tgtY) < 0.01;
+  if (settled) running = false;
+  else requestAnimationFrame(frame);
 }
-requestAnimationFrame(frame);
+wake();
 
 // holographic lamination toggle
 const foilBtn = document.getElementById('foilBtn');
@@ -186,7 +215,9 @@ document.getElementById('dl').addEventListener('click', () => {
       }
     })
     .filter((t) =>
-      /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.boat|\.rays|\.glow|\.bird|\.p\d/.test(t),
+      /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.boat|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
+        t,
+      ),
     );
   const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
   style.textContent = css.join('\n');
@@ -197,6 +228,9 @@ document.getElementById('dl').addEventListener('click', () => {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'fuji-postcard-front.svg';
+  document.body.append(a);
   a.click();
-  URL.revokeObjectURL(a.href);
+  a.remove();
+  // revoking in the same tick can beat the download in some browsers
+  setTimeout(() => URL.revokeObjectURL(a.href), 30000);
 });
