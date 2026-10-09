@@ -199,9 +199,12 @@ foilBtn.addEventListener('click', () => {
   foilBtn.setAttribute('aria-pressed', String(foilOn));
 });
 
-// export the front artwork as a standalone .svg
+// Export the face you are looking at as a standalone .svg. The back is a
+// piece of artwork too, and saving the front while the back is showing is
+// saving something that is not on the screen.
 document.getElementById('dl').addEventListener('click', () => {
-  const src = card.querySelector('.face.front svg');
+  const face = flipped ? 'back' : 'front';
+  const src = card.querySelector(`.face.${face} svg`);
   const clone = src.cloneNode(true);
   clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   clone.setAttribute('width', '1800');
@@ -227,7 +230,7 @@ document.getElementById('dl').addEventListener('click', () => {
   });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'fuji-postcard-front.svg';
+  a.download = `fuji-postcard-${face}.svg`;
   document.body.append(a);
   a.click();
   a.remove();

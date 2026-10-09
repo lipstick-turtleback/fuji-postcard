@@ -19,7 +19,7 @@ it behaves the same.
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Move the pointer**         | the card tilts in 3D and the laminate is re-lit by a real lighting model — sheen, specular band and sparkle are computed from the lamp, not looped |
 | **`F`** or click the card    | turn it over: the back is a real postcard, addressed and stamped                                                                                   |
-| **`S`** or Save the plate    | serialises the live SVG out of the DOM and downloads it as a standalone `.svg`                                                                     |
+| **`S`** or Save the plate    | serialises the face you are looking at out of the DOM and downloads it as a standalone `.svg`                                                      |
 | **`M`** or Play              | a ~5-minute soundtrack: koto-ish plucks on the D hirajōshi scale, a lake drone, a dotted-eighth delay                                              |
 | **Laminate on/off**          | toggles the foil layer                                                                                                                             |
 | **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely                                                                                         |
