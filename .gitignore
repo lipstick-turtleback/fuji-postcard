@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# build output (the single-file page is generated from src/)
+dist/
+
+# vercel
+.vercel/
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# local env
+.env
+.env.local
+.env.*.local
+
+# editor / OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp

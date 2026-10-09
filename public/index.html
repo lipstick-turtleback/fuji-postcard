@@ -150,7 +150,10 @@
       0 0 0 1px rgba(34,32,28,.10);
   }
   .face.back{transform:rotateY(180deg);}
-  .face svg{display:block;width:100%;height:100%;}
+  /* The artwork blends its paper grain with mix-blend-mode. Inside a 3D
+     transform that blend escapes to the page backdrop unless the svg itself
+     isolates, which washes the lower half of the card to the wall colour. */
+  .face svg{display:block;width:100%;height:100%;isolation:isolate;}
 
   /* ---------- control console ---------- */
   /* ---------- plinth: wall label and controls ---------- */
@@ -407,10 +410,26 @@
   .p9{animation-duration:16s;animation-delay:-11s;}
   .p10{animation-duration:25s;animation-delay:-2s;}
 
-  .ripple{animation:shimmer 7s ease-in-out infinite alternate;}
-  .ripple:nth-child(2n){animation-duration:9s;animation-delay:-2s;}
-  .ripple:nth-child(3n){animation-duration:11s;animation-delay:-4s;}
-  @keyframes shimmer{from{opacity:.18;}to{opacity:.5;}}
+  .ripple{animation:shimmer 17s ease-in-out infinite alternate;}
+  .ripple:nth-child(2n){animation-duration:23s;animation-delay:-6s;}
+  .ripple:nth-child(3n){animation-duration:29s;animation-delay:-11s;}
+  @keyframes shimmer{from{opacity:.22;}to{opacity:.46;}}
+
+  /* the water: three slow drifts, deliberately unsynchronised. nothing here
+     moves fast enough to be followed with the eye — it is only ever noticed
+     having moved, which is exactly how a lake at dawn behaves */
+  .water-a{animation:waterA 47s ease-in-out infinite alternate;}
+  .water-b{animation:waterB 61s ease-in-out infinite alternate;}
+  .refl{animation:reflBreathe 39s ease-in-out infinite alternate;}
+  @keyframes waterA{from{transform:translateX(-9px);}to{transform:translateX(11px);}}
+  @keyframes waterB{from{transform:translateX(8px);}to{transform:translateX(-10px);}}
+  @keyframes reflBreathe{from{opacity:.86;}to{opacity:1;}}
+
+  /* grass and reeds: a breath of wind, not a gale */
+  .sway-a,.sway-b{transform-box:fill-box;transform-origin:50% 100%;}
+  .sway-a{animation:sway 13s ease-in-out infinite alternate;}
+  .sway-b{animation:sway 17s ease-in-out infinite alternate-reverse;}
+  @keyframes sway{from{transform:rotate(-.5deg);}to{transform:rotate(.6deg);}}
 
   .boat{animation:bob 6.5s ease-in-out infinite alternate;}
   @keyframes bob{from{transform:translate(0,0);}to{transform:translate(6px,-3px);}}
@@ -433,7 +452,8 @@
   }
 
   @media (prefers-reduced-motion:reduce){
-    .cloud-a,.cloud-b,.cloud-c,.mist,.petal,.ripple,.boat,.rays,.glow,.bird{animation:none;}
+    .cloud-a,.cloud-b,.cloud-c,.mist,.petal,.ripple,.boat,.rays,.glow,.bird,
+    .water-a,.water-b,.refl,.sway-a,.sway-b{animation:none;}
     .card{transition:none;}
   }
 </style>
@@ -581,7 +601,7 @@
                       0 0 0 -3.4 1.42"/>
             <feGaussianBlur stdDeviation="1.1"/>
           </filter>
-          <!-- finer, denser field for the handling wear of a carried card */
+          <!-- finer, denser field for the handling wear of a carried card -->
           <filter id="speckle" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
             <feTurbulence type="fractalNoise" baseFrequency="0.42" numOctaves="2" seed="41" result="n"/>
             <feColorMatrix in="n" type="matrix"
@@ -630,21 +650,33 @@
             C486 170 494 182 502 200
             C548 296 636 386 754 404 Z"/>
 
-          <linearGradient id="sunColumn" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"    stop-color="#ffd9a0" stop-opacity="0"/>
-            <stop offset="0.28" stop-color="#ffe3b8" stop-opacity=".28"/>
-            <stop offset="0.5"  stop-color="#ffedcb" stop-opacity=".46"/>
-            <stop offset="0.72" stop-color="#ffe3b8" stop-opacity=".28"/>
-            <stop offset="1"    stop-color="#ffd9a0" stop-opacity="0"/>
-          </linearGradient>
-
           <linearGradient id="reflFade" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0"    stop-color="#ffffff" stop-opacity=".50"/>
-            <stop offset="0.34" stop-color="#ffffff" stop-opacity=".26"/>
-            <stop offset="0.68" stop-color="#ffffff" stop-opacity=".10"/>
+            <stop offset="0"    stop-color="#ffffff" stop-opacity=".62"/>
+            <stop offset="0.34" stop-color="#ffffff" stop-opacity=".34"/>
+            <stop offset="0.68" stop-color="#ffffff" stop-opacity=".14"/>
             <stop offset="1"    stop-color="#ffffff" stop-opacity="0"/>
           </linearGradient>
-          <mask id="reflMask"><rect x="0" y="404" width="900" height="146" fill="url(#reflFade)"/></mask>
+          <!-- the mirror is not a mirror: the surface cuts it into bands that
+               widen as they come toward the viewer, then blurs the cuts -->
+          <filter id="reflBreak" filterUnits="userSpaceOnUse" x="0" y="404" width="900" height="146">
+            <feGaussianBlur stdDeviation="1.7"/>
+          </filter>
+          <mask id="reflMask" maskUnits="userSpaceOnUse" x="0" y="404" width="900" height="146">
+            <rect x="0" y="404" width="900" height="146" fill="url(#reflFade)"/>
+            <g fill="#000" filter="url(#reflBreak)">
+              <rect x="120" y="419" width="300" height="2.2" rx="1.1"/>
+              <rect x="470" y="423" width="250" height="2" rx="1"/>
+              <rect x="180" y="437" width="410" height="2.8" rx="1.4"/>
+              <rect x="620" y="441" width="210" height="2.4" rx="1.2"/>
+              <rect x="90"  y="457" width="370" height="3.2" rx="1.6"/>
+              <rect x="500" y="461" width="320" height="3" rx="1.5"/>
+              <rect x="150" y="481" width="450" height="3.8" rx="1.9"/>
+              <rect x="640" y="485" width="230" height="3.2" rx="1.6"/>
+              <rect x="60"  y="507" width="410" height="4.4" rx="2.2"/>
+              <rect x="520" y="511" width="330" height="3.8" rx="1.9"/>
+              <rect x="140" y="533" width="500" height="5" rx="2.5"/>
+            </g>
+          </mask>
 
           <!-- the rays are cut off by nothing but distance from the lamp -->
           <radialGradient id="rayFall" cx="0.5" cy="0.5" r="0.5">
@@ -676,6 +708,46 @@
           <clipPath id="clipCard"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
 
           <path id="petalShape" d="M0 0 C3 -5.5 11 -6.5 14.5 -1 C11 5 3 5.5 0 0 Z"/>
+
+          <!-- bank furniture, drawn once and placed by hand.
+               every blade is its own stroke width, so a tuft tapers as it
+               rises instead of reading as a bundle of matchsticks -->
+          <g id="tuft" fill="none" stroke-linecap="round">
+            <path d="M0 0 C-1 -6 -4 -12 -9 -17"   stroke-width="1.5"/>
+            <path d="M0 0 C0 -7 0 -14 -2 -22"     stroke-width="1.6"/>
+            <path d="M1 -1 C2 -9 4 -16 7 -21"     stroke-width="1.3"/>
+            <path d="M1 -1 C3 -6 6 -11 11 -14"    stroke-width="1.2"/>
+            <path d="M-1 -1 C-3 -5 -6 -8 -12 -10" stroke-width="1.1"/>
+            <path d="M0 0 C2 -4 4 -7 6 -8"        stroke-width="1"/>
+          </g>
+          <!-- a reed: one stem, two leaves that keep the stem's direction,
+               and the dark head that gives the cluster its rhythm -->
+          <g id="reed" stroke-linecap="round">
+            <path d="M0 0 C1 -14 0 -28 2 -44" fill="none" stroke-width="1.8"/>
+            <path d="M0.5 -10 C4 -20 6 -30 6.5 -40" fill="none" stroke-width="1.2"/>
+            <path d="M0 -16 C-3 -24 -5 -31 -5.5 -38" fill="none" stroke-width="1.1"/>
+            <ellipse cx="2.2" cy="-49" rx="1.9" ry="6.2" stroke="none"/>
+            <path d="M2.2 -54 L2.4 -58" fill="none" stroke-width=".9"/>
+          </g>
+          <!-- the heron: long legs, a thin S neck, a bill like a needle -->
+          <g id="heron">
+            <path d="M-10 -16 C-13 -21 -9 -27 -2 -28 C5 -29 11 -26 12 -21
+                     C13 -16 7 -12 0 -12 C-5 -12 -9 -13 -10 -16 Z"/>
+            <path d="M-10 -19 L-18 -15.5 L-9 -13 Z"/>
+            <path d="M7 -25 C11 -30 11 -36 8.5 -40 C7 -42.5 7.5 -44.5 9.5 -45.5"
+                  fill="none" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M8.5 -46.5 C11.5 -47.5 14.5 -46.5 15.5 -45.5 L25 -43.5
+                     L15.5 -42.5 C12.5 -42 9.5 -43 8.5 -44.5 Z"/>
+            <path d="M-1 -13 L-2.5 -6 L-2 0" fill="none" stroke-width="1.1" stroke-linecap="round"/>
+            <path d="M4.5 -13 L5.5 -6 L6.5 0" fill="none" stroke-width="1.1" stroke-linecap="round"/>
+          </g>
+          <g id="duck">
+            <path d="M-7 -4 C-10 -6 -9 -10 -4 -11 C1 -12 7 -10 8 -7 C9 -4 5 -2 0 -2 C-4 -2 -6 -3 -7 -4 Z"/>
+            <circle cx="7" cy="-11" r="2.6"/>
+            <path d="M9 -12 L14 -11 L9 -10 Z"/>
+            <path d="M-6 -2 L-6 0 M2 -2 L2 0" fill="none" stroke-width="1"/>
+          </g>
+
           <g id="blossom">
             <g>
               <ellipse cx="0" cy="-6.4" rx="4.1" ry="5.4"/>
@@ -843,35 +915,42 @@
           <!-- lake -->
           <rect x="0" y="404" width="900" height="146" fill="url(#lake)"/>
           <g clip-path="url(#clipLake)">
-            <!-- mirrored mountain, compressed and cut into bands by the water -->
-            <g mask="url(#reflMask)">
-              <g transform="matrix(1 0 0 -0.55 0 626.2)">
-                <use href="#fujiPath" fill="#333b60"/>
-                <path d="M336 126 H564 V206
-                         C560 220 552 236 542 238 C532 240 528 222 518 222
-                         C508 222 504 248 492 250 C480 252 476 230 466 230
-                         C456 230 452 254 440 256 C428 258 424 234 414 234
-                         C404 234 400 250 388 248 C376 246 348 226 336 218 Z" fill="#c3cfe2"/>
+            <!-- mirrored mountain, compressed and cut into bands by the water.
+                 the clip is applied inside the mirrored space, so the snow
+                 cannot spill outside the reflected body of the mountain -->
+            <g class="refl" mask="url(#reflMask)">
+              <g transform="matrix(1 0 0 -0.46 0 590)">
+                <g clip-path="url(#clipFuji)">
+                  <use href="#fujiPath" fill="#333b60"/>
+                  <path d="M336 126 H564 V206
+                           C560 220 552 236 542 238 C532 240 528 222 518 222
+                           C508 222 504 248 492 250 C480 252 476 230 466 230
+                           C456 230 452 254 440 256 C428 258 424 234 414 234
+                           C404 234 400 250 388 248 C376 246 348 226 336 218 Z" fill="#b4c2d6"/>
+                  <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
+                </g>
               </g>
             </g>
 
             <!-- the glitter path: narrow at the far shore, opening as it
                  comes in, and never a solid sheet of light -->
-            <path d="M594 404 H646 L742 550 H498 Z" fill="url(#glitter)" opacity=".55" filter="url(#soft)"/>
-            <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
-              <path d="M600 411 h40"  stroke-width="2.4" opacity=".55"/>
-              <path d="M586 419 h26 M624 419 h30" stroke-width="2.2" opacity=".5"/>
-              <path d="M572 429 h44 M632 429 h26" stroke-width="2.4" opacity=".46"/>
-              <path d="M560 441 h30 M604 441 h52" stroke-width="2.6" opacity=".42"/>
-              <path d="M548 455 h52 M618 455 h34" stroke-width="2.8" opacity=".38"/>
-              <path d="M534 471 h38 M592 471 h60" stroke-width="3" opacity=".34"/>
-              <path d="M520 489 h60 M600 489 h44" stroke-width="3.2" opacity=".3"/>
-              <path d="M506 509 h44 M572 509 h70" stroke-width="3.4" opacity=".26"/>
-              <path d="M494 531 h70 M586 531 h52" stroke-width="3.6" opacity=".22"/>
+            <g class="water-b">
+              <path d="M594 404 H646 L742 550 H498 Z" fill="url(#glitter)" opacity=".46" filter="url(#soft)"/>
+              <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
+                <path d="M600 411 h40"  stroke-width="2.4" opacity=".55"/>
+                <path d="M586 419 h26 M624 419 h30" stroke-width="2.2" opacity=".5"/>
+                <path d="M572 429 h44 M632 429 h26" stroke-width="2.4" opacity=".46"/>
+                <path d="M560 441 h30 M604 441 h52" stroke-width="2.6" opacity=".42"/>
+                <path d="M548 455 h52 M618 455 h34" stroke-width="2.8" opacity=".38"/>
+                <path d="M534 471 h38 M592 471 h60" stroke-width="3" opacity=".34"/>
+                <path d="M520 489 h60 M600 489 h44" stroke-width="3.2" opacity=".3"/>
+                <path d="M506 509 h44 M572 509 h70" stroke-width="3.4" opacity=".26"/>
+                <path d="M494 531 h70 M586 531 h52" stroke-width="3.6" opacity=".22"/>
+              </g>
             </g>
 
             <!-- ripples: a pale crest always paired with a darker trough -->
-            <g stroke="#f2e6d4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".5">
+            <g class="water-a" stroke="#f2e6d4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".5">
               <path class="ripple" d="M470 420 h64 M566 420 h44 M648 420 h30"/>
               <path class="ripple" d="M418 438 h88 M540 438 h62 M640 438 h36"/>
               <path class="ripple" d="M356 458 h104 M498 458 h78 M614 458 h50"/>
@@ -879,15 +958,15 @@
               <path class="ripple" d="M176 504 h146 M362 504 h114 M516 504 h84"/>
               <path class="ripple" d="M84 530 h168 M296 530 h132 M470 530 h96"/>
             </g>
-            <g stroke="#39446a" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".38">
+            <g class="water-b" stroke="#39446a" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".38">
               <path class="ripple" d="M180 448 h112 M336 470 h92 M232 512 h132 M600 464 h96 M664 496 h112"/>
             </g>
           </g>
 
           <!-- torii — every member mirrored exactly about x = 230 -->
           <g>
-            <!-- cast shadow on the water -->
-            <ellipse cx="230" cy="527" rx="74" ry="6" fill="#101426" opacity=".26"/>
+            <!-- contact shadow where the posts meet the water -->
+            <ellipse cx="230" cy="526" rx="68" ry="4.5" fill="#101426" opacity=".22" filter="url(#tiny)"/>
             <g fill="#c8452f" stroke="#8f2f20" stroke-width=".8" stroke-opacity=".45">
               <path d="M171 524 L177 428 L188 428 L185 524 Z"/>
               <path d="M289 524 L283 428 L272 428 L275 524 Z"/>
@@ -906,12 +985,13 @@
               <path d="M185 524 L188 428 L186 428 L182.5 524 Z"/>
               <path d="M275 524 L272 428 L274 428 L277.5 524 Z"/>
             </g>
-            <g fill="#c8452f" opacity=".18">
-              <path d="M171 526 L175 592 L186 592 L185 526 Z"/>
-              <path d="M289 526 L285 592 L274 592 L275 526 Z"/>
-              <rect x="168" y="528" width="124" height="8" rx="2"/>
+            <!-- reflection: broken into the same bands as the rest of the water -->
+            <g stroke="#8f2f20" stroke-linecap="round" fill="none" opacity=".34">
+              <path d="M177 530 h9 M175 538 h11 M178 546 h8" stroke-width="4.4"/>
+              <path d="M283 530 h9 M285 538 h11 M282 546 h8" stroke-width="4.4"/>
+              <path d="M196 534 h68" stroke-width="2.6" opacity=".5"/>
             </g>
-            <path d="M168 528 C198 534 262 534 292 528" stroke="#f2e6d4" stroke-opacity=".3"
+            <path d="M168 528 C198 534 262 534 292 528" stroke="#f2e6d4" stroke-opacity=".34"
                   stroke-width="1.6" fill="none"/>
           </g>
 
@@ -928,26 +1008,99 @@
                   stroke-width="1.4" fill="none"/>
           </g>
 
-          <!-- foreground shore -->
-          <path d="M0 556 C120 542 240 552 360 548 C500 543 640 556 760 548 C820 544 870 548 900 546
-                   L900 600 L0 600 Z" fill="url(#shore)"/>
-          <path d="M0 556 C120 542 240 552 360 548 C500 543 640 556 760 548 C820 544 870 548 900 546
-                   L900 560 C860 562 812 558 758 562 C640 570 500 557 360 562 C240 566 120 556 0 570 Z"
-                fill="#39425f" opacity=".5"/>
-          <!-- reeds -->
-          <g stroke="#0f1322" stroke-width="2" fill="none" stroke-linecap="round" opacity=".9">
-            <path d="M40 566 C44 546 38 532 46 516"/>
-            <path d="M54 568 C58 550 54 538 62 524"/>
-            <path d="M68 570 C70 552 66 542 74 530"/>
-            <path d="M826 560 C830 542 824 530 832 516"/>
-            <path d="M842 562 C846 546 842 536 850 524"/>
-            <path d="M858 564 C860 548 856 540 864 530"/>
+          <!-- the near bank. one irregular waterline, then the small things
+               that live on it: wet sand, stones, driftwood, grass, reeds,
+               two ducks in the shallows and a heron standing at the edge. -->
+          <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
+                   C450 541 520 549 596 545 C670 541 740 548 812 544
+                   C852 542 878 546 900 544 L900 600 L0 600 Z" fill="url(#shore)"/>
+          <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
+                   C450 541 520 549 596 545 C670 541 740 548 812 544
+                   C852 542 878 546 900 544 L900 556 C878 558 852 554 812 556
+                   C740 560 670 553 596 557 C520 561 450 553 372 556
+                   C300 559 240 553 168 558 C110 562 60 556 0 564 Z"
+                fill="#4d5878" opacity=".42"/>
+          <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
+                   C450 541 520 549 596 545 C670 541 740 548 812 544
+                   C852 542 878 546 900 544"
+                fill="none" stroke="#e6dcc8" stroke-opacity=".20" stroke-width="1.4"/>
+
+          <!-- stones, each with the thin lit edge the water leaves on top -->
+          <g fill="#151b2d">
+            <ellipse cx="132" cy="553" rx="12" ry="4.6"/>
+            <ellipse cx="152" cy="556" rx="6.5" ry="2.6"/>
+            <ellipse cx="466" cy="551" rx="9" ry="3.4"/>
+            <ellipse cx="700" cy="550" rx="7.5" ry="3"/>
+            <ellipse cx="868" cy="549" rx="10" ry="3.8"/>
           </g>
-          <g fill="#0f1322">
-            <ellipse cx="46" cy="512" rx="3" ry="7"/>
-            <ellipse cx="62" cy="520" rx="2.6" ry="6"/>
-            <ellipse cx="832" cy="512" rx="3" ry="7"/>
-            <ellipse cx="850" cy="520" rx="2.6" ry="6"/>
+          <g fill="none" stroke="#7e88a4" stroke-opacity=".45" stroke-width="1.1">
+            <path d="M121 552 C126 548 139 548 143 552"/>
+            <path d="M458 550 C462 547 471 547 474 550"/>
+            <path d="M693 549 C697 546 704 546 707 549"/>
+            <path d="M859 548 C864 545 873 545 877 548"/>
+          </g>
+
+          <!-- a length of driftwood with one chip beside it, and the low
+               bushes behind the bank — their tops are ragged, not scalloped,
+               so they read as growth and not as rocks -->
+          <g stroke="#1a2033" fill="none" stroke-linecap="round">
+            <path d="M330 551 C352 547 378 549 400 546" stroke-width="3.6"/>
+            <path d="M406 549 L418 548" stroke-width="2.2"/>
+          </g>
+          <g fill="#1b2135" opacity=".92">
+            <path d="M196 550 C199 544 204 541 209 543 C211 537 218 535 222 539
+                     C226 534 233 535 235 540 C241 537 247 540 248 545
+                     C253 544 257 547 257 550 Z"/>
+            <path d="M556 549 C559 544 564 542 568 544 C571 539 577 538 580 542
+                     C584 538 590 539 592 543 C597 542 601 545 601 549 Z"/>
+          </g>
+
+          <!-- two ducks, and the wake each one trails -->
+          <g fill="#141a2c" stroke="#141a2c">
+            <use href="#duck" transform="translate(296 536)"/>
+            <use href="#duck" transform="translate(322 541) scale(.84)"/>
+          </g>
+          <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
+            <path d="M286 539 h22 M314 544 h18"/>
+          </g>
+
+          <!-- the heron: still, and the only tall thing on the right -->
+          <g fill="#101627" stroke="#101627">
+            <use href="#heron" transform="translate(772 546) scale(-1 1)"/>
+          </g>
+          <path d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
+
+          <!-- grass and reeds, in clusters of different weight -->
+          <g class="sway-a" stroke="#0f1322" stroke-width="1.7" fill="#0f1322">
+            <use href="#tuft" transform="translate(24 566) scale(1.15)"/>
+            <use href="#tuft" transform="translate(104 560) scale(.9)"/>
+            <use href="#tuft" transform="translate(176 556) scale(.8)"/>
+          </g>
+          <g class="sway-b" stroke="#0f1322" stroke-width="2" fill="#0f1322">
+            <use href="#reed" transform="translate(46 570) scale(1.1)"/>
+            <use href="#reed" transform="translate(66 572) rotate(4) scale(.86)"/>
+            <use href="#reed" transform="translate(84 568) rotate(-6) scale(.7)"/>
+          </g>
+          <g class="sway-b" stroke="#0f1322" stroke-width="1.9" fill="#0f1322" style="animation-delay:-5s">
+            <use href="#reed" transform="translate(834 556) scale(.95)"/>
+            <use href="#reed" transform="translate(852 558) rotate(5) scale(.78)"/>
+          </g>
+          <g class="sway-a" stroke="#0f1322" stroke-width="1.6" fill="#0f1322" style="animation-delay:-3.5s">
+            <use href="#tuft" transform="translate(806 552) scale(.95)"/>
+            <use href="#tuft" transform="translate(884 552) scale(1.05)"/>
+            <use href="#tuft" transform="translate(640 552) scale(.7)"/>
+            <use href="#tuft" transform="translate(500 553) scale(.62)"/>
+          </g>
+
+          <!-- petals that have already reached the water -->
+          <g fill="#f4c3d0" opacity=".75">
+            <ellipse cx="238" cy="524" rx="5" ry="1.7"/>
+            <ellipse cx="412" cy="536" rx="4.4" ry="1.5"/>
+            <ellipse cx="540" cy="520" rx="3.8" ry="1.3"/>
+            <ellipse cx="668" cy="534" rx="4.6" ry="1.6"/>
+          </g>
+          <g stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none">
+            <path d="M232 527 h13 M406 539 h12 M534 523 h11 M662 537 h13"/>
           </g>
 
           <!-- cherry branch, top-left -->
