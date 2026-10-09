@@ -149,6 +149,36 @@
             <feGaussianBlur stdDeviation="1.4"/>
           </filter>
 
+          <!-- film grain: finer than the paper fibre and barely visible. it
+               is what stops the long soft gradients from reading as flat
+               vector fills, and it masks the hairlines just enough -->
+          <filter id="film" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="1.7" numOctaves="2" seed="57" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>
+          </filter>
+
+          <!-- age. a card that has been carried is lighter at the very
+               corners, soiled a little inside them, and creased where it
+               was bent; none of it is drawn as a line -->
+          <linearGradient id="crease" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"   stop-color="#0b1020" stop-opacity="0"/>
+            <stop offset=".34" stop-color="#0b1020" stop-opacity=".055"/>
+            <stop offset=".50" stop-color="#fff6e2" stop-opacity=".065"/>
+            <stop offset=".66" stop-color="#0b1020" stop-opacity=".032"/>
+            <stop offset="1"   stop-color="#0b1020" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="cornerWear" cx=".5" cy=".5" r=".5">
+            <stop offset="0"   stop-color="#7d6c50" stop-opacity="0"/>
+            <stop offset=".62" stop-color="#7d6c50" stop-opacity=".045"/>
+            <stop offset="1"   stop-color="#f7f0e1" stop-opacity=".11"/>
+          </radialGradient>
+          <linearGradient id="tanzakuPaper" x1="0" y1="0" x2=".35" y2="1">
+            <stop offset="0"   stop-color="#fbf7ee"/>
+            <stop offset=".55" stop-color="#f4ecdb"/>
+            <stop offset="1"   stop-color="#eae0cb"/>
+          </linearGradient>
+
           <linearGradient id="rimLight" gradientUnits="userSpaceOnUse" x1="470" y1="150" x2="740" y2="400">
             <stop offset="0"   stop-color="#ffe2b0" stop-opacity=".80"/>
             <stop offset=".42" stop-color="#ffc48c" stop-opacity=".40"/>
@@ -658,11 +688,15 @@
             <g class="petal p10"><use href="#petalShape" transform="translate(300 240) scale(.85)"/></g>
           </g>
 
-          <!-- tanzaku title strip -->
+          <!-- tanzaku title strip: a separate piece of paper laid on the
+               picture, so it has its own tone and its own shadow -->
           <g transform="rotate(-1.2 76 344)">
-            <rect x="48" y="176" width="58" height="336" rx="2" fill="#f8f3e8" opacity=".93"/>
+            <rect x="51" y="180" width="58" height="336" rx="2" fill="#0b1020" opacity=".16"
+                  filter="url(#tiny)"/>
+            <rect x="48" y="176" width="58" height="336" rx="2" fill="url(#tanzakuPaper)" opacity=".95"/>
             <rect x="48" y="176" width="58" height="336" rx="2" fill="none" stroke="#c9b79a" stroke-width="1"/>
             <rect x="53" y="181" width="48" height="326" fill="none" stroke="#c9b79a" stroke-width=".6" opacity=".7"/>
+            <rect x="48" y="176" width="6" height="336" fill="#fffaf0" opacity=".35"/>
             <g fill="#22283a" font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Songti SC',serif"
                font-size="38" text-anchor="middle">
               <text x="77" y="234">富</text>
@@ -730,9 +764,27 @@
             </g>
           </g>
 
-          <!-- paper grain + vignette -->
+          <!-- age: foxing in the paper, soiling along the edges, the
+               corners where it has been handled, one crease -->
+          <rect x="0" y="0" width="900" height="600" filter="url(#fox)" opacity=".085"
+                style="mix-blend-mode:multiply"/>
+          <rect x="7" y="7" width="886" height="586" rx="6" fill="none" stroke="#6d5c44"
+                stroke-opacity=".085" stroke-width="5" filter="url(#tiny)"/>
+          <g fill="url(#cornerWear)">
+            <ellipse cx="8" cy="8" rx="40" ry="30"/>
+            <ellipse cx="892" cy="8" rx="40" ry="30"/>
+            <ellipse cx="8" cy="592" rx="40" ry="30"/>
+            <ellipse cx="892" cy="592" rx="40" ry="30"/>
+          </g>
+          <g transform="rotate(-13 450 300)">
+            <rect x="296" y="-80" width="15" height="760" fill="url(#crease)"/>
+          </g>
+
+          <!-- paper grain, film grain, vignette -->
           <rect x="0" y="0" width="900" height="600" filter="url(#grain)" opacity=".13"
                 style="mix-blend-mode:multiply"/>
+          <rect x="0" y="0" width="900" height="600" filter="url(#film)" opacity=".075"
+                style="mix-blend-mode:overlay"/>
           <rect x="0" y="0" width="900" height="600" fill="none" stroke="#080c18" stroke-opacity=".30"
                 stroke-width="34" filter="url(#soft)"/>
         </g>
