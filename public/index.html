@@ -1385,6 +1385,11 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <stop offset=".70" stop-color="#0b1020" stop-opacity=".014"/>
             <stop offset="1"   stop-color="#0b1020" stop-opacity="0"/>
           </linearGradient>
+          <linearGradient id="tanzakuAge" x1="0" y1="0" x2="1" y2=".2">
+            <stop offset="0"   stop-color="#d8c49a" stop-opacity="0"/>
+            <stop offset=".6"  stop-color="#d8c49a" stop-opacity=".1"/>
+            <stop offset="1"   stop-color="#c9ae7e" stop-opacity=".22"/>
+          </linearGradient>
           <linearGradient id="tanzakuPaper" x1="0" y1="0" x2=".35" y2="1">
             <stop offset="0"   stop-color="#fbf7ee"/>
             <stop offset=".55" stop-color="#f4ecdb"/>
@@ -2280,9 +2285,25 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <rect x="51" y="180" width="58" height="336" rx="2" fill="#0b1020" opacity=".16"
                   filter="url(#tiny)"/>
             <rect x="48" y="176" width="58" height="336" rx="2" fill="url(#tanzakuPaper)" opacity=".95"/>
-            <rect x="48" y="176" width="58" height="336" rx="2" fill="none" stroke="#c9b79a" stroke-width="1"/>
+            <rect x="48" y="176" width="58" height="336" rx="2" fill="none" stroke="#c9b79a" stroke-width="1" opacity=".85"/>
             <rect x="53" y="181" width="48" height="326" fill="none" stroke="#c9b79a" stroke-width=".6" opacity=".7"/>
             <rect x="48" y="176" width="6" height="336" fill="#fffaf0" opacity=".35"/>
+            <!-- The strip is a separate piece of paper, so it ages separately:
+                 a warm wash along the edge that faced the light, and three
+                 foxing marks. It is paler than the card underneath because it
+                 covered that part of the card - the paper beneath a pasted
+                 strip stays protected, and this is the strip's own turn. -->
+            <rect x="48" y="176" width="58" height="336" fill="url(#tanzakuAge)"/>
+            <ellipse cx="60" cy="300" rx="4.4" ry="6.2" fill="#8a6a3c" opacity=".09"/>
+            <ellipse cx="97" cy="212" rx="3.2" ry="4.4" fill="#8a6a3c" opacity=".07"/>
+            <ellipse cx="88" cy="452" rx="5.6" ry="3.2" fill="#8a6a3c" opacity=".08"/>
+            <!-- The right edge was one unbroken line for 336 units, and a
+                 measured 226-to-151 luminance step in a single unit. Paper
+                 worn along an edge is not unbroken: four short stretches
+                 where the border is lighter, at uneven intervals. -->
+            <g stroke="#f6efdf" stroke-width="1.2" stroke-linecap="round" opacity=".55">
+              <path d="M106 214 v18 M106 288 v9 M106 356 v24 M106 448 v13"/>
+            </g>
             <g fill="#22283a" font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Songti SC',serif"
                font-size="38" text-anchor="middle">
               <text x="77" y="234">富</text>
