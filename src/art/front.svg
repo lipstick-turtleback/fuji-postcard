@@ -42,7 +42,8 @@
           <radialGradient id="sunDisc" cx="0.42" cy="0.38" r="0.72">
             <stop offset="0"   stop-color="#fff8e4"/>
             <stop offset=".62" stop-color="#ffe6b4"/>
-            <stop offset="1"   stop-color="#ffcf92"/>
+            <stop offset=".93" stop-color="#ffcf92"/>
+            <stop offset="1"   stop-color="#f7c283"/>
           </radialGradient>
 
           <linearGradient id="fujiBody" x1="0.15" y1="0" x2="0.9" y2="1">
@@ -380,8 +381,6 @@
           <circle cx="620" cy="206" r="96" fill="#ffd9a0" opacity=".30" filter="url(#bloom)"/>
           <circle class="glow" cx="620" cy="206" r="176" fill="url(#sunGlow)"/>
           <circle cx="620" cy="206" r="38" fill="url(#sunDisc)"/>
-          <circle cx="620" cy="206" r="38" fill="none" stroke="#fff8e6" stroke-width="1.1" opacity=".55"/>
-          <circle cx="620" cy="206" r="52" fill="none" stroke="#ffdda8" stroke-width=".9" opacity=".18"/>
 
           <!-- high clouds: thin, wind-combed, lit from below -->
           <g class="cloud-a" filter="url(#cloudSoft)">
