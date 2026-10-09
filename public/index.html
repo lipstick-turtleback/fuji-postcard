@@ -1945,12 +1945,19 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                    path opens toward the viewer. Anything more than this stops
                    being the sun on water and becomes texture. -->
               <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
-                <path d="M598 412 h44 M652 412 h14" stroke-width="2.4" opacity=".55"/>
-                <path d="M578 430 h62 M650 430 h22" stroke-width="2.6" opacity=".46"/>
-                <path d="M558 452 h76 M644 452 h34" stroke-width="2.9" opacity=".38"/>
-                <path d="M536 478 h92 M640 478 h44" stroke-width="3.2" opacity=".3"/>
-                <path d="M512 506 h108 M632 506 h56" stroke-width="3.5" opacity=".24"/>
-                <path d="M488 534 h124 M626 534 h66" stroke-width="3.8" opacity=".18"/>
+                <!-- The bands widen, thicken, fade and spread as the water
+                     comes toward the viewer, which is perspective and correct.
+                     But the old ladder advanced by a near-constant step in
+                     every quantity at once - widths +16, gaps +28, stroke
+                     +0.3, opacity -.06 - and four progressions in lockstep is
+                     a gradient, not a lake. The rows now hold a different
+                     number of breaks, and the steps vary. -->
+                <path d="M598 412 h44 M652 412 h14 M676 412 h7" stroke-width="2.4" opacity=".55"/>
+                <path d="M578 431 h62 M650 431 h22" stroke-width="2.7" opacity=".44"/>
+                <path d="M560 453 h71 M644 453 h34 M690 453 h11" stroke-width="2.9" opacity=".37"/>
+                <path d="M534 477 h96 M640 477 h40" stroke-width="3.3" opacity=".29"/>
+                <path d="M512 507 h104 M632 507 h58 M704 507 h16" stroke-width="3.4" opacity=".23"/>
+                <path d="M486 535 h128 M626 535 h62" stroke-width="3.9" opacity=".17"/>
               </g>
             </g>
 
@@ -2298,16 +2305,16 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 
           <!-- falling petals -->
           <g fill="#f4c3d0">
-            <g class="petal p1"><use href="#petalShape" transform="translate(150 150)"/></g>
-            <g class="petal p2"><use href="#petalShape" transform="translate(210 120) scale(.85)"/></g>
-            <g class="petal p3"><use href="#petalShape" transform="translate(96 190) scale(.9)"/></g>
-            <g class="petal p4"><use href="#petalShape" transform="translate(260 170) scale(.75)"/></g>
-            <g class="petal p5"><use href="#petalShape" transform="translate(180 240) scale(1)"/></g>
-            <g class="petal p6"><use href="#petalShape" transform="translate(320 130) scale(.8)"/></g>
-            <g class="petal p7"><use href="#petalShape" transform="translate(60 260) scale(.7)"/></g>
-            <g class="petal p8"><use href="#petalShape" transform="translate(240 280) scale(.9)"/></g>
-            <g class="petal p9"><use href="#petalShape" transform="translate(130 320) scale(.75)"/></g>
-            <g class="petal p10"><use href="#petalShape" transform="translate(300 240) scale(.85)"/></g>
+            <g class="petal p1"><use href="#petalShape" transform="translate(150 150) rotate(-24) scale(.92 .78)"/></g>
+            <g class="petal p2"><use href="#petalShape" transform="translate(210 120) rotate(58) scale(.85 .6)"/></g>
+            <g class="petal p3"><use href="#petalShape" transform="translate(96 190) rotate(-71) scale(.9 .9)"/></g>
+            <g class="petal p4"><use href="#petalShape" transform="translate(260 170) rotate(13) scale(.75 .5)"/></g>
+            <g class="petal p5"><use href="#petalShape" transform="translate(180 240) rotate(-41) scale(1 .85)"/></g>
+            <g class="petal p6"><use href="#petalShape" transform="translate(320 130) rotate(76) scale(.8 .62)"/></g>
+            <g class="petal p7"><use href="#petalShape" transform="translate(60 260) rotate(-8) scale(.7 .7)"/></g>
+            <g class="petal p8"><use href="#petalShape" transform="translate(240 280) rotate(34) scale(.9 .55)"/></g>
+            <g class="petal p9"><use href="#petalShape" transform="translate(130 320) rotate(-56) scale(.75 .8)"/></g>
+            <g class="petal p10"><use href="#petalShape" transform="translate(300 240) rotate(21) scale(.85 .68)"/></g>
           </g>
 
           <!-- tanzaku title strip: a separate piece of paper laid on the
