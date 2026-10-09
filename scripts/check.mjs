@@ -92,6 +92,23 @@ for (const r of html.matchAll(/#([A-Za-z][\w-]*)/g)) named.add(r[1]);
 for (const r of html.matchAll(/getElementById\(\s*['"]([^'"]+)['"]/g)) named.add(r[1]);
 const unused = [...ids].filter(([name]) => !named.has(name));
 
+/* ---- every advertised keyboard shortcut actually exists ----------------- */
+// The README and the <kbd> hints on the buttons are promises. This caught
+// "S — Save the plate" being advertised for the whole life of the README
+// while only F and M were ever wired up.
+const scripts = [...html.matchAll(/<script\b[\s\S]*?<\/script>/gi)].map((m) => m[0]).join('\n');
+const handled = new Set([...scripts.matchAll(/e\.key === '(.)'/g)].map((m) => m[1].toUpperCase()));
+for (const m of markup.matchAll(/<kbd[^>]*>\s*([A-Za-z])\s*<\/kbd>/g)) {
+  const key = m[1].toUpperCase();
+  if (!handled.has(key))
+    fail(m.index, `the button advertises the "${key}" key but nothing handles it`);
+}
+const readme = readFileSync(join(root, 'README.md'), 'utf8');
+for (const m of readme.matchAll(/\*\*`([A-Za-z])`\*\*/g)) {
+  const key = m[1].toUpperCase();
+  if (!handled.has(key)) fail(0, `README documents the "${key}" shortcut but nothing handles it`);
+}
+
 /* ---- the export must carry every animation the page has ---------------- */
 // "Save the plate" clones the live SVG and inlines only the CSS rules its
 // filter regex matches. A class that animates but is not in that regex
