@@ -358,7 +358,7 @@ const savePlate = () => {
       }
     })
     .filter((t) =>
-      /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.boat|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
+      /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
         t,
       ),
     );

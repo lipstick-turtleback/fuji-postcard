@@ -787,6 +787,26 @@ kbd {
   animation-duration: 29s;
   animation-delay: -11s;
 }
+/* The wake off the hull: slower than the ripples and it drifts, because the
+   boat is moving through the water rather than sitting in still water. */
+.wake {
+  animation: wake 19s ease-in-out infinite alternate;
+}
+.wake-b {
+  animation-duration: 23s;
+  animation-delay: -8s;
+}
+@keyframes wake {
+  from {
+    opacity: 0.34;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0.66;
+    transform: translateY(-0.9px);
+  }
+}
+
 @keyframes shimmer {
   from {
     opacity: 0.22;
@@ -928,6 +948,7 @@ kbd {
   .mist-b,
   .petal,
   .ripple,
+  .wake,
   .boat,
   .rays,
   .glow,
@@ -985,15 +1006,21 @@ kbd {
 html[data-enhance="off"] .foil {
   display: none;
 }
-html[data-enhance="off"] .face svg * {
+/* The mist and the water keep moving. Their drift sits on a wrapper above the
+   blur, so the filtered result is cached and the browser only moves a layer —
+   cheap enough that the calm rendering can afford weather, and the brief says
+   the mist stays on whatever else is switched off.
+
+   The exemption is written as :not() on the kill rule rather than as a second
+   rule that puts the animation back. It used to be `animation: revert`, which
+   reads as though it restores the author value. It does not: revert rolls the
+   cascade back to the previous origin, which here is the UA sheet, and the UA
+   value of animation is none. Measured — with Enhance off the mist reported
+   animation-name: none, so the exemption had never done anything at all.
+   Excluding the elements from the kill is the only form that works, and it
+   does not duplicate the timings. */
+html[data-enhance="off"] .face svg *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake) {
   animation: none !important;
-}
-/* except the mist. Its drift sits on a wrapper above the blur, so the
-   filtered result is cached and the browser only moves a layer — which is
-   cheap enough that the calm rendering can afford weather. */
-html[data-enhance="off"] .mist-a,
-html[data-enhance="off"] .mist-b {
-  animation: revert;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
    re-rasterised with the card; together they are the difference between a
@@ -1866,11 +1893,25 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                    only thing that says the boat is being poled at all -->
               <path d="M646 470 L648.5 471 L666 519 L663 520.5 Z"/>
             </g>
-            <path d="M600 512 C618 517 646 517 662 512" stroke="#f2e6d4" stroke-opacity=".3"
-                  stroke-width="1.4" fill="none"/>
-            <g stroke="#f2e6d4" stroke-opacity=".26" stroke-width="1.2" fill="none" stroke-linecap="round">
-              <path d="M657 521 C661 522.6 669 522.6 673 521"/>
-              <path d="M660 525 C663 526.2 669 526.2 672 525"/>
+            <!-- What the water does around the boat. Almost invisible on
+                 purpose: the test is that the lake is not frozen, not that
+                 you can see rings. Three arcs leave the paddle and never are
+                 in step - the .ripple phases put them at 17s, 23s and 29s -
+                 so one is always fading while another brightens, which is how
+                 ripples read: as something continually setting off, not as a
+                 thing pulsing. The wake under the hull breathes more slowly
+                 and drifts, because the boat is moving through the water and
+                 the water is not level with it. -->
+            <g class="wake" fill="none" stroke="#f2e6d4" stroke-opacity=".3" stroke-width="1.4">
+              <path d="M600 512 C618 517 646 517 662 512"/>
+            </g>
+            <g class="wake wake-b" fill="none" stroke="#f2e6d4" stroke-opacity=".15" stroke-width="1.1">
+              <path d="M592 516 C612 522 650 522 670 516"/>
+            </g>
+            <g fill="none" stroke="#f2e6d4" stroke-linecap="round">
+              <path class="ripple" d="M657 521 C661 522.6 669 522.6 673 521" stroke-opacity=".26" stroke-width="1.2"/>
+              <path class="ripple" d="M660 525 C663 526.2 669 526.2 672 525" stroke-opacity=".2" stroke-width="1.1"/>
+              <path class="ripple" d="M663 529 C665.5 530 670.5 530 673 529" stroke-opacity=".14" stroke-width="1"/>
             </g>
           </g>
 
@@ -2890,7 +2931,7 @@ const savePlate = () => {
       }
     })
     .filter((t) =>
-      /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.boat|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
+      /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
         t,
       ),
     );

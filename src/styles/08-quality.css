@@ -10,15 +10,21 @@
 html[data-enhance="off"] .foil {
   display: none;
 }
-html[data-enhance="off"] .face svg * {
+/* The mist and the water keep moving. Their drift sits on a wrapper above the
+   blur, so the filtered result is cached and the browser only moves a layer —
+   cheap enough that the calm rendering can afford weather, and the brief says
+   the mist stays on whatever else is switched off.
+
+   The exemption is written as :not() on the kill rule rather than as a second
+   rule that puts the animation back. It used to be `animation: revert`, which
+   reads as though it restores the author value. It does not: revert rolls the
+   cascade back to the previous origin, which here is the UA sheet, and the UA
+   value of animation is none. Measured — with Enhance off the mist reported
+   animation-name: none, so the exemption had never done anything at all.
+   Excluding the elements from the kill is the only form that works, and it
+   does not duplicate the timings. */
+html[data-enhance="off"] .face svg *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake) {
   animation: none !important;
-}
-/* except the mist. Its drift sits on a wrapper above the blur, so the
-   filtered result is cached and the browser only moves a layer — which is
-   cheap enough that the calm rendering can afford weather. */
-html[data-enhance="off"] .mist-a,
-html[data-enhance="off"] .mist-b {
-  animation: revert;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
    re-rasterised with the card; together they are the difference between a

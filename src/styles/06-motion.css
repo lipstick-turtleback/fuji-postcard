@@ -125,6 +125,26 @@
   animation-duration: 29s;
   animation-delay: -11s;
 }
+/* The wake off the hull: slower than the ripples and it drifts, because the
+   boat is moving through the water rather than sitting in still water. */
+.wake {
+  animation: wake 19s ease-in-out infinite alternate;
+}
+.wake-b {
+  animation-duration: 23s;
+  animation-delay: -8s;
+}
+@keyframes wake {
+  from {
+    opacity: 0.34;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0.66;
+    transform: translateY(-0.9px);
+  }
+}
+
 @keyframes shimmer {
   from {
     opacity: 0.22;
@@ -266,6 +286,7 @@
   .mist-b,
   .petal,
   .ripple,
+  .wake,
   .boat,
   .rays,
   .glow,

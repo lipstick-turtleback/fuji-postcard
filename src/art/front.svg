@@ -748,11 +748,25 @@
                    only thing that says the boat is being poled at all -->
               <path d="M646 470 L648.5 471 L666 519 L663 520.5 Z"/>
             </g>
-            <path d="M600 512 C618 517 646 517 662 512" stroke="#f2e6d4" stroke-opacity=".3"
-                  stroke-width="1.4" fill="none"/>
-            <g stroke="#f2e6d4" stroke-opacity=".26" stroke-width="1.2" fill="none" stroke-linecap="round">
-              <path d="M657 521 C661 522.6 669 522.6 673 521"/>
-              <path d="M660 525 C663 526.2 669 526.2 672 525"/>
+            <!-- What the water does around the boat. Almost invisible on
+                 purpose: the test is that the lake is not frozen, not that
+                 you can see rings. Three arcs leave the paddle and never are
+                 in step - the .ripple phases put them at 17s, 23s and 29s -
+                 so one is always fading while another brightens, which is how
+                 ripples read: as something continually setting off, not as a
+                 thing pulsing. The wake under the hull breathes more slowly
+                 and drifts, because the boat is moving through the water and
+                 the water is not level with it. -->
+            <g class="wake" fill="none" stroke="#f2e6d4" stroke-opacity=".3" stroke-width="1.4">
+              <path d="M600 512 C618 517 646 517 662 512"/>
+            </g>
+            <g class="wake wake-b" fill="none" stroke="#f2e6d4" stroke-opacity=".15" stroke-width="1.1">
+              <path d="M592 516 C612 522 650 522 670 516"/>
+            </g>
+            <g fill="none" stroke="#f2e6d4" stroke-linecap="round">
+              <path class="ripple" d="M657 521 C661 522.6 669 522.6 673 521" stroke-opacity=".26" stroke-width="1.2"/>
+              <path class="ripple" d="M660 525 C663 526.2 669 526.2 672 525" stroke-opacity=".2" stroke-width="1.1"/>
+              <path class="ripple" d="M663 529 C665.5 530 670.5 530 673 529" stroke-opacity=".14" stroke-width="1"/>
             </g>
           </g>
 
