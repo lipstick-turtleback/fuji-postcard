@@ -1300,7 +1300,16 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                       0 0 0 0 0.32
                       0 0 0 0 0.19
                       0 0 0 -5.0 2.1"/>
-            <feGaussianBlur stdDeviation="1.1"/>
+            <!-- A per-pixel lookup on alpha, not another turbulence pass. The
+                 colour matrix above gives every speck the same ramp, so the
+                 dust is all one strength; this table makes the distribution
+                 uneven - some specks barely there, some dark - which is what
+                 real foxing looks like. A table is a lookup, so it costs
+                 almost nothing next to generating the noise. -->
+            <feComponentTransfer>
+              <feFuncA type="table" tableValues="0 0.85 0.12 0.55 0 0.3 1 0.18"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="1.1"/>'
           </filter>
           <filter id="foxLarge" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
             <feTurbulence type="fractalNoise" baseFrequency="0.0115 0.0145" numOctaves="3" seed="91" result="n"/>
@@ -1309,8 +1318,17 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                       0 0 0 0 0.33
                       0 0 0 0 0.19
                       0 0 0 -4.4 1.72"/>
-            <feGaussianBlur stdDeviation="2.4"/>
+            <feComponentTransfer>
+              <feFuncA type="table" tableValues="0 0.4 0 0.9 0.15 0 0.65 0.25"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2.4"/>'
           </filter>
+          <radialGradient id="foxBloom">
+            <stop offset="0"   stop-color="#8a6a3c" stop-opacity=".85"/>
+            <stop offset=".45" stop-color="#8a6a3c" stop-opacity=".5"/>
+            <stop offset=".8"  stop-color="#8a6a3c" stop-opacity=".18"/>
+            <stop offset="1"   stop-color="#8a6a3c" stop-opacity="0"/>
+          </radialGradient>
           <!-- filter regions are pinned in user space: a blur that runs out
                of room leaves a hard rectangular edge, and nothing here
                should ever have a rectangular edge -->
@@ -2299,6 +2317,22 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                 style="mix-blend-mode:multiply"/>
           <rect x="0" y="0" width="900" height="600" filter="url(#fox)" opacity=".115"
                 style="mix-blend-mode:multiply"/>
+          <!-- Foxing blooms drawn by hand, over the top of the two noise scales.
+               Turbulence gives a size distribution that is the same everywhere,
+               and real age is not: a sheet picks up a few distinct marks where
+               something wet sat on it, each one lopsided, each a different size,
+               each fading out on one side faster than the other. Seven of them,
+               radii 20 to 62, filled with a radial gradient so the edge is a
+               fade and not a boundary. -->
+          <g fill="url(#foxBloom)" opacity=".13">
+              <path d="M186.0 120.0 Q163.4 139.2 174.7 129.6 Q140.0 163.4 151.7 151.3 Q112.4 142.7 126.2 153.0 Q81.1 120.0 96.7 131.3 Q114.6 99.2 97.9 109.6 Q140.0 84.2 127.3 91.7 Q175.8 90.7 157.9 87.4 Q186.0 120.0 180.9 105.3 Z"/>
+              <path d="M727.0 92.0 Q725.5 112.9 726.2 102.4 Q700.0 110.5 712.7 111.7 Q677.7 110.3 688.9 110.4 Q674.5 92.0 676.1 101.1 Q675.6 72.0 675.1 82.0 Q700.0 68.6 687.8 70.3 Q717.0 78.1 708.5 73.4 Q727.0 92.0 722.0 85.0 Z"/>
+              <path d="M890.2 300.0 Q857.1 328.8 873.6 314.4 Q822.0 350.8 839.5 339.8 Q793.5 323.4 807.8 337.1 Q750.7 300.0 772.1 311.7 Q782.5 267.6 766.6 283.8 Q822.0 236.4 802.3 252.0 Q854.9 273.0 838.4 254.7 Q890.2 300.0 872.5 286.5 Z"/>
+              <path d="M88.4 402.0 Q87.6 426.2 88.0 414.1 Q58.0 439.4 72.8 432.8 Q33.8 421.8 45.9 430.6 Q31.4 402.0 32.6 411.9 Q29.8 378.9 30.6 390.4 Q58.0 366.2 43.9 372.5 Q80.8 383.3 69.4 374.7 Q88.4 402.0 84.6 392.6 Z"/>
+              <path d="M456.0 58.0 Q446.4 69.8 451.2 63.9 Q432.0 80.6 439.2 75.2 Q415.9 71.2 423.9 75.9 Q412.8 58.0 414.3 64.6 Q413.3 42.7 413.1 50.3 Q432.0 40.3 422.7 41.5 Q449.8 43.4 440.9 41.8 Q456.0 58.0 452.9 50.7 Z"/>
+              <path d="M691.3 468.0 Q685.8 505.6 688.6 486.8 Q640.0 503.4 662.9 504.5 Q598.0 502.4 619.0 502.9 Q599.5 468.0 598.7 485.2 Q601.8 436.7 600.7 452.3 Q640.0 428.1 620.9 432.4 Q683.9 432.0 662.0 430.1 Q691.3 468.0 687.6 450.0 Z"/>
+              <path d="M274.0 296.0 Q264.7 306.4 269.4 301.2 Q252.0 312.4 258.4 309.4 Q240.7 305.3 246.3 308.8 Q228.0 296.0 234.3 300.6 Q238.6 285.0 233.3 290.5 Q252.0 282.1 245.3 283.5 Q266.8 283.8 259.4 282.9 Q274.0 296.0 270.4 289.9 Z"/>
+          </g>
           <!-- Edge soiling, widened from 5 units to 11 and halved in strength.
                Narrow and strong, it sat hard against the cut edge and read as a
                dark line running the length of the card; wide and faint, it reads
@@ -2395,8 +2429,17 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                       0 0 0 0 0.31
                       0 0 0 0 0.18
                       0 0 0 -5.4 2.25"/>
-            <feGaussianBlur stdDeviation="1.1"/>
+            <feComponentTransfer>
+              <feFuncA type="table" tableValues="0 0.7 0 0.45 0.95 0.1 0 0.6"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="1.1"/>'
           </filter>
+          <radialGradient id="foxBloomB">
+            <stop offset="0"   stop-color="#8a6a3c" stop-opacity=".85"/>
+            <stop offset=".45" stop-color="#8a6a3c" stop-opacity=".5"/>
+            <stop offset=".8"  stop-color="#8a6a3c" stop-opacity=".18"/>
+            <stop offset="1"   stop-color="#8a6a3c" stop-opacity="0"/>
+          </radialGradient>
           <filter id="filmB" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
             <feTurbulence type="fractalNoise" baseFrequency="1.7" numOctaves="2" seed="83" result="n"/>
             <feColorMatrix in="n" type="saturate" values="0"/>
@@ -2537,6 +2580,15 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           <!-- age, then grain -->
           <rect x="0" y="0" width="900" height="600" filter="url(#foxB)" opacity=".055"
                 style="mix-blend-mode:multiply"/>
+          <!-- Four blooms on the back, fewer and fainter than the front: this
+               side faced out, so it is dirtier overall, but the print covers
+               most of it and the marks sit where the paper is bare. -->
+          <g fill="url(#foxBloomB)" opacity=".1">
+            <path d="M160.0 480.0 Q141.2 497.4 150.6 488.7 Q120.0 518.7 130.6 508.0 Q95.1 500.4 107.6 509.6 Q70.0 480.0 82.6 490.2 Q97.4 461.4 83.7 470.7 Q120.0 448.8 108.7 455.1 Q150.5 455.0 135.3 451.9 Q160.0 480.0 155.3 467.5 Z"/>
+            <path d="M806.8 470.0 Q803.4 505.6 805.1 487.8 Q760.0 503.3 781.7 504.4 Q721.4 501.7 740.7 502.5 Q715.8 470.0 718.6 485.8 Q718.8 436.2 717.3 453.1 Q760.0 429.5 739.4 432.9 Q790.2 445.3 775.1 437.4 Q806.8 470.0 798.5 457.6 Z"/>
+            <path d="M477.3 90.0 Q465.6 102.8 471.5 96.4 Q450.0 113.9 457.8 108.3 Q432.5 104.3 441.3 109.1 Q429.2 90.0 430.9 97.2 Q430.1 73.7 429.7 81.9 Q450.0 70.8 440.1 72.3 Q468.4 74.9 459.2 72.9 Q477.3 90.0 472.8 82.5 Z"/>
+            <path d="M78.7 200.0 Q77.1 214.0 77.9 207.0 Q60.0 220.7 68.6 217.4 Q46.0 211.5 53.0 216.1 Q44.2 200.0 45.1 205.7 Q43.7 186.6 43.9 193.3 Q60.0 178.7 51.8 182.7 Q73.7 188.8 66.8 183.7 Q78.7 200.0 76.2 194.4 Z"/>
+          </g>
           <!-- widened and halved, matching the front: narrow and strong it read
                as a line drawn round the card, wide and faint it reads as the
                edge of the paper being dirtier than the middle -->

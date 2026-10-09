@@ -33,8 +33,17 @@
                       0 0 0 0 0.31
                       0 0 0 0 0.18
                       0 0 0 -5.4 2.25"/>
-            <feGaussianBlur stdDeviation="1.1"/>
+            <feComponentTransfer>
+              <feFuncA type="table" tableValues="0 0.7 0 0.45 0.95 0.1 0 0.6"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="1.1"/>'
           </filter>
+          <radialGradient id="foxBloomB">
+            <stop offset="0"   stop-color="#8a6a3c" stop-opacity=".85"/>
+            <stop offset=".45" stop-color="#8a6a3c" stop-opacity=".5"/>
+            <stop offset=".8"  stop-color="#8a6a3c" stop-opacity=".18"/>
+            <stop offset="1"   stop-color="#8a6a3c" stop-opacity="0"/>
+          </radialGradient>
           <filter id="filmB" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
             <feTurbulence type="fractalNoise" baseFrequency="1.7" numOctaves="2" seed="83" result="n"/>
             <feColorMatrix in="n" type="saturate" values="0"/>
@@ -175,6 +184,15 @@
           <!-- age, then grain -->
           <rect x="0" y="0" width="900" height="600" filter="url(#foxB)" opacity=".055"
                 style="mix-blend-mode:multiply"/>
+          <!-- Four blooms on the back, fewer and fainter than the front: this
+               side faced out, so it is dirtier overall, but the print covers
+               most of it and the marks sit where the paper is bare. -->
+          <g fill="url(#foxBloomB)" opacity=".1">
+            <path d="M160.0 480.0 Q141.2 497.4 150.6 488.7 Q120.0 518.7 130.6 508.0 Q95.1 500.4 107.6 509.6 Q70.0 480.0 82.6 490.2 Q97.4 461.4 83.7 470.7 Q120.0 448.8 108.7 455.1 Q150.5 455.0 135.3 451.9 Q160.0 480.0 155.3 467.5 Z"/>
+            <path d="M806.8 470.0 Q803.4 505.6 805.1 487.8 Q760.0 503.3 781.7 504.4 Q721.4 501.7 740.7 502.5 Q715.8 470.0 718.6 485.8 Q718.8 436.2 717.3 453.1 Q760.0 429.5 739.4 432.9 Q790.2 445.3 775.1 437.4 Q806.8 470.0 798.5 457.6 Z"/>
+            <path d="M477.3 90.0 Q465.6 102.8 471.5 96.4 Q450.0 113.9 457.8 108.3 Q432.5 104.3 441.3 109.1 Q429.2 90.0 430.9 97.2 Q430.1 73.7 429.7 81.9 Q450.0 70.8 440.1 72.3 Q468.4 74.9 459.2 72.9 Q477.3 90.0 472.8 82.5 Z"/>
+            <path d="M78.7 200.0 Q77.1 214.0 77.9 207.0 Q60.0 220.7 68.6 217.4 Q46.0 211.5 53.0 216.1 Q44.2 200.0 45.1 205.7 Q43.7 186.6 43.9 193.3 Q60.0 178.7 51.8 182.7 Q73.7 188.8 66.8 183.7 Q78.7 200.0 76.2 194.4 Z"/>
+          </g>
           <!-- widened and halved, matching the front: narrow and strong it read
                as a line drawn round the card, wide and faint it reads as the
                edge of the paper being dirtier than the middle -->
