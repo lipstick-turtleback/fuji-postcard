@@ -869,8 +869,8 @@
           <g transform="translate(0 -10)">
           <!-- Grass and reeds grow in stands, not at intervals. The left bank
                has a dense one that thins as it runs right; the right bank has a
-               smaller one; between them the shore is bare, which is what a shore
-               somebody walks along looks like. Each stand has a back row, a
+               smaller one; between them growth goes thin and scattered rather
+               than absent. Each stand has a back row, a
                little lighter and taller, and a front row - the overlap is what
                makes it read as growth rather than a row of stick figures. Three
                sway phases, so the clumps are never in step. -->
@@ -912,13 +912,37 @@
             <use href="#tuft" transform="translate(884 558) scale(.98)"/>
             <use href="#tuft" transform="translate(896 560) scale(.7)"/>
           </g>
-          <!-- three survivors out in the open, which is what keeps the bare
-               stretch from reading as an omission -->
+          <!-- Out in the open the shore is not bare, it is thin. Three
+               survivors were not enough: the middle of the bank read as an
+               omission, a gap in the drawing rather than water's edge. Real
+               growth comes in clusters and then leaves a stretch - so the
+               gaps here are 82, 86 and 14 units, not a rhythm, and the
+               heights run .38 to .68. Three reeds stand up among the tufts
+               so the open ground is not all the same shape.
+               Split across three sway phases, so nothing is ever in step. -->
           <g class="sway-a" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
              style="animation-delay:-7.5s">
-            <use href="#tuft" transform="translate(206 556) scale(.62)"/>
+            <use href="#tuft" transform="translate(168 558) rotate(3) scale(.68)"/>
+            <use href="#tuft" transform="translate(244 554) scale(.52)"/>
+            <use href="#reed" transform="translate(292 552) rotate(-4) scale(.58)"/>
+            <use href="#tuft" transform="translate(306 556) scale(.42)"/>
+          </g>
+          <g class="sway-b" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-3.5s">
+            <use href="#tuft" transform="translate(388 554) scale(.6)"/>
+            <use href="#reed" transform="translate(432 550) rotate(5) scale(.5)"/>
             <use href="#tuft" transform="translate(474 552) scale(.46)"/>
+            <use href="#tuft" transform="translate(556 554) rotate(-3) scale(.56)"/>
+          </g>
+          <g class="sway-a" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-11s">
+            <use href="#tuft" transform="translate(206 556) scale(.62)"/>
+            <use href="#tuft" transform="translate(508 550) scale(.4)"/>
             <use href="#tuft" transform="translate(642 552) scale(.54)"/>
+            <use href="#tuft" transform="translate(654 556) scale(.38)"/>
+            <use href="#reed" transform="translate(668 550) rotate(4) scale(.5)"/>
+            <use href="#tuft" transform="translate(726 554) scale(.44)"/>
+            <use href="#tuft" transform="translate(762 556) rotate(-5) scale(.62)"/>
           </g>
           </g>
           <!-- petals that have already reached the water -->
