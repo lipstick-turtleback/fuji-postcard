@@ -11,6 +11,39 @@
             <feComponentTransfer><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
           </filter>
           <clipPath id="clipCard2"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
+
+          <!-- the same age as the front, a shade stronger: this is the side
+               that was handled, written on and posted. ids are suffixed so
+               they cannot collide with the front artwork on the same page -->
+          <filter id="foxB" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="0.013 0.011" numOctaves="4" seed="71" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 0.44
+                      0 0 0 0 0.31
+                      0 0 0 0 0.18
+                      0 0 0 -3.6 1.5"/>
+            <feGaussianBlur stdDeviation="1.1"/>
+          </filter>
+          <filter id="filmB" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="1.7" numOctaves="2" seed="83" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>
+          </filter>
+          <filter id="tinyB" filterUnits="userSpaceOnUse" x="-20" y="-20" width="940" height="640">
+            <feGaussianBlur stdDeviation="1.4"/>
+          </filter>
+          <linearGradient id="creaseB" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"   stop-color="#6a5c46" stop-opacity="0"/>
+            <stop offset=".34" stop-color="#6a5c46" stop-opacity=".07"/>
+            <stop offset=".50" stop-color="#fffdf6" stop-opacity=".55"/>
+            <stop offset=".66" stop-color="#6a5c46" stop-opacity=".05"/>
+            <stop offset="1"   stop-color="#6a5c46" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="cornerWearB" cx=".5" cy=".5" r=".5">
+            <stop offset="0"   stop-color="#7d6c50" stop-opacity="0"/>
+            <stop offset=".62" stop-color="#7d6c50" stop-opacity=".055"/>
+            <stop offset="1"   stop-color="#fdf8ec" stop-opacity=".16"/>
+          </radialGradient>
         </defs>
 
         <g clip-path="url(#clipCard2)">
