@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Light on Paper — Hanga Studio · Mount Fuji at dawn</title>
+<style>
+  :root{
+    /* one measure for everything, and a rhythm that tightens as it
+       approaches the work: room -> header -> object -> label -> controls */
+    --col:min(940px,100%);
+    --gap-room:clamp(30px,4.6vw,58px);
+    --gap-hang:clamp(24px,3.4vw,44px);
+    --gap-label:clamp(18px,2.4vw,30px);
+    --gap-ctl:clamp(14px,1.8vw,22px);
+    --wall:#ece8df;
+    --ink:#22201c;
+    --ink-soft:#4d483f;
+    --muted:#8b8478;
+    --hair:rgba(34,32,28,.17);
+    --hair-soft:rgba(34,32,28,.09);
+    --vermilion:#b8402c;
+    --amber:#a9762c;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --jp:'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Songti SC',serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:clamp(20px,3.4vw,44px) clamp(16px,4vw,48px) clamp(26px,3.4vw,48px);
+    background:#e7e2d9;
+    font-family:var(--serif);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  /* the gallery wall. every layer is fixed to the viewport, so the surface
+     never restarts or seams however far the page is scrolled. */
+  .bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+  .bg span{position:absolute;inset:0;display:block;}
+  .bg-wall{background:radial-gradient(122% 80% at 50% -8%, #f7f4ed 0%, #ece8df 42%, #ded8cc 78%, #d2cbbe 100%);}
+  .bg-pool{
+    inset:auto;
+    left:var(--poolx,50%); top:var(--pooly,42%);
+    width:min(1500px,170vw); aspect-ratio:1.5/1;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(closest-side, rgba(255,249,235,.9), rgba(255,249,235,.3) 46%, rgba(255,249,235,0) 74%);
+  }
+  .bg-grain{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size:190px 190px;
+    opacity:.15;
+    mix-blend-mode:multiply;
+  }
+  .bg-vig{background:radial-gradient(132% 102% at 50% 38%, transparent 50%, rgba(78,66,48,.17) 100%);}
+  .topbar,.masthead,.stage,.plinth,.footer{position:relative;z-index:1;}
+
+
+
+  .topbar{
+    width:var(--col);
+    display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+    margin-bottom:var(--gap-room);
+    font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);
+  }
+  .topbar .brand{display:flex;align-items:center;gap:9px;color:var(--ink-soft);letter-spacing:.26em;}
+  .topbar .mk{
+    font-family:var(--jp);font-size:13px;letter-spacing:0;line-height:1;
+    color:#fdf9f1;background:var(--vermilion);
+    padding:4px 6px 3px;border-radius:3px;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    margin-bottom:var(--gap-hang);
+    text-align:center;
+    max-width:100%;
+  }
+  .eyebrow{
+    margin:0;
+    font-size:9.5px;letter-spacing:.36em;text-transform:uppercase;color:var(--muted);
+  }
+  h1{
+    margin:0;
+    font-size:clamp(21px,3.2vw,33px);
+    font-weight:400;
+    letter-spacing:.015em;
+    line-height:1.18;
+    color:var(--ink);
+  }
+  .sub{
+    margin:5px 0 0;
+    font-size:clamp(10px,1.4vw,12px);
+    letter-spacing:.17em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .sub .jp{font-family:var(--jp);letter-spacing:.26em;}
+  .masthead .rule{width:46px;height:1px;background:var(--hair);margin:5px auto 0;}
+
+  .stage{
+    perspective:1800px;
+    width:var(--col);
+    margin-bottom:var(--gap-label);
+  }
+  .card{
+    position:relative;
+    width:100%;
+    aspect-ratio:3/2;
+    transform-style:preserve-3d;
+    will-change:transform;
+    cursor:pointer;
+    border-radius:6px;
+  }
+  .face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:
+      calc(var(--shx,0) * 1px) calc(var(--shy,20) * 1px) 48px -16px rgba(58,48,32,.40),
+      calc(var(--shx,0) * .3px) calc(var(--shy,20) * .3px) 11px -4px rgba(58,48,32,.20),
+      0 0 0 1px rgba(34,32,28,.10);
+  }
+  .face.back{transform:rotateY(180deg);}
+  .face svg{display:block;width:100%;height:100%;}
+
+  /* ---------- control console ---------- */
+  /* ---------- plinth: wall label and controls ---------- */
+  .plinth{
+    width:var(--col);
+    display:flex;
+    flex-direction:column;
+    gap:var(--gap-ctl);
+    padding-top:clamp(14px,1.8vw,20px);
+    border-top:1px solid var(--hair);
+  }
+  .label{margin:0;max-width:46ch;}
+  .label .lt{margin:0 0 6px;font-size:15px;line-height:1.4;color:var(--ink);}
+  .label .la{margin:0 0 11px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+  .label .lm{margin:0;font-size:12.5px;line-height:1.65;font-style:italic;color:var(--ink-soft);}
+  .label .ld{
+    margin:13px 0 0;
+    display:flex;gap:20px;
+    font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  }
+
+  .console{
+    display:flex;
+    align-items:center;
+    gap:clamp(10px,1.6vw,18px);
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    padding:0;
+    margin:0;
+    background:none;border:0;box-shadow:none;
+  }
+  button{
+    font:inherit;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:10.5px;
+    letter-spacing:.17em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    background:transparent;
+    border:0;
+    border-bottom:1px solid var(--hair-soft);
+    border-radius:0;
+    padding:9px 4px;
+    cursor:pointer;
+    transition:color .22s ease, border-color .22s ease;
+  }
+  button:hover{color:var(--ink);border-bottom-color:var(--ink);}
+  button:focus-visible{outline:1px solid var(--ink);outline-offset:4px;}
+  .ico{display:none;}
+  .dot{
+    width:6px;height:6px;flex:none;border-radius:50%;
+    background:var(--vermilion);
+    transition:background .25s ease, box-shadow .25s ease;
+  }
+  button[aria-pressed="false"] .dot{
+    background:transparent;
+    box-shadow:inset 0 0 0 1px var(--muted);
+  }
+  button[aria-pressed="false"]{color:var(--muted);}
+
+  kbd{
+    font-family:var(--serif);
+    font-size:9px;
+    letter-spacing:.06em;
+    padding:1px 5px;
+    border-radius:3px;
+    border:1px solid var(--hair);
+    background:transparent;
+    color:var(--muted);
+  }
+
+  .footer{
+    width:var(--col);
+    margin-top:var(--gap-room);
+    display:flex;align-items:center;justify-content:center;gap:16px;
+    font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);
+  }
+  .footer .jp{font-family:var(--jp);letter-spacing:.24em;}
+  .footer .pip{width:2px;height:2px;border-radius:50%;background:var(--hair);}
+
+  /* ---------- sound control ---------- */
+  .sound{
+    display:flex;align-items:center;gap:clamp(10px,1.4vw,14px);
+    padding:0;margin:0;
+    background:none;border:0;
+  }
+  .sound #play{
+    border:0;background:transparent;
+    padding:4px 2px;box-shadow:none;
+    display:flex;align-items:center;gap:10px;
+  }
+  .sound #play:hover{background:transparent;color:var(--ink-soft);border-bottom:none;}
+  .sound #play .glyph{
+    width:27px;height:27px;flex:none;
+    display:grid;place-items:center;
+    border-radius:50%;
+    border:1px solid var(--hair);
+    background:transparent;
+    font-size:9px;letter-spacing:0;
+    color:var(--ink-soft);
+    transition:background .3s ease, border-color .3s ease, color .3s ease;
+  }
+  .sound #play:hover .glyph{border-color:var(--ink);}
+  .sound.playing #play .glyph{
+    background:var(--vermilion);
+    border-color:var(--vermilion);
+    color:#fdf9f1;
+  }
+  /* the meter takes no room until there is something to measure */
+  .eq{
+    display:flex;align-items:flex-end;gap:3px;height:16px;
+    width:0;overflow:hidden;opacity:0;
+    transition:width .45s cubic-bezier(.4,0,.2,1), opacity .35s ease;
+  }
+  .eq i{
+    display:block;width:2px;height:9%;
+    background:rgba(34,32,28,.22);
+    border-radius:1px;
+    transition:height .09s linear, background .3s ease;
+  }
+  .sound.playing .eq{width:22px;opacity:1;}
+  .sound.playing .eq i{background:var(--vermilion);}
+  .sound input[type=range]{
+    -webkit-appearance:none;appearance:none;
+    width:84px;min-width:60px;height:18px;margin:0 0 0 2px;
+    background:transparent;cursor:pointer;
+  }
+  .sound input[type=range]::-webkit-slider-runnable-track{
+    height:1px;
+    background:linear-gradient(90deg, var(--ink) 0 var(--fill,55%), var(--hair) var(--fill,55%) 100%);
+  }
+  .sound input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:9px;height:9px;margin-top:-4px;border-radius:50%;
+    background:var(--ink);border:0;
+    transition:transform .15s ease;
+  }
+  .sound input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.25);}
+  .sound input[type=range]::-moz-range-track{height:1px;background:var(--hair);}
+  .sound input[type=range]::-moz-range-progress{height:1px;background:var(--ink);}
+  .sound input[type=range]::-moz-range-thumb{width:9px;height:9px;border:0;border-radius:50%;background:var(--ink);}
+  .sound input[type=range]:focus-visible{outline:1px solid var(--ink);outline-offset:4px;}
+
+  /* ---------- holographic lamination ----------
+     No keyframes here: every value below is written each frame by the
+     lighting model in the script, from the card's real surface normal. */
+  .face{ isolation:isolate; }
+  .card{ --sx:50%; --sy:50%; --band:50%; --sheen:0deg; --spec:0; --foil:1; }
+  .foil{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:var(--foil);
+    transition:opacity .5s ease;
+  }
+  .foil > span{position:absolute;inset:0;display:block;}
+  .foil-holo{
+    background:conic-gradient(from 210deg at var(--sx) var(--sy),
+      #ff6b81,#ffd36b,#9cff6b,#6bd8ff,#b06bff,#ff6b81);
+    mix-blend-mode:color-dodge;
+    opacity:calc(var(--spec) * .32);
+    -webkit-mask-image:radial-gradient(circle at var(--sx) var(--sy),
+      #000 0 11%, rgba(0,0,0,.55) 27%, transparent 51%);
+            mask-image:radial-gradient(circle at var(--sx) var(--sy),
+      #000 0 11%, rgba(0,0,0,.55) 27%, transparent 51%);
+  }
+  .foil-sparkle,
+  .foil-sparkle2{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-repeat:repeat;
+    filter:contrast(700%) brightness(230%);
+    mix-blend-mode:color-dodge;
+    opacity:calc(var(--spec) * .85);
+    -webkit-mask-image:radial-gradient(circle at var(--sx) var(--sy),
+      #000 0 6%, rgba(0,0,0,.45) 19%, transparent 37%);
+            mask-image:radial-gradient(circle at var(--sx) var(--sy),
+      #000 0 6%, rgba(0,0,0,.45) 19%, transparent 37%);
+  }
+  .foil-sparkle{background-size:170px 170px;}
+  .foil-sparkle2{background-size:112px 112px;}
+  .foil-sheen{
+    background:linear-gradient(var(--sheen),
+      transparent calc(var(--band) - 30%),
+      rgba(255,255,255,.17) var(--band),
+      transparent calc(var(--band) + 30%));
+    mix-blend-mode:screen;
+    opacity:calc(.10 + var(--spec) * .26);
+  }
+  .foil-glint{
+    background:linear-gradient(var(--sheen),
+      transparent calc(var(--band) - 2.6%),
+      rgba(255,255,255,.42) var(--band),
+      transparent calc(var(--band) + 2.6%));
+    mix-blend-mode:overlay;
+    opacity:calc(var(--spec) * var(--spec) * .55);
+  }
+  .foil-spot{
+    background:radial-gradient(circle at var(--sx) var(--sy),
+      rgba(255,255,255,.5), rgba(255,255,255,.1) 15%, transparent 34%);
+    mix-blend-mode:soft-light;
+    opacity:calc(var(--spec) * .8);
+  }
+
+  @media (max-width:700px){
+    .console{justify-content:flex-start;}
+  }
+  @media (max-width:520px){
+    .topbar{font-size:8.5px;letter-spacing:.22em;}
+    button{font-size:9.5px;letter-spacing:.14em;padding:8px 3px;}
+    .sound input[type=range]{width:72px;}
+    .label .ld{gap:14px;}
+    .label .lt{font-size:14px;}
+  }
+
+  /* ---------- SVG animations ---------- */
+  .cloud-a{animation:drift 46s ease-in-out infinite alternate;}
+  .cloud-b{animation:drift 62s ease-in-out infinite alternate-reverse;}
+  .cloud-c{animation:drift 38s ease-in-out infinite alternate;}
+  @keyframes drift{from{transform:translateX(-26px);}to{transform:translateX(26px);}}
+
+  .mist{animation:mist 24s ease-in-out infinite alternate;}
+  @keyframes mist{from{transform:translateX(-14px);opacity:.42;}to{transform:translateX(16px);opacity:.62;}}
+
+  .petal{
+    animation:petalFall linear infinite;
+    transform-box:fill-box;
+    transform-origin:center;
+  }
+  @keyframes petalFall{
+    0%{transform:translate(0,0) rotate(0deg);opacity:0;}
+    14%{opacity:.9;}
+    86%{opacity:.7;}
+    100%{transform:translate(-150px,430px) rotate(340deg);opacity:0;}
+  }
+  .p1{animation-duration:15s;animation-delay:-1s;}
+  .p2{animation-duration:19s;animation-delay:-6s;}
+  .p3{animation-duration:13s;animation-delay:-9s;}
+  .p4{animation-duration:21s;animation-delay:-3s;}
+  .p5{animation-duration:17s;animation-delay:-12s;}
+  .p6{animation-duration:23s;animation-delay:-8s;}
+  .p7{animation-duration:14s;animation-delay:-15s;}
+  .p8{animation-duration:20s;animation-delay:-5s;}
+  .p9{animation-duration:16s;animation-delay:-11s;}
+  .p10{animation-duration:25s;animation-delay:-2s;}
+
+  .ripple{animation:shimmer 7s ease-in-out infinite alternate;}
+  .ripple:nth-child(2n){animation-duration:9s;animation-delay:-2s;}
+  .ripple:nth-child(3n){animation-duration:11s;animation-delay:-4s;}
+  @keyframes shimmer{from{opacity:.18;}to{opacity:.5;}}
+
+  .boat{animation:bob 6.5s ease-in-out infinite alternate;}
+  @keyframes bob{from{transform:translate(0,0);}to{transform:translate(6px,-3px);}}
+
+  .rays{animation:spin 150s linear infinite;transform-origin:620px 206px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .glow{animation:pulse 9s ease-in-out infinite alternate;}
+  @keyframes pulse{from{opacity:.34;}to{opacity:.6;}}
+
+  .bird{--bo:.72;animation:glide 34s cubic-bezier(.42,0,.58,1) infinite;}
+  .bird.b2{--bo:.5;animation-duration:46s;animation-delay:-16s;}
+  .bird.b3{--bo:.6;animation-duration:39s;animation-delay:-28s;}
+  /* ~4s of fade at each end, so the loop point is never visible */
+  @keyframes glide{
+    0%{transform:translate(0,0);opacity:0;}
+    12%{opacity:var(--bo);}
+    88%{opacity:var(--bo);}
+    100%{transform:translate(168px,-38px);opacity:0;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .cloud-a,.cloud-b,.cloud-c,.mist,.petal,.ripple,.boat,.rays,.glow,.bird{animation:none;}
+    .card{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true">
+  <span class="bg-wall"></span>
+  <span class="bg-pool"></span>
+  <span class="bg-grain"></span>
+  <span class="bg-vig"></span>
+</div>
+
+<div class="topbar">
+  <span class="brand"><span class="mk" aria-hidden="true">浮</span><span>Hanga&nbsp;Studio</span></span>
+  <span class="meta">Exhibition&nbsp;I · Room&nbsp;2</span>
+</div>
+
+<header class="masthead">
+  <h1>Light on Paper</h1>
+  <p class="sub"><span class="jp">富士山</span> &nbsp;·&nbsp; a single postcard, drawn in vectors</p>
+  <span class="rule" aria-hidden="true"></span>
+</header>
+
+<div class="stage">
+  <div class="card" id="card" role="img"
+       aria-label="Illustrated postcard of Mount Fuji at dawn with a torii gate, cherry blossoms and a lake; flip to see the addressed back.">
+
+    <!-- ============================ FRONT ============================ -->
+    <div class="face front">
+      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#22305c"/>
+            <stop offset="0.28" stop-color="#4a5a86"/>
+            <stop offset="0.52" stop-color="#8f7a86"/>
+            <stop offset="0.72" stop-color="#d08a63"/>
+            <stop offset="0.88" stop-color="#f0b478"/>
+            <stop offset="1"    stop-color="#f8d9a4"/>
+          </linearGradient>
+
+          <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0"    stop-color="#ffe9b8" stop-opacity=".95"/>
+            <stop offset="0.45" stop-color="#ffcf8f" stop-opacity=".45"/>
+            <stop offset="1"    stop-color="#ffbf7d" stop-opacity="0"/>
+          </radialGradient>
+
+          <linearGradient id="fujiBody" x1="0.15" y1="0" x2="0.9" y2="1">
+            <stop offset="0"    stop-color="#5b5f8f"/>
+            <stop offset="0.45" stop-color="#3f4670"/>
+            <stop offset="1"    stop-color="#2a2f4f"/>
+          </linearGradient>
+
+          <linearGradient id="snow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fdfbf6"/>
+            <stop offset="1" stop-color="#d9e2ef"/>
+          </linearGradient>
+
+          <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#e9c79b"/>
+            <stop offset="0.18" stop-color="#c3b3a8"/>
+            <stop offset="0.55" stop-color="#7f8fae"/>
+            <stop offset="1"    stop-color="#54628a"/>
+          </linearGradient>
+
+          <linearGradient id="shore" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#252b45"/>
+            <stop offset="1" stop-color="#141828"/>
+          </linearGradient>
+
+          <linearGradient id="paperEdge" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fffdf8"/>
+            <stop offset="1" stop-color="#efe7d6"/>
+          </linearGradient>
+
+          <filter id="grain" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
+          </filter>
+
+          <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+
+          <!-- the mountain, reused for fill + reflection + clipping -->
+          <path id="fujiPath" d="M150 404
+            C268 386 356 296 404 196
+            C412 178 420 168 428 160
+            L440 152 L452 158 L466 152 L478 162
+            C486 170 494 182 502 200
+            C548 296 636 386 754 404 Z"/>
+
+          <linearGradient id="sunColumn" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"    stop-color="#ffd9a0" stop-opacity="0"/>
+            <stop offset="0.28" stop-color="#ffe3b8" stop-opacity=".28"/>
+            <stop offset="0.5"  stop-color="#ffedcb" stop-opacity=".46"/>
+            <stop offset="0.72" stop-color="#ffe3b8" stop-opacity=".28"/>
+            <stop offset="1"    stop-color="#ffd9a0" stop-opacity="0"/>
+          </linearGradient>
+
+          <linearGradient id="reflFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#ffffff" stop-opacity=".62"/>
+            <stop offset="0.6" stop-color="#ffffff" stop-opacity=".22"/>
+            <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
+          </linearGradient>
+          <mask id="reflMask"><rect x="0" y="404" width="900" height="146" fill="url(#reflFade)"/></mask>
+
+          <!-- hot-stamped metal for the wordmark -->
+          <linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="90" y1="548" x2="90" y2="592">
+            <stop offset="0"   stop-color="#fdf4d2"/>
+            <stop offset=".28" stop-color="#dcb458"/>
+            <stop offset=".52" stop-color="#8e6524"/>
+            <stop offset=".74" stop-color="#eed488"/>
+            <stop offset="1"   stop-color="#7c5518"/>
+          </linearGradient>
+          <linearGradient id="goldShine" gradientUnits="userSpaceOnUse" x1="90" y1="0" x2="284" y2="0">
+            <stop offset="0"   stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset=".43" stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset=".5"  stop-color="#fffdf0" stop-opacity=".95"/>
+            <stop offset=".57" stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
+          </linearGradient>
+
+          <clipPath id="clipFuji"><use href="#fujiPath"/></clipPath>
+          <clipPath id="clipLake"><rect x="0" y="404" width="900" height="146"/></clipPath>
+          <clipPath id="clipCard"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
+
+          <path id="petalShape" d="M0 0 C3 -5.5 11 -6.5 14.5 -1 C11 5 3 5.5 0 0 Z"/>
+          <g id="blossom">
+            <g>
+              <ellipse cx="0" cy="-6.4" rx="4.1" ry="5.4"/>
+              <ellipse cx="6.1" cy="-1.9" rx="4.1" ry="5.4" transform="rotate(72 0 0)"/>
+              <ellipse cx="3.8" cy="5.2" rx="4.1" ry="5.4" transform="rotate(144 0 0)"/>
+              <ellipse cx="-3.8" cy="5.2" rx="4.1" ry="5.4" transform="rotate(216 0 0)"/>
+              <ellipse cx="-6.1" cy="-1.9" rx="4.1" ry="5.4" transform="rotate(288 0 0)"/>
+            </g>
+            <circle r="2.1" fill="#c9607a"/>
+            <circle r="0.8" cx="0" cy="-3.2" fill="#f7e3a8"/>
+          </g>
+        </defs>
+
+        <g clip-path="url(#clipCard)">
+
+          <!-- sky -->
+          <rect x="0" y="0" width="900" height="410" fill="url(#sky)"/>
+
+          <!-- sun + rays -->
+          <g class="rays" opacity=".16" stroke="#ffe3b8" stroke-width="4.5" stroke-linecap="round">
+            <line x1="620" y1="206" x2="830" y2="206"/>
+            <line x1="620" y1="206" x2="814" y2="126"/>
+            <line x1="620" y1="206" x2="768" y2="58"/>
+            <line x1="620" y1="206" x2="700" y2="12"/>
+            <line x1="620" y1="206" x2="620" y2="-4"/>
+            <line x1="620" y1="206" x2="540" y2="12"/>
+            <line x1="620" y1="206" x2="472" y2="58"/>
+            <line x1="620" y1="206" x2="426" y2="126"/>
+            <line x1="620" y1="206" x2="410" y2="206"/>
+          </g>
+          <circle class="glow" cx="620" cy="206" r="150" fill="url(#sunGlow)"/>
+          <circle cx="620" cy="206" r="40" fill="#ffe3ae"/>
+          <circle cx="620" cy="206" r="40" fill="none" stroke="#fff3d4" stroke-width="1.2" opacity=".7"/>
+          <circle cx="620" cy="206" r="54" fill="none" stroke="#ffd9a0" stroke-width="1" opacity=".35"/>
+          <circle cx="620" cy="206" r="70" fill="none" stroke="#ffd9a0" stroke-width="1" opacity=".2"/>
+
+          <!-- high clouds -->
+          <g class="cloud-a" opacity=".55" fill="#f3d9c4">
+            <path d="M60 96 C140 84 236 88 300 98 C356 107 340 118 268 118 C170 118 92 112 60 106 Z"/>
+            <path d="M470 66 C540 58 604 62 646 70 C684 77 672 86 606 86 C536 86 492 80 470 74 Z" opacity=".7"/>
+          </g>
+          <g class="cloud-b" opacity=".45" fill="#f6e0cb">
+            <path d="M560 140 C650 130 742 134 796 143 C842 151 828 160 748 160 C656 160 592 154 560 148 Z"/>
+          </g>
+
+          <!-- distant ridges -->
+          <path d="M0 404 L0 336 C56 328 116 352 172 378 C214 396 246 402 276 404 Z" fill="#6f7fa4" opacity=".85"/>
+          <path d="M900 404 L900 322 C838 328 782 352 730 380 C700 396 676 402 654 404 Z" fill="#66769c" opacity=".8"/>
+          <path d="M0 404 L0 366 C74 360 150 380 214 396 C246 403 268 404 290 404 Z" fill="#57668c" opacity=".7"/>
+          <path d="M900 404 L900 358 C846 358 792 376 744 392 C718 400 698 403 678 404 Z" fill="#4e5c82" opacity=".65"/>
+
+          <!-- Mount Fuji -->
+          <use href="#fujiPath" fill="url(#fujiBody)"/>
+          <g clip-path="url(#clipFuji)">
+            <!-- shaded left flank -->
+            <path d="M150 404 C268 386 356 296 404 196 C412 178 420 168 428 160 L452 158 L452 404 Z"
+                  fill="#232842" opacity=".55"/>
+            <!-- lit right flank -->
+            <path d="M452 158 L466 152 L478 162 C486 170 494 182 502 200 C548 296 636 386 754 404 L452 404 Z"
+                  fill="#7d7f9e" opacity=".22"/>
+            <!-- snow cap -->
+            <path d="M352 128 H548 V230
+                     C528 246 512 224 494 240
+                     C476 256 460 232 442 246
+                     C424 260 408 234 390 248
+                     C374 260 362 240 352 232 Z" fill="url(#snow)"/>
+            <!-- snow streaks -->
+            <g fill="#e6eef8" opacity=".42">
+              <path d="M366 244 C369 260 371 272 373 284 C376 270 379 256 381 246 Z"/>
+              <path d="M392 248 C395 268 397 284 400 300 C403 282 407 264 409 250 Z"/>
+              <path d="M420 246 C423 264 425 276 427 290 C430 274 434 258 436 248 Z"/>
+              <path d="M450 244 C454 270 457 290 460 312 C464 288 468 264 471 246 Z"/>
+              <path d="M484 242 C487 258 489 270 491 282 C494 268 497 254 500 244 Z"/>
+              <path d="M512 240 C515 254 517 264 519 274 C522 262 525 250 528 242 Z"/>
+              <path d="M536 236 C538 246 540 254 541 262 C544 252 546 244 548 238 Z"/>
+            </g>
+            <!-- summit crater shading -->
+            <path d="M440 152 L452 158 L466 152 L462 166 L446 168 Z" fill="#8fa2bd" opacity=".5"/>
+            <!-- ridges -->
+            <g fill="none" stroke="#ffffff" stroke-opacity=".13" stroke-width="1.4">
+              <path d="M452 160 C472 232 494 302 528 384"/>
+              <path d="M440 158 C420 242 388 322 348 398"/>
+              <path d="M478 164 C506 240 540 316 588 392"/>
+            </g>
+            <!-- foot mist -->
+            <path d="M150 404 C280 392 380 398 452 392 C540 386 640 396 754 404 Z" fill="#f4dcc0" opacity=".18"/>
+          </g>
+
+          <!-- mist band crossing the mountain -->
+          <g class="mist" opacity=".5">
+            <path d="M120 300 C240 290 360 296 480 302 C600 308 720 302 820 296
+                     C860 294 872 316 820 322 C700 334 560 328 440 322
+                     C320 316 200 322 120 316 C88 313 88 303 120 300 Z" fill="#f7e3c8"/>
+          </g>
+
+          <!-- low clouds in front -->
+          <g class="cloud-c" opacity=".5" fill="#f8e6cf">
+            <path d="M200 356 C300 348 400 352 470 358 C530 363 520 372 430 372 C320 372 244 366 200 362 Z"/>
+            <path d="M600 344 C676 338 742 342 786 348 C822 353 812 362 742 362 C660 362 626 354 600 350 Z" opacity=".8"/>
+          </g>
+
+          <!-- birds -->
+          <g class="bird" stroke="#3a4463" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".75">
+            <path d="M300 150 q9 -7 17 0 q8 -7 17 0"/>
+          </g>
+          <g class="bird b2" stroke="#3a4463" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".6">
+            <path d="M356 128 q7 -6 14 0 q7 -6 14 0"/>
+          </g>
+          <g class="bird b3" stroke="#3a4463" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5">
+            <path d="M262 186 q6 -5 12 0 q6 -5 12 0"/>
+          </g>
+
+          <!-- lake -->
+          <rect x="0" y="404" width="900" height="146" fill="url(#lake)"/>
+          <g clip-path="url(#clipLake)">
+            <!-- mirrored mountain, compressed + faded -->
+            <g mask="url(#reflMask)">
+              <g transform="matrix(1 0 0 -0.72 0 695)">
+                <use href="#fujiPath" fill="#2c3355"/>
+                <path d="M352 128 H548 V230
+                         C528 246 512 224 494 240
+                         C476 256 460 232 442 246
+                         C424 260 408 234 390 248
+                         C374 260 362 240 352 232 Z" fill="#cfd9e8"/>
+              </g>
+            </g>
+            <!-- sun column -->
+            <rect x="466" y="404" width="308" height="146" fill="url(#sunColumn)"/>
+            <!-- ripples -->
+            <g stroke="#f2e6d4" stroke-width="1.6" stroke-linecap="round" fill="none">
+              <path class="ripple" d="M470 418 h70 M580 418 h48 M660 418 h34"/>
+              <path class="ripple" d="M430 434 h96 M560 434 h70 M672 434 h40"/>
+              <path class="ripple" d="M380 452 h110 M520 452 h86 M648 452 h58"/>
+              <path class="ripple" d="M300 472 h130 M462 472 h104 M606 472 h74"/>
+              <path class="ripple" d="M210 494 h150 M398 494 h120 M556 494 h96"/>
+              <path class="ripple" d="M120 518 h170 M326 518 h140 M508 518 h118"/>
+              <path class="ripple" d="M60 538 h190 M286 538 h150 M474 538 h130"/>
+            </g>
+            <g stroke="#3f4a6d" stroke-width="1.2" stroke-linecap="round" fill="none" opacity=".35">
+              <path class="ripple" d="M180 444 h120 M340 466 h96 M240 504 h140"/>
+            </g>
+          </g>
+
+          <!-- torii -->
+          <g>
+            <g fill="#c8452f" stroke="#8f2f20" stroke-width=".8" stroke-opacity=".5">
+              <path d="M186 524 L194 430 L204 430 L198 524 Z"/>
+              <path d="M288 524 L280 430 L270 430 L276 524 Z"/>
+              <rect x="231" y="436" width="12" height="24" rx="1.5"/>
+              <rect x="176" y="458" width="122" height="10" rx="2"/>
+              <path d="M172 434 C204 427 256 427 288 434 L288 444 C256 437 204 437 172 444 Z"/>
+              <path d="M162 418 C198 408 262 408 298 418 L298 428 C262 418 198 418 162 428 Z"/>
+            </g>
+            <g fill="#8f2f20" opacity=".45">
+              <path d="M186 524 L194 430 L197 430 L190 524 Z"/>
+              <path d="M288 524 L280 430 L277 430 L284 524 Z"/>
+            </g>
+            <g fill="#c8452f" opacity=".2">
+              <path d="M186 526 L192 596 L202 596 L196 526 Z"/>
+              <path d="M288 526 L282 596 L272 596 L278 526 Z"/>
+              <rect x="176" y="528" width="122" height="8" rx="2"/>
+            </g>
+            <path d="M170 528 C200 534 258 534 292 528" stroke="#f2e6d4" stroke-opacity=".28"
+                  stroke-width="1.6" fill="none"/>
+          </g>
+
+          <!-- boat -->
+          <g class="boat">
+            <g fill="#1b2036">
+              <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
+              <path d="M624 481 C628 477 634 477 638 481 L640 499 L622 499 Z"/>
+              <circle cx="631" cy="475" r="4"/>
+              <path d="M619 473 L643 473 L631 464 Z"/>
+              <path d="M646 470 L648.5 471 L662 502 L659 503.5 Z"/>
+            </g>
+            <path d="M600 512 C618 517 646 517 662 512" stroke="#f2e6d4" stroke-opacity=".3"
+                  stroke-width="1.4" fill="none"/>
+          </g>
+
+          <!-- foreground shore -->
+          <path d="M0 556 C120 542 240 552 360 548 C500 543 640 556 760 548 C820 544 870 548 900 546
+                   L900 600 L0 600 Z" fill="url(#shore)"/>
+          <path d="M0 556 C120 542 240 552 360 548 C500 543 640 556 760 548 C820 544 870 548 900 546
+                   L900 560 C860 562 812 558 758 562 C640 570 500 557 360 562 C240 566 120 556 0 570 Z"
+                fill="#39425f" opacity=".5"/>
+          <!-- reeds -->
+          <g stroke="#0f1322" stroke-width="2" fill="none" stroke-linecap="round" opacity=".9">
+            <path d="M40 566 C44 546 38 532 46 516"/>
+            <path d="M54 568 C58 550 54 538 62 524"/>
+            <path d="M68 570 C70 552 66 542 74 530"/>
+            <path d="M826 560 C830 542 824 530 832 516"/>
+            <path d="M842 562 C846 546 842 536 850 524"/>
+            <path d="M858 564 C860 548 856 540 864 530"/>
+          </g>
+          <g fill="#0f1322">
+            <ellipse cx="46" cy="512" rx="3" ry="7"/>
+            <ellipse cx="62" cy="520" rx="2.6" ry="6"/>
+            <ellipse cx="832" cy="512" rx="3" ry="7"/>
+            <ellipse cx="850" cy="520" rx="2.6" ry="6"/>
+          </g>
+
+          <!-- cherry branch, top-left -->
+          <g>
+            <path d="M-10 26 C60 40 118 74 168 118 C196 143 218 158 244 164"
+                  fill="none" stroke="#3a2a2c" stroke-width="9" stroke-linecap="round"/>
+            <path d="M62 42 C86 26 108 20 132 22" fill="none" stroke="#3a2a2c" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M120 78 C142 66 158 62 178 66" fill="none" stroke="#3a2a2c" stroke-width="4" stroke-linecap="round"/>
+            <path d="M172 122 C192 116 206 112 224 116" fill="none" stroke="#3a2a2c" stroke-width="3.4" stroke-linecap="round"/>
+            <path d="M100 62 C96 44 92 34 84 24" fill="none" stroke="#3a2a2c" stroke-width="3.4" stroke-linecap="round"/>
+            <g fill="#f4c3d0">
+              <use href="#blossom" transform="translate(28 34) scale(1.15)"/>
+              <use href="#blossom" transform="translate(74 22) scale(1)"/>
+              <use href="#blossom" transform="translate(132 22) scale(1.1)"/>
+              <use href="#blossom" transform="translate(104 66) scale(.95)"/>
+              <use href="#blossom" transform="translate(158 62) scale(1.05)"/>
+              <use href="#blossom" transform="translate(186 74) scale(.9)"/>
+              <use href="#blossom" transform="translate(168 118) scale(1.1)"/>
+              <use href="#blossom" transform="translate(222 116) scale(.95)"/>
+              <use href="#blossom" transform="translate(206 148) scale(1)"/>
+              <use href="#blossom" transform="translate(244 164) scale(.85)"/>
+              <use href="#blossom" transform="translate(84 24) scale(.8)"/>
+            </g>
+            <g fill="#f7d7e0" opacity=".9">
+              <circle cx="52" cy="52" r="3.4"/>
+              <circle cx="146" cy="42" r="3"/>
+              <circle cx="196" cy="96" r="2.6"/>
+            </g>
+          </g>
+
+          <!-- falling petals -->
+          <g fill="#f4c3d0">
+            <g class="petal p1"><use href="#petalShape" transform="translate(150 150)"/></g>
+            <g class="petal p2"><use href="#petalShape" transform="translate(210 120) scale(.85)"/></g>
+            <g class="petal p3"><use href="#petalShape" transform="translate(96 190) scale(.9)"/></g>
+            <g class="petal p4"><use href="#petalShape" transform="translate(260 170) scale(.75)"/></g>
+            <g class="petal p5"><use href="#petalShape" transform="translate(180 240) scale(1)"/></g>
+            <g class="petal p6"><use href="#petalShape" transform="translate(320 130) scale(.8)"/></g>
+            <g class="petal p7"><use href="#petalShape" transform="translate(60 260) scale(.7)"/></g>
+            <g class="petal p8"><use href="#petalShape" transform="translate(240 280) scale(.9)"/></g>
+            <g class="petal p9"><use href="#petalShape" transform="translate(130 320) scale(.75)"/></g>
+            <g class="petal p10"><use href="#petalShape" transform="translate(300 240) scale(.85)"/></g>
+          </g>
+
+          <!-- tanzaku title strip -->
+          <g transform="rotate(-1.2 76 344)">
+            <rect x="48" y="176" width="58" height="336" rx="2" fill="#f8f3e8" opacity=".93"/>
+            <rect x="48" y="176" width="58" height="336" rx="2" fill="none" stroke="#c9b79a" stroke-width="1"/>
+            <rect x="53" y="181" width="48" height="326" fill="none" stroke="#c9b79a" stroke-width=".6" opacity=".7"/>
+            <g fill="#22283a" font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Songti SC',serif"
+               font-size="38" text-anchor="middle">
+              <text x="77" y="234">富</text>
+              <text x="77" y="284">士</text>
+              <text x="77" y="334">山</text>
+            </g>
+            <g fill="#5d6478" font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif"
+               font-size="15" text-anchor="middle">
+              <text x="77" y="374">河</text>
+              <text x="77" y="394">口</text>
+              <text x="77" y="414">湖</text>
+            </g>
+            <g transform="translate(77 462)">
+              <circle r="17" fill="#c8452f" opacity=".92"/>
+              <circle r="17" fill="none" stroke="#a3341f" stroke-width="1.4"/>
+              <text x="0" y="6" text-anchor="middle" fill="#f8f3e8" font-size="18"
+                    font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif">旅</text>
+            </g>
+          </g>
+
+          <!-- stamp, top-right -->
+          <g transform="rotate(-2.4 806 78)">
+            <g fill="#f8f3e8">
+              <path d="M762 34 h88 v88 h-88 Z"/>
+            </g>
+            <g fill="#f8f3e8" stroke="#f8f3e8" stroke-width="2.6">
+              <path d="M762 34 h88 v88 h-88 Z" fill="none" stroke-dasharray="0.01 7.3" stroke-linecap="round"/>
+            </g>
+            <rect x="768" y="40" width="76" height="76" fill="#e8eef6"/>
+            <rect x="768" y="40" width="76" height="76" fill="none" stroke="#9fb0cc" stroke-width="1"/>
+            <g>
+              <rect x="772" y="44" width="68" height="56" fill="#cfe0ef"/>
+              <path d="M772 100 L772 84 C790 80 806 88 822 94 C832 98 838 100 840 100 Z" fill="#7fa8c6"/>
+              <path d="M786 100 C800 96 812 82 820 66 C828 82 840 96 840 100 Z" fill="#3f5d86"/>
+              <path d="M812 68 L820 62 L828 68 L824 74 L816 74 Z" fill="#f4f8fc"/>
+              <circle cx="796" cy="60" r="7" fill="#f2c14e"/>
+              <text x="806" y="112" text-anchor="middle" fill="#3f5d86" font-size="9"
+                    letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>
+            </g>
+          </g>
+          <!-- cancellation rings -->
+          <g transform="translate(742 128) rotate(-14)" fill="none" stroke="#4a5570" opacity=".5">
+            <circle r="34" stroke-width="1.6"/>
+            <circle r="28" stroke-width="1"/>
+            <path d="M-28 -8 H28 M-28 0 H28 M-28 8 H28" stroke-width="1"/>
+            <text x="0" y="-14" text-anchor="middle" fill="#4a5570" stroke="none" font-size="8"
+                  letter-spacing="1.4" font-family="Georgia,serif">TOKYO</text>
+            <text x="0" y="22" text-anchor="middle" fill="#4a5570" stroke="none" font-size="7.5"
+                  letter-spacing="1" font-family="Georgia,serif">24.5.12</text>
+          </g>
+
+          <!-- hot-stamped wordmark, lower left -->
+          <g font-family="Georgia,'Times New Roman',serif">
+            <g fill="#0b0f1c" opacity=".55" transform="translate(1 1.2)">
+              <text x="98" y="570" font-size="16" letter-spacing="4.8">MT. FUJI</text>
+              <text x="99" y="588" font-size="8.5" letter-spacing="2.8">KAWAGUCHI-KO · JAPAN</text>
+            </g>
+            <g fill="url(#gold)">
+              <text x="98" y="570" font-size="16" letter-spacing="4.8">MT. FUJI</text>
+              <text x="99" y="588" font-size="8.5" letter-spacing="2.8">KAWAGUCHI-KO · JAPAN</text>
+            </g>
+            <g id="wmShine" fill="url(#goldShine)" opacity="0">
+              <text x="98" y="570" font-size="16" letter-spacing="4.8">MT. FUJI</text>
+              <text x="99" y="588" font-size="8.5" letter-spacing="2.8">KAWAGUCHI-KO · JAPAN</text>
+            </g>
+          </g>
+
+          <!-- paper grain + vignette -->
+          <rect x="0" y="0" width="900" height="600" filter="url(#grain)" opacity=".13"
+                style="mix-blend-mode:multiply"/>
+          <rect x="0" y="0" width="900" height="600" fill="none" stroke="#000" stroke-opacity=".18"
+                stroke-width="26" filter="url(#soft)"/>
+        </g>
+
+        <!-- deckled card edge -->
+        <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="#f8f3e8" stroke-opacity=".5" stroke-width="2"/>
+      </svg>
+
+      <div class="foil" aria-hidden="true">
+        <span class="foil-holo"></span>
+        <span class="foil-sparkle"></span>
+        <span class="foil-sparkle2"></span>
+        <span class="foil-sheen"></span>
+        <span class="foil-glint"></span>
+        <span class="foil-spot"></span>
+      </div>
+    </div>
+
+    <!-- ============================ BACK ============================ -->
+    <div class="face back">
+      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="backPaper" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0"   stop-color="#fbf6ec"/>
+            <stop offset="0.5" stop-color="#f5efe2"/>
+            <stop offset="1"   stop-color="#ece3d1"/>
+          </linearGradient>
+          <filter id="grain2" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="3" seed="19" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
+          </filter>
+          <clipPath id="clipCard2"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
+        </defs>
+
+        <g clip-path="url(#clipCard2)">
+          <rect x="0" y="0" width="900" height="600" fill="url(#backPaper)"/>
+
+          <!-- printed frame -->
+          <rect x="26" y="26" width="848" height="548" fill="none" stroke="#b9a98f" stroke-width="1.4"/>
+          <rect x="31" y="31" width="838" height="538" fill="none" stroke="#b9a98f" stroke-width=".6" opacity=".7"/>
+
+          <g font-family="Georgia,'Times New Roman',serif" fill="#6f6350">
+            <text x="46" y="62" font-size="15" letter-spacing="7">POST CARD</text>
+            <text x="46" y="80" font-size="9.5" letter-spacing="2.4" opacity=".7">CORRESPONDENCE CARD · 郵便はがき</text>
+          </g>
+
+          <!-- divider -->
+          <line x1="452" y1="96" x2="452" y2="548" stroke="#b9a98f" stroke-width="1.2"/>
+          <line x1="456" y1="96" x2="456" y2="548" stroke="#b9a98f" stroke-width=".5" opacity=".6"/>
+
+          <!-- message side -->
+          <g font-family="'Snell Roundhand','Brush Script MT','Segoe Script','Bradley Hand',cursive"
+             fill="#2f3548">
+            <text x="66" y="150" font-size="30">Wish you were here.</text>
+            <text x="66" y="196" font-size="22">The mountain showed itself</text>
+            <text x="66" y="228" font-size="22">for only a moment at dawn —</text>
+            <text x="66" y="260" font-size="22">then the cloud came back,</text>
+            <text x="66" y="292" font-size="22">and everyone applauded anyway.</text>
+            <text x="236" y="352" font-size="24">See you in autumn.</text>
+          </g>
+          <g stroke="#8d8270" stroke-width=".8" opacity=".45" fill="none">
+            <path d="M66 396 H410 M66 428 H410 M66 460 H410 M66 492 H410"/>
+          </g>
+          <g font-family="Georgia,serif" font-size="10" fill="#8b7f6b" letter-spacing="1.6">
+            <text x="66" y="524">KAWAGUCHI-KO · 35.4387° N, 138.7265° E</text>
+          </g>
+
+          <!-- small fuji doodle -->
+          <g transform="translate(352 470)" fill="none" stroke="#7d7260" stroke-width="1.4" opacity=".8">
+            <path d="M-40 34 C-22 30 -10 12 -4 -6 L0 -12 L4 -6 C10 12 22 30 40 34"/>
+            <path d="M-9 4 C-6 -4 -3 -9 0 -12 C3 -9 6 -4 9 4 L4 2 L0 6 L-4 2 Z" fill="#cfd8e2"/>
+            <path d="M-46 34 H46"/>
+          </g>
+
+          <!-- address side -->
+          <g font-family="Georgia,serif" fill="#6f6350">
+            <text x="486" y="132" font-size="10" letter-spacing="2.6">TO</text>
+          </g>
+          <g stroke="#a89a83" stroke-width="1" fill="none">
+            <path d="M486 176 H854 M486 216 H854 M486 256 H854 M486 296 H854"/>
+          </g>
+          <g font-family="'Snell Roundhand','Brush Script MT','Segoe Script',cursive" fill="#2f3548">
+            <text x="500" y="170" font-size="24">Hana Sato</text>
+            <text x="500" y="210" font-size="19">4-12-3 Kitazawa, Setagaya-ku</text>
+            <text x="500" y="250" font-size="19">Tokyo 155-0031</text>
+            <text x="500" y="290" font-size="19">Japan</text>
+          </g>
+
+          <!-- postal code box -->
+          <g transform="translate(486 330)">
+            <rect x="0" y="0" width="150" height="42" rx="3" fill="none" stroke="#a89a83" stroke-width="1"/>
+            <line x1="52" y1="0" x2="52" y2="42" stroke="#a89a83" stroke-width="1"/>
+            <text x="26" y="30" text-anchor="middle" font-size="24" fill="#3a4258"
+                  font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif">〒</text>
+            <text x="100" y="29" text-anchor="middle" font-size="19" fill="#4a4a5c"
+                  font-family="Georgia,serif" letter-spacing="1.5">155-0031</text>
+          </g>
+
+          <!-- stamp box + stamp -->
+          <g transform="rotate(-1.6 786 118)">
+            <rect x="726" y="52" width="120" height="132" rx="2" fill="none"
+                  stroke="#b0a28c" stroke-width=".9" stroke-dasharray="5 4"/>
+            <g transform="translate(740 64)">
+              <path d="M0 0 h92 v100 h-92 Z" fill="#f8f3e8"/>
+              <path d="M0 0 h92 v100 h-92 Z" fill="none" stroke="#f8f3e8" stroke-width="3"
+                    stroke-dasharray="0.01 7.6" stroke-linecap="round"/>
+              <rect x="6" y="6" width="80" height="88" fill="#eef2f7"/>
+              <rect x="10" y="10" width="72" height="66" fill="#cfe0ef"/>
+              <path d="M10 76 L10 58 C30 54 48 62 62 68 C72 72 78 75 82 76 Z" fill="#7fa8c6"/>
+              <path d="M26 76 C42 72 54 56 62 38 C70 56 80 72 82 76 Z" fill="#3f5d86"/>
+              <path d="M54 40 L62 33 L70 40 L66 47 L58 47 Z" fill="#f4f8fc"/>
+              <circle cx="30" cy="30" r="8" fill="#f2c14e"/>
+              <text x="46" y="90" text-anchor="middle" font-size="9" fill="#3f5d86"
+                    letter-spacing="2" font-family="Georgia,serif">NIPPON</text>
+              <text x="46" y="102" text-anchor="middle" font-size="8" fill="#6f6350"
+                    font-family="Georgia,serif">84</text>
+            </g>
+          </g>
+
+          <!-- postmark -->
+          <g transform="translate(694 160) rotate(-11)" fill="none" stroke="#4a5570" opacity=".45">
+            <circle r="42" stroke-width="1.8"/>
+            <circle r="35" stroke-width="1"/>
+            <path d="M-35 -10 H35 M-35 0 H35 M-35 10 H35" stroke-width="1"/>
+            <text x="0" y="-18" text-anchor="middle" fill="#4a5570" stroke="none" font-size="9"
+                  letter-spacing="1.6" font-family="Georgia,serif">KAWAGUCHIKO</text>
+            <text x="0" y="26" text-anchor="middle" fill="#4a5570" stroke="none" font-size="9"
+                  letter-spacing="1.2" font-family="Georgia,serif">24.5.12</text>
+          </g>
+
+          <!-- air mail stripes -->
+          <g opacity=".55">
+            <path d="M26 574 l14 -12 h18 l-14 12 z M78 574 l14 -12 h18 l-14 12 z M130 574 l14 -12 h18 l-14 12 z"
+                  fill="#c8452f"/>
+            <path d="M52 574 l14 -12 h18 l-14 12 z M104 574 l14 -12 h18 l-14 12 z" fill="#2b3a67"/>
+            <text x="176" y="571" font-size="9" letter-spacing="3" fill="#6f6350"
+                  font-family="Georgia,serif">PAR AVION · BY AIR MAIL</text>
+          </g>
+
+          <rect x="0" y="0" width="900" height="600" filter="url(#grain2)" opacity=".12"
+                style="mix-blend-mode:multiply"/>
+        </g>
+        <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="#f8f3e8" stroke-opacity=".5" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="plinth">
+  <figure class="label">
+    <figcaption>
+      <p class="lt">Mount Fuji at dawn, from Kawaguchi-ko</p>
+      <p class="la">Hanga Studio · 2025</p>
+      <p class="lm">Holographic laminate over ink on washi</p>
+      <p class="ld"><span>900 × 600</span><span>Ed. 01</span></p>
+    </figcaption>
+  </figure>
+
+  <div class="console" role="group" aria-label="Postcard controls">
+    <button id="flip">Turn the card<kbd aria-hidden="true">F</kbd></button>
+    <button id="dl">Save the plate</button>
+    <button id="foilBtn" aria-pressed="true"><span class="dot" aria-hidden="true"></span><span id="foilLabel">Laminate on</span></button>
+
+    <div class="sound" id="sound">
+      <button id="play" aria-pressed="false" title="Play / pause the soundtrack (press M)">
+        <span class="glyph" id="playGlyph">▶</span>
+        <span id="playLabel">Play</span>
+        <kbd aria-hidden="true">M</kbd>
+      </button>
+      <span class="eq" id="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <input id="vol" type="range" min="0" max="100" value="55" aria-label="Soundtrack volume">
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <span class="jp">河口湖にて</span>
+  <span class="pip" aria-hidden="true"></span>
+  <span>Hanga Studio</span>
+  <span class="pip" aria-hidden="true"></span>
+  <span>MMXXV</span>
+</footer>
+
+<script>
+  const card = document.getElementById('card');
+  const goldShine = document.getElementById('goldShine');
+  const wmShine = document.getElementById('wmShine');
+
+  /* =============================================================
+     One lighting model drives everything.
+
+     The card is a flat plane. The key light and the eye are fixed
+     in the room. So the highlight on the laminate is found the way
+     a mirror finds one: reflect the lamp in the plane of the card,
+     sight that reflection from the eye, and take where the sight
+     line crosses the card. Tilt the card and the highlight travels
+     exactly as far as it physically has to — the rainbow pool, the
+     glitter, the sheen band, the hard glint, the light behind the
+     page and the hot-stamped wordmark all read the same numbers.
+     ============================================================= */
+  const DEG = Math.PI / 180;
+  const unit = v => { const m = Math.hypot(v[0], v[1], v[2]); return [v[0]/m, v[1]/m, v[2]/m]; };
+
+  const LAMP = [-0.30, -0.22, 0.85];   // point light, in card-widths, upper-left, in front
+  const EYE  = [0, 0, 2.60];           // the viewer
+  const HALF = unit(LAMP.map((v, i) => v / Math.hypot(...LAMP) + (i === 2 ? 1 : 0)));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let rx = 0, ry = 0, tgtX = 0, tgtY = 0;
+  let hovering = false, hx = 0, hy = 0;
+  let turn = 0, turnFrom = 0, turnTo = 0, turnT0 = -1, flipped = false;
+  let cardW = 900, cardH = 600;
+
+  const measure = () => { const r = card.getBoundingClientRect(); cardW = r.width; cardH = r.height; };
+  measure();
+  addEventListener('resize', measure);
+
+  const flip = () => {
+    flipped = !flipped;
+    turnFrom = turn;
+    turnTo = flipped ? 180 : 0;
+    turnT0 = performance.now();
+  };
+  card.addEventListener('click', flip);
+  document.getElementById('flip').addEventListener('click', flip);
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey && !e.altKey) flip();
+  });
+
+  card.addEventListener('pointermove', e => {
+    const r = card.getBoundingClientRect();
+    hovering = true;
+    hx = (e.clientX - r.left) / r.width - .5;
+    hy = (e.clientY - r.top) / r.height - .5;
+  });
+  card.addEventListener('pointerleave', () => { hovering = false; });
+
+  // world -> card frame.  R = rotateY(ry) . rotateX(rx), so R^T = Rx(-b) . Ry(-a)
+  function toLocal(v, ca, sa, cb, sb) {
+    const x = ca * v[0] - sa * v[2];
+    const y = v[1], z = sa * v[0] + ca * v[2];
+    return [x, cb * y + sb * z, -sb * y + cb * z];
+  }
+
+  function frame(now) {
+    // pointer steers the card; when the pointer is away it keeps a slow 3-5 degree sway
+    if (hovering) {
+      tgtX = -hy * 12;
+      tgtY =  hx * 16;
+    } else if (!reduce) {
+      const t = now / 1000;
+      tgtX = Math.sin(t * .29) * 3.2 + Math.sin(t * .13 + 1.2) * 1.6;
+      tgtY = Math.sin(t * .21 + .5) * 4.2 + Math.sin(t * .09) * 1.8;
+    } else { tgtX = 0; tgtY = 0; }
+
+    rx += (tgtX - rx) * .055;
+    ry += (tgtY - ry) * .055;
+
+    if (turnT0 >= 0) {
+      const k = Math.min(1, (now - turnT0) / 900);
+      const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      turn = turnFrom + (turnTo - turnFrom) * e;
+      if (k >= 1) turnT0 = -1;
+    }
+
+    const a = ry * DEG, b = rx * DEG;
+    const ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b);
+
+    // surface normal in world space
+    const nx = cb * sa, ny = -sb, nz = cb * ca;
+    const spec = Math.pow(Math.max(0, nx * HALF[0] + ny * HALF[1] + nz * HALF[2]), 14);
+
+    // mirror the lamp in the card plane, then sight it from the eye
+    const L = toLocal(LAMP, ca, sa, cb, sb);
+    const E = toLocal(EYE, ca, sa, cb, sb);
+    const t = -E[2] / (-L[2] - E[2]);
+    const gx = E[0] + t * (L[0] - E[0]);          // card spans -0.5 .. 0.5 wide
+    const gy = E[1] + t * (L[1] - E[1]);          // and -0.3333 .. 0.3333 tall
+    const sx = 50 + gx * 100;
+    const sy = 50 + gy * 150;
+
+    // the sheen band lies across the direction of travel
+    const dx = gx, dy = gy * 1.5;
+    const A = Math.atan2(dx, -dy);
+    const ax = Math.sin(A), ay = -Math.cos(A);
+    const len = Math.abs(cardW * ax) + Math.abs(cardH * ay);
+    const band = 50 + (((sx - 50) / 100 * cardW) * ax + ((sy - 50) / 100 * cardH) * ay) / len * 100;
+
+    card.style.setProperty('--sx', sx.toFixed(2) + '%');
+    card.style.setProperty('--sy', sy.toFixed(2) + '%');
+    card.style.setProperty('--band', band.toFixed(2) + '%');
+    card.style.setProperty('--sheen', (A / DEG + 360).toFixed(2) + 'deg');
+    card.style.setProperty('--spec', spec.toFixed(4));
+
+    document.body.style.setProperty('--poolx', (14 + sx * .72).toFixed(2) + '%');
+    document.body.style.setProperty('--pooly', (10 + sy * .60).toFixed(2) + '%');
+
+    // the cast shadow falls away from the lamp, so it drifts as the card turns
+    card.style.setProperty('--shx', (-gx * 26).toFixed(2));
+    card.style.setProperty('--shy', (18 - gy * 14).toFixed(2));
+
+    card.style.transform = `rotateY(${(turn + ry).toFixed(3)}deg) rotateX(${rx.toFixed(3)}deg)`;
+
+    // the hot-stamped wordmark catches the same highlight
+    goldShine.setAttribute('gradientTransform', `translate(${(sx / 100 * 900 - 187).toFixed(1)} 0)`);
+    wmShine.setAttribute('opacity', Math.min(.92, spec * 1.5).toFixed(3));
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // holographic lamination toggle
+  const foilBtn = document.getElementById('foilBtn');
+  const foilLabel = document.getElementById('foilLabel');
+  let foilOn = true;
+  foilBtn.addEventListener('click', () => {
+    foilOn = !foilOn;
+    card.style.setProperty('--foil', foilOn ? '1' : '0');
+    foilLabel.textContent = foilOn ? 'Laminate on' : 'Laminate off';
+    foilBtn.setAttribute('aria-pressed', String(foilOn));
+  });
+
+  // export the front artwork as a standalone .svg
+  document.getElementById('dl').addEventListener('click', () => {
+    const src = card.querySelector('.face.front svg');
+    const clone = src.cloneNode(true);
+    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    clone.setAttribute('width', '1800');
+    clone.setAttribute('height', '1200');
+    const css = [...document.styleSheets].flatMap(s => {
+      try { return [...s.cssRules].map(r => r.cssText); } catch { return []; }
+    }).filter(t => /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.boat|\.rays|\.glow|\.bird|\.p\d/.test(t));
+    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    style.textContent = css.join('\n');
+    clone.insertBefore(style, clone.firstChild);
+    const blob = new Blob(
+      ['<?xml version="1.0" encoding="UTF-8"?>\n' + clone.outerHTML],
+      { type: 'image/svg+xml;charset=utf-8' }
+    );
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'fuji-postcard-front.svg';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+</script>
+
+<script>
+  /* =============================================================
+     Tiny soundtrack — synthesised live with the Web Audio API.
+     No audio files, no network requests.
+     Hirajōshi (koto) scale on D · 8-bar loop · 66 bpm
+     plucked strings + lake ambience + a slow shakuhachi drone
+     ============================================================= */
+  (function () {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const wrap = document.getElementById('sound');
+    if (!AC) { wrap.style.display = 'none'; return; }
+
+    const BPM = 66, BEAT = 60 / BPM, TOTAL = 32;      // 8 bars of 4/4
+    const HZ = m => 440 * Math.pow(2, (m - 69) / 12); // midi -> Hz
+
+    /* [midi, start beat, length in beats, gain] — D F G A C */
+    const MELODY = [
+      [57,0,1,.50],[55,1,.5,.42],[57,1.5,.5,.42],[62,2,1,.55],[60,3,1,.50],
+      [57,4,1.5,.50],[55,5.5,.5,.42],[53,6,1,.46],[55,7,1,.44],
+      [62,8,1,.55],[60,9,.5,.46],[57,9.5,.5,.44],[55,10,1,.46],[53,11,1,.42],
+      [50,12,2,.50],[53,15,.5,.34],[55,15.5,.5,.36],
+      [57,16,.5,.44],[60,16.5,.5,.48],[62,17,1,.55],[65,18,1,.50],[62,19,1,.48],
+      [60,20,1.5,.50],[57,21.5,.5,.42],[55,22,1,.46],[57,23,1,.44],
+      [53,24,1,.44],[55,25,.5,.38],[57,25.5,.5,.42],[60,26,1,.50],[57,27,1,.46],
+      [50,28,2,.50]
+    ];
+    const CHORDS = [[50,55,60],[53,57,62],[55,60,65],[50,57,62],
+                    [53,60,65],[55,60,67],[50,57,65],[50,55,60]];
+
+    const EVENTS = [];
+    MELODY.forEach(([m, b, d, g]) => EVENTS.push({ b, m, d, g, k: 'mel' }));
+    CHORDS.forEach((ch, bar) => {
+      ch.forEach((m, j) => EVENTS.push({ b: bar * 4 + j * .16, m, d: 1.8, g: .15, k: 'arp' }));
+      if (bar % 2 === 1) EVENTS.push({ b: bar * 4 + 2, m: ch[0] - 12, d: 2.4, g: .12, k: 'arp' });
+    });
+    EVENTS.push({ b: 0, k: 'drone' }, { b: 16, k: 'drone' });
+    EVENTS.sort((a, b) => a.b - b.b);
+
+    let ctx, master, dry, verbSend, conv, echoSend, delayNode, noiseBuf, analyser;
+    let amb = [], timer = null, idx = 0, t0 = 0, playing = false, rafId = 0;
+
+    const btn   = document.getElementById('play');
+    const glyph = document.getElementById('playGlyph');
+    const label = document.getElementById('playLabel');
+    const vol   = document.getElementById('vol');
+    const bars  = [...document.querySelectorAll('#eq i')];
+    const data  = new Uint8Array(512);
+    const BANDS = [[2,9],[9,20],[20,44],[44,90],[90,170]];
+
+    function noiseBuffer(sec) {
+      const n = Math.floor(ctx.sampleRate * sec);
+      const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      return buf;
+    }
+    /* procedural impulse response: exponentially decaying noise */
+    function impulse(sec, decay) {
+      const n = Math.floor(ctx.sampleRate * sec);
+      const buf = ctx.createBuffer(2, n, ctx.sampleRate);
+      for (let c = 0; c < 2; c++) {
+        const d = buf.getChannelData(c);
+        for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, decay);
+      }
+      return buf;
+    }
+
+    function build() {
+      ctx = new AC();
+      noiseBuf = noiseBuffer(2);
+
+      master = ctx.createGain(); master.gain.value = 0;
+      const comp = ctx.createDynamicsCompressor();
+      comp.threshold.value = -20; comp.ratio.value = 4;
+      analyser = ctx.createAnalyser(); analyser.fftSize = 1024;
+      master.connect(comp); comp.connect(analyser); analyser.connect(ctx.destination);
+
+      dry = ctx.createGain(); dry.gain.value = .85; dry.connect(master);
+
+      conv = ctx.createConvolver(); conv.buffer = impulse(2.6, 3.4);
+      verbSend = ctx.createGain(); verbSend.gain.value = .30;
+      verbSend.connect(conv); conv.connect(master);
+
+      echoSend = ctx.createGain(); echoSend.gain.value = .18;
+      delayNode = ctx.createDelay(1.5); delayNode.delayTime.value = BEAT * .75;
+      const damp = ctx.createBiquadFilter(); damp.type = 'lowpass'; damp.frequency.value = 1700;
+      const fb = ctx.createGain(); fb.gain.value = .33;
+      echoSend.connect(delayNode); delayNode.connect(damp);
+      damp.connect(fb); fb.connect(delayNode);
+      damp.connect(master);
+
+    }
+
+    function route(node) { node.connect(dry); node.connect(verbSend); node.connect(echoSend); }
+
+    /* koto / shamisen pluck: inharmonic partials, fast attack, filtered decay */
+    function pluck(freq, t, gain, dur, bright) {
+      const lp = ctx.createBiquadFilter();
+      lp.type = 'lowpass'; lp.Q.value = .6;
+      lp.frequency.setValueAtTime(Math.min(freq * 9 * bright, 11000), t);
+      lp.frequency.exponentialRampToValueAtTime(Math.max(freq * 1.8, 140), t + Math.min(dur, 1.5));
+
+      const env = ctx.createGain();
+      env.gain.setValueAtTime(.0001, t);
+      env.gain.exponentialRampToValueAtTime(gain, t + .008);
+      env.gain.exponentialRampToValueAtTime(.0001, t + dur);
+
+      let last;
+      [[1,'triangle',1],[2.004,'sine',.34],[3.01,'sine',.13],[4.98,'sine',.05]]
+        .forEach(([mult, type, lvl]) => {
+          const o = ctx.createOscillator();
+          o.type = type;
+          o.frequency.setValueAtTime(freq * mult * .995, t);      // slight bend up into pitch
+          o.frequency.exponentialRampToValueAtTime(freq * mult, t + .07);
+          const pg = ctx.createGain(); pg.gain.value = lvl;
+          o.connect(pg); pg.connect(env);
+          o.start(t); o.stop(t + dur + .05);
+          last = o;
+        });
+      env.connect(lp); route(lp);
+
+      const pick = ctx.createBufferSource(); pick.buffer = noiseBuf;
+      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
+      bp.frequency.value = Math.min(freq * 5.5, 5200); bp.Q.value = 1.1;
+      const pg = ctx.createGain();
+      pg.gain.setValueAtTime(gain * .5, t);
+      pg.gain.exponentialRampToValueAtTime(.0001, t + .045);
+      pick.connect(bp); bp.connect(pg); pg.connect(dry);
+      pick.start(t); pick.stop(t + .06);
+
+      last.onended = () => { env.disconnect(); lp.disconnect(); };
+    }
+
+    /* low bowed/breath swell under the phrases */
+    function drone(t) {
+      const len = BEAT * 14;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(.0001, t);
+      g.gain.exponentialRampToValueAtTime(.05, t + 2.2);
+      g.gain.exponentialRampToValueAtTime(.0001, t + len);
+
+      const o = ctx.createOscillator();  o.type = 'sine';     o.frequency.value = HZ(38);
+      const o2 = ctx.createOscillator(); o2.type = 'triangle'; o2.frequency.value = HZ(50);
+      const g2 = ctx.createGain(); g2.gain.value = .22;
+      o.connect(g); o2.connect(g2); g2.connect(g);
+
+      const breath = ctx.createBufferSource(); breath.buffer = noiseBuf; breath.loop = true;
+      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
+      bp.frequency.value = HZ(50) * 2; bp.Q.value = 7;
+      const bg = ctx.createGain(); bg.gain.value = .014;
+      breath.connect(bp); bp.connect(bg); bg.connect(g);
+
+      const lfo = ctx.createOscillator(); lfo.frequency.value = 4.2;
+      const lg = ctx.createGain(); lg.gain.value = 1.1;
+      lfo.connect(lg); lg.connect(o.frequency); lg.connect(o2.frequency);
+
+      g.connect(dry); g.connect(verbSend);
+      [o, o2, lfo].forEach(x => { x.start(t); x.stop(t + len + .1); });
+      breath.start(t); breath.stop(t + len + .1);
+      o.onended = () => g.disconnect();
+    }
+
+    /* the lake: slow filtered noise with a drifting cutoff */
+    function ambience() {
+      const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 420; lp.Q.value = .4;
+      const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 90;
+      const g = ctx.createGain(); g.gain.value = .05;
+      const lfo = ctx.createOscillator(); lfo.frequency.value = .07;
+      const lg = ctx.createGain(); lg.gain.value = 170;
+      lfo.connect(lg); lg.connect(lp.frequency);
+      src.connect(lp); lp.connect(hp); hp.connect(g); g.connect(master);
+      src.start(); lfo.start();
+      amb.push(src, lfo);
+    }
+
+    function schedule() {
+      const horizon = ctx.currentTime + .5;
+      let guard = 0;
+      while (guard++ < 600) {
+        const ev = EVENTS[idx % EVENTS.length];
+        const t = t0 + (Math.floor(idx / EVENTS.length) * TOTAL + ev.b) * BEAT;
+        if (t >= horizon) break;
+        if (t > ctx.currentTime) {
+          if (ev.k === 'drone') drone(t);
+          else pluck(HZ(ev.m), t, ev.g,
+                     ev.d * BEAT * (ev.k === 'mel' ? 2.2 : 1.6),
+                     ev.k === 'mel' ? 1 : .72);
+        }
+        idx++;
+      }
+    }
+
+    const level = () => (vol.value / 100) * .55;
+
+    function start() {
+      if (!ctx) build();
+      if (ctx.state === 'suspended') ctx.resume();
+      idx = 0;
+      t0 = ctx.currentTime + .25;
+      ambience();
+      const t = ctx.currentTime;
+      master.gain.cancelScheduledValues(t);
+      master.gain.setValueAtTime(Math.max(master.gain.value, .0001), t);
+      master.gain.linearRampToValueAtTime(level(), t + 1.2);
+      timer = setInterval(schedule, 60);
+      schedule();
+      playing = true;
+      wrap.classList.add('playing');
+      btn.setAttribute('aria-pressed', 'true');
+      glyph.textContent = '❚❚';
+      label.textContent = 'Pause';
+      meter();
+    }
+
+    function stop() {
+      playing = false;
+      clearInterval(timer); timer = null;
+      cancelAnimationFrame(rafId);
+      const t = ctx.currentTime;
+      master.gain.cancelScheduledValues(t);
+      master.gain.setValueAtTime(master.gain.value, t);
+      master.gain.linearRampToValueAtTime(.0001, t + .5);
+      amb.forEach(n => { try { n.stop(t + .6); } catch (e) { /* already stopped */ } });
+      amb = [];
+      bars.forEach(b => b.style.height = '10%');
+      wrap.classList.remove('playing');
+      btn.setAttribute('aria-pressed', 'false');
+      glyph.textContent = '▶';
+      label.textContent = 'Play melody';
+    }
+
+    function meter() {
+      if (!playing) return;
+      analyser.getByteFrequencyData(data);
+      bars.forEach((el, i) => {
+        const [a, z] = BANDS[i];
+        let s = 0;
+        for (let k = a; k < z; k++) s += data[k];
+        const v = Math.min(1, (s / (z - a)) / 130);
+        el.style.height = (10 + v * 90).toFixed(1) + '%';
+      });
+      rafId = requestAnimationFrame(meter);
+    }
+
+    btn.addEventListener('click', () => playing ? stop() : start());
+    const paintVol = () => vol.style.setProperty('--fill', vol.value + '%');
+    paintVol();
+    vol.addEventListener('input', () => {
+      paintVol();
+      if (ctx && playing) {
+        master.gain.cancelScheduledValues(ctx.currentTime);
+        master.gain.setTargetAtTime(level(), ctx.currentTime, .05);
+      }
+    });
+    document.addEventListener('keydown', e => {
+      if ((e.key === 'm' || e.key === 'M') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        playing ? stop() : start();
+      }
+    });
+
+    /* Start on our own if the browser allows it; otherwise the very first
+       click or keypress anywhere on the page starts it. The play button is
+       left alone — it already starts the music itself. */
+    build();
+    const begin = () => { if (!playing) start(); };
+    ctx.resume().then(begin).catch(() => {});
+    const gesture = ev => {
+      if (ev.target && ev.target.closest && ev.target.closest('#play')) return;
+      removeEventListener('pointerdown', gesture);
+      removeEventListener('keydown', gesture);
+      ctx.resume().then(begin).catch(() => {});
+    };
+    addEventListener('pointerdown', gesture);
+    addEventListener('keydown', gesture);
+  })();
+</script>
+</body>
+</html>
