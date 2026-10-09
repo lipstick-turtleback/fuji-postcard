@@ -202,7 +202,7 @@ foilBtn.addEventListener('click', () => {
 // Export the face you are looking at as a standalone .svg. The back is a
 // piece of artwork too, and saving the front while the back is showing is
 // saving something that is not on the screen.
-document.getElementById('dl').addEventListener('click', () => {
+const savePlate = () => {
   const face = flipped ? 'back' : 'front';
   const src = card.querySelector(`.face.${face} svg`);
   const clone = src.cloneNode(true);
@@ -236,4 +236,14 @@ document.getElementById('dl').addEventListener('click', () => {
   a.remove();
   // revoking in the same tick can beat the download in some browsers
   setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+};
+document.getElementById('dl').addEventListener('click', savePlate);
+// the README promised this key; the button now says so too. Cmd/Ctrl+S is
+// left alone on purpose — that is the browser saving the page, and it is
+// the one shortcut here a visitor is already reaching for with a habit.
+document.addEventListener('keydown', (e) => {
+  if ((e.key === 's' || e.key === 'S') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+    e.preventDefault();
+    savePlate();
+  }
 });
