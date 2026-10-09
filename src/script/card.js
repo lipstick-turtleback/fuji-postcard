@@ -150,26 +150,44 @@ function toLocal(v, ca, sa, cb, sb) {
   return [x, cb * y + sb * z, -sb * y + cb * z];
 }
 
-/* A second of sampling is better than a guess about the machine. The mean
-   frame time is the wrong statistic here: the distribution is bimodal —
-   frames land on a vsync boundary or they miss it entirely — so a page
-   dropping half its frames can still report a mean of 24 ms. What matters
-   is how many frames missed. */
-let probeFrames = 0;
-let probeLate = 0;
+/* Sampling the machine beats guessing about it. Two things about the
+   sample are worth stating, because both were gotchas on the way here.
+
+   The window: on a slow machine frames arrive at ~38 ms, so counting
+   frames means waiting longer the worse the machine is — exactly
+   backwards. The window is wall-clock, and short, because every
+   millisecond of it is stutter somebody is sitting through. */
+const PROBE_WARMUP = 300; // first paint, webfonts, the first gradient compile
+const PROBE_WINDOW = 900;
+let probeStart = 0;
+const probeGaps = [];
 let probeLast = 0;
 
 function frame(now) {
-  // If nobody has chosen, feel the machine for a second and drop to the
-  // calm rendering if the frames are actually bad. Detection by core count
-  // is a guess; this is a measurement.
+  // If nobody has chosen, feel the machine and drop to the calm rendering
+  // if the frames are actually bad.
   if (foilOn && storedQuality === null && !autoDropped) {
-    if (probeLast) {
-      // 24 ms is a missed 60 Hz vsync with room for clock jitter
-      if (probeFrames > 15 && now - probeLast > 24) probeLate++;
-      if (++probeFrames > 105) {
+    if (!probeStart) probeStart = now;
+    else if (probeLast) {
+      const age = now - probeStart;
+      if (age > PROBE_WARMUP) probeGaps.push(now - probeLast);
+      // too few frames to judge by means rAF is being throttled, not that
+      // the machine is slow — so keep probing rather than decide on noise
+      if (age >= PROBE_WARMUP + PROBE_WINDOW && probeGaps.length >= 8) {
         autoDropped = true;
-        if (probeLate / (probeFrames - 16) > 0.2) setQuality(false, 'auto');
+        // The median, not the mean and not the share of late frames. The
+        // distribution is bimodal: a frame lands on a vsync boundary or it
+        // misses it, so the median says which of those a typical frame does.
+        // Measured on this page: full laminate sits at a 33 ms median, and
+        // every rendering worth keeping sits at 16.7 ms. A "20% of frames
+        // are late" rule fired on a 45 fps page that is perfectly usable;
+        // the median does not.
+        probeGaps.sort((a, b) => a - b);
+        const median = probeGaps[probeGaps.length >> 1];
+        // what the page decided and why, for anyone who wants to know why
+        // the laminate is off on their machine
+        document.documentElement.dataset.probe = `${probeGaps.length}f median ${median.toFixed(1)}ms`;
+        if (median > 24) setQuality(false, 'auto');
       }
     }
     probeLast = now;

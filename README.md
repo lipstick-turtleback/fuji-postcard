@@ -104,9 +104,13 @@ grain, the foxing and the drifting water are nearly free by comparison — about
 60 fps, so calm mode drops them too.
 
 So the laminate is the quality switch, and the page picks for you: it samples
-its own frame times for the first couple of seconds and, if more than a fifth
-of them missed vsync, drops to the calm rendering and says so in the button.
-Your own choice wins and is remembered. The exported `.svg` is unaffected — a
+its own frame intervals for a second after load and, if the **median** gap is
+over 24 ms — a typical frame missing a 60 Hz vsync — drops to the calm
+rendering and says so in the button. The median rather than the mean or the
+share of late frames, because the distribution is bimodal and both of those
+fire on a perfectly usable 45 fps page. The decision lands about 1.5 s after
+navigation, and `<html data-probe>` records what it measured. Your own choice
+wins over the guess and is remembered. The exported `.svg` is unaffected — a
 saved plate is always the full artwork.
 
 `npm run test` also runs `scripts/test-score.mjs`, which lifts the score out
