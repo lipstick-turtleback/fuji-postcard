@@ -109,6 +109,15 @@ confirmed a second time from the other direction: seven hand-drawn foxing
 blooms cost 19.6 ms with `mix-blend-mode: multiply` and 18.1 ms without it,
 which is the entire difference between a comfortable 55 fps and 42 late frames
 out of 240.
+
+The rule has a boundary, and measuring it found the boundary wrong. The back of
+the card carries a full-bleed `multiply` rect of its own, and with the card
+flipped it runs at **16.6 ms mean, 16.7 ms median, 0 of 240 late frames — a
+locked 60**. A blended layer forces the subtree to re-composite, but on the back
+there is almost nothing animating to re-composite. The front's 18 ms is its
+mist, ripples, wake and petals, not its foil. Blend cost is a function of what
+else is moving, so "is the blend expensive" is the wrong question; "what is
+moving underneath it" is the right one.
 but they are what stand between 45 fps and a locked 60, so Enhance carries them
 too.
 

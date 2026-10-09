@@ -2767,11 +2767,24 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                   letter-spacing="1.2" font-family="Georgia,serif">24.5.12</text>
           </g>
 
-          <!-- air mail stripes -->
+          <!-- Air-mail border. A printed border is regular, so the 26-unit
+               spacing is correct and stays. What a century does to it is
+               uneven: the five chevrons now take the ink at different
+               strengths, each sits a fraction off its own registration, and
+               the first has a nick where the paper was abraded down to the
+               fibre. Split from two multi-subpath shapes into five, because
+               one fill for all three reds cannot fade unevenly. -->
           <g opacity=".55">
-            <path d="M26 574 l14 -12 h18 l-14 12 z M78 574 l14 -12 h18 l-14 12 z M130 574 l14 -12 h18 l-14 12 z"
-                  fill="#c8452f"/>
-            <path d="M52 574 l14 -12 h18 l-14 12 z M104 574 l14 -12 h18 l-14 12 z" fill="#2b3a67"/>
+            <g fill="#c8452f">
+              <path d="M26 574 l14 -12 h18 l-14 12 z" opacity=".92"/>
+              <path d="M78.4 573.7 l14 -12 h18 l-14 12 z" opacity=".7"/>
+              <path d="M130 574.3 l14 -12 h18 l-14 12 z" opacity=".84"/>
+            </g>
+            <g fill="#2b3a67">
+              <path d="M51.7 574.2 l14 -12 h18 l-14 12 z" opacity=".78"/>
+              <path d="M104.3 573.8 l14 -12 h18 l-14 12 z" opacity=".95"/>
+            </g>
+            <path d="M30 570 l6 -5 h4 l-6 5 z" fill="#efe6d4" opacity=".5"/>
             <text x="176" y="571" font-size="9" letter-spacing="3" fill="#6f6350"
                   font-family="Georgia,serif">PAR AVION · BY AIR MAIL</text>
           </g>
