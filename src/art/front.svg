@@ -159,6 +159,15 @@
           <filter id="soft" filterUnits="userSpaceOnUse" x="-40" y="-40" width="980" height="680">
             <feGaussianBlur stdDeviation="7"/>
           </filter>
+          <!-- Mist is not one colour. It is water in the air, and the sun is
+               low and to the right, so the same band is cool grey-blue where it
+               is away from the light and warm where the light goes through it.
+               Painted flat cream over a dark mountain it read as a grey smear. -->
+          <linearGradient id="mistLit" gradientUnits="userSpaceOnUse" x1="110" y1="0" x2="790" y2="0">
+            <stop offset="0"   stop-color="#dfe4ee"/>
+            <stop offset=".55" stop-color="#f2e3d3"/>
+            <stop offset="1"   stop-color="#ffe5c2"/>
+          </linearGradient>
           <filter id="mist" filterUnits="userSpaceOnUse" x="-60" y="180" width="1020" height="300">
             <feGaussianBlur stdDeviation="9"/>
           </filter>
@@ -541,18 +550,18 @@
           <g filter="url(#mist)" opacity=".40">
             <path d="M120 306 C210 298 300 303 386 307 C470 311 540 306 604 302
                      C640 300 646 316 606 322 C520 330 420 326 330 322
-                     C240 318 160 322 122 318 C98 316 98 308 120 306 Z" fill="#f7e6cf"/>
+                     C240 318 160 322 122 318 C98 316 98 308 120 306 Z" fill="url(#mistLit)"/>
             <path d="M470 330 C560 324 660 328 742 334 C776 337 770 348 726 350
                      C640 353 540 349 476 344 C448 342 446 333 470 330 Z"
-                  fill="#f7e6cf" opacity=".7"/>
+                  fill="url(#mistLit)" opacity=".7"/>
           </g>
           </g>
           <g class="mist-b">
           <g filter="url(#mist)" opacity=".28">
             <path d="M150 386 C250 379 340 384 420 381 C480 379 520 384 560 388
-                     C580 390 574 400 540 401 L180 401 C148 401 132 392 150 386 Z" fill="#f4dcc0"/>
+                     C580 390 574 400 540 401 L180 401 C148 401 132 392 150 386 Z" fill="url(#mistLit)"/>
             <path d="M596 390 C660 385 720 389 768 394 C788 396 782 402 752 402
-                     L610 402 C588 401 580 393 596 390 Z" fill="#f4dcc0" opacity=".8"/>
+                     L610 402 C588 401 580 393 596 390 Z" fill="url(#mistLit)" opacity=".8"/>
           </g>
           </g>
 
