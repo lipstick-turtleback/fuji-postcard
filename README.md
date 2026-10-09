@@ -69,8 +69,12 @@ the mistakes that break this page: an HTML comment closed with the two
 characters that end a C comment silently swallows every filter defined after
 it, and the artwork just stops rendering. The checker reports the line —
 unterminated and malformed comments, unbalanced tags, duplicate `id`s,
-references to ids that do not exist, and any external `src`/`href`/`url()`,
-which would break the offline property (and the SVG export) outright.
+references to ids that do not exist, ids that nothing references, and any
+external `src`/`href`/`url()`, which would break the offline property (and the
+SVG export) outright. It also cross-checks the export: every class the page
+animates has to be matched by the filter in `card.js` that decides which CSS
+rules get inlined into the downloaded `.svg`, or the plate you save is a still
+image and nothing tells you.
 
 `npm run test` also runs `scripts/test-score.mjs`, which lifts the score out
 of the soundtrack IIFE and evaluates it as plain data — no DOM, no Web Audio.

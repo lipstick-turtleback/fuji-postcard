@@ -92,6 +92,33 @@ for (const r of html.matchAll(/#([A-Za-z][\w-]*)/g)) named.add(r[1]);
 for (const r of html.matchAll(/getElementById\(\s*['"]([^'"]+)['"]/g)) named.add(r[1]);
 const unused = [...ids].filter(([name]) => !named.has(name));
 
+/* ---- the export must carry every animation the page has ---------------- */
+// "Save the plate" clones the live SVG and inlines only the CSS rules its
+// filter regex matches. A class that animates but is not in that regex
+// exports as a still image, silently.
+const styleBlock = html.slice(html.indexOf('<style>'), html.indexOf('</style>'));
+const animClasses = new Set();
+for (const m of styleBlock.matchAll(/\.([A-Za-z][\w-]*)[^{}]*\{[^}]*\banimation(-name)?\b/g))
+  animClasses.add(m[1]);
+const reStart = html.indexOf('/@keyframes|');
+if (reStart < 0) {
+  fail(0, 'the export filter regex was not found — did card.js change?');
+} else {
+  let reEnd = reStart + 1;
+  while (reEnd < html.length) {
+    if (html[reEnd] === '\\') reEnd += 2;
+    else if (html[reEnd] === '/') break;
+    else reEnd++;
+  }
+  const exportRe = new RegExp(html.slice(reStart + 1, reEnd));
+  for (const cls of animClasses)
+    if (!exportRe.test(`.${cls}`))
+      fail(
+        reStart,
+        `the export drops the animated class ".${cls}" — add it to the filter in card.js`,
+      );
+}
+
 /* ---- the file must stay self-contained --------------------------------- */
 for (const d of html.matchAll(/(?:src|href)="(?!#)([^"]*)"/g)) {
   if (/^(https?:)?\/\//.test(d[1]) || !d[1].startsWith('data:'))
