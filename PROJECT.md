@@ -1,0 +1,152 @@
+# 富士山 · Light on Paper — what this project is
+
+A short brief you can hand to a person or an agent. It says what the thing is,
+what it has to feel like, the rules it may not break, and how to tell whether a
+change worked.
+
+---
+
+## The idea in one paragraph
+
+One illustrated postcard — Mount Fuji at dawn, seen from Kawaguchi-ko — drawn
+entirely in vectors and lying on a gallery wall under a lamp you can move.
+Pick the card up and it tilts; the light on it is computed from where your
+pointer is, the way light on a real laminated print actually behaves. Turn it
+over and there is the back of a card somebody posted: a message in ink, an
+address, a stamp with a cancellation over it, a small drawing of the mountain
+in the corner. Press play and about five minutes of music, synthesised live in
+the browser, plays under the picture. Save the plate and you get the artwork
+out as a clean, standalone SVG.
+
+It is one HTML file. No framework, no runtime dependencies, no network
+requests. The artwork is inline SVG, the soundtrack is Web Audio, the paper
+grain and the foxing and the lake are generated in the browser. Copy the file
+to a USB stick in 2035 and it still works.
+
+## The feeling the whole thing is chasing
+
+**An object, not a web page.** The test for every decision is: would a real
+print made a hundred years ago and handled since then have this? A print has
+foxing — thousands of small rust specks, and a few large soft blooms where
+something wet sat on it for a decade. It has a cut edge that catches light and
+an edge that is dirtier than the middle. It has one crease from being folded,
+not four. Its lettering sits at the foot of the sheet like a plate inscription,
+small and low in contrast, because the picture is the point.
+
+**Weather, not animation.** The mist over the lake breathes on a 78-second and
+a 103-second cycle — periods with no common factor, so they are never in step
+and the scene never visibly repeats. The amplitude is deliberately below the
+threshold of _did that just move_. Anything faster stops being weather and
+starts being a widget.
+
+**Restraint as the highest quality.** The lake is nearly empty, because a dawn
+lake that still holds almost no marks of its own. What is on the water is what
+is _happening_ to the water: the sun's path, and the water moving around the
+posts, the hull and the birds. Thirty-odd pale dashes scattered over the
+surface as "texture" were deleted, not tuned — texture with no cause reads as
+noise. The same rule removed four circles from the corners and a bright line
+down the left edge.
+
+> Less is more. Nothing needs to be added for its own sake. Whatever stays has
+> to be perfect, and has to have a reason.
+
+## The rules
+
+1. **Every mark has a cause.** If you cannot say what the viewer is seeing a
+   _picture of_, delete it. This is the single most productive rule in the
+   project; most of the improvements have been subtractions.
+2. **Light is computed, not looped.** The sheen, the specular band and the
+   sparkle come from a lighting model driven by pointer position. A CSS
+   animation that fakes a highlight is a loop, and loops are detectable.
+3. **The effects are opt-in.** One switch — Enhance — carries the holographic
+   laminate and its glow, the card's sway, the falling petals, the drifting
+   water and the paper grain. It is **off by default**, because one
+   `mix-blend-mode` layer over the card roughly halves the frame rate. What
+   stays on regardless is the artwork itself: the sun, its bloom, the mist.
+   Those are not effects bolted onto the picture.
+4. **Nothing may be broken to make something look better.** Flip, export,
+   audio, keyboard shortcuts and reduced-motion must all keep working after
+   every change, verified rather than assumed.
+5. **The exported plate is the full artwork.** A saved `.svg` is always the
+   whole drawing, whatever the page is currently rendering.
+6. **Zero dependencies is a feature worth defending.** The build, the checks
+   and the perf harness are all plain Node with no packages.
+
+## How it is put together
+
+`public/index.html` is a generated artefact and is committed on purpose, so the
+repo can be opened with no build step. It is concatenated from parts by
+`scripts/build.mjs`:
+
+| Part                       | Role                                                         |
+| -------------------------- | ------------------------------------------------------------ |
+| `src/template.html`        | the shell, with whole-line markers `@CSS@`, `@SVG_FRONT@`, … |
+| `src/art/front.svg`        | the picture: mountain, lake, torii, bank, birds, lettering   |
+| `src/art/back.svg`         | the other side: message, address, stamp, cancellation        |
+| `src/styles/*.css`         | nine numbered files, applied in sorted order                 |
+| `src/script/card.js`       | tilt, lighting model, flip, export, Enhance                  |
+| `src/script/soundtrack.js` | the whole score as data, plus a small Web Audio engine       |
+
+Front and back deliberately duplicate their stamps and edge wear. A cross-file
+`<use>` would make the export produce a broken single SVG.
+
+## How change is verified here
+
+This is the part that makes the rest of it work. Screenshots lie, so the
+project built tools to stop being fooled:
+
+- **`npm run check`** — structural checks on the built file: XML comments that
+  would break the export, animation classes the export would silently drop,
+  keyboard shortcuts advertised by a `<kbd>` or the README but not handled by
+  any code, ids defined and never used.
+- **`npm run test`** — check, plus the score lifted out of the audio IIFE and
+  evaluated as plain data (80 bars, ten phrases, 305 notes, 4.85 min), plus a
+  contrast check on the ink against the paper, plus Biome and Prettier.
+- **`npm run perf`** — a zero-dependency Chrome DevTools Protocol harness that
+  puts the pointer on the card so the lighting model actually runs, then
+  samples `requestAnimationFrame` intervals. Screenshots cannot tell you any of
+  this, and `--virtual-time-budget` lies about it.
+- **Headless renders at 2× and 4×, always with
+  `--force-prefers-reduced-motion`** — without it, roughly a third of headless
+  renders drop composited tiles and you spend an afternoon chasing a bug that
+  only exists in the screenshot machinery.
+
+The habits that keep paying off:
+
+- **Negative-test every new check** by deliberately breaking the thing it is
+  supposed to catch. A check that passes on a broken page is worse than none.
+- **Keep a control render** when diagnosing a visual discrepancy.
+- **Read page exceptions over CDP, not just pixels.** A `ReferenceError` during
+  startup once left a page that looked completely fine while tilt, flip, export
+  and every shortcut were dead.
+- **Diagnose by subtraction.** The line down the left edge was found by
+  rendering the page with one suspect hidden at a time and diffing the column
+  profile against the baseline. Only two elements moved it; guessing would have
+  taken a week.
+- **Measure the thing you actually care about.** The frame-time distribution is
+  bimodal — a frame lands on a vsync boundary or misses it — so the mean and
+  "share of late frames" are both wrong statistics. The median is the one that
+  fires on a genuinely bad page and not on a comfortable 45 fps one.
+
+## The standing goal
+
+Keep polishing. Each finished step gets its own commit, with a message that
+says what was wrong, why it was wrong, what was changed, and the measurement
+that shows it changed. Prefer deleting to adding. When something looks wrong,
+find the cause before touching it.
+
+## The short version, as a prompt
+
+> Make a single self-contained HTML file: one illustrated postcard of Mount
+> Fuji at dawn from Kawaguchi-ko, drawn entirely in inline SVG, lying on a
+> gallery wall under a lamp the pointer moves. The card tilts in 3D and its
+> holographic laminate is re-lit by a real lighting model, not an animation.
+> It has a printed back — message, address, stamp, cancellation — reachable by
+> flipping it. A ~5-minute soundtrack is synthesised live with Web Audio. The
+> paper is a hundred years old: foxing, a cut edge, one crease, and lettering
+> along the bottom edge like a fine print. Everything expensive is opt-in and
+> off by default. No dependencies, no network requests, one file. Restraint is
+> the quality bar: every mark must have a cause, motion must be weather rather
+> than animation, and when in doubt delete. Verify with headless renders,
+> structural checks, a CDP perf harness and page exceptions — never by looking
+> at one screenshot and hoping.

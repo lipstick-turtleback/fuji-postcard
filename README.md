@@ -9,6 +9,9 @@ the Web Audio API, and the paper grain, the holographic foil and the lake are
 all generated in the browser. Save the file anywhere and open it offline and
 it behaves the same.
 
+[PROJECT.md](PROJECT.md) is the brief — what the thing is for, the rules it may
+not break, and how change is verified here.
+
 **Live:** <https://fuji-postcard.vercel.app> _(replace with your own URL after the first deploy)_
 
 ---
