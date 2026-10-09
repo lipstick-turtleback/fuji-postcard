@@ -1442,6 +1442,11 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           </radialGradient>
           <mask id="rayMask"><circle cx="620" cy="206" r="330" fill="url(#rayFall)"/></mask>
 
+          <linearGradient id="stampAge" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0"   stop-color="#d8c49a" stop-opacity="0"/>
+            <stop offset=".55" stop-color="#d8c49a" stop-opacity=".16"/>
+            <stop offset="1"   stop-color="#c9ae7e" stop-opacity=".3"/>
+          </linearGradient>
           <!-- hot-stamped metal for the wordmark -->
           <linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="90" y1="548" x2="90" y2="592">
             <stop offset="0"   stop-color="#fdf4d2"/>
@@ -2308,6 +2313,13 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 
           <!-- stamp, top-right -->
           <g transform="rotate(-2.4 806 78)">
+            <!-- A contact shadow. The stamp is glued to the card, so its edge
+                 is a fraction of a millimetre above the paper, and after a
+                 century one corner has lifted more than the rest. Without it
+                 the stamp was paint applied directly to the card - the
+                 flattest thing on a page whose whole subject is paper. -->
+            <path d="M762 34 h88 v88 h-88 Z" fill="#141a2c" opacity=".22"
+                  filter="url(#tiny)" transform="translate(2.4 3)"/>
             <g fill="#f8f3e8">
               <path d="M762 34 h88 v88 h-88 Z"/>
             </g>
@@ -2331,6 +2343,18 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
               <text x="806" y="112" text-anchor="middle" fill="#3f5d86" font-size="9"
                     letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>
             </g>
+            <!-- Age on the stamp itself. Paper yellows where it is exposed and
+                 stays paler under whatever lay on top of it, so the wash is
+                 diagonal and uneven rather than a flat tint. Two foxing marks,
+                 small and few, because this is the one part of the card that
+                 spent most of its life face down. -->
+            <rect x="762" y="34" width="88" height="88" fill="url(#stampAge)"/>
+            <ellipse cx="779" cy="96" rx="5.5" ry="3.4" fill="#8a6a3c" opacity=".1"/>
+            <ellipse cx="839" cy="44" rx="3.6" ry="2.4" fill="#8a6a3c" opacity=".08"/>
+            <!-- one lifted corner: the paper is lighter where it has curled
+                 away from the ink, and it throws its own small shadow -->
+            <path d="M850 122 L850 112 L840 122 Z" fill="#fffaf0" opacity=".5"/>
+            <path d="M850 122 L840 122 L845 117 Z" fill="#141a2c" opacity=".12"/>
           </g>
           <!-- cancellation rings: a postmark straddles the corner of the
                stamp it killed, it does not sit beside it -->
