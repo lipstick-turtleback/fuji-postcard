@@ -514,7 +514,8 @@ kbd {
   --band: 50%;
   --sheen: 0deg;
   --spec: 0;
-  --foil: 1;
+  /* Enhance is off by default; the script turns it on and remembers that you did */
+  --foil: 0;
 }
 .foil {
   position: absolute;
@@ -664,17 +665,38 @@ kbd {
   }
 }
 
-.mist {
-  animation: mist 24s ease-in-out infinite alternate;
+/* The mist does not travel, it breathes. Two bands — the one across the
+   mountain's shoulders and the one lying on the water — at periods that
+   share no common factor, so they are never in step and the scene never
+   visibly repeats. The amplitude is deliberately below the threshold of
+   "did that just move": a few pixels of drift and a tenth of opacity over
+   more than a minute. Anything faster stops being weather and starts being
+   an animation. */
+.mist-a {
+  animation: mist-a 78s ease-in-out infinite alternate;
 }
-@keyframes mist {
+@keyframes mist-a {
   from {
-    transform: translateX(-14px);
-    opacity: 0.42;
+    transform: translate(-9px, 0);
+    opacity: 0.84;
   }
   to {
-    transform: translateX(16px);
-    opacity: 0.62;
+    transform: translate(11px, -3px);
+    opacity: 1;
+  }
+}
+
+.mist-b {
+  animation: mist-b 103s ease-in-out infinite alternate;
+}
+@keyframes mist-b {
+  from {
+    transform: translate(12px, 1px);
+    opacity: 0.78;
+  }
+  to {
+    transform: translate(-10px, -2px);
+    opacity: 1;
   }
 }
 
@@ -888,7 +910,8 @@ kbd {
   .cloud-a,
   .cloud-b,
   .cloud-c,
-  .mist,
+  .mist-a,
+  .mist-b,
   .petal,
   .ripple,
   .boat,
@@ -936,7 +959,7 @@ kbd {
   }
 }
 
-/* ---------- calm rendering ----------
+/* ---------- Enhance off ----------
    Set by the script on <html data-quality>. The laminate is the expensive
    thing on the page — one blended layer over the card costs about 20 ms a
    frame — so when it is off, the page stops paying for it entirely rather
@@ -945,11 +968,18 @@ kbd {
    The water, the mist and the petals stop too. A rendering chosen because
    it is cheap should actually be cheap, and a card that is going to sit
    still looks deliberate when it does. */
-html[data-quality="calm"] .foil {
+html[data-enhance="off"] .foil {
   display: none;
 }
-html[data-quality="calm"] .face svg * {
+html[data-enhance="off"] .face svg * {
   animation: none !important;
+}
+/* except the mist. Its drift sits on a wrapper above the blur, so the
+   filtered result is cached and the browser only moves a layer — which is
+   cheap enough that the calm rendering can afford weather. */
+html[data-enhance="off"] .mist-a,
+html[data-enhance="off"] .mist-b {
+  animation: revert;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
    re-rasterised with the card; together they are the difference between a
@@ -958,9 +988,9 @@ html[data-quality="calm"] .face svg * {
    The drawing, the wear and the crease stay — this is the paper's grain,
    not the picture. The exported plate keeps all of it: the export inlines
    only animation rules, so a saved .svg is always the full artwork. */
-html[data-quality="calm"] [filter="url(#film)"],
-html[data-quality="calm"] [filter="url(#grain)"],
-html[data-quality="calm"] [filter="url(#fox)"] {
+html[data-enhance="off"] [filter="url(#film)"],
+html[data-enhance="off"] [filter="url(#grain)"],
+html[data-enhance="off"] [filter="url(#foxLarge)"] {
   display: none;
 }
 
@@ -1099,6 +1129,16 @@ html[data-quality="calm"] [filter="url(#fox)"] {
           </linearGradient>
 
           <!-- the terminator: one soft sweep instead of a hard vertical seam -->
+          <!-- The lit flank fades in from the centre line instead of starting
+               there. It used to be a flat fill closed by a straight edge down
+               x=452, which put a hard vertical tone break exactly where the
+               eye travels the most — the summit. -->
+          <linearGradient id="litSide" gradientUnits="userSpaceOnUse" x1="446" y1="200" x2="640" y2="360">
+            <stop offset="0"   stop-color="#8d92b4" stop-opacity="0"/>
+            <stop offset=".38" stop-color="#8d92b4" stop-opacity=".16"/>
+            <stop offset="1"   stop-color="#8d92b4" stop-opacity=".16"/>
+          </linearGradient>
+
           <linearGradient id="terminator" gradientUnits="userSpaceOnUse" x1="300" y1="180" x2="486" y2="420">
             <stop offset="0"    stop-color="#141a30" stop-opacity=".62"/>
             <stop offset="0.46" stop-color="#161c34" stop-opacity=".46"/>
@@ -1157,14 +1197,29 @@ html[data-quality="calm"] [filter="url(#fox)"] {
           </filter>
 
           <!-- age: a slow field thresholded into sparse, soft-edged patina -->
+          <!-- Foxing in two scales, the way paper actually ages. The fine one
+               is the dust: thousands of small rust-coloured specks. The coarse
+               one is the blooms: a handful of large soft rings where something
+               wet sat on the sheet for a decade. The back of the card has had
+               the fine one all along; the front only had a broad wash, which
+               read as a tint rather than as age. -->
           <filter id="fox" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
-            <feTurbulence type="fractalNoise" baseFrequency="0.011 0.014" numOctaves="4" seed="23" result="n"/>
+            <feTurbulence type="fractalNoise" baseFrequency="0.05 0.043" numOctaves="4" seed="23" result="n"/>
             <feColorMatrix in="n" type="matrix"
-              values="0 0 0 0 0.46
-                      0 0 0 0 0.33
-                      0 0 0 0 0.20
-                      0 0 0 -3.4 1.42"/>
+              values="0 0 0 0 0.45
+                      0 0 0 0 0.32
+                      0 0 0 0 0.19
+                      0 0 0 -5.0 2.1"/>
             <feGaussianBlur stdDeviation="1.1"/>
+          </filter>
+          <filter id="foxLarge" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="0.0115 0.0145" numOctaves="3" seed="91" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 0.47
+                      0 0 0 0 0.33
+                      0 0 0 0 0.19
+                      0 0 0 -4.4 1.72"/>
+            <feGaussianBlur stdDeviation="2.4"/>
           </filter>
           <!-- filter regions are pinned in user space: a blur that runs out
                of room leaves a hard rectangular edge, and nothing here
@@ -1213,11 +1268,6 @@ html[data-quality="calm"] [filter="url(#fox)"] {
             <stop offset=".70" stop-color="#0b1020" stop-opacity=".014"/>
             <stop offset="1"   stop-color="#0b1020" stop-opacity="0"/>
           </linearGradient>
-          <radialGradient id="cornerWear" cx=".5" cy=".5" r=".5">
-            <stop offset="0"   stop-color="#7d6c50" stop-opacity="0"/>
-            <stop offset=".70" stop-color="#7d6c50" stop-opacity=".03"/>
-            <stop offset="1"   stop-color="#f7f0e1" stop-opacity=".055"/>
-          </radialGradient>
           <linearGradient id="tanzakuPaper" x1="0" y1="0" x2=".35" y2="1">
             <stop offset="0"   stop-color="#fbf7ee"/>
             <stop offset=".55" stop-color="#f4ecdb"/>
@@ -1456,7 +1506,7 @@ html[data-quality="calm"] [filter="url(#fox)"] {
             <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
             <!-- the lit side, warmed by the low sun -->
             <path d="M452 158 L466 152 L478 162 C486 170 494 182 502 200 C548 296 636 386 754 404 L452 404 Z"
-                  fill="#8d92b4" opacity=".16"/>
+                  fill="url(#litSide)"/>
             <!-- the sun grazes the right shoulder: a rim of warm light -->
             <path d="M440 152 L478 162 C486 170 494 182 502 200 C548 296 636 386 754 404"
                   fill="none" stroke="url(#rimLight)" stroke-width="4.4"
@@ -1551,7 +1601,12 @@ html[data-quality="calm"] [filter="url(#fox)"] {
                both drifting, neither one a hard stripe -->
           <!-- each band is two masses of different length and height,
                never one long lens: a single lens blurs into a stripe -->
-          <g class="mist" filter="url(#mist)" opacity=".40">
+          <!-- The drift lives on the wrapper, not on the filtered group. A
+               transform on an element that carries a blur makes the browser
+               re-run the blur every frame; a transform on its parent lets it
+               cache the filtered result and just move it. -->
+          <g class="mist-a">
+          <g filter="url(#mist)" opacity=".40">
             <path d="M120 306 C210 298 300 303 386 307 C470 311 540 306 604 302
                      C640 300 646 316 606 322 C520 330 420 326 330 322
                      C240 318 160 322 122 318 C98 316 98 308 120 306 Z" fill="#f7e6cf"/>
@@ -1559,11 +1614,14 @@ html[data-quality="calm"] [filter="url(#fox)"] {
                      C640 353 540 349 476 344 C448 342 446 333 470 330 Z"
                   fill="#f7e6cf" opacity=".7"/>
           </g>
-          <g class="mist" filter="url(#mist)" opacity=".28" style="animation-duration:31s">
+          </g>
+          <g class="mist-b">
+          <g filter="url(#mist)" opacity=".28">
             <path d="M150 386 C250 379 340 384 420 381 C480 379 520 384 560 388
                      C580 390 574 400 540 401 L180 401 C148 401 132 392 150 386 Z" fill="#f4dcc0"/>
             <path d="M596 390 C660 385 720 389 768 394 C788 396 782 402 752 402
                      L610 402 C588 401 580 393 596 390 Z" fill="#f4dcc0" opacity=".8"/>
+          </g>
           </g>
 
           <!-- the air itself, thickening toward the water -->
@@ -1613,31 +1671,26 @@ html[data-quality="calm"] [filter="url(#fox)"] {
             <g class="water-b">
               <path d="M594 404 H646 C678 452 706 504 742 550 Q620 561 498 550 C536 502 566 452 594 404 Z"
                     fill="url(#glitter)" opacity=".42" filter="url(#soft)"/>
+                <!-- Six rows, not nine. Each row is one long crest with one
+                   short answer beside it, and the pair steps outward as the
+                   path opens toward the viewer. Anything more than this stops
+                   being the sun on water and becomes texture. -->
               <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
-                <path d="M600 411 h40"  stroke-width="2.4" opacity=".55"/>
-                <path d="M586 419 h26 M624 419 h30" stroke-width="2.2" opacity=".5"/>
-                <path d="M572 429 h44 M632 429 h26" stroke-width="2.4" opacity=".46"/>
-                <path d="M560 441 h30 M604 441 h52" stroke-width="2.6" opacity=".42"/>
-                <path d="M548 455 h52 M618 455 h34" stroke-width="2.8" opacity=".38"/>
-                <path d="M534 471 h38 M592 471 h60" stroke-width="3" opacity=".34"/>
-                <path d="M520 489 h60 M600 489 h44" stroke-width="3.2" opacity=".3"/>
-                <path d="M506 509 h44 M572 509 h70" stroke-width="3.4" opacity=".26"/>
-                <path d="M494 531 h70 M586 531 h52" stroke-width="3.6" opacity=".22"/>
+                <path d="M598 412 h44 M652 412 h14" stroke-width="2.4" opacity=".55"/>
+                <path d="M578 430 h62 M650 430 h22" stroke-width="2.6" opacity=".46"/>
+                <path d="M558 452 h76 M644 452 h34" stroke-width="2.9" opacity=".38"/>
+                <path d="M536 478 h92 M640 478 h44" stroke-width="3.2" opacity=".3"/>
+                <path d="M512 506 h108 M632 506 h56" stroke-width="3.5" opacity=".24"/>
+                <path d="M488 534 h124 M626 534 h66" stroke-width="3.8" opacity=".18"/>
               </g>
             </g>
 
-            <!-- ripples: a pale crest always paired with a darker trough -->
-            <g class="water-a" stroke="#f2e6d4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".5">
-              <path class="ripple" d="M470 420 h64 M566 420 h44 M648 420 h30"/>
-              <path class="ripple" d="M418 438 h88 M540 438 h62 M640 438 h36"/>
-              <path class="ripple" d="M356 458 h104 M498 458 h78 M614 458 h50"/>
-              <path class="ripple" d="M272 480 h126 M436 480 h98 M574 480 h68"/>
-              <path class="ripple" d="M176 504 h146 M362 504 h114 M516 504 h84"/>
-              <path class="ripple" d="M84 530 h168 M296 530 h132 M470 530 h96"/>
-            </g>
-            <g class="water-b" stroke="#39446a" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".38">
-              <path class="ripple" d="M180 448 h112 M336 470 h92 M232 512 h132 M600 464 h96 M664 496 h112"/>
-            </g>
+            <!-- The rest of the lake is left alone. A dawn lake this still
+                 holds almost no marks of its own: what is on it is what is
+                 happening to it — the sun's path, and the water moving
+                 around the posts, the hull and the birds. Thirty-odd pale
+                 and dark dashes used to be scattered over the whole surface
+                 as "texture", and texture with no cause reads as noise. -->
           </g>
 
           <!-- torii — every member mirrored exactly about x = 230 -->
@@ -1960,16 +2013,12 @@ html[data-quality="calm"] [filter="url(#fox)"] {
 
           <!-- age: foxing in the paper, soiling along the edges, the
                corners where it has been handled, one crease -->
-          <rect x="0" y="0" width="900" height="600" filter="url(#fox)" opacity=".085"
+          <rect x="0" y="0" width="900" height="600" filter="url(#foxLarge)" opacity=".075"
+                style="mix-blend-mode:multiply"/>
+          <rect x="0" y="0" width="900" height="600" filter="url(#fox)" opacity=".115"
                 style="mix-blend-mode:multiply"/>
           <rect x="7" y="7" width="886" height="586" rx="6" fill="none" stroke="#6d5c44"
                 stroke-opacity=".085" stroke-width="5" filter="url(#tiny)"/>
-          <g fill="url(#cornerWear)">
-            <ellipse cx="8" cy="8" rx="40" ry="30"/>
-            <ellipse cx="892" cy="8" rx="40" ry="30"/>
-            <ellipse cx="8" cy="592" rx="40" ry="30"/>
-            <ellipse cx="892" cy="592" rx="40" ry="30"/>
-          </g>
           <g transform="rotate(-13 450 300)">
             <rect x="292" y="-80" width="24" height="760" fill="url(#crease)"/>
           </g>
@@ -2040,11 +2089,6 @@ html[data-quality="calm"] [filter="url(#fox)"] {
             <stop offset=".70" stop-color="#6a5c46" stop-opacity=".025"/>
             <stop offset="1"   stop-color="#6a5c46" stop-opacity="0"/>
           </linearGradient>
-          <radialGradient id="cornerWearB" cx=".5" cy=".5" r=".5">
-            <stop offset="0"   stop-color="#7d6c50" stop-opacity="0"/>
-            <stop offset=".62" stop-color="#7d6c50" stop-opacity=".055"/>
-            <stop offset="1"   stop-color="#fdf8ec" stop-opacity=".16"/>
-          </radialGradient>
         </defs>
 
         <g clip-path="url(#clipCard2)">
@@ -2162,12 +2206,6 @@ html[data-quality="calm"] [filter="url(#fox)"] {
                 style="mix-blend-mode:multiply"/>
           <rect x="7" y="7" width="886" height="586" rx="6" fill="none" stroke="#6d5c44"
                 stroke-opacity=".10" stroke-width="5" filter="url(#tinyB)"/>
-          <g fill="url(#cornerWearB)">
-            <ellipse cx="8" cy="8" rx="42" ry="32"/>
-            <ellipse cx="892" cy="8" rx="42" ry="32"/>
-            <ellipse cx="8" cy="592" rx="42" ry="32"/>
-            <ellipse cx="892" cy="592" rx="42" ry="32"/>
-          </g>
           <g transform="rotate(-13 450 300)">
             <rect x="606" y="-80" width="30" height="760" fill="url(#creaseB)"/>
           </g>
@@ -2196,7 +2234,7 @@ html[data-quality="calm"] [filter="url(#fox)"] {
   <div class="console" role="group" aria-label="Postcard controls">
     <button id="flip">Turn the card<kbd aria-hidden="true">F</kbd></button>
     <button id="dl">Save the plate<kbd aria-hidden="true">S</kbd></button>
-    <button id="foilBtn" aria-pressed="true"><span class="dot" aria-hidden="true"></span><span id="foilLabel">Laminate on</span></button>
+    <button id="enhanceBtn" aria-pressed="false"><span class="dot" aria-hidden="true"></span><span id="enhanceLabel">Enhance off</span></button>
 
     <div class="sound" id="sound">
       <button id="play" aria-pressed="false" title="Play / pause the soundtrack (press M)">
@@ -2246,48 +2284,52 @@ const EYE = [0, 0, 2.6]; // the viewer
 const HALF = unit(LAMP.map((v, i) => v / Math.hypot(...LAMP) + (i === 2 ? 1 : 0)));
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- rendering quality ----------
-     Measured, not guessed (scripts/perf.mjs): one mix-blend-mode layer
-     anywhere inside the card costs about 20 ms a frame, because blending
-     has to read the backdrop and the card is a 1880×1270 subtree. It does
-     not matter how many blended layers there are, how simple the gradients
-     are, or whether the card is standing still — the presence of the blend
-     is the whole cost. With the laminate gone the same page runs at twice
-     the frame rate.
+/* ---------- Enhance ----------
+     One switch for everything that is an effect rather than a picture: the
+     holographic laminate and its glow, the card's idle sway, the falling
+     petals, the drifting water, the paper grain. Off by default.
 
-     So the laminate is the quality switch, and "off" is not just a hidden
-     layer: it is the calm rendering. The sway and the drifting water stop
-     with it, because a page that is going to be still should be still. */
-const QUALITY_KEY = 'fuji.quality';
-const storedQuality = (() => {
+     Measured, not guessed (scripts/perf.mjs): one mix-blend-mode layer
+     anywhere inside the card costs about 20 ms a frame, because blending has
+     to read the backdrop and the card is a 1880×1270 subtree. It does not
+     matter how many blended layers there are, how simple the gradients are,
+     or whether the card is standing still — the presence of the blend is the
+     whole cost. With Enhance off the same page runs at twice the frame rate.
+
+     What stays on regardless is the artwork itself: the sun and its bloom,
+     the mist breathing over the water. Those are not special effects
+     bolted onto the picture; they are the picture. */
+const ENHANCE_KEY = 'fuji.enhance';
+const storedEnhance = (() => {
   try {
-    return localStorage.getItem(QUALITY_KEY);
+    return localStorage.getItem(ENHANCE_KEY);
   } catch {
     return null; // private mode, or storage disabled
   }
 })();
-const weakDevice =
-  (navigator.hardwareConcurrency || 8) <= 4 ||
-  (navigator.deviceMemory ? navigator.deviceMemory <= 4 : false);
-let foilOn = storedQuality !== null ? storedQuality === 'on' : !weakDevice;
+let enhanceOn = storedEnhance === 'on';
 let autoDropped = false;
+// Set the moment somebody switches Enhance back on after the page dropped it
+// for smoothness. Two clicks is a decision, not an accident, and after that
+// the page stops second-guessing them.
+let userOverrode = false;
 
-const foilBtn = document.getElementById('foilBtn');
-const foilLabel = document.getElementById('foilLabel');
+const enhanceBtn = document.getElementById('enhanceBtn');
+const enhanceLabel = document.getElementById('enhanceLabel');
 
-function setQuality(on, reason) {
-  foilOn = on;
+function setEnhance(on, reason) {
+  enhanceOn = on;
   card.style.setProperty('--foil', on ? '1' : '0');
-  document.documentElement.dataset.quality = on ? 'full' : 'calm';
-  foilLabel.textContent = on
-    ? 'Laminate on'
+  document.documentElement.dataset.enhance = on ? 'on' : 'off';
+  enhanceLabel.textContent = on
+    ? 'Enhance on'
     : reason === 'auto'
-      ? 'Laminate off · smooth'
-      : 'Laminate off';
-  foilBtn.setAttribute('aria-pressed', String(on));
-  foilBtn.title = on
-    ? 'Holographic laminate: the rainbow pool, the glitter and the sheen. The most expensive thing on the page.'
-    : 'Calm rendering: no laminate, no sway, no drifting water. About twice the frame rate.';
+      ? 'Enhance off · smooth'
+      : 'Enhance off';
+  enhanceBtn.setAttribute('aria-pressed', String(on));
+  enhanceBtn.title = on
+    ? 'On: holographic laminate and its glow, the card swaying, petals and water moving, paper grain. The most expensive thing on the page.'
+    : 'Off: the print on its own — no laminate, no glow, no grain, no motion but the mist. About twice the frame rate.';
   wake();
 }
 let touchOff = 0;
@@ -2385,9 +2427,9 @@ const probeGaps = [];
 let probeLast = 0;
 
 function frame(now) {
-  // If nobody has chosen, feel the machine and drop to the calm rendering
-  // if the frames are actually bad.
-  if (foilOn && storedQuality === null && !autoDropped) {
+  // While Enhance is on, feel the machine. If the frames are actually bad,
+  // drop it and say why.
+  if (enhanceOn && !userOverrode && !autoDropped) {
     if (!probeStart) probeStart = now;
     else if (probeLast) {
       const age = now - probeStart;
@@ -2408,7 +2450,7 @@ function frame(now) {
         // what the page decided and why, for anyone who wants to know why
         // the laminate is off on their machine
         document.documentElement.dataset.probe = `${probeGaps.length}f median ${median.toFixed(1)}ms`;
-        if (median > 24) setQuality(false, 'auto');
+        if (median > 24) setEnhance(false, 'auto');
       }
     }
     probeLast = now;
@@ -2418,7 +2460,7 @@ function frame(now) {
   if (hovering) {
     tgtX = -hy * 12;
     tgtY = hx * 16;
-  } else if (!reduce && foilOn) {
+  } else if (!reduce && enhanceOn) {
     const t = now / 1000;
     tgtX = Math.sin(t * 0.29) * 3.2 + Math.sin(t * 0.13 + 1.2) * 1.6;
     tgtY = Math.sin(t * 0.21 + 0.5) * 4.2 + Math.sin(t * 0.09) * 1.8;
@@ -2500,13 +2542,14 @@ function frame(now) {
 
 // Applied here rather than where it is declared: it calls wake(), and wake()
 // reads `running`, which is not initialised until further down the file.
-setQuality(foilOn, storedQuality === 'off' ? 'user' : storedQuality === null ? 'auto' : 'user');
+setEnhance(enhanceOn, storedEnhance === 'on' ? 'user' : 'default');
 wake();
 
-foilBtn.addEventListener('click', () => {
-  setQuality(!foilOn, 'user');
+enhanceBtn.addEventListener('click', () => {
+  if (!enhanceOn && autoDropped) userOverrode = true;
+  setEnhance(!enhanceOn, 'user');
   try {
-    localStorage.setItem(QUALITY_KEY, foilOn ? 'on' : 'off');
+    localStorage.setItem(ENHANCE_KEY, enhanceOn ? 'on' : 'off');
   } catch {
     /* the choice just will not be remembered */
   }

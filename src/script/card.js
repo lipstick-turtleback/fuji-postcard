@@ -25,48 +25,52 @@ const EYE = [0, 0, 2.6]; // the viewer
 const HALF = unit(LAMP.map((v, i) => v / Math.hypot(...LAMP) + (i === 2 ? 1 : 0)));
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- rendering quality ----------
-     Measured, not guessed (scripts/perf.mjs): one mix-blend-mode layer
-     anywhere inside the card costs about 20 ms a frame, because blending
-     has to read the backdrop and the card is a 1880×1270 subtree. It does
-     not matter how many blended layers there are, how simple the gradients
-     are, or whether the card is standing still — the presence of the blend
-     is the whole cost. With the laminate gone the same page runs at twice
-     the frame rate.
+/* ---------- Enhance ----------
+     One switch for everything that is an effect rather than a picture: the
+     holographic laminate and its glow, the card's idle sway, the falling
+     petals, the drifting water, the paper grain. Off by default.
 
-     So the laminate is the quality switch, and "off" is not just a hidden
-     layer: it is the calm rendering. The sway and the drifting water stop
-     with it, because a page that is going to be still should be still. */
-const QUALITY_KEY = 'fuji.quality';
-const storedQuality = (() => {
+     Measured, not guessed (scripts/perf.mjs): one mix-blend-mode layer
+     anywhere inside the card costs about 20 ms a frame, because blending has
+     to read the backdrop and the card is a 1880×1270 subtree. It does not
+     matter how many blended layers there are, how simple the gradients are,
+     or whether the card is standing still — the presence of the blend is the
+     whole cost. With Enhance off the same page runs at twice the frame rate.
+
+     What stays on regardless is the artwork itself: the sun and its bloom,
+     the mist breathing over the water. Those are not special effects
+     bolted onto the picture; they are the picture. */
+const ENHANCE_KEY = 'fuji.enhance';
+const storedEnhance = (() => {
   try {
-    return localStorage.getItem(QUALITY_KEY);
+    return localStorage.getItem(ENHANCE_KEY);
   } catch {
     return null; // private mode, or storage disabled
   }
 })();
-const weakDevice =
-  (navigator.hardwareConcurrency || 8) <= 4 ||
-  (navigator.deviceMemory ? navigator.deviceMemory <= 4 : false);
-let foilOn = storedQuality !== null ? storedQuality === 'on' : !weakDevice;
+let enhanceOn = storedEnhance === 'on';
 let autoDropped = false;
+// Set the moment somebody switches Enhance back on after the page dropped it
+// for smoothness. Two clicks is a decision, not an accident, and after that
+// the page stops second-guessing them.
+let userOverrode = false;
 
-const foilBtn = document.getElementById('foilBtn');
-const foilLabel = document.getElementById('foilLabel');
+const enhanceBtn = document.getElementById('enhanceBtn');
+const enhanceLabel = document.getElementById('enhanceLabel');
 
-function setQuality(on, reason) {
-  foilOn = on;
+function setEnhance(on, reason) {
+  enhanceOn = on;
   card.style.setProperty('--foil', on ? '1' : '0');
-  document.documentElement.dataset.quality = on ? 'full' : 'calm';
-  foilLabel.textContent = on
-    ? 'Laminate on'
+  document.documentElement.dataset.enhance = on ? 'on' : 'off';
+  enhanceLabel.textContent = on
+    ? 'Enhance on'
     : reason === 'auto'
-      ? 'Laminate off · smooth'
-      : 'Laminate off';
-  foilBtn.setAttribute('aria-pressed', String(on));
-  foilBtn.title = on
-    ? 'Holographic laminate: the rainbow pool, the glitter and the sheen. The most expensive thing on the page.'
-    : 'Calm rendering: no laminate, no sway, no drifting water. About twice the frame rate.';
+      ? 'Enhance off · smooth'
+      : 'Enhance off';
+  enhanceBtn.setAttribute('aria-pressed', String(on));
+  enhanceBtn.title = on
+    ? 'On: holographic laminate and its glow, the card swaying, petals and water moving, paper grain. The most expensive thing on the page.'
+    : 'Off: the print on its own — no laminate, no glow, no grain, no motion but the mist. About twice the frame rate.';
   wake();
 }
 let touchOff = 0;
@@ -164,9 +168,9 @@ const probeGaps = [];
 let probeLast = 0;
 
 function frame(now) {
-  // If nobody has chosen, feel the machine and drop to the calm rendering
-  // if the frames are actually bad.
-  if (foilOn && storedQuality === null && !autoDropped) {
+  // While Enhance is on, feel the machine. If the frames are actually bad,
+  // drop it and say why.
+  if (enhanceOn && !userOverrode && !autoDropped) {
     if (!probeStart) probeStart = now;
     else if (probeLast) {
       const age = now - probeStart;
@@ -187,7 +191,7 @@ function frame(now) {
         // what the page decided and why, for anyone who wants to know why
         // the laminate is off on their machine
         document.documentElement.dataset.probe = `${probeGaps.length}f median ${median.toFixed(1)}ms`;
-        if (median > 24) setQuality(false, 'auto');
+        if (median > 24) setEnhance(false, 'auto');
       }
     }
     probeLast = now;
@@ -197,7 +201,7 @@ function frame(now) {
   if (hovering) {
     tgtX = -hy * 12;
     tgtY = hx * 16;
-  } else if (!reduce && foilOn) {
+  } else if (!reduce && enhanceOn) {
     const t = now / 1000;
     tgtX = Math.sin(t * 0.29) * 3.2 + Math.sin(t * 0.13 + 1.2) * 1.6;
     tgtY = Math.sin(t * 0.21 + 0.5) * 4.2 + Math.sin(t * 0.09) * 1.8;
@@ -279,13 +283,14 @@ function frame(now) {
 
 // Applied here rather than where it is declared: it calls wake(), and wake()
 // reads `running`, which is not initialised until further down the file.
-setQuality(foilOn, storedQuality === 'off' ? 'user' : storedQuality === null ? 'auto' : 'user');
+setEnhance(enhanceOn, storedEnhance === 'on' ? 'user' : 'default');
 wake();
 
-foilBtn.addEventListener('click', () => {
-  setQuality(!foilOn, 'user');
+enhanceBtn.addEventListener('click', () => {
+  if (!enhanceOn && autoDropped) userOverrode = true;
+  setEnhance(!enhanceOn, 'user');
   try {
-    localStorage.setItem(QUALITY_KEY, foilOn ? 'on' : 'off');
+    localStorage.setItem(ENHANCE_KEY, enhanceOn ? 'on' : 'off');
   } catch {
     /* the choice just will not be remembered */
   }

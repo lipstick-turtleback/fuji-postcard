@@ -15,14 +15,14 @@ it behaves the same.
 
 ## What it does
 
-| Interaction                  | What happens                                                                                                                                       |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Move the pointer**         | the card tilts in 3D and the laminate is re-lit by a real lighting model — sheen, specular band and sparkle are computed from the lamp, not looped |
-| **`F`** or click the card    | turn it over: the back is a real postcard, addressed and stamped                                                                                   |
-| **`S`** or Save the plate    | serialises the face you are looking at out of the DOM and downloads it as a standalone `.svg`                                                      |
-| **`M`** or Play              | a ~5-minute soundtrack: koto-ish plucks on the D hirajōshi scale, a lake drone, a dotted-eighth delay                                              |
-| **Laminate on/off**          | the quality switch. Off is the calm rendering: no foil, no sway, no drifting water, no paper grain — about 2.3× the frame rate                     |
-| **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely                                                                                         |
+| Interaction                  | What happens                                                                                                                                                                                   |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Move the pointer**         | the card tilts in 3D and the laminate is re-lit by a real lighting model — sheen, specular band and sparkle are computed from the lamp, not looped                                             |
+| **`F`** or click the card    | turn it over: the back is a real postcard, addressed and stamped                                                                                                                               |
+| **`S`** or Save the plate    | serialises the face you are looking at out of the DOM and downloads it as a standalone `.svg`                                                                                                  |
+| **`M`** or Play              | a ~5-minute soundtrack: koto-ish plucks on the D hirajōshi scale, a lake drone, a dotted-eighth delay                                                                                          |
+| **Enhance on/off**           | the effects switch, **off by default**. On adds the holographic laminate and its glow, the card's sway, the falling petals, the drifting water and the paper grain — about 2.3× the frame rate |
+| **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely                                                                                                                                     |
 
 ## The repository
 
@@ -88,10 +88,10 @@ lies about it because virtual time fast-forwards the clock.
 
 The numbers on this machine, 4-second samples:
 
-| Rendering                    | mean    | median  | frames over 33 ms |
-| ---------------------------- | ------- | ------- | ----------------- |
-| full — laminate, sway, grain | 38.4 ms | 33.4 ms | 237 / 240         |
-| calm — none of the above     | 16.7 ms | 16.7 ms | 0 / 240           |
+| Rendering                 | mean    | median  | frames over 33 ms |
+| ------------------------- | ------- | ------- | ----------------- |
+| Enhance on                | 38.4 ms | 33.4 ms | 237 / 240         |
+| Enhance off (the default) | 16.7 ms | 16.7 ms | 0 / 240           |
 
 The laminate is the whole cost, and the shape of the cost is worth knowing
 before anyone tries to optimise it: `mix-blend-mode` has to read the backdrop,
@@ -99,19 +99,21 @@ so a single blended layer anywhere inside the card forces the whole 1880×1270
 subtree to be re-composited every frame. Removing four of the five foil layers
 changes nothing. Freezing the gradients changes nothing. Holding the card still
 changes nothing. Only the presence or absence of the blend matters. The paper
-grain, the foxing and the drifting water are nearly free by comparison — about
-2 ms each — but they are what stands between the calm rendering and a locked
-60 fps, so calm mode drops them too.
+grain and the drifting water are nearly free by comparison — about 2 ms each —
+but they are what stand between 45 fps and a locked 60, so Enhance carries them
+too.
 
-So the laminate is the quality switch, and the page picks for you: it samples
-its own frame intervals for a second after load and, if the **median** gap is
-over 24 ms — a typical frame missing a 60 Hz vsync — drops to the calm
-rendering and says so in the button. The median rather than the mean or the
-share of late frames, because the distribution is bimodal and both of those
-fire on a perfectly usable 45 fps page. The decision lands about 1.5 s after
-navigation, and `<html data-probe>` records what it measured. Your own choice
-wins over the guess and is remembered. The exported `.svg` is unaffected — a
-saved plate is always the full artwork.
+So Enhance is the effects switch, and it starts off. Turn it on and the page
+samples its own frame intervals for a second and, if the **median** gap is over
+24 ms — a typical frame missing a 60 Hz vsync — turns it back off and says so in
+the button: `Enhance off · smooth`. The median rather than the mean or the share
+of late frames, because the distribution is bimodal and both of those fire on a
+perfectly usable 45 fps page. Switch it on a second time and the page stops
+second-guessing you — two clicks is a decision, not an accident. The decision
+lands about 1.5 s after navigation, and `<html data-probe>` records what the page
+measured, so "why is this off on my machine" has an answer. Whatever you choose
+is remembered. The exported `.svg` is unaffected — a saved plate is always the
+full artwork.
 
 `npm run test` also runs `scripts/test-score.mjs`, which lifts the score out
 of the soundtrack IIFE and evaluates it as plain data — no DOM, no Web Audio.

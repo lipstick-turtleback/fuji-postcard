@@ -10,7 +10,8 @@
   --band: 50%;
   --sheen: 0deg;
   --spec: 0;
-  --foil: 1;
+  /* Enhance is off by default; the script turns it on and remembers that you did */
+  --foil: 0;
 }
 .foil {
   position: absolute;

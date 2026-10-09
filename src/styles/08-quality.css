@@ -1,4 +1,4 @@
-/* ---------- calm rendering ----------
+/* ---------- Enhance off ----------
    Set by the script on <html data-quality>. The laminate is the expensive
    thing on the page — one blended layer over the card costs about 20 ms a
    frame — so when it is off, the page stops paying for it entirely rather
@@ -7,11 +7,18 @@
    The water, the mist and the petals stop too. A rendering chosen because
    it is cheap should actually be cheap, and a card that is going to sit
    still looks deliberate when it does. */
-html[data-quality="calm"] .foil {
+html[data-enhance="off"] .foil {
   display: none;
 }
-html[data-quality="calm"] .face svg * {
+html[data-enhance="off"] .face svg * {
   animation: none !important;
+}
+/* except the mist. Its drift sits on a wrapper above the blur, so the
+   filtered result is cached and the browser only moves a layer — which is
+   cheap enough that the calm rendering can afford weather. */
+html[data-enhance="off"] .mist-a,
+html[data-enhance="off"] .mist-b {
+  animation: revert;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
    re-rasterised with the card; together they are the difference between a
@@ -20,8 +27,8 @@ html[data-quality="calm"] .face svg * {
    The drawing, the wear and the crease stay — this is the paper's grain,
    not the picture. The exported plate keeps all of it: the export inlines
    only animation rules, so a saved .svg is always the full artwork. */
-html[data-quality="calm"] [filter="url(#film)"],
-html[data-quality="calm"] [filter="url(#grain)"],
-html[data-quality="calm"] [filter="url(#fox)"] {
+html[data-enhance="off"] [filter="url(#film)"],
+html[data-enhance="off"] [filter="url(#grain)"],
+html[data-enhance="off"] [filter="url(#foxLarge)"] {
   display: none;
 }
