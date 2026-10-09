@@ -1,0 +1,261 @@
+/* ---------- SVG animations ---------- */
+.cloud-a {
+  animation: drift 46s ease-in-out infinite alternate;
+}
+.cloud-b {
+  animation: drift 62s ease-in-out infinite alternate-reverse;
+}
+.cloud-c {
+  animation: drift 38s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  from {
+    transform: translateX(-26px);
+  }
+  to {
+    transform: translateX(26px);
+  }
+}
+
+.mist {
+  animation: mist 24s ease-in-out infinite alternate;
+}
+@keyframes mist {
+  from {
+    transform: translateX(-14px);
+    opacity: 0.42;
+  }
+  to {
+    transform: translateX(16px);
+    opacity: 0.62;
+  }
+}
+
+.petal {
+  animation: petalFall linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes petalFall {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  14% {
+    opacity: 0.9;
+  }
+  86% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-150px, 430px) rotate(340deg);
+    opacity: 0;
+  }
+}
+.p1 {
+  animation-duration: 15s;
+  animation-delay: -1s;
+}
+.p2 {
+  animation-duration: 19s;
+  animation-delay: -6s;
+}
+.p3 {
+  animation-duration: 13s;
+  animation-delay: -9s;
+}
+.p4 {
+  animation-duration: 21s;
+  animation-delay: -3s;
+}
+.p5 {
+  animation-duration: 17s;
+  animation-delay: -12s;
+}
+.p6 {
+  animation-duration: 23s;
+  animation-delay: -8s;
+}
+.p7 {
+  animation-duration: 14s;
+  animation-delay: -15s;
+}
+.p8 {
+  animation-duration: 20s;
+  animation-delay: -5s;
+}
+.p9 {
+  animation-duration: 16s;
+  animation-delay: -11s;
+}
+.p10 {
+  animation-duration: 25s;
+  animation-delay: -2s;
+}
+
+.ripple {
+  animation: shimmer 17s ease-in-out infinite alternate;
+}
+.ripple:nth-child(2n) {
+  animation-duration: 23s;
+  animation-delay: -6s;
+}
+.ripple:nth-child(3n) {
+  animation-duration: 29s;
+  animation-delay: -11s;
+}
+@keyframes shimmer {
+  from {
+    opacity: 0.22;
+  }
+  to {
+    opacity: 0.46;
+  }
+}
+
+/* the water: three slow drifts, deliberately unsynchronised. nothing here
+     moves fast enough to be followed with the eye — it is only ever noticed
+     having moved, which is exactly how a lake at dawn behaves */
+.water-a {
+  animation: waterA 47s ease-in-out infinite alternate;
+}
+.water-b {
+  animation: waterB 61s ease-in-out infinite alternate;
+}
+.refl {
+  animation: reflBreathe 39s ease-in-out infinite alternate;
+}
+@keyframes waterA {
+  from {
+    transform: translateX(-9px);
+  }
+  to {
+    transform: translateX(11px);
+  }
+}
+@keyframes waterB {
+  from {
+    transform: translateX(8px);
+  }
+  to {
+    transform: translateX(-10px);
+  }
+}
+@keyframes reflBreathe {
+  from {
+    opacity: 0.86;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* grass and reeds: a breath of wind, not a gale */
+.sway-a,
+.sway-b {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.sway-a {
+  animation: sway 13s ease-in-out infinite alternate;
+}
+.sway-b {
+  animation: sway 17s ease-in-out infinite alternate-reverse;
+}
+@keyframes sway {
+  from {
+    transform: rotate(-0.5deg);
+  }
+  to {
+    transform: rotate(0.6deg);
+  }
+}
+
+.boat {
+  animation: bob 6.5s ease-in-out infinite alternate;
+}
+@keyframes bob {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(6px, -3px);
+  }
+}
+
+.rays {
+  animation: spin 150s linear infinite;
+  transform-origin: 620px 206px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.glow {
+  animation: pulse 9s ease-in-out infinite alternate;
+}
+@keyframes pulse {
+  from {
+    opacity: 0.34;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+
+.bird {
+  --bo: 0.72;
+  animation: glide 34s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+.bird.b2 {
+  --bo: 0.5;
+  animation-duration: 46s;
+  animation-delay: -16s;
+}
+.bird.b3 {
+  --bo: 0.6;
+  animation-duration: 39s;
+  animation-delay: -28s;
+}
+/* ~4s of fade at each end, so the loop point is never visible */
+@keyframes glide {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--bo);
+  }
+  88% {
+    opacity: var(--bo);
+  }
+  100% {
+    transform: translate(168px, -38px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud-a,
+  .cloud-b,
+  .cloud-c,
+  .mist,
+  .petal,
+  .ripple,
+  .boat,
+  .rays,
+  .glow,
+  .bird,
+  .water-a,
+  .water-b,
+  .refl,
+  .sway-a,
+  .sway-b {
+    animation: none;
+  }
+  .card {
+    transition: none;
+  }
+}

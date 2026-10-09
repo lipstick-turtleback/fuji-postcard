@@ -1,7 +1,9 @@
 # dependencies
 node_modules/
 
-# build output (the single-file page is generated from src/)
+# build output. public/index.html is generated from src/ but is committed on
+# purpose, so the page can be opened without a build; `npm run check` fails if
+# it has drifted.
 dist/
 
 # vercel

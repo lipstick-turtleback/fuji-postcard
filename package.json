@@ -1,0 +1,25 @@
+{
+  "name": "fuji-postcard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mount Fuji at dawn, drawn in vectors — one self-contained postcard page.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/serve.mjs",
+    "dev": "node scripts/build.mjs && node scripts/serve.mjs",
+    "check": "node scripts/build.mjs --check && node scripts/check.mjs",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "fmt": "prettier --write \"src/**/*.{css,svg,html}\" \"*.{json,md}\" \".github/**/*.{yml,yaml}\"",
+    "test": "npm run build && npm run check && biome check ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.15",
+    "prettier": "^3.6.2"
+  }
+}

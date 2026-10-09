@@ -1,0 +1,742 @@
+      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <!-- sky: zenith indigo down to a low gold. the last two stops are
+               deliberately close so the light gathers at the horizon. -->
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#1b2547"/>
+            <stop offset="0.20" stop-color="#33456e"/>
+            <stop offset="0.40" stop-color="#68688a"/>
+            <stop offset="0.56" stop-color="#a67e79"/>
+            <stop offset="0.70" stop-color="#d6905f"/>
+            <stop offset="0.84" stop-color="#f0b678"/>
+            <stop offset="0.94" stop-color="#f9dcab"/>
+            <stop offset="1"    stop-color="#fbe7c6"/>
+          </linearGradient>
+
+          <!-- aerial perspective: the air itself thickens toward the water -->
+          <linearGradient id="air" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#ffd9a8" stop-opacity="0"/>
+            <stop offset=".62" stop-color="#ffd2a0" stop-opacity=".10"/>
+            <stop offset="1"   stop-color="#f6d3ac" stop-opacity=".30"/>
+          </linearGradient>
+
+          <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0"    stop-color="#fff3d2" stop-opacity=".92"/>
+            <stop offset="0.22" stop-color="#ffdda4" stop-opacity=".52"/>
+            <stop offset="0.52" stop-color="#ffc98d" stop-opacity=".22"/>
+            <stop offset="1"    stop-color="#ffb87c" stop-opacity="0"/>
+          </radialGradient>
+
+          <!-- clouds at dawn: lit from underneath, so the warmth sits on
+               the lower edge and the shade on the upper -->
+          <linearGradient id="cloudWarm" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#a9b0c4" stop-opacity=".42"/>
+            <stop offset=".55" stop-color="#e7c6ae" stop-opacity=".70"/>
+            <stop offset="1"   stop-color="#ffe3c2" stop-opacity=".92"/>
+          </linearGradient>
+          <linearGradient id="cloudCool" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#9aa4bc" stop-opacity=".38"/>
+            <stop offset="1"   stop-color="#f0d3b6" stop-opacity=".78"/>
+          </linearGradient>
+
+          <radialGradient id="sunDisc" cx="0.42" cy="0.38" r="0.72">
+            <stop offset="0"   stop-color="#fff8e4"/>
+            <stop offset=".62" stop-color="#ffe6b4"/>
+            <stop offset="1"   stop-color="#ffcf92"/>
+          </radialGradient>
+
+          <linearGradient id="fujiBody" x1="0.15" y1="0" x2="0.9" y2="1">
+            <stop offset="0"    stop-color="#666c9b"/>
+            <stop offset="0.42" stop-color="#474e7c"/>
+            <stop offset="0.76" stop-color="#343b62"/>
+            <stop offset="1"    stop-color="#2b3154"/>
+          </linearGradient>
+
+          <!-- the terminator: one soft sweep instead of a hard vertical seam -->
+          <linearGradient id="terminator" gradientUnits="userSpaceOnUse" x1="300" y1="180" x2="486" y2="420">
+            <stop offset="0"    stop-color="#141a30" stop-opacity=".62"/>
+            <stop offset="0.46" stop-color="#161c34" stop-opacity=".46"/>
+            <stop offset="0.78" stop-color="#1b2140" stop-opacity=".14"/>
+            <stop offset="1"    stop-color="#1b2140" stop-opacity="0"/>
+          </linearGradient>
+
+          <linearGradient id="snow" x1="0.1" y1="0" x2="0.72" y2="1">
+            <stop offset="0"    stop-color="#ffffff"/>
+            <stop offset="0.46" stop-color="#f4f7fb"/>
+            <stop offset="1"    stop-color="#dbe4f0"/>
+          </linearGradient>
+
+          <linearGradient id="snowShade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#aab8cf" stop-opacity="0"/>
+            <stop offset="1" stop-color="#8fa0bd" stop-opacity=".55"/>
+          </linearGradient>
+
+          <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#e6c8a4"/>
+            <stop offset="0.10" stop-color="#c2b4ac"/>
+            <stop offset="0.34" stop-color="#8593b2"/>
+            <stop offset="0.68" stop-color="#606d95"/>
+            <stop offset="1"    stop-color="#4b5680"/>
+          </linearGradient>
+
+          <linearGradient id="glitter" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"    stop-color="#ffe3b8" stop-opacity="0"/>
+            <stop offset="0.30" stop-color="#ffe9c6" stop-opacity=".22"/>
+            <stop offset="0.50" stop-color="#fff3d8" stop-opacity=".40"/>
+            <stop offset="0.70" stop-color="#ffe9c6" stop-opacity=".22"/>
+            <stop offset="1"    stop-color="#ffe3b8" stop-opacity="0"/>
+          </linearGradient>
+
+          <linearGradient id="shore" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#2b3252"/>
+            <stop offset="0.45" stop-color="#1d2338"/>
+            <stop offset="1"    stop-color="#12162a"/>
+          </linearGradient>
+
+          <linearGradient id="paperEdge" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fffdf8"/>
+            <stop offset="1" stop-color="#efe7d6"/>
+          </linearGradient>
+
+          <filter id="grain" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="1.05" numOctaves="3" seed="7" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0.42" intercept="-0.04"/></feComponentTransfer>
+          </filter>
+
+          <!-- age: a slow field thresholded into sparse, soft-edged patina -->
+          <filter id="fox" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="0.011 0.014" numOctaves="4" seed="23" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 0.46
+                      0 0 0 0 0.33
+                      0 0 0 0 0.20
+                      0 0 0 -3.4 1.42"/>
+            <feGaussianBlur stdDeviation="1.1"/>
+          </filter>
+          <!-- finer, denser field for the handling wear of a carried card -->
+          <filter id="speckle" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="0.42" numOctaves="2" seed="41" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 0.38
+                      0 0 0 0 0.28
+                      0 0 0 0 0.17
+                      0 0 0 -5.2 2.05"/>
+          </filter>
+
+          <!-- filter regions are pinned in user space: a blur that runs out
+               of room leaves a hard rectangular edge, and nothing here
+               should ever have a rectangular edge -->
+          <filter id="soft" filterUnits="userSpaceOnUse" x="-40" y="-40" width="980" height="680">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+          <filter id="mist" filterUnits="userSpaceOnUse" x="-60" y="180" width="1020" height="300">
+            <feGaussianBlur stdDeviation="9"/>
+          </filter>
+          <filter id="cloudSoft" filterUnits="userSpaceOnUse" x="-60" y="-60" width="1020" height="520">
+            <feGaussianBlur stdDeviation="4.2"/>
+          </filter>
+          <filter id="bloom" filterUnits="userSpaceOnUse" x="440" y="26" width="360" height="360">
+            <feGaussianBlur stdDeviation="14"/>
+          </filter>
+          <filter id="rim" filterUnits="userSpaceOnUse" x="300" y="40" width="600" height="480">
+            <feGaussianBlur stdDeviation="3.6"/>
+          </filter>
+          <filter id="edgeWear" filterUnits="userSpaceOnUse" x="300" y="170" width="320" height="140">
+            <feGaussianBlur stdDeviation="2.4"/>
+          </filter>
+          <filter id="tiny" filterUnits="userSpaceOnUse" x="-20" y="-20" width="940" height="640">
+            <feGaussianBlur stdDeviation="1.4"/>
+          </filter>
+
+          <linearGradient id="rimLight" gradientUnits="userSpaceOnUse" x1="470" y1="150" x2="740" y2="400">
+            <stop offset="0"   stop-color="#ffe2b0" stop-opacity=".80"/>
+            <stop offset=".42" stop-color="#ffc48c" stop-opacity=".40"/>
+            <stop offset="1"   stop-color="#ffab74" stop-opacity="0"/>
+          </linearGradient>
+
+          <!-- the mountain, reused for fill + reflection + clipping -->
+          <path id="fujiPath" d="M150 404
+            C268 386 356 296 404 196
+            C412 178 420 168 428 160
+            L440 152 L452 158 L466 152 L478 162
+            C486 170 494 182 502 200
+            C548 296 636 386 754 404 Z"/>
+
+          <linearGradient id="reflFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#ffffff" stop-opacity=".62"/>
+            <stop offset="0.34" stop-color="#ffffff" stop-opacity=".34"/>
+            <stop offset="0.68" stop-color="#ffffff" stop-opacity=".14"/>
+            <stop offset="1"    stop-color="#ffffff" stop-opacity="0"/>
+          </linearGradient>
+          <!-- the mirror is not a mirror: the surface cuts it into bands that
+               widen as they come toward the viewer, then blurs the cuts -->
+          <filter id="reflBreak" filterUnits="userSpaceOnUse" x="0" y="404" width="900" height="146">
+            <feGaussianBlur stdDeviation="1.7"/>
+          </filter>
+          <mask id="reflMask" maskUnits="userSpaceOnUse" x="0" y="404" width="900" height="146">
+            <rect x="0" y="404" width="900" height="146" fill="url(#reflFade)"/>
+            <g fill="#000" filter="url(#reflBreak)">
+              <rect x="120" y="419" width="300" height="2.2" rx="1.1"/>
+              <rect x="470" y="423" width="250" height="2" rx="1"/>
+              <rect x="180" y="437" width="410" height="2.8" rx="1.4"/>
+              <rect x="620" y="441" width="210" height="2.4" rx="1.2"/>
+              <rect x="90"  y="457" width="370" height="3.2" rx="1.6"/>
+              <rect x="500" y="461" width="320" height="3" rx="1.5"/>
+              <rect x="150" y="481" width="450" height="3.8" rx="1.9"/>
+              <rect x="640" y="485" width="230" height="3.2" rx="1.6"/>
+              <rect x="60"  y="507" width="410" height="4.4" rx="2.2"/>
+              <rect x="520" y="511" width="330" height="3.8" rx="1.9"/>
+              <rect x="140" y="533" width="500" height="5" rx="2.5"/>
+            </g>
+          </mask>
+
+          <!-- the rays are cut off by nothing but distance from the lamp -->
+          <radialGradient id="rayFall" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0"   stop-color="#ffffff" stop-opacity=".9"/>
+            <stop offset=".30" stop-color="#ffffff" stop-opacity=".55"/>
+            <stop offset=".68" stop-color="#ffffff" stop-opacity=".16"/>
+            <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
+          </radialGradient>
+          <mask id="rayMask"><circle cx="620" cy="206" r="330" fill="url(#rayFall)"/></mask>
+
+          <!-- hot-stamped metal for the wordmark -->
+          <linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="90" y1="548" x2="90" y2="592">
+            <stop offset="0"   stop-color="#fdf4d2"/>
+            <stop offset=".28" stop-color="#dcb458"/>
+            <stop offset=".52" stop-color="#8e6524"/>
+            <stop offset=".74" stop-color="#eed488"/>
+            <stop offset="1"   stop-color="#7c5518"/>
+          </linearGradient>
+          <linearGradient id="goldShine" gradientUnits="userSpaceOnUse" x1="90" y1="0" x2="284" y2="0">
+            <stop offset="0"   stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset=".43" stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset=".5"  stop-color="#fffdf0" stop-opacity=".95"/>
+            <stop offset=".57" stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
+          </linearGradient>
+
+          <clipPath id="clipFuji"><use href="#fujiPath"/></clipPath>
+          <clipPath id="clipLake"><rect x="0" y="404" width="900" height="146"/></clipPath>
+          <clipPath id="clipCard"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
+
+          <path id="petalShape" d="M0 0 C3 -5.5 11 -6.5 14.5 -1 C11 5 3 5.5 0 0 Z"/>
+
+          <!-- bank furniture, drawn once and placed by hand.
+               every blade is its own stroke width, so a tuft tapers as it
+               rises instead of reading as a bundle of matchsticks -->
+          <g id="tuft" fill="none" stroke-linecap="round">
+            <path d="M0 0 C-1 -6 -4 -12 -9 -17"   stroke-width="1.5"/>
+            <path d="M0 0 C0 -7 0 -14 -2 -22"     stroke-width="1.6"/>
+            <path d="M1 -1 C2 -9 4 -16 7 -21"     stroke-width="1.3"/>
+            <path d="M1 -1 C3 -6 6 -11 11 -14"    stroke-width="1.2"/>
+            <path d="M-1 -1 C-3 -5 -6 -8 -12 -10" stroke-width="1.1"/>
+            <path d="M0 0 C2 -4 4 -7 6 -8"        stroke-width="1"/>
+          </g>
+          <!-- a reed: one stem, two leaves that keep the stem's direction,
+               and the dark head that gives the cluster its rhythm -->
+          <g id="reed" stroke-linecap="round">
+            <path d="M0 0 C1 -14 0 -28 2 -44" fill="none" stroke-width="1.8"/>
+            <path d="M0.5 -10 C4 -20 6 -30 6.5 -40" fill="none" stroke-width="1.2"/>
+            <path d="M0 -16 C-3 -24 -5 -31 -5.5 -38" fill="none" stroke-width="1.1"/>
+            <ellipse cx="2.2" cy="-49" rx="1.9" ry="6.2" stroke="none"/>
+            <path d="M2.2 -54 L2.4 -58" fill="none" stroke-width=".9"/>
+          </g>
+          <!-- the heron: long legs, a thin S neck, a bill like a needle -->
+          <g id="heron">
+            <path d="M-10 -16 C-13 -21 -9 -27 -2 -28 C5 -29 11 -26 12 -21
+                     C13 -16 7 -12 0 -12 C-5 -12 -9 -13 -10 -16 Z"/>
+            <path d="M-10 -19 L-18 -15.5 L-9 -13 Z"/>
+            <path d="M7 -25 C11 -30 11 -36 8.5 -40 C7 -42.5 7.5 -44.5 9.5 -45.5"
+                  fill="none" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M8.5 -46.5 C11.5 -47.5 14.5 -46.5 15.5 -45.5 L25 -43.5
+                     L15.5 -42.5 C12.5 -42 9.5 -43 8.5 -44.5 Z"/>
+            <path d="M-1 -13 L-2.5 -6 L-2 0" fill="none" stroke-width="1.1" stroke-linecap="round"/>
+            <path d="M4.5 -13 L5.5 -6 L6.5 0" fill="none" stroke-width="1.1" stroke-linecap="round"/>
+          </g>
+          <g id="duck">
+            <path d="M-7 -4 C-10 -6 -9 -10 -4 -11 C1 -12 7 -10 8 -7 C9 -4 5 -2 0 -2 C-4 -2 -6 -3 -7 -4 Z"/>
+            <circle cx="7" cy="-11" r="2.6"/>
+            <path d="M9 -12 L14 -11 L9 -10 Z"/>
+            <path d="M-6 -2 L-6 0 M2 -2 L2 0" fill="none" stroke-width="1"/>
+          </g>
+
+          <g id="blossom">
+            <g>
+              <ellipse cx="0" cy="-6.4" rx="4.1" ry="5.4"/>
+              <ellipse cx="6.1" cy="-1.9" rx="4.1" ry="5.4" transform="rotate(72 0 0)"/>
+              <ellipse cx="3.8" cy="5.2" rx="4.1" ry="5.4" transform="rotate(144 0 0)"/>
+              <ellipse cx="-3.8" cy="5.2" rx="4.1" ry="5.4" transform="rotate(216 0 0)"/>
+              <ellipse cx="-6.1" cy="-1.9" rx="4.1" ry="5.4" transform="rotate(288 0 0)"/>
+            </g>
+            <circle r="2.1" fill="#c9607a"/>
+            <circle r="0.8" cx="0" cy="-3.2" fill="#f7e3a8"/>
+          </g>
+        </defs>
+
+        <g clip-path="url(#clipCard)">
+
+          <!-- sky -->
+          <rect x="0" y="0" width="900" height="410" fill="url(#sky)"/>
+
+          <!-- sun + rays. the rays are lines that never end: the mask
+               lets them thin out with distance, the way light does. -->
+          <g class="rays" mask="url(#rayMask)" opacity=".26" fill="none"
+             stroke="#ffe8c6" stroke-linecap="round">
+            <line x1="620" y1="206" x2="960" y2="206" stroke-width="3.4"/>
+            <line x1="620" y1="206" x2="926" y2="90"  stroke-width="2.2"/>
+            <line x1="620" y1="206" x2="836" y2="-6"  stroke-width="3"/>
+            <line x1="620" y1="206" x2="700" y2="-70" stroke-width="1.8"/>
+            <line x1="620" y1="206" x2="620" y2="-90" stroke-width="2.6"/>
+            <line x1="620" y1="206" x2="540" y2="-70" stroke-width="1.6"/>
+            <line x1="620" y1="206" x2="404" y2="-6"  stroke-width="2.8"/>
+            <line x1="620" y1="206" x2="314" y2="90"  stroke-width="1.8"/>
+            <line x1="620" y1="206" x2="280" y2="206" stroke-width="3"/>
+            <line x1="620" y1="206" x2="314" y2="322" stroke-width="1.6"/>
+            <line x1="620" y1="206" x2="404" y2="418" stroke-width="2.2"/>
+            <line x1="620" y1="206" x2="540" y2="482" stroke-width="1.4"/>
+            <line x1="620" y1="206" x2="700" y2="482" stroke-width="1.4"/>
+            <line x1="620" y1="206" x2="836" y2="418" stroke-width="2"/>
+            <line x1="620" y1="206" x2="926" y2="322" stroke-width="1.6"/>
+          </g>
+          <circle cx="620" cy="206" r="96" fill="#ffd9a0" opacity=".30" filter="url(#bloom)"/>
+          <circle class="glow" cx="620" cy="206" r="176" fill="url(#sunGlow)"/>
+          <circle cx="620" cy="206" r="38" fill="url(#sunDisc)"/>
+          <circle cx="620" cy="206" r="38" fill="none" stroke="#fff8e6" stroke-width="1.1" opacity=".55"/>
+          <circle cx="620" cy="206" r="52" fill="none" stroke="#ffdda8" stroke-width=".9" opacity=".18"/>
+
+          <!-- high clouds: thin, wind-combed, lit from below -->
+          <g class="cloud-a" filter="url(#cloudSoft)">
+            <path d="M46 100 C132 86 244 88 316 100 C368 109 348 121 262 120 C150 119 74 114 46 108 Z"
+                  fill="url(#cloudCool)" opacity=".62"/>
+            <path d="M64 112 C150 104 246 106 306 114 C348 120 330 128 250 127 C156 126 92 122 64 118 Z"
+                  fill="#ffe6c8" opacity=".30"/>
+            <path d="M452 62 C528 54 600 58 648 68 C688 76 670 86 600 85 C520 84 476 78 452 72 Z"
+                  fill="url(#cloudCool)" opacity=".45"/>
+          </g>
+          <g class="cloud-b" filter="url(#cloudSoft)">
+            <path d="M556 146 C652 134 754 138 812 149 C860 158 842 169 752 168 C650 167 588 160 556 154 Z"
+                  fill="url(#cloudWarm)" opacity=".55"/>
+            <path d="M700 128 C760 122 812 126 848 133 C878 139 866 147 812 146 C748 145 716 140 700 135 Z"
+                  fill="url(#cloudCool)" opacity=".32"/>
+          </g>
+
+          <!-- distant ridges, each one lighter than the last: air in the way -->
+          <path d="M0 404 L0 336 C56 328 116 352 172 378 C214 396 246 402 276 404 Z" fill="#7484a8" opacity=".8"/>
+          <path d="M900 404 L900 322 C838 328 782 352 730 380 C700 396 676 402 654 404 Z" fill="#6b7ba1" opacity=".76"/>
+          <path d="M0 404 L0 366 C74 360 150 380 214 396 C246 403 268 404 290 404 Z" fill="#5d6c92" opacity=".62"/>
+          <path d="M900 404 L900 358 C846 358 792 376 744 392 C718 400 698 403 678 404 Z" fill="#54628a" opacity=".56"/>
+
+          <!-- Mount Fuji -->
+          <use href="#fujiPath" fill="url(#fujiBody)"/>
+          <g clip-path="url(#clipFuji)">
+            <!-- the shadow side: one graded sweep, no seam where it ends -->
+            <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
+            <!-- the lit side, warmed by the low sun -->
+            <path d="M452 158 L466 152 L478 162 C486 170 494 182 502 200 C548 296 636 386 754 404 L452 404 Z"
+                  fill="#8d92b4" opacity=".16"/>
+            <!-- the sun grazes the right shoulder: a rim of warm light -->
+            <path d="M440 152 L478 162 C486 170 494 182 502 200 C548 296 636 386 754 404"
+                  fill="none" stroke="url(#rimLight)" stroke-width="4.4"
+                  stroke-linecap="round" filter="url(#rim)"/>
+
+            <!-- snow cap. the edge is a snowline, not a saw: it hangs into
+                 the gullies and climbs back over every ridge it crosses -->
+            <path d="M336 126 H564 V206
+                     C560 220 552 236 542 238
+                     C532 240 528 222 518 222
+                     C508 222 504 248 492 250
+                     C480 252 476 230 466 230
+                     C456 230 452 254 440 256
+                     C428 258 424 234 414 234
+                     C404 234 400 250 388 248
+                     C376 246 348 226 336 218 Z" fill="url(#snow)"/>
+            <!-- the melt edge casts a hairline onto the rock below it -->
+            <path d="M564 206 C560 220 552 236 542 238 C532 240 528 222 518 222
+                     C508 222 504 248 492 250 C480 252 476 230 466 230
+                     C456 230 452 254 440 256 C428 258 424 234 414 234
+                     C404 234 400 250 388 248 C376 246 348 226 336 218"
+                  fill="none" stroke="#7f8fab" stroke-opacity=".45" stroke-width="2.4"
+                  filter="url(#edgeWear)"/>
+            <!-- residual snow left in the gullies, on the fall lines -->
+            <g fill="#eef3fa" opacity=".30" filter="url(#tiny)">
+              <path d="M486 254 C489 272 491 286 493 300 C496 286 499 272 501 256 Z"/>
+              <path d="M436 260 C438 274 440 284 441 296 C444 284 446 272 448 262 Z"/>
+              <path d="M536 242 C538 252 539 260 540 270 C542 260 544 250 546 244 Z"/>
+              <path d="M392 252 C394 262 395 270 396 280 C398 270 400 260 402 254 Z"/>
+            </g>
+            <!-- summit crater: a shallow bowl, lit on the far rim -->
+            <path d="M440 152 L452 158 L466 152 L478 162 L470 172 L448 174 Z" fill="#93a6c2" opacity=".42"/>
+            <path d="M440 152 C448 158 462 158 478 162" fill="none" stroke="#fdfbf6" stroke-opacity=".5" stroke-width="1.4"/>
+            <!-- fall lines down the cone -->
+            <g fill="none" stroke="#ffffff" stroke-opacity=".10" stroke-width="1.3">
+              <path d="M452 162 C472 234 494 304 528 386"/>
+              <path d="M440 160 C420 244 388 324 348 398"/>
+              <path d="M478 166 C506 242 540 318 588 392"/>
+              <path d="M462 164 C470 250 480 330 494 400"/>
+              <path d="M428 168 C404 250 372 326 322 396"/>
+            </g>
+            <g fill="none" stroke="#161c30" stroke-opacity=".16" stroke-width="1.6">
+              <path d="M446 166 C432 246 410 320 372 396"/>
+              <path d="M470 168 C486 248 508 322 540 394"/>
+            </g>
+          </g>
+
+          <!-- the far shore of the lake: a line of trees at the foot of the mountain -->
+          <path d="M0 402 C120 398 240 400 360 398 C500 396 640 401 760 398 C820 396 870 400 900 398
+                   L900 407 L0 407 Z" fill="#252b47" opacity=".75"/>
+          <g fill="#20263e" opacity=".8">
+            <path d="M196 402 l3 -7 l3 7 z M214 402 l2.5 -6 l2.5 6 z M232 402 l3 -8 l3 8 z
+                     M252 402 l2.5 -6 l2.5 6 z M560 402 l3 -7 l3 7 z M578 402 l2.5 -6 l2.5 6 z
+                     M596 402 l3 -8 l3 8 z M618 402 l2.5 -6 l2.5 6 z M640 402 l3 -7 l3 7 z"/>
+          </g>
+
+          <!-- mist at the foot, and a band crossing the cone: both blurred,
+               both drifting, neither one a hard stripe -->
+          <g class="mist" filter="url(#mist)" opacity=".42">
+            <path d="M120 306 C250 296 372 302 486 308 C600 314 716 308 812 302
+                     C848 300 858 320 812 326 C694 336 556 330 438 324
+                     C322 318 204 324 124 318 C96 316 96 308 120 306 Z" fill="#f7e6cf"/>
+          </g>
+          <g class="mist" filter="url(#mist)" opacity=".30" style="animation-duration:31s">
+            <path d="M150 386 C280 378 386 384 462 380 C552 375 648 384 752 390
+                     C784 392 780 402 742 402 L170 402 C138 402 128 392 150 386 Z" fill="#f4dcc0"/>
+          </g>
+
+          <!-- the air itself, thickening toward the water -->
+          <rect x="0" y="150" width="900" height="256" fill="url(#air)"/>
+
+          <!-- low clouds in front -->
+          <g class="cloud-c" filter="url(#cloudSoft)" opacity=".5">
+            <path d="M196 358 C300 348 404 352 476 359 C536 365 522 375 428 374 C316 373 240 367 196 364 Z"
+                  fill="url(#cloudWarm)"/>
+            <path d="M596 346 C676 339 744 343 790 350 C828 356 816 366 742 365 C656 364 622 356 596 352 Z"
+                  fill="url(#cloudWarm)" opacity=".8"/>
+          </g>
+
+          <!-- birds -->
+          <g class="bird" stroke="#3a4463" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".75">
+            <path d="M300 150 q9 -7 17 0 q8 -7 17 0"/>
+          </g>
+          <g class="bird b2" stroke="#3a4463" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".6">
+            <path d="M356 128 q7 -6 14 0 q7 -6 14 0"/>
+          </g>
+          <g class="bird b3" stroke="#3a4463" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5">
+            <path d="M262 186 q6 -5 12 0 q6 -5 12 0"/>
+          </g>
+
+          <!-- lake -->
+          <rect x="0" y="404" width="900" height="146" fill="url(#lake)"/>
+          <g clip-path="url(#clipLake)">
+            <!-- mirrored mountain, compressed and cut into bands by the water.
+                 the clip is applied inside the mirrored space, so the snow
+                 cannot spill outside the reflected body of the mountain -->
+            <g class="refl" mask="url(#reflMask)">
+              <g transform="matrix(1 0 0 -0.46 0 590)">
+                <g clip-path="url(#clipFuji)">
+                  <use href="#fujiPath" fill="#333b60"/>
+                  <path d="M336 126 H564 V206
+                           C560 220 552 236 542 238 C532 240 528 222 518 222
+                           C508 222 504 248 492 250 C480 252 476 230 466 230
+                           C456 230 452 254 440 256 C428 258 424 234 414 234
+                           C404 234 400 250 388 248 C376 246 348 226 336 218 Z" fill="#b4c2d6"/>
+                  <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
+                </g>
+              </g>
+            </g>
+
+            <!-- the glitter path: narrow at the far shore, opening as it
+                 comes in, and never a solid sheet of light -->
+            <g class="water-b">
+              <path d="M594 404 H646 L742 550 H498 Z" fill="url(#glitter)" opacity=".46" filter="url(#soft)"/>
+              <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
+                <path d="M600 411 h40"  stroke-width="2.4" opacity=".55"/>
+                <path d="M586 419 h26 M624 419 h30" stroke-width="2.2" opacity=".5"/>
+                <path d="M572 429 h44 M632 429 h26" stroke-width="2.4" opacity=".46"/>
+                <path d="M560 441 h30 M604 441 h52" stroke-width="2.6" opacity=".42"/>
+                <path d="M548 455 h52 M618 455 h34" stroke-width="2.8" opacity=".38"/>
+                <path d="M534 471 h38 M592 471 h60" stroke-width="3" opacity=".34"/>
+                <path d="M520 489 h60 M600 489 h44" stroke-width="3.2" opacity=".3"/>
+                <path d="M506 509 h44 M572 509 h70" stroke-width="3.4" opacity=".26"/>
+                <path d="M494 531 h70 M586 531 h52" stroke-width="3.6" opacity=".22"/>
+              </g>
+            </g>
+
+            <!-- ripples: a pale crest always paired with a darker trough -->
+            <g class="water-a" stroke="#f2e6d4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".5">
+              <path class="ripple" d="M470 420 h64 M566 420 h44 M648 420 h30"/>
+              <path class="ripple" d="M418 438 h88 M540 438 h62 M640 438 h36"/>
+              <path class="ripple" d="M356 458 h104 M498 458 h78 M614 458 h50"/>
+              <path class="ripple" d="M272 480 h126 M436 480 h98 M574 480 h68"/>
+              <path class="ripple" d="M176 504 h146 M362 504 h114 M516 504 h84"/>
+              <path class="ripple" d="M84 530 h168 M296 530 h132 M470 530 h96"/>
+            </g>
+            <g class="water-b" stroke="#39446a" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".38">
+              <path class="ripple" d="M180 448 h112 M336 470 h92 M232 512 h132 M600 464 h96 M664 496 h112"/>
+            </g>
+          </g>
+
+          <!-- torii — every member mirrored exactly about x = 230 -->
+          <g>
+            <!-- contact shadow where the posts meet the water -->
+            <ellipse cx="230" cy="526" rx="68" ry="4.5" fill="#101426" opacity=".22" filter="url(#tiny)"/>
+            <g fill="#c8452f" stroke="#8f2f20" stroke-width=".8" stroke-opacity=".45">
+              <path d="M171 524 L177 428 L188 428 L185 524 Z"/>
+              <path d="M289 524 L283 428 L272 428 L275 524 Z"/>
+              <rect x="225" y="432" width="10" height="24" rx="1"/>
+              <rect x="168" y="456" width="124" height="10" rx="2"/>
+              <path d="M164 429 C194 421 266 421 296 429 L296 438 C266 430 194 430 164 438 Z"/>
+              <path d="M158 420 C190 410 270 410 302 420 L302 429 C270 419 190 419 158 429 Z"/>
+            </g>
+            <!-- shaded inner edges -->
+            <g fill="#8f2f20" opacity=".42">
+              <path d="M171 524 L177 428 L180 428 L174 524 Z"/>
+              <path d="M289 524 L283 428 L280 428 L286 524 Z"/>
+            </g>
+            <!-- lit outer edges, catching the low sun -->
+            <g fill="#f08a5e" opacity=".5">
+              <path d="M185 524 L188 428 L186 428 L182.5 524 Z"/>
+              <path d="M275 524 L272 428 L274 428 L277.5 524 Z"/>
+            </g>
+            <!-- reflection: broken into the same bands as the rest of the water -->
+            <g stroke="#8f2f20" stroke-linecap="round" fill="none" opacity=".34">
+              <path d="M177 530 h9 M175 538 h11 M178 546 h8" stroke-width="4.4"/>
+              <path d="M283 530 h9 M285 538 h11 M282 546 h8" stroke-width="4.4"/>
+              <path d="M196 534 h68" stroke-width="2.6" opacity=".5"/>
+            </g>
+            <path d="M168 528 C198 534 262 534 292 528" stroke="#f2e6d4" stroke-opacity=".34"
+                  stroke-width="1.6" fill="none"/>
+          </g>
+
+          <!-- boat -->
+          <g class="boat">
+            <g fill="#1b2036">
+              <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
+              <path d="M624 481 C628 477 634 477 638 481 L640 499 L622 499 Z"/>
+              <circle cx="631" cy="475" r="4"/>
+              <path d="M619 473 L643 473 L631 464 Z"/>
+              <path d="M646 470 L648.5 471 L662 502 L659 503.5 Z"/>
+            </g>
+            <path d="M600 512 C618 517 646 517 662 512" stroke="#f2e6d4" stroke-opacity=".3"
+                  stroke-width="1.4" fill="none"/>
+          </g>
+
+          <!-- the near bank. one irregular waterline, then the small things
+               that live on it: wet sand, stones, driftwood, grass, reeds,
+               two ducks in the shallows and a heron standing at the edge. -->
+          <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
+                   C450 541 520 549 596 545 C670 541 740 548 812 544
+                   C852 542 878 546 900 544 L900 600 L0 600 Z" fill="url(#shore)"/>
+          <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
+                   C450 541 520 549 596 545 C670 541 740 548 812 544
+                   C852 542 878 546 900 544 L900 556 C878 558 852 554 812 556
+                   C740 560 670 553 596 557 C520 561 450 553 372 556
+                   C300 559 240 553 168 558 C110 562 60 556 0 564 Z"
+                fill="#4d5878" opacity=".42"/>
+          <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
+                   C450 541 520 549 596 545 C670 541 740 548 812 544
+                   C852 542 878 546 900 544"
+                fill="none" stroke="#e6dcc8" stroke-opacity=".20" stroke-width="1.4"/>
+
+          <!-- stones, each with the thin lit edge the water leaves on top -->
+          <g fill="#151b2d">
+            <ellipse cx="132" cy="553" rx="12" ry="4.6"/>
+            <ellipse cx="152" cy="556" rx="6.5" ry="2.6"/>
+            <ellipse cx="466" cy="551" rx="9" ry="3.4"/>
+            <ellipse cx="700" cy="550" rx="7.5" ry="3"/>
+            <ellipse cx="868" cy="549" rx="10" ry="3.8"/>
+          </g>
+          <g fill="none" stroke="#7e88a4" stroke-opacity=".45" stroke-width="1.1">
+            <path d="M121 552 C126 548 139 548 143 552"/>
+            <path d="M458 550 C462 547 471 547 474 550"/>
+            <path d="M693 549 C697 546 704 546 707 549"/>
+            <path d="M859 548 C864 545 873 545 877 548"/>
+          </g>
+
+          <!-- a length of driftwood with one chip beside it, and the low
+               bushes behind the bank — their tops are ragged, not scalloped,
+               so they read as growth and not as rocks -->
+          <g stroke="#1a2033" fill="none" stroke-linecap="round">
+            <path d="M330 551 C352 547 378 549 400 546" stroke-width="3.6"/>
+            <path d="M406 549 L418 548" stroke-width="2.2"/>
+          </g>
+          <g fill="#1b2135" opacity=".92">
+            <path d="M196 550 C199 544 204 541 209 543 C211 537 218 535 222 539
+                     C226 534 233 535 235 540 C241 537 247 540 248 545
+                     C253 544 257 547 257 550 Z"/>
+            <path d="M556 549 C559 544 564 542 568 544 C571 539 577 538 580 542
+                     C584 538 590 539 592 543 C597 542 601 545 601 549 Z"/>
+          </g>
+
+          <!-- two ducks, and the wake each one trails -->
+          <g fill="#141a2c" stroke="#141a2c">
+            <use href="#duck" transform="translate(296 536)"/>
+            <use href="#duck" transform="translate(322 541) scale(.84)"/>
+          </g>
+          <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
+            <path d="M286 539 h22 M314 544 h18"/>
+          </g>
+
+          <!-- the heron: still, and the only tall thing on the right -->
+          <g fill="#101627" stroke="#101627">
+            <use href="#heron" transform="translate(772 546) scale(-1 1)"/>
+          </g>
+          <path d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
+
+          <!-- grass and reeds, in clusters of different weight -->
+          <g class="sway-a" stroke="#0f1322" stroke-width="1.7" fill="#0f1322">
+            <use href="#tuft" transform="translate(24 566) scale(1.15)"/>
+            <use href="#tuft" transform="translate(104 560) scale(.9)"/>
+            <use href="#tuft" transform="translate(176 556) scale(.8)"/>
+          </g>
+          <g class="sway-b" stroke="#0f1322" stroke-width="2" fill="#0f1322">
+            <use href="#reed" transform="translate(46 570) scale(1.1)"/>
+            <use href="#reed" transform="translate(66 572) rotate(4) scale(.86)"/>
+            <use href="#reed" transform="translate(84 568) rotate(-6) scale(.7)"/>
+          </g>
+          <g class="sway-b" stroke="#0f1322" stroke-width="1.9" fill="#0f1322" style="animation-delay:-5s">
+            <use href="#reed" transform="translate(834 556) scale(.95)"/>
+            <use href="#reed" transform="translate(852 558) rotate(5) scale(.78)"/>
+          </g>
+          <g class="sway-a" stroke="#0f1322" stroke-width="1.6" fill="#0f1322" style="animation-delay:-3.5s">
+            <use href="#tuft" transform="translate(806 552) scale(.95)"/>
+            <use href="#tuft" transform="translate(884 552) scale(1.05)"/>
+            <use href="#tuft" transform="translate(640 552) scale(.7)"/>
+            <use href="#tuft" transform="translate(500 553) scale(.62)"/>
+          </g>
+
+          <!-- petals that have already reached the water -->
+          <g fill="#f4c3d0" opacity=".75">
+            <ellipse cx="238" cy="524" rx="5" ry="1.7"/>
+            <ellipse cx="412" cy="536" rx="4.4" ry="1.5"/>
+            <ellipse cx="540" cy="520" rx="3.8" ry="1.3"/>
+            <ellipse cx="668" cy="534" rx="4.6" ry="1.6"/>
+          </g>
+          <g stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none">
+            <path d="M232 527 h13 M406 539 h12 M534 523 h11 M662 537 h13"/>
+          </g>
+
+          <!-- cherry branch, top-left -->
+          <g>
+            <path d="M-10 26 C60 40 118 74 168 118 C196 143 218 158 244 164"
+                  fill="none" stroke="#3a2a2c" stroke-width="9" stroke-linecap="round"/>
+            <path d="M62 42 C86 26 108 20 132 22" fill="none" stroke="#3a2a2c" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M120 78 C142 66 158 62 178 66" fill="none" stroke="#3a2a2c" stroke-width="4" stroke-linecap="round"/>
+            <path d="M172 122 C192 116 206 112 224 116" fill="none" stroke="#3a2a2c" stroke-width="3.4" stroke-linecap="round"/>
+            <path d="M100 62 C96 44 92 34 84 24" fill="none" stroke="#3a2a2c" stroke-width="3.4" stroke-linecap="round"/>
+            <g fill="#f4c3d0">
+              <use href="#blossom" transform="translate(28 34) scale(1.15)"/>
+              <use href="#blossom" transform="translate(74 22) scale(1)"/>
+              <use href="#blossom" transform="translate(132 22) scale(1.1)"/>
+              <use href="#blossom" transform="translate(104 66) scale(.95)"/>
+              <use href="#blossom" transform="translate(158 62) scale(1.05)"/>
+              <use href="#blossom" transform="translate(186 74) scale(.9)"/>
+              <use href="#blossom" transform="translate(168 118) scale(1.1)"/>
+              <use href="#blossom" transform="translate(222 116) scale(.95)"/>
+              <use href="#blossom" transform="translate(206 148) scale(1)"/>
+              <use href="#blossom" transform="translate(244 164) scale(.85)"/>
+              <use href="#blossom" transform="translate(84 24) scale(.8)"/>
+            </g>
+            <g fill="#f7d7e0" opacity=".9">
+              <circle cx="52" cy="52" r="3.4"/>
+              <circle cx="146" cy="42" r="3"/>
+              <circle cx="196" cy="96" r="2.6"/>
+            </g>
+          </g>
+
+          <!-- falling petals -->
+          <g fill="#f4c3d0">
+            <g class="petal p1"><use href="#petalShape" transform="translate(150 150)"/></g>
+            <g class="petal p2"><use href="#petalShape" transform="translate(210 120) scale(.85)"/></g>
+            <g class="petal p3"><use href="#petalShape" transform="translate(96 190) scale(.9)"/></g>
+            <g class="petal p4"><use href="#petalShape" transform="translate(260 170) scale(.75)"/></g>
+            <g class="petal p5"><use href="#petalShape" transform="translate(180 240) scale(1)"/></g>
+            <g class="petal p6"><use href="#petalShape" transform="translate(320 130) scale(.8)"/></g>
+            <g class="petal p7"><use href="#petalShape" transform="translate(60 260) scale(.7)"/></g>
+            <g class="petal p8"><use href="#petalShape" transform="translate(240 280) scale(.9)"/></g>
+            <g class="petal p9"><use href="#petalShape" transform="translate(130 320) scale(.75)"/></g>
+            <g class="petal p10"><use href="#petalShape" transform="translate(300 240) scale(.85)"/></g>
+          </g>
+
+          <!-- tanzaku title strip -->
+          <g transform="rotate(-1.2 76 344)">
+            <rect x="48" y="176" width="58" height="336" rx="2" fill="#f8f3e8" opacity=".93"/>
+            <rect x="48" y="176" width="58" height="336" rx="2" fill="none" stroke="#c9b79a" stroke-width="1"/>
+            <rect x="53" y="181" width="48" height="326" fill="none" stroke="#c9b79a" stroke-width=".6" opacity=".7"/>
+            <g fill="#22283a" font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Songti SC',serif"
+               font-size="38" text-anchor="middle">
+              <text x="77" y="234">富</text>
+              <text x="77" y="284">士</text>
+              <text x="77" y="334">山</text>
+            </g>
+            <g fill="#5d6478" font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif"
+               font-size="15" text-anchor="middle">
+              <text x="77" y="374">河</text>
+              <text x="77" y="394">口</text>
+              <text x="77" y="414">湖</text>
+            </g>
+            <g transform="translate(77 462)">
+              <circle r="17" fill="#c8452f" opacity=".92"/>
+              <circle r="17" fill="none" stroke="#a3341f" stroke-width="1.4"/>
+              <text x="0" y="6" text-anchor="middle" fill="#f8f3e8" font-size="18"
+                    font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif">旅</text>
+            </g>
+          </g>
+
+          <!-- stamp, top-right -->
+          <g transform="rotate(-2.4 806 78)">
+            <g fill="#f8f3e8">
+              <path d="M762 34 h88 v88 h-88 Z"/>
+            </g>
+            <g fill="#f8f3e8" stroke="#f8f3e8" stroke-width="2.6">
+              <path d="M762 34 h88 v88 h-88 Z" fill="none" stroke-dasharray="0.01 7.3" stroke-linecap="round"/>
+            </g>
+            <rect x="768" y="40" width="76" height="76" fill="#e8eef6"/>
+            <rect x="768" y="40" width="76" height="76" fill="none" stroke="#9fb0cc" stroke-width="1"/>
+            <g>
+              <rect x="772" y="44" width="68" height="56" fill="#cfe0ef"/>
+              <path d="M772 100 L772 84 C790 80 806 88 822 94 C832 98 838 100 840 100 Z" fill="#7fa8c6"/>
+              <path d="M786 100 C800 96 812 82 820 66 C828 82 840 96 840 100 Z" fill="#3f5d86"/>
+              <path d="M812 68 L820 62 L828 68 L824 74 L816 74 Z" fill="#f4f8fc"/>
+              <circle cx="796" cy="60" r="7" fill="#f2c14e"/>
+              <text x="806" y="112" text-anchor="middle" fill="#3f5d86" font-size="9"
+                    letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>
+            </g>
+          </g>
+          <!-- cancellation rings -->
+          <g transform="translate(742 128) rotate(-14)" fill="none" stroke="#4a5570" opacity=".5">
+            <circle r="34" stroke-width="1.6"/>
+            <circle r="28" stroke-width="1"/>
+            <path d="M-28 -8 H28 M-28 0 H28 M-28 8 H28" stroke-width="1"/>
+            <text x="0" y="-14" text-anchor="middle" fill="#4a5570" stroke="none" font-size="8"
+                  letter-spacing="1.4" font-family="Georgia,serif">TOKYO</text>
+            <text x="0" y="22" text-anchor="middle" fill="#4a5570" stroke="none" font-size="7.5"
+                  letter-spacing="1" font-family="Georgia,serif">24.5.12</text>
+          </g>
+
+          <!-- hot-stamped wordmark, lower left -->
+          <g font-family="Georgia,'Times New Roman',serif">
+            <g fill="#0b0f1c" opacity=".55" transform="translate(1 1.2)">
+              <text x="98" y="570" font-size="16" letter-spacing="4.8">MT. FUJI</text>
+              <text x="99" y="588" font-size="8.5" letter-spacing="2.8">KAWAGUCHI-KO · JAPAN</text>
+            </g>
+            <g fill="url(#gold)">
+              <text x="98" y="570" font-size="16" letter-spacing="4.8">MT. FUJI</text>
+              <text x="99" y="588" font-size="8.5" letter-spacing="2.8">KAWAGUCHI-KO · JAPAN</text>
+            </g>
+            <g id="wmShine" fill="url(#goldShine)" opacity="0">
+              <text x="98" y="570" font-size="16" letter-spacing="4.8">MT. FUJI</text>
+              <text x="99" y="588" font-size="8.5" letter-spacing="2.8">KAWAGUCHI-KO · JAPAN</text>
+            </g>
+          </g>
+
+          <!-- paper grain + vignette -->
+          <rect x="0" y="0" width="900" height="600" filter="url(#grain)" opacity=".13"
+                style="mix-blend-mode:multiply"/>
+          <rect x="0" y="0" width="900" height="600" fill="none" stroke="#080c18" stroke-opacity=".30"
+                stroke-width="34" filter="url(#soft)"/>
+        </g>
+
+        <!-- deckled card edge -->
+        <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="#f8f3e8" stroke-opacity=".5" stroke-width="2"/>
+      </svg>

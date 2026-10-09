@@ -1,0 +1,38 @@
+.stage {
+  perspective: 1800px;
+  width: var(--col);
+  margin-bottom: var(--gap-label);
+}
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/2;
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow:
+    calc(var(--shx, 0) * 1px) calc(var(--shy, 20) * 1px) 48px -16px rgba(58, 48, 32, 0.4),
+    calc(var(--shx, 0) * 0.3px) calc(var(--shy, 20) * 0.3px) 11px -4px rgba(58, 48, 32, 0.2),
+    0 0 0 1px rgba(34, 32, 28, 0.1);
+}
+.face.back {
+  transform: rotateY(180deg);
+}
+/* The artwork blends its paper grain with mix-blend-mode. Inside a 3D
+     transform that blend escapes to the page backdrop unless the svg itself
+     isolates, which washes the lower half of the card to the wall colour. */
+.face svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+}

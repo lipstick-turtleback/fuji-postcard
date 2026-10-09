@@ -5,457 +5,905 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Light on Paper — Hanga Studio · Mount Fuji at dawn</title>
 <style>
-  :root{
-    /* one measure for everything, and a rhythm that tightens as it
+:root {
+  /* one measure for everything, and a rhythm that tightens as it
        approaches the work: room -> header -> object -> label -> controls */
-    --col:min(940px,100%);
-    --gap-room:clamp(30px,4.6vw,58px);
-    --gap-hang:clamp(24px,3.4vw,44px);
-    --gap-label:clamp(18px,2.4vw,30px);
-    --gap-ctl:clamp(14px,1.8vw,22px);
-    --wall:#ece8df;
-    --ink:#22201c;
-    --ink-soft:#4d483f;
-    --muted:#8b8478;
-    --hair:rgba(34,32,28,.17);
-    --hair-soft:rgba(34,32,28,.09);
-    --vermilion:#b8402c;
-    --amber:#a9762c;
-    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
-    --jp:'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Songti SC',serif;
-  }
-  *{box-sizing:border-box;}
-  html,body{height:100%;}
-  body{
-    margin:0;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:clamp(20px,3.4vw,44px) clamp(16px,4vw,48px) clamp(26px,3.4vw,48px);
-    background:#e7e2d9;
-    font-family:var(--serif);
-    color:var(--ink);
-    -webkit-font-smoothing:antialiased;
-  }
-  /* the gallery wall. every layer is fixed to the viewport, so the surface
+  --col: min(940px, 100%);
+  --gap-room: clamp(30px, 4.6vw, 58px);
+  --gap-hang: clamp(24px, 3.4vw, 44px);
+  --gap-label: clamp(18px, 2.4vw, 30px);
+  --gap-ctl: clamp(14px, 1.8vw, 22px);
+  --wall: #ece8df;
+  --ink: #22201c;
+  --ink-soft: #4d483f;
+  --muted: #8b8478;
+  --hair: rgba(34, 32, 28, 0.17);
+  --hair-soft: rgba(34, 32, 28, 0.09);
+  --vermilion: #b8402c;
+  --amber: #a9762c;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --jp: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Songti SC", serif;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(20px, 3.4vw, 44px) clamp(16px, 4vw, 48px) clamp(26px, 3.4vw, 48px);
+  background: #e7e2d9;
+  font-family: var(--serif);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+/* the gallery wall. every layer is fixed to the viewport, so the surface
      never restarts or seams however far the page is scrolled. */
-  .bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
-  .bg span{position:absolute;inset:0;display:block;}
-  .bg-wall{background:radial-gradient(122% 80% at 50% -8%, #f7f4ed 0%, #ece8df 42%, #ded8cc 78%, #d2cbbe 100%);}
-  .bg-pool{
-    inset:auto;
-    left:var(--poolx,50%); top:var(--pooly,42%);
-    width:min(1500px,170vw); aspect-ratio:1.5/1;
-    transform:translate(-50%,-50%);
-    background:radial-gradient(closest-side, rgba(255,249,235,.9), rgba(255,249,235,.3) 46%, rgba(255,249,235,0) 74%);
-  }
-  /* seigaiha — 青海波, the overlapping wave scale.
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.bg span {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.bg-wall {
+  background: radial-gradient(
+    122% 80% at 50% -8%,
+    #f7f4ed 0%,
+    #ece8df 42%,
+    #ded8cc 78%,
+    #d2cbbe 100%
+  );
+}
+.bg-pool {
+  inset: auto;
+  left: var(--poolx, 50%);
+  top: var(--pooly, 42%);
+  width: min(1500px, 170vw);
+  aspect-ratio: 1.5/1;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 249, 235, 0.9),
+    rgba(255, 249, 235, 0.3) 46%,
+    rgba(255, 249, 235, 0) 74%
+  );
+}
+/* seigaiha — 青海波, the overlapping wave scale.
      The tile is 64×64 and the fan centres sit on a centred rectangular
      lattice: (0,0) (64,0) (0,64) (64,64) and (32,32). Rows fall every
      32px and each row is offset by half a column, so every arc cut by one
      edge of the tile is finished by its twin on the opposite edge. The
      repeat is then invisible at any zoom — no seam, no step, no half-fan.
      Kept far below the ink so it reads as texture, not decoration. */
-  .bg-seigaiha{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='%233a3226' stroke-opacity='.075' stroke-width='1'%3E%3Ccircle cx='0' cy='0' r='30'/%3E%3Ccircle cx='0' cy='0' r='22.5'/%3E%3Ccircle cx='0' cy='0' r='15'/%3E%3Ccircle cx='0' cy='0' r='7.5'/%3E%3Ccircle cx='64' cy='0' r='30'/%3E%3Ccircle cx='64' cy='0' r='22.5'/%3E%3Ccircle cx='64' cy='0' r='15'/%3E%3Ccircle cx='64' cy='0' r='7.5'/%3E%3Ccircle cx='0' cy='64' r='30'/%3E%3Ccircle cx='0' cy='64' r='22.5'/%3E%3Ccircle cx='0' cy='64' r='15'/%3E%3Ccircle cx='0' cy='64' r='7.5'/%3E%3Ccircle cx='64' cy='64' r='30'/%3E%3Ccircle cx='64' cy='64' r='22.5'/%3E%3Ccircle cx='64' cy='64' r='15'/%3E%3Ccircle cx='64' cy='64' r='7.5'/%3E%3Ccircle cx='32' cy='32' r='30'/%3E%3Ccircle cx='32' cy='32' r='22.5'/%3E%3Ccircle cx='32' cy='32' r='15'/%3E%3Ccircle cx='32' cy='32' r='7.5'/%3E%3C/g%3E%3C/svg%3E");
-    background-size:64px 64px;
-    background-repeat:repeat;
-    -webkit-mask-image:radial-gradient(115% 88% at 50% 44%, #000 0%, rgba(0,0,0,.55) 52%, transparent 86%);
-            mask-image:radial-gradient(115% 88% at 50% 44%, #000 0%, rgba(0,0,0,.55) 52%, transparent 86%);
-  }
-  /* paper fibre. the turbulence region is pinned to exactly the tile box
+.bg-seigaiha {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='%233a3226' stroke-opacity='.075' stroke-width='1'%3E%3Ccircle cx='0' cy='0' r='30'/%3E%3Ccircle cx='0' cy='0' r='22.5'/%3E%3Ccircle cx='0' cy='0' r='15'/%3E%3Ccircle cx='0' cy='0' r='7.5'/%3E%3Ccircle cx='64' cy='0' r='30'/%3E%3Ccircle cx='64' cy='0' r='22.5'/%3E%3Ccircle cx='64' cy='0' r='15'/%3E%3Ccircle cx='64' cy='0' r='7.5'/%3E%3Ccircle cx='0' cy='64' r='30'/%3E%3Ccircle cx='0' cy='64' r='22.5'/%3E%3Ccircle cx='0' cy='64' r='15'/%3E%3Ccircle cx='0' cy='64' r='7.5'/%3E%3Ccircle cx='64' cy='64' r='30'/%3E%3Ccircle cx='64' cy='64' r='22.5'/%3E%3Ccircle cx='64' cy='64' r='15'/%3E%3Ccircle cx='64' cy='64' r='7.5'/%3E%3Ccircle cx='32' cy='32' r='30'/%3E%3Ccircle cx='32' cy='32' r='22.5'/%3E%3Ccircle cx='32' cy='32' r='15'/%3E%3Ccircle cx='32' cy='32' r='7.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 64px 64px;
+  background-repeat: repeat;
+  -webkit-mask-image: radial-gradient(
+    115% 88% at 50% 44%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 52%,
+    transparent 86%
+  );
+  mask-image: radial-gradient(
+    115% 88% at 50% 44%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 52%,
+    transparent 86%
+  );
+}
+/* paper fibre. the turbulence region is pinned to exactly the tile box
      (filterUnits=userSpaceOnUse) and stitched, so the noise wraps across
      all four edges instead of being cropped out of a larger field. */
-  .bg-grain{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='180' height='180'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch' seed='11'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
-    background-size:180px 180px;
-    opacity:.13;
-    mix-blend-mode:multiply;
-  }
-  .bg-vig{background:radial-gradient(132% 102% at 50% 38%, transparent 50%, rgba(78,66,48,.17) 100%);}
-  .topbar,.masthead,.stage,.plinth,.footer{position:relative;z-index:1;}
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='180' height='180'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch' seed='11'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.13;
+  mix-blend-mode: multiply;
+}
+.bg-vig {
+  background: radial-gradient(132% 102% at 50% 38%, transparent 50%, rgba(78, 66, 48, 0.17) 100%);
+}
+.topbar,
+.masthead,
+.stage,
+.plinth,
+.footer {
+  position: relative;
+  z-index: 1;
+}
 
+.topbar {
+  width: var(--col);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: var(--gap-room);
+  font-size: 9.5px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.topbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ink-soft);
+  letter-spacing: 0.26em;
+}
+.topbar .mk {
+  font-family: var(--jp);
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: 1;
+  color: #fdf9f1;
+  background: var(--vermilion);
+  padding: 4px 6px 3px;
+  border-radius: 3px;
+}
 
+/* ---------- masthead ---------- */
+.masthead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: var(--gap-hang);
+  text-align: center;
+  max-width: 100%;
+}
+.eyebrow {
+  margin: 0;
+  font-size: 9.5px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+h1 {
+  margin: 0;
+  font-size: clamp(21px, 3.2vw, 33px);
+  font-weight: 400;
+  letter-spacing: 0.015em;
+  line-height: 1.18;
+  color: var(--ink);
+}
+.sub {
+  margin: 5px 0 0;
+  font-size: clamp(10px, 1.4vw, 12px);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sub .jp {
+  font-family: var(--jp);
+  letter-spacing: 0.26em;
+}
+.masthead .rule {
+  width: 46px;
+  height: 1px;
+  background: var(--hair);
+  margin: 5px auto 0;
+}
 
-  .topbar{
-    width:var(--col);
-    display:flex;align-items:baseline;justify-content:space-between;gap:14px;
-    margin-bottom:var(--gap-room);
-    font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);
-  }
-  .topbar .brand{display:flex;align-items:center;gap:9px;color:var(--ink-soft);letter-spacing:.26em;}
-  .topbar .mk{
-    font-family:var(--jp);font-size:13px;letter-spacing:0;line-height:1;
-    color:#fdf9f1;background:var(--vermilion);
-    padding:4px 6px 3px;border-radius:3px;
-  }
-
-  /* ---------- masthead ---------- */
-  .masthead{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-    margin-bottom:var(--gap-hang);
-    text-align:center;
-    max-width:100%;
-  }
-  .eyebrow{
-    margin:0;
-    font-size:9.5px;letter-spacing:.36em;text-transform:uppercase;color:var(--muted);
-  }
-  h1{
-    margin:0;
-    font-size:clamp(21px,3.2vw,33px);
-    font-weight:400;
-    letter-spacing:.015em;
-    line-height:1.18;
-    color:var(--ink);
-  }
-  .sub{
-    margin:5px 0 0;
-    font-size:clamp(10px,1.4vw,12px);
-    letter-spacing:.17em;
-    text-transform:uppercase;
-    color:var(--muted);
-  }
-  .sub .jp{font-family:var(--jp);letter-spacing:.26em;}
-  .masthead .rule{width:46px;height:1px;background:var(--hair);margin:5px auto 0;}
-
-  .stage{
-    perspective:1800px;
-    width:var(--col);
-    margin-bottom:var(--gap-label);
-  }
-  .card{
-    position:relative;
-    width:100%;
-    aspect-ratio:3/2;
-    transform-style:preserve-3d;
-    will-change:transform;
-    cursor:pointer;
-    border-radius:6px;
-  }
-  .face{
-    position:absolute;
-    inset:0;
-    backface-visibility:hidden;
-    -webkit-backface-visibility:hidden;
-    border-radius:6px;
-    overflow:hidden;
-    box-shadow:
-      calc(var(--shx,0) * 1px) calc(var(--shy,20) * 1px) 48px -16px rgba(58,48,32,.40),
-      calc(var(--shx,0) * .3px) calc(var(--shy,20) * .3px) 11px -4px rgba(58,48,32,.20),
-      0 0 0 1px rgba(34,32,28,.10);
-  }
-  .face.back{transform:rotateY(180deg);}
-  /* The artwork blends its paper grain with mix-blend-mode. Inside a 3D
+.stage {
+  perspective: 1800px;
+  width: var(--col);
+  margin-bottom: var(--gap-label);
+}
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/2;
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow:
+    calc(var(--shx, 0) * 1px) calc(var(--shy, 20) * 1px) 48px -16px rgba(58, 48, 32, 0.4),
+    calc(var(--shx, 0) * 0.3px) calc(var(--shy, 20) * 0.3px) 11px -4px rgba(58, 48, 32, 0.2),
+    0 0 0 1px rgba(34, 32, 28, 0.1);
+}
+.face.back {
+  transform: rotateY(180deg);
+}
+/* The artwork blends its paper grain with mix-blend-mode. Inside a 3D
      transform that blend escapes to the page backdrop unless the svg itself
      isolates, which washes the lower half of the card to the wall colour. */
-  .face svg{display:block;width:100%;height:100%;isolation:isolate;}
+.face svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+}
 
-  /* ---------- control console ---------- */
-  /* ---------- plinth: wall label and controls ---------- */
-  .plinth{
-    width:var(--col);
-    display:flex;
-    flex-direction:column;
-    gap:var(--gap-ctl);
-    padding-top:clamp(14px,1.8vw,20px);
-    border-top:1px solid var(--hair);
-  }
-  .label{margin:0;max-width:46ch;}
-  .label .lt{margin:0 0 6px;font-size:15px;line-height:1.4;color:var(--ink);}
-  .label .la{margin:0 0 11px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
-  .label .lm{margin:0;font-size:12.5px;line-height:1.65;font-style:italic;color:var(--ink-soft);}
-  .label .ld{
-    margin:13px 0 0;
-    display:flex;gap:20px;
-    font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
-  }
+/* ---------- control console ---------- */
+/* ---------- plinth: wall label and controls ---------- */
+.plinth {
+  width: var(--col);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-ctl);
+  padding-top: clamp(14px, 1.8vw, 20px);
+  border-top: 1px solid var(--hair);
+}
+.label {
+  margin: 0;
+  max-width: 46ch;
+}
+.label .lt {
+  margin: 0 0 6px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.label .la {
+  margin: 0 0 11px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.label .lm {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.65;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.label .ld {
+  margin: 13px 0 0;
+  display: flex;
+  gap: 20px;
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 
-  .console{
-    display:flex;
-    align-items:center;
-    gap:clamp(10px,1.6vw,18px);
-    flex-wrap:wrap;
-    justify-content:flex-end;
-    padding:0;
-    margin:0;
-    background:none;border:0;box-shadow:none;
-  }
-  button{
-    font:inherit;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-size:10.5px;
-    letter-spacing:.17em;
-    text-transform:uppercase;
-    color:var(--ink-soft);
-    background:transparent;
-    border:0;
-    border-bottom:1px solid var(--hair-soft);
-    border-radius:0;
-    padding:9px 4px;
-    cursor:pointer;
-    transition:color .22s ease, border-color .22s ease;
-  }
-  button:hover{color:var(--ink);border-bottom-color:var(--ink);}
-  button:focus-visible{outline:1px solid var(--ink);outline-offset:4px;}
-  .ico{display:none;}
-  .dot{
-    width:6px;height:6px;flex:none;border-radius:50%;
-    background:var(--vermilion);
-    transition:background .25s ease, box-shadow .25s ease;
-  }
-  button[aria-pressed="false"] .dot{
-    background:transparent;
-    box-shadow:inset 0 0 0 1px var(--muted);
-  }
-  button[aria-pressed="false"]{color:var(--muted);}
+.console {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.6vw, 18px);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+button {
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--hair-soft);
+  border-radius: 0;
+  padding: 9px 4px;
+  cursor: pointer;
+  transition:
+    color 0.22s ease,
+    border-color 0.22s ease;
+}
+button:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+button:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 4px;
+}
+.ico {
+  display: none;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--vermilion);
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+button[aria-pressed="false"] .dot {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--muted);
+}
+button[aria-pressed="false"] {
+  color: var(--muted);
+}
 
-  kbd{
-    font-family:var(--serif);
-    font-size:9px;
-    letter-spacing:.06em;
-    padding:1px 5px;
-    border-radius:3px;
-    border:1px solid var(--hair);
-    background:transparent;
-    color:var(--muted);
-  }
+kbd {
+  font-family: var(--serif);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--hair);
+  background: transparent;
+  color: var(--muted);
+}
 
-  .footer{
-    width:var(--col);
-    margin-top:var(--gap-room);
-    display:flex;align-items:center;justify-content:center;gap:16px;
-    font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);
-  }
-  .footer .jp{font-family:var(--jp);letter-spacing:.24em;}
-  .footer .pip{width:2px;height:2px;border-radius:50%;background:var(--hair);}
+.footer {
+  width: var(--col);
+  margin-top: var(--gap-room);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.footer .jp {
+  font-family: var(--jp);
+  letter-spacing: 0.24em;
+}
+.footer .pip {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--hair);
+}
 
-  /* ---------- sound control ---------- */
-  .sound{
-    display:flex;align-items:center;gap:clamp(10px,1.4vw,14px);
-    padding:0;margin:0;
-    background:none;border:0;
-  }
-  .sound #play{
-    border:0;background:transparent;
-    padding:4px 2px;box-shadow:none;
-    display:flex;align-items:center;gap:10px;
-  }
-  .sound #play:hover{background:transparent;color:var(--ink-soft);border-bottom:none;}
-  .sound #play .glyph{
-    width:27px;height:27px;flex:none;
-    display:grid;place-items:center;
-    border-radius:50%;
-    border:1px solid var(--hair);
-    background:transparent;
-    font-size:9px;letter-spacing:0;
-    color:var(--ink-soft);
-    transition:background .3s ease, border-color .3s ease, color .3s ease;
-  }
-  .sound #play:hover .glyph{border-color:var(--ink);}
-  .sound.playing #play .glyph{
-    background:var(--vermilion);
-    border-color:var(--vermilion);
-    color:#fdf9f1;
-  }
-  /* the meter takes no room until there is something to measure */
-  .eq{
-    display:flex;align-items:flex-end;gap:3px;height:16px;
-    width:0;overflow:hidden;opacity:0;
-    transition:width .45s cubic-bezier(.4,0,.2,1), opacity .35s ease;
-  }
-  .eq i{
-    display:block;width:2px;height:9%;
-    background:rgba(34,32,28,.22);
-    border-radius:1px;
-    transition:height .09s linear, background .3s ease;
-  }
-  .sound.playing .eq{width:22px;opacity:1;}
-  .sound.playing .eq i{background:var(--vermilion);}
-  .sound input[type=range]{
-    -webkit-appearance:none;appearance:none;
-    width:84px;min-width:60px;height:18px;margin:0 0 0 2px;
-    background:transparent;cursor:pointer;
-  }
-  .sound input[type=range]::-webkit-slider-runnable-track{
-    height:1px;
-    background:linear-gradient(90deg, var(--ink) 0 var(--fill,55%), var(--hair) var(--fill,55%) 100%);
-  }
-  .sound input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;
-    width:9px;height:9px;margin-top:-4px;border-radius:50%;
-    background:var(--ink);border:0;
-    transition:transform .15s ease;
-  }
-  .sound input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.25);}
-  .sound input[type=range]::-moz-range-track{height:1px;background:var(--hair);}
-  .sound input[type=range]::-moz-range-progress{height:1px;background:var(--ink);}
-  .sound input[type=range]::-moz-range-thumb{width:9px;height:9px;border:0;border-radius:50%;background:var(--ink);}
-  .sound input[type=range]:focus-visible{outline:1px solid var(--ink);outline-offset:4px;}
+/* ---------- sound control ---------- */
+.sound {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 14px);
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: 0;
+}
+.sound #play {
+  border: 0;
+  background: transparent;
+  padding: 4px 2px;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sound #play:hover {
+  background: transparent;
+  color: var(--ink-soft);
+  border-bottom: none;
+}
+.sound #play .glyph {
+  width: 27px;
+  height: 27px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--hair);
+  background: transparent;
+  font-size: 9px;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+.sound #play:hover .glyph {
+  border-color: var(--ink);
+}
+.sound.playing #play .glyph {
+  background: var(--vermilion);
+  border-color: var(--vermilion);
+  color: #fdf9f1;
+}
+/* the meter takes no room until there is something to measure */
+.eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease;
+}
+.eq i {
+  display: block;
+  width: 2px;
+  height: 9%;
+  background: rgba(34, 32, 28, 0.22);
+  border-radius: 1px;
+  transition:
+    height 0.09s linear,
+    background 0.3s ease;
+}
+.sound.playing .eq {
+  width: 22px;
+  opacity: 1;
+}
+.sound.playing .eq i {
+  background: var(--vermilion);
+}
+.sound input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 84px;
+  min-width: 60px;
+  height: 18px;
+  margin: 0 0 0 2px;
+  background: transparent;
+  cursor: pointer;
+}
+.sound input[type="range"]::-webkit-slider-runnable-track {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--ink) 0 var(--fill, 55%),
+    var(--hair) var(--fill, 55%) 100%
+  );
+}
+.sound input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 9px;
+  height: 9px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 0;
+  transition: transform 0.15s ease;
+}
+.sound input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+.sound input[type="range"]::-moz-range-track {
+  height: 1px;
+  background: var(--hair);
+}
+.sound input[type="range"]::-moz-range-progress {
+  height: 1px;
+  background: var(--ink);
+}
+.sound input[type="range"]::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.sound input[type="range"]:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 4px;
+}
 
-  /* ---------- holographic lamination ----------
+/* ---------- holographic lamination ----------
      No keyframes here: every value below is written each frame by the
      lighting model in the script, from the card's real surface normal. */
-  .face{ isolation:isolate; }
-  .card{ --sx:50%; --sy:50%; --band:50%; --sheen:0deg; --spec:0; --foil:1; }
-  .foil{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    opacity:var(--foil);
-    transition:opacity .5s ease;
-  }
-  .foil > span{position:absolute;inset:0;display:block;}
-  .foil-holo{
-    background:conic-gradient(from 210deg at var(--sx) var(--sy),
-      #ff6b81,#ffd36b,#9cff6b,#6bd8ff,#b06bff,#ff6b81);
-    mix-blend-mode:color-dodge;
-    opacity:calc(var(--spec) * .32);
-    -webkit-mask-image:radial-gradient(circle at var(--sx) var(--sy),
-      #000 0 11%, rgba(0,0,0,.55) 27%, transparent 51%);
-            mask-image:radial-gradient(circle at var(--sx) var(--sy),
-      #000 0 11%, rgba(0,0,0,.55) 27%, transparent 51%);
-  }
-  /* two glitter beds, each generated from a turbulence field pinned to its
+.face {
+  isolation: isolate;
+}
+.card {
+  --sx: 50%;
+  --sy: 50%;
+  --band: 50%;
+  --sheen: 0deg;
+  --spec: 0;
+  --foil: 1;
+}
+.foil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--foil);
+  transition: opacity 0.5s ease;
+}
+.foil > span {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.foil-holo {
+  background: conic-gradient(
+    from 210deg at var(--sx) var(--sy),
+    #ff6b81,
+    #ffd36b,
+    #9cff6b,
+    #6bd8ff,
+    #b06bff,
+    #ff6b81
+  );
+  mix-blend-mode: color-dodge;
+  opacity: calc(var(--spec) * 0.32);
+  -webkit-mask-image: radial-gradient(
+    circle at var(--sx) var(--sy),
+    #000 0 11%,
+    rgba(0, 0, 0, 0.55) 27%,
+    transparent 51%
+  );
+  mask-image: radial-gradient(
+    circle at var(--sx) var(--sy),
+    #000 0 11%,
+    rgba(0, 0, 0, 0.55) 27%,
+    transparent 51%
+  );
+}
+/* two glitter beds, each generated from a turbulence field pinned to its
      own tile box and stitched, so the sparkle never lines up with a seam */
-  .foil-sparkle{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='200' height='200'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch' seed='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
-    background-size:200px 200px;
-  }
-  .foil-sparkle2{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='150' height='150'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='2' stitchTiles='stitch' seed='29'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23g)'/%3E%3C/svg%3E");
-    background-size:150px 150px;
-  }
-  .foil-sparkle,
-  .foil-sparkle2{
-    background-repeat:repeat;
-    filter:contrast(700%) brightness(230%);
-    mix-blend-mode:color-dodge;
-    opacity:calc(var(--spec) * .85);
-    -webkit-mask-image:radial-gradient(circle at var(--sx) var(--sy),
-      #000 0 6%, rgba(0,0,0,.45) 19%, transparent 37%);
-            mask-image:radial-gradient(circle at var(--sx) var(--sy),
-      #000 0 6%, rgba(0,0,0,.45) 19%, transparent 37%);
-  }
-  .foil-sheen{
-    background:linear-gradient(var(--sheen),
-      transparent calc(var(--band) - 30%),
-      rgba(255,255,255,.17) var(--band),
-      transparent calc(var(--band) + 30%));
-    filter:blur(9px);
-    mix-blend-mode:screen;
-    opacity:calc(.06 + var(--spec) * .16);
-  }
-  .foil-glint{
-    background:linear-gradient(var(--sheen),
-      transparent calc(var(--band) - 2.6%),
-      rgba(255,255,255,.42) var(--band),
-      transparent calc(var(--band) + 2.6%));
-    filter:blur(5px);
-    mix-blend-mode:overlay;
-    opacity:calc(var(--spec) * var(--spec) * .30);
-  }
-  .foil-spot{
-    background:radial-gradient(circle at var(--sx) var(--sy),
-      rgba(255,255,255,.5), rgba(255,255,255,.1) 15%, transparent 34%);
-    mix-blend-mode:soft-light;
-    opacity:calc(var(--spec) * .8);
-  }
+.foil-sparkle {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='200' height='200'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch' seed='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+.foil-sparkle2 {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='150' height='150'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='2' stitchTiles='stitch' seed='29'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+}
+.foil-sparkle,
+.foil-sparkle2 {
+  background-repeat: repeat;
+  filter: contrast(700%) brightness(230%);
+  mix-blend-mode: color-dodge;
+  opacity: calc(var(--spec) * 0.85);
+  -webkit-mask-image: radial-gradient(
+    circle at var(--sx) var(--sy),
+    #000 0 6%,
+    rgba(0, 0, 0, 0.45) 19%,
+    transparent 37%
+  );
+  mask-image: radial-gradient(
+    circle at var(--sx) var(--sy),
+    #000 0 6%,
+    rgba(0, 0, 0, 0.45) 19%,
+    transparent 37%
+  );
+}
+.foil-sheen {
+  background: linear-gradient(
+    var(--sheen),
+    transparent calc(var(--band) - 30%),
+    rgba(255, 255, 255, 0.17) var(--band),
+    transparent calc(var(--band) + 30%)
+  );
+  filter: blur(9px);
+  mix-blend-mode: screen;
+  opacity: calc(0.06 + var(--spec) * 0.16);
+}
+.foil-glint {
+  background: linear-gradient(
+    var(--sheen),
+    transparent calc(var(--band) - 2.6%),
+    rgba(255, 255, 255, 0.42) var(--band),
+    transparent calc(var(--band) + 2.6%)
+  );
+  filter: blur(5px);
+  mix-blend-mode: overlay;
+  opacity: calc(var(--spec) * var(--spec) * 0.3);
+}
+.foil-spot {
+  background: radial-gradient(
+    circle at var(--sx) var(--sy),
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.1) 15%,
+    transparent 34%
+  );
+  mix-blend-mode: soft-light;
+  opacity: calc(var(--spec) * 0.8);
+}
 
-  @media (max-width:700px){
-    .console{justify-content:flex-start;}
+@media (max-width: 700px) {
+  .console {
+    justify-content: flex-start;
   }
-  @media (max-width:520px){
-    .topbar{font-size:8.5px;letter-spacing:.22em;}
-    button{font-size:9.5px;letter-spacing:.14em;padding:8px 3px;}
-    .sound input[type=range]{width:72px;}
-    .label .ld{gap:14px;}
-    .label .lt{font-size:14px;}
+}
+@media (max-width: 520px) {
+  .topbar {
+    font-size: 8.5px;
+    letter-spacing: 0.22em;
   }
-
-  /* ---------- SVG animations ---------- */
-  .cloud-a{animation:drift 46s ease-in-out infinite alternate;}
-  .cloud-b{animation:drift 62s ease-in-out infinite alternate-reverse;}
-  .cloud-c{animation:drift 38s ease-in-out infinite alternate;}
-  @keyframes drift{from{transform:translateX(-26px);}to{transform:translateX(26px);}}
-
-  .mist{animation:mist 24s ease-in-out infinite alternate;}
-  @keyframes mist{from{transform:translateX(-14px);opacity:.42;}to{transform:translateX(16px);opacity:.62;}}
-
-  .petal{
-    animation:petalFall linear infinite;
-    transform-box:fill-box;
-    transform-origin:center;
+  button {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    padding: 8px 3px;
   }
-  @keyframes petalFall{
-    0%{transform:translate(0,0) rotate(0deg);opacity:0;}
-    14%{opacity:.9;}
-    86%{opacity:.7;}
-    100%{transform:translate(-150px,430px) rotate(340deg);opacity:0;}
+  .sound input[type="range"] {
+    width: 72px;
   }
-  .p1{animation-duration:15s;animation-delay:-1s;}
-  .p2{animation-duration:19s;animation-delay:-6s;}
-  .p3{animation-duration:13s;animation-delay:-9s;}
-  .p4{animation-duration:21s;animation-delay:-3s;}
-  .p5{animation-duration:17s;animation-delay:-12s;}
-  .p6{animation-duration:23s;animation-delay:-8s;}
-  .p7{animation-duration:14s;animation-delay:-15s;}
-  .p8{animation-duration:20s;animation-delay:-5s;}
-  .p9{animation-duration:16s;animation-delay:-11s;}
-  .p10{animation-duration:25s;animation-delay:-2s;}
+  .label .ld {
+    gap: 14px;
+  }
+  .label .lt {
+    font-size: 14px;
+  }
+}
 
-  .ripple{animation:shimmer 17s ease-in-out infinite alternate;}
-  .ripple:nth-child(2n){animation-duration:23s;animation-delay:-6s;}
-  .ripple:nth-child(3n){animation-duration:29s;animation-delay:-11s;}
-  @keyframes shimmer{from{opacity:.22;}to{opacity:.46;}}
+/* ---------- SVG animations ---------- */
+.cloud-a {
+  animation: drift 46s ease-in-out infinite alternate;
+}
+.cloud-b {
+  animation: drift 62s ease-in-out infinite alternate-reverse;
+}
+.cloud-c {
+  animation: drift 38s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  from {
+    transform: translateX(-26px);
+  }
+  to {
+    transform: translateX(26px);
+  }
+}
 
-  /* the water: three slow drifts, deliberately unsynchronised. nothing here
+.mist {
+  animation: mist 24s ease-in-out infinite alternate;
+}
+@keyframes mist {
+  from {
+    transform: translateX(-14px);
+    opacity: 0.42;
+  }
+  to {
+    transform: translateX(16px);
+    opacity: 0.62;
+  }
+}
+
+.petal {
+  animation: petalFall linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes petalFall {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  14% {
+    opacity: 0.9;
+  }
+  86% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-150px, 430px) rotate(340deg);
+    opacity: 0;
+  }
+}
+.p1 {
+  animation-duration: 15s;
+  animation-delay: -1s;
+}
+.p2 {
+  animation-duration: 19s;
+  animation-delay: -6s;
+}
+.p3 {
+  animation-duration: 13s;
+  animation-delay: -9s;
+}
+.p4 {
+  animation-duration: 21s;
+  animation-delay: -3s;
+}
+.p5 {
+  animation-duration: 17s;
+  animation-delay: -12s;
+}
+.p6 {
+  animation-duration: 23s;
+  animation-delay: -8s;
+}
+.p7 {
+  animation-duration: 14s;
+  animation-delay: -15s;
+}
+.p8 {
+  animation-duration: 20s;
+  animation-delay: -5s;
+}
+.p9 {
+  animation-duration: 16s;
+  animation-delay: -11s;
+}
+.p10 {
+  animation-duration: 25s;
+  animation-delay: -2s;
+}
+
+.ripple {
+  animation: shimmer 17s ease-in-out infinite alternate;
+}
+.ripple:nth-child(2n) {
+  animation-duration: 23s;
+  animation-delay: -6s;
+}
+.ripple:nth-child(3n) {
+  animation-duration: 29s;
+  animation-delay: -11s;
+}
+@keyframes shimmer {
+  from {
+    opacity: 0.22;
+  }
+  to {
+    opacity: 0.46;
+  }
+}
+
+/* the water: three slow drifts, deliberately unsynchronised. nothing here
      moves fast enough to be followed with the eye — it is only ever noticed
      having moved, which is exactly how a lake at dawn behaves */
-  .water-a{animation:waterA 47s ease-in-out infinite alternate;}
-  .water-b{animation:waterB 61s ease-in-out infinite alternate;}
-  .refl{animation:reflBreathe 39s ease-in-out infinite alternate;}
-  @keyframes waterA{from{transform:translateX(-9px);}to{transform:translateX(11px);}}
-  @keyframes waterB{from{transform:translateX(8px);}to{transform:translateX(-10px);}}
-  @keyframes reflBreathe{from{opacity:.86;}to{opacity:1;}}
-
-  /* grass and reeds: a breath of wind, not a gale */
-  .sway-a,.sway-b{transform-box:fill-box;transform-origin:50% 100%;}
-  .sway-a{animation:sway 13s ease-in-out infinite alternate;}
-  .sway-b{animation:sway 17s ease-in-out infinite alternate-reverse;}
-  @keyframes sway{from{transform:rotate(-.5deg);}to{transform:rotate(.6deg);}}
-
-  .boat{animation:bob 6.5s ease-in-out infinite alternate;}
-  @keyframes bob{from{transform:translate(0,0);}to{transform:translate(6px,-3px);}}
-
-  .rays{animation:spin 150s linear infinite;transform-origin:620px 206px;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-
-  .glow{animation:pulse 9s ease-in-out infinite alternate;}
-  @keyframes pulse{from{opacity:.34;}to{opacity:.6;}}
-
-  .bird{--bo:.72;animation:glide 34s cubic-bezier(.42,0,.58,1) infinite;}
-  .bird.b2{--bo:.5;animation-duration:46s;animation-delay:-16s;}
-  .bird.b3{--bo:.6;animation-duration:39s;animation-delay:-28s;}
-  /* ~4s of fade at each end, so the loop point is never visible */
-  @keyframes glide{
-    0%{transform:translate(0,0);opacity:0;}
-    12%{opacity:var(--bo);}
-    88%{opacity:var(--bo);}
-    100%{transform:translate(168px,-38px);opacity:0;}
+.water-a {
+  animation: waterA 47s ease-in-out infinite alternate;
+}
+.water-b {
+  animation: waterB 61s ease-in-out infinite alternate;
+}
+.refl {
+  animation: reflBreathe 39s ease-in-out infinite alternate;
+}
+@keyframes waterA {
+  from {
+    transform: translateX(-9px);
   }
-
-  @media (prefers-reduced-motion:reduce){
-    .cloud-a,.cloud-b,.cloud-c,.mist,.petal,.ripple,.boat,.rays,.glow,.bird,
-    .water-a,.water-b,.refl,.sway-a,.sway-b{animation:none;}
-    .card{transition:none;}
+  to {
+    transform: translateX(11px);
   }
+}
+@keyframes waterB {
+  from {
+    transform: translateX(8px);
+  }
+  to {
+    transform: translateX(-10px);
+  }
+}
+@keyframes reflBreathe {
+  from {
+    opacity: 0.86;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* grass and reeds: a breath of wind, not a gale */
+.sway-a,
+.sway-b {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.sway-a {
+  animation: sway 13s ease-in-out infinite alternate;
+}
+.sway-b {
+  animation: sway 17s ease-in-out infinite alternate-reverse;
+}
+@keyframes sway {
+  from {
+    transform: rotate(-0.5deg);
+  }
+  to {
+    transform: rotate(0.6deg);
+  }
+}
+
+.boat {
+  animation: bob 6.5s ease-in-out infinite alternate;
+}
+@keyframes bob {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(6px, -3px);
+  }
+}
+
+.rays {
+  animation: spin 150s linear infinite;
+  transform-origin: 620px 206px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.glow {
+  animation: pulse 9s ease-in-out infinite alternate;
+}
+@keyframes pulse {
+  from {
+    opacity: 0.34;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+
+.bird {
+  --bo: 0.72;
+  animation: glide 34s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+.bird.b2 {
+  --bo: 0.5;
+  animation-duration: 46s;
+  animation-delay: -16s;
+}
+.bird.b3 {
+  --bo: 0.6;
+  animation-duration: 39s;
+  animation-delay: -28s;
+}
+/* ~4s of fade at each end, so the loop point is never visible */
+@keyframes glide {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--bo);
+  }
+  88% {
+    opacity: var(--bo);
+  }
+  100% {
+    transform: translate(168px, -38px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud-a,
+  .cloud-b,
+  .cloud-c,
+  .mist,
+  .petal,
+  .ripple,
+  .boat,
+  .rays,
+  .glow,
+  .bird,
+  .water-a,
+  .water-b,
+  .refl,
+  .sway-a,
+  .sway-b {
+    animation: none;
+  }
+  .card {
+    transition: none;
+  }
+}
 </style>
 </head>
 <body>
@@ -1405,11 +1853,11 @@
 </footer>
 
 <script>
-  const card = document.getElementById('card');
-  const goldShine = document.getElementById('goldShine');
-  const wmShine = document.getElementById('wmShine');
+const card = document.getElementById('card');
+const goldShine = document.getElementById('goldShine');
+const wmShine = document.getElementById('wmShine');
 
-  /* =============================================================
+/* =============================================================
      One lighting model drives everything.
 
      The card is a flat plane. The key light and the eye are fixed
@@ -1421,429 +1869,865 @@
      glitter, the sheen band, the hard glint, the light behind the
      page and the hot-stamped wordmark all read the same numbers.
      ============================================================= */
-  const DEG = Math.PI / 180;
-  const unit = v => { const m = Math.hypot(v[0], v[1], v[2]); return [v[0]/m, v[1]/m, v[2]/m]; };
+const DEG = Math.PI / 180;
+const unit = (v) => {
+  const m = Math.hypot(v[0], v[1], v[2]);
+  return [v[0] / m, v[1] / m, v[2] / m];
+};
 
-  const LAMP = [-0.30, -0.22, 0.85];   // point light, in card-widths, upper-left, in front
-  const EYE  = [0, 0, 2.60];           // the viewer
-  const HALF = unit(LAMP.map((v, i) => v / Math.hypot(...LAMP) + (i === 2 ? 1 : 0)));
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const LAMP = [-0.3, -0.22, 0.85]; // point light, in card-widths, upper-left, in front
+const EYE = [0, 0, 2.6]; // the viewer
+const HALF = unit(LAMP.map((v, i) => v / Math.hypot(...LAMP) + (i === 2 ? 1 : 0)));
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  let rx = 0, ry = 0, tgtX = 0, tgtY = 0;
-  let hovering = false, hx = 0, hy = 0;
-  let turn = 0, turnFrom = 0, turnTo = 0, turnT0 = -1, flipped = false;
-  let cardW = 900, cardH = 600;
+let rx = 0,
+  ry = 0,
+  tgtX = 0,
+  tgtY = 0;
+let hovering = false,
+  hx = 0,
+  hy = 0;
+let turn = 0,
+  turnFrom = 0,
+  turnTo = 0,
+  turnT0 = -1,
+  flipped = false;
+let cardW = 900,
+  cardH = 600;
 
-  const measure = () => { const r = card.getBoundingClientRect(); cardW = r.width; cardH = r.height; };
-  measure();
-  addEventListener('resize', measure);
+const measure = () => {
+  const r = card.getBoundingClientRect();
+  cardW = r.width;
+  cardH = r.height;
+};
+measure();
+addEventListener('resize', measure);
 
-  const flip = () => {
-    flipped = !flipped;
-    turnFrom = turn;
-    turnTo = flipped ? 180 : 0;
-    turnT0 = performance.now();
-  };
-  card.addEventListener('click', flip);
-  document.getElementById('flip').addEventListener('click', flip);
-  document.addEventListener('keydown', e => {
-    if ((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey && !e.altKey) flip();
-  });
+const flip = () => {
+  flipped = !flipped;
+  turnFrom = turn;
+  turnTo = flipped ? 180 : 0;
+  turnT0 = performance.now();
+};
+card.addEventListener('click', flip);
+document.getElementById('flip').addEventListener('click', flip);
+document.addEventListener('keydown', (e) => {
+  if ((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey && !e.altKey) flip();
+});
 
-  card.addEventListener('pointermove', e => {
-    const r = card.getBoundingClientRect();
-    hovering = true;
-    hx = (e.clientX - r.left) / r.width - .5;
-    hy = (e.clientY - r.top) / r.height - .5;
-  });
-  card.addEventListener('pointerleave', () => { hovering = false; });
+card.addEventListener('pointermove', (e) => {
+  const r = card.getBoundingClientRect();
+  hovering = true;
+  hx = (e.clientX - r.left) / r.width - 0.5;
+  hy = (e.clientY - r.top) / r.height - 0.5;
+});
+card.addEventListener('pointerleave', () => {
+  hovering = false;
+});
 
-  // world -> card frame.  R = rotateY(ry) . rotateX(rx), so R^T = Rx(-b) . Ry(-a)
-  function toLocal(v, ca, sa, cb, sb) {
-    const x = ca * v[0] - sa * v[2];
-    const y = v[1], z = sa * v[0] + ca * v[2];
-    return [x, cb * y + sb * z, -sb * y + cb * z];
+// world -> card frame.  R = rotateY(ry) . rotateX(rx), so R^T = Rx(-b) . Ry(-a)
+function toLocal(v, ca, sa, cb, sb) {
+  const x = ca * v[0] - sa * v[2];
+  const y = v[1],
+    z = sa * v[0] + ca * v[2];
+  return [x, cb * y + sb * z, -sb * y + cb * z];
+}
+
+function frame(now) {
+  // pointer steers the card; when the pointer is away it keeps a slow 3-5 degree sway
+  if (hovering) {
+    tgtX = -hy * 12;
+    tgtY = hx * 16;
+  } else if (!reduce) {
+    const t = now / 1000;
+    tgtX = Math.sin(t * 0.29) * 3.2 + Math.sin(t * 0.13 + 1.2) * 1.6;
+    tgtY = Math.sin(t * 0.21 + 0.5) * 4.2 + Math.sin(t * 0.09) * 1.8;
+  } else {
+    tgtX = 0;
+    tgtY = 0;
   }
 
-  function frame(now) {
-    // pointer steers the card; when the pointer is away it keeps a slow 3-5 degree sway
-    if (hovering) {
-      tgtX = -hy * 12;
-      tgtY =  hx * 16;
-    } else if (!reduce) {
-      const t = now / 1000;
-      tgtX = Math.sin(t * .29) * 3.2 + Math.sin(t * .13 + 1.2) * 1.6;
-      tgtY = Math.sin(t * .21 + .5) * 4.2 + Math.sin(t * .09) * 1.8;
-    } else { tgtX = 0; tgtY = 0; }
+  rx += (tgtX - rx) * 0.055;
+  ry += (tgtY - ry) * 0.055;
 
-    rx += (tgtX - rx) * .055;
-    ry += (tgtY - ry) * .055;
-
-    if (turnT0 >= 0) {
-      const k = Math.min(1, (now - turnT0) / 900);
-      const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-      turn = turnFrom + (turnTo - turnFrom) * e;
-      if (k >= 1) turnT0 = -1;
-    }
-
-    const a = ry * DEG, b = rx * DEG;
-    const ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b);
-
-    // surface normal in world space
-    const nx = cb * sa, ny = -sb, nz = cb * ca;
-    const spec = Math.pow(Math.max(0, nx * HALF[0] + ny * HALF[1] + nz * HALF[2]), 14);
-
-    // mirror the lamp in the card plane, then sight it from the eye
-    const L = toLocal(LAMP, ca, sa, cb, sb);
-    const E = toLocal(EYE, ca, sa, cb, sb);
-    const t = -E[2] / (-L[2] - E[2]);
-    const gx = E[0] + t * (L[0] - E[0]);          // card spans -0.5 .. 0.5 wide
-    const gy = E[1] + t * (L[1] - E[1]);          // and -0.3333 .. 0.3333 tall
-    const sx = 50 + gx * 100;
-    const sy = 50 + gy * 150;
-
-    // the sheen band lies across the direction of travel
-    const dx = gx, dy = gy * 1.5;
-    const A = Math.atan2(dx, -dy);
-    const ax = Math.sin(A), ay = -Math.cos(A);
-    const len = Math.abs(cardW * ax) + Math.abs(cardH * ay);
-    const band = 50 + (((sx - 50) / 100 * cardW) * ax + ((sy - 50) / 100 * cardH) * ay) / len * 100;
-
-    card.style.setProperty('--sx', sx.toFixed(2) + '%');
-    card.style.setProperty('--sy', sy.toFixed(2) + '%');
-    card.style.setProperty('--band', band.toFixed(2) + '%');
-    card.style.setProperty('--sheen', (A / DEG + 360).toFixed(2) + 'deg');
-    card.style.setProperty('--spec', spec.toFixed(4));
-
-    document.body.style.setProperty('--poolx', (14 + sx * .72).toFixed(2) + '%');
-    document.body.style.setProperty('--pooly', (10 + sy * .60).toFixed(2) + '%');
-
-    // the cast shadow falls away from the lamp, so it drifts as the card turns
-    card.style.setProperty('--shx', (-gx * 26).toFixed(2));
-    card.style.setProperty('--shy', (18 - gy * 14).toFixed(2));
-
-    card.style.transform = `rotateY(${(turn + ry).toFixed(3)}deg) rotateX(${rx.toFixed(3)}deg)`;
-
-    // the hot-stamped wordmark catches the same highlight
-    goldShine.setAttribute('gradientTransform', `translate(${(sx / 100 * 900 - 187).toFixed(1)} 0)`);
-    wmShine.setAttribute('opacity', Math.min(.92, spec * 1.5).toFixed(3));
-
-    requestAnimationFrame(frame);
+  if (turnT0 >= 0) {
+    const k = Math.min(1, (now - turnT0) / 900);
+    const e = k < 0.5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2;
+    turn = turnFrom + (turnTo - turnFrom) * e;
+    if (k >= 1) turnT0 = -1;
   }
+
+  const a = ry * DEG,
+    b = rx * DEG;
+  const ca = Math.cos(a),
+    sa = Math.sin(a),
+    cb = Math.cos(b),
+    sb = Math.sin(b);
+
+  // surface normal in world space
+  const nx = cb * sa,
+    ny = -sb,
+    nz = cb * ca;
+  const spec = Math.max(0, nx * HALF[0] + ny * HALF[1] + nz * HALF[2]) ** 14;
+
+  // mirror the lamp in the card plane, then sight it from the eye
+  const L = toLocal(LAMP, ca, sa, cb, sb);
+  const E = toLocal(EYE, ca, sa, cb, sb);
+  const t = -E[2] / (-L[2] - E[2]);
+  const gx = E[0] + t * (L[0] - E[0]); // card spans -0.5 .. 0.5 wide
+  const gy = E[1] + t * (L[1] - E[1]); // and -0.3333 .. 0.3333 tall
+  const sx = 50 + gx * 100;
+  const sy = 50 + gy * 150;
+
+  // the sheen band lies across the direction of travel
+  const dx = gx,
+    dy = gy * 1.5;
+  const A = Math.atan2(dx, -dy);
+  const ax = Math.sin(A),
+    ay = -Math.cos(A);
+  const len = Math.abs(cardW * ax) + Math.abs(cardH * ay);
+  const band = 50 + ((((sx - 50) / 100) * cardW * ax + ((sy - 50) / 100) * cardH * ay) / len) * 100;
+
+  card.style.setProperty('--sx', `${sx.toFixed(2)}%`);
+  card.style.setProperty('--sy', `${sy.toFixed(2)}%`);
+  card.style.setProperty('--band', `${band.toFixed(2)}%`);
+  card.style.setProperty('--sheen', `${(A / DEG + 360).toFixed(2)}deg`);
+  card.style.setProperty('--spec', spec.toFixed(4));
+
+  document.body.style.setProperty('--poolx', `${(14 + sx * 0.72).toFixed(2)}%`);
+  document.body.style.setProperty('--pooly', `${(10 + sy * 0.6).toFixed(2)}%`);
+
+  // the cast shadow falls away from the lamp, so it drifts as the card turns
+  card.style.setProperty('--shx', (-gx * 26).toFixed(2));
+  card.style.setProperty('--shy', (18 - gy * 14).toFixed(2));
+
+  card.style.transform = `rotateY(${(turn + ry).toFixed(3)}deg) rotateX(${rx.toFixed(3)}deg)`;
+
+  // the hot-stamped wordmark catches the same highlight
+  goldShine.setAttribute(
+    'gradientTransform',
+    `translate(${((sx / 100) * 900 - 187).toFixed(1)} 0)`,
+  );
+  wmShine.setAttribute('opacity', Math.min(0.92, spec * 1.5).toFixed(3));
+
   requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
 
-  // holographic lamination toggle
-  const foilBtn = document.getElementById('foilBtn');
-  const foilLabel = document.getElementById('foilLabel');
-  let foilOn = true;
-  foilBtn.addEventListener('click', () => {
-    foilOn = !foilOn;
-    card.style.setProperty('--foil', foilOn ? '1' : '0');
-    foilLabel.textContent = foilOn ? 'Laminate on' : 'Laminate off';
-    foilBtn.setAttribute('aria-pressed', String(foilOn));
-  });
+// holographic lamination toggle
+const foilBtn = document.getElementById('foilBtn');
+const foilLabel = document.getElementById('foilLabel');
+let foilOn = true;
+foilBtn.addEventListener('click', () => {
+  foilOn = !foilOn;
+  card.style.setProperty('--foil', foilOn ? '1' : '0');
+  foilLabel.textContent = foilOn ? 'Laminate on' : 'Laminate off';
+  foilBtn.setAttribute('aria-pressed', String(foilOn));
+});
 
-  // export the front artwork as a standalone .svg
-  document.getElementById('dl').addEventListener('click', () => {
-    const src = card.querySelector('.face.front svg');
-    const clone = src.cloneNode(true);
-    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    clone.setAttribute('width', '1800');
-    clone.setAttribute('height', '1200');
-    const css = [...document.styleSheets].flatMap(s => {
-      try { return [...s.cssRules].map(r => r.cssText); } catch { return []; }
-    }).filter(t => /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.boat|\.rays|\.glow|\.bird|\.p\d/.test(t));
-    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-    style.textContent = css.join('\n');
-    clone.insertBefore(style, clone.firstChild);
-    const blob = new Blob(
-      ['<?xml version="1.0" encoding="UTF-8"?>\n' + clone.outerHTML],
-      { type: 'image/svg+xml;charset=utf-8' }
+// export the front artwork as a standalone .svg
+document.getElementById('dl').addEventListener('click', () => {
+  const src = card.querySelector('.face.front svg');
+  const clone = src.cloneNode(true);
+  clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  clone.setAttribute('width', '1800');
+  clone.setAttribute('height', '1200');
+  const css = [...document.styleSheets]
+    .flatMap((s) => {
+      try {
+        return [...s.cssRules].map((r) => r.cssText);
+      } catch {
+        return [];
+      }
+    })
+    .filter((t) =>
+      /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.boat|\.rays|\.glow|\.bird|\.p\d/.test(t),
     );
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'fuji-postcard-front.svg';
-    a.click();
-    URL.revokeObjectURL(a.href);
+  const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+  style.textContent = css.join('\n');
+  clone.insertBefore(style, clone.firstChild);
+  const blob = new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n${clone.outerHTML}`], {
+    type: 'image/svg+xml;charset=utf-8',
   });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fuji-postcard-front.svg';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
 </script>
 
 <script>
+// biome-ignore lint/complexity/useArrowFunction: the page inlines this as a plain function IIFE
+(function () {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  const wrap = document.getElementById('sound');
+  if (!AC) {
+    wrap.style.display = 'none';
+    return;
+  }
+
   /* =============================================================
-     Tiny soundtrack — synthesised live with the Web Audio API.
+     Soundtrack — synthesised live with the Web Audio API.
      No audio files, no network requests.
-     Hirajōshi (koto) scale on D · 8-bar loop · 66 bpm
-     plucked strings + lake ambience + a slow shakuhachi drone
+
+     D hirajōshi (D F G A C) · 66 bpm · 4/4 · 80 bars ≈ 4 min 50 s
+     through-composed, in ten eight-bar phrases:
+
+       A    statement        bars  1– 8   opens bare, drone in at 5
+       A'   answer           bars  9–16   same head, different tail
+       B    contrast         bars 17–24   upper register, wide, one bar of rest
+       A2   the tune again   bars 25–32   an octave down, darker touch
+       C    bloom            bars 33–40   fullest: brightest, most notes
+       B'   contrast again   bars 41–48   quieter, more silence
+       A3   coming apart     bars 49–56   the head, then only pieces of it
+       D    drifting         bars 57–64   stepwise, mid register
+       A4   recall           bars 65–72   the tune, answered from below
+       coda                 bars 73–80   thins to drone, ends on the open fifth
+
+     The coda's last note is a low A held against the drone's D, and bar 1
+     opens on the A an octave above it — so the seam back to the top is not
+     a seam. Nothing literally returns for 80 bars; each pass through the
+     score is shaded a few percent by a slow seeded drift, so the second
+     pass is the same piece and not the same recording.
+
+     Score notation: one string per bar, notes space-separated, each note
+     "step.beat.len.touch" — step indexes SCALE below (0 = D2 … 14 = C5),
+     beat and len are in half-beats (8 half-beats = one bar), touch is
+     p soft · m sung · f full. An empty string is a bar of nothing.
+
+     Three layers at most: one plucked line, the drone, the lake.
      ============================================================= */
-  (function () {
-    const AC = window.AudioContext || window.webkitAudioContext;
-    const wrap = document.getElementById('sound');
-    if (!AC) { wrap.style.display = 'none'; return; }
 
-    const BPM = 66, BEAT = 60 / BPM, TOTAL = 32;      // 8 bars of 4/4
-    const HZ = m => 440 * Math.pow(2, (m - 69) / 12); // midi -> Hz
+  const BPM = 66;
+  const BEAT = 60 / BPM;
+  const BAR = BEAT * 4;
+  const FLOOR = 0.0001;
+  const SEED = 19580524;
 
-    /* [midi, start beat, length in beats, gain] — D F G A C */
-    const MELODY = [
-      [57,0,1,.50],[55,1,.5,.42],[57,1.5,.5,.42],[62,2,1,.55],[60,3,1,.50],
-      [57,4,1.5,.50],[55,5.5,.5,.42],[53,6,1,.46],[55,7,1,.44],
-      [62,8,1,.55],[60,9,.5,.46],[57,9.5,.5,.44],[55,10,1,.46],[53,11,1,.42],
-      [50,12,2,.50],[53,15,.5,.34],[55,15.5,.5,.36],
-      [57,16,.5,.44],[60,16.5,.5,.48],[62,17,1,.55],[65,18,1,.50],[62,19,1,.48],
-      [60,20,1.5,.50],[57,21.5,.5,.42],[55,22,1,.46],[57,23,1,.44],
-      [53,24,1,.44],[55,25,.5,.38],[57,25.5,.5,.42],[60,26,1,.50],[57,27,1,.46],
-      [50,28,2,.50]
-    ];
-    const CHORDS = [[50,55,60],[53,57,62],[55,60,65],[50,57,62],
-                    [53,60,65],[55,60,67],[50,57,65],[50,55,60]];
+  const HZ = (m) => 440 * 2 ** ((m - 69) / 12);
+  const SCALE = [38, 41, 43, 45, 48, 50, 53, 55, 57, 60, 62, 65, 67, 69, 72];
+  const TOUCH = { p: 0.34, m: 0.46, f: 0.58 };
 
-    const EVENTS = [];
-    MELODY.forEach(([m, b, d, g]) => EVENTS.push({ b, m, d, g, k: 'mel' }));
-    CHORDS.forEach((ch, bar) => {
-      ch.forEach((m, j) => EVENTS.push({ b: bar * 4 + j * .16, m, d: 1.8, g: .15, k: 'arp' }));
-      if (bar % 2 === 1) EVENTS.push({ b: bar * 4 + 2, m: ch[0] - 12, d: 2.4, g: .12, k: 'arp' });
-    });
-    EVENTS.push({ b: 0, k: 'drone' }, { b: 16, k: 'drone' });
-    EVENTS.sort((a, b) => a.b - b.b);
-
-    let ctx, master, dry, verbSend, conv, echoSend, delayNode, noiseBuf, analyser;
-    let amb = [], timer = null, idx = 0, t0 = 0, playing = false, rafId = 0;
-
-    const btn   = document.getElementById('play');
-    const glyph = document.getElementById('playGlyph');
-    const label = document.getElementById('playLabel');
-    const vol   = document.getElementById('vol');
-    const bars  = [...document.querySelectorAll('#eq i')];
-    const data  = new Uint8Array(512);
-    const BANDS = [[2,9],[9,20],[20,44],[44,90],[90,170]];
-
-    function noiseBuffer(sec) {
-      const n = Math.floor(ctx.sampleRate * sec);
-      const buf = ctx.createBuffer(1, n, ctx.sampleRate);
-      const d = buf.getChannelData(0);
-      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
-      return buf;
-    }
-    /* procedural impulse response: exponentially decaying noise */
-    function impulse(sec, decay) {
-      const n = Math.floor(ctx.sampleRate * sec);
-      const buf = ctx.createBuffer(2, n, ctx.sampleRate);
-      for (let c = 0; c < 2; c++) {
-        const d = buf.getChannelData(c);
-        for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, decay);
-      }
-      return buf;
-    }
-
-    function build() {
-      ctx = new AC();
-      noiseBuf = noiseBuffer(2);
-
-      master = ctx.createGain(); master.gain.value = 0;
-      const comp = ctx.createDynamicsCompressor();
-      comp.threshold.value = -20; comp.ratio.value = 4;
-      analyser = ctx.createAnalyser(); analyser.fftSize = 1024;
-      master.connect(comp); comp.connect(analyser); analyser.connect(ctx.destination);
-
-      dry = ctx.createGain(); dry.gain.value = .85; dry.connect(master);
-
-      conv = ctx.createConvolver(); conv.buffer = impulse(2.6, 3.4);
-      verbSend = ctx.createGain(); verbSend.gain.value = .30;
-      verbSend.connect(conv); conv.connect(master);
-
-      echoSend = ctx.createGain(); echoSend.gain.value = .18;
-      delayNode = ctx.createDelay(1.5); delayNode.delayTime.value = BEAT * .75;
-      const damp = ctx.createBiquadFilter(); damp.type = 'lowpass'; damp.frequency.value = 1700;
-      const fb = ctx.createGain(); fb.gain.value = .33;
-      echoSend.connect(delayNode); delayNode.connect(damp);
-      damp.connect(fb); fb.connect(delayNode);
-      damp.connect(master);
-
-    }
-
-    function route(node) { node.connect(dry); node.connect(verbSend); node.connect(echoSend); }
-
-    /* koto / shamisen pluck: inharmonic partials, fast attack, filtered decay */
-    function pluck(freq, t, gain, dur, bright) {
-      const lp = ctx.createBiquadFilter();
-      lp.type = 'lowpass'; lp.Q.value = .6;
-      lp.frequency.setValueAtTime(Math.min(freq * 9 * bright, 11000), t);
-      lp.frequency.exponentialRampToValueAtTime(Math.max(freq * 1.8, 140), t + Math.min(dur, 1.5));
-
-      const env = ctx.createGain();
-      env.gain.setValueAtTime(.0001, t);
-      env.gain.exponentialRampToValueAtTime(gain, t + .008);
-      env.gain.exponentialRampToValueAtTime(.0001, t + dur);
-
-      let last;
-      [[1,'triangle',1],[2.004,'sine',.34],[3.01,'sine',.13],[4.98,'sine',.05]]
-        .forEach(([mult, type, lvl]) => {
-          const o = ctx.createOscillator();
-          o.type = type;
-          o.frequency.setValueAtTime(freq * mult * .995, t);      // slight bend up into pitch
-          o.frequency.exponentialRampToValueAtTime(freq * mult, t + .07);
-          const pg = ctx.createGain(); pg.gain.value = lvl;
-          o.connect(pg); pg.connect(env);
-          o.start(t); o.stop(t + dur + .05);
-          last = o;
-        });
-      env.connect(lp); route(lp);
-
-      const pick = ctx.createBufferSource(); pick.buffer = noiseBuf;
-      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
-      bp.frequency.value = Math.min(freq * 5.5, 5200); bp.Q.value = 1.1;
-      const pg = ctx.createGain();
-      pg.gain.setValueAtTime(gain * .5, t);
-      pg.gain.exponentialRampToValueAtTime(.0001, t + .045);
-      pick.connect(bp); bp.connect(pg); pg.connect(dry);
-      pick.start(t); pick.stop(t + .06);
-
-      last.onended = () => { env.disconnect(); lp.disconnect(); };
-    }
-
-    /* low bowed/breath swell under the phrases */
-    function drone(t) {
-      const len = BEAT * 14;
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(.0001, t);
-      g.gain.exponentialRampToValueAtTime(.05, t + 2.2);
-      g.gain.exponentialRampToValueAtTime(.0001, t + len);
-
-      const o = ctx.createOscillator();  o.type = 'sine';     o.frequency.value = HZ(38);
-      const o2 = ctx.createOscillator(); o2.type = 'triangle'; o2.frequency.value = HZ(50);
-      const g2 = ctx.createGain(); g2.gain.value = .22;
-      o.connect(g); o2.connect(g2); g2.connect(g);
-
-      const breath = ctx.createBufferSource(); breath.buffer = noiseBuf; breath.loop = true;
-      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
-      bp.frequency.value = HZ(50) * 2; bp.Q.value = 7;
-      const bg = ctx.createGain(); bg.gain.value = .014;
-      breath.connect(bp); bp.connect(bg); bg.connect(g);
-
-      const lfo = ctx.createOscillator(); lfo.frequency.value = 4.2;
-      const lg = ctx.createGain(); lg.gain.value = 1.1;
-      lfo.connect(lg); lg.connect(o.frequency); lg.connect(o2.frequency);
-
-      g.connect(dry); g.connect(verbSend);
-      [o, o2, lfo].forEach(x => { x.start(t); x.stop(t + len + .1); });
-      breath.start(t); breath.stop(t + len + .1);
-      o.onended = () => g.disconnect();
-    }
-
-    /* the lake: slow filtered noise with a drifting cutoff */
-    function ambience() {
-      const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
-      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 420; lp.Q.value = .4;
-      const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 90;
-      const g = ctx.createGain(); g.gain.value = .05;
-      const lfo = ctx.createOscillator(); lfo.frequency.value = .07;
-      const lg = ctx.createGain(); lg.gain.value = 170;
-      lfo.connect(lg); lg.connect(lp.frequency);
-      src.connect(lp); lp.connect(hp); hp.connect(g); g.connect(master);
-      src.start(); lfo.start();
-      amb.push(src, lfo);
-    }
-
-    function schedule() {
-      const horizon = ctx.currentTime + .5;
-      let guard = 0;
-      while (guard++ < 600) {
-        const ev = EVENTS[idx % EVENTS.length];
-        const t = t0 + (Math.floor(idx / EVENTS.length) * TOTAL + ev.b) * BEAT;
-        if (t >= horizon) break;
-        if (t > ctx.currentTime) {
-          if (ev.k === 'drone') drone(t);
-          else pluck(HZ(ev.m), t, ev.g,
-                     ev.d * BEAT * (ev.k === 'mel' ? 2.2 : 1.6),
-                     ev.k === 'mel' ? 1 : .72);
-        }
-        idx++;
-      }
-    }
-
-    const level = () => (vol.value / 100) * .55;
-
-    function start() {
-      if (!ctx) build();
-      if (ctx.state === 'suspended') ctx.resume();
-      idx = 0;
-      t0 = ctx.currentTime + .25;
-      ambience();
-      const t = ctx.currentTime;
-      master.gain.cancelScheduledValues(t);
-      master.gain.setValueAtTime(Math.max(master.gain.value, .0001), t);
-      master.gain.linearRampToValueAtTime(level(), t + 1.2);
-      timer = setInterval(schedule, 60);
-      schedule();
-      playing = true;
-      wrap.classList.add('playing');
-      btn.setAttribute('aria-pressed', 'true');
-      glyph.textContent = '❚❚';
-      label.textContent = 'Pause';
-      meter();
-    }
-
-    function stop() {
-      playing = false;
-      clearInterval(timer); timer = null;
-      cancelAnimationFrame(rafId);
-      const t = ctx.currentTime;
-      master.gain.cancelScheduledValues(t);
-      master.gain.setValueAtTime(master.gain.value, t);
-      master.gain.linearRampToValueAtTime(.0001, t + .5);
-      amb.forEach(n => { try { n.stop(t + .6); } catch (e) { /* already stopped */ } });
-      amb = [];
-      bars.forEach(b => b.style.height = '10%');
-      wrap.classList.remove('playing');
-      btn.setAttribute('aria-pressed', 'false');
-      glyph.textContent = '▶';
-      label.textContent = 'Play melody';
-    }
-
-    function meter() {
-      if (!playing) return;
-      analyser.getByteFrequencyData(data);
-      bars.forEach((el, i) => {
-        const [a, z] = BANDS[i];
-        let s = 0;
-        for (let k = a; k < z; k++) s += data[k];
-        const v = Math.min(1, (s / (z - a)) / 130);
-        el.style.height = (10 + v * 90).toFixed(1) + '%';
-      });
-      rafId = requestAnimationFrame(meter);
-    }
-
-    btn.addEventListener('click', () => playing ? stop() : start());
-    const paintVol = () => vol.style.setProperty('--fill', vol.value + '%');
-    paintVol();
-    vol.addEventListener('input', () => {
-      paintVol();
-      if (ctx && playing) {
-        master.gain.cancelScheduledValues(ctx.currentTime);
-        master.gain.setTargetAtTime(level(), ctx.currentTime, .05);
-      }
-    });
-    document.addEventListener('keydown', e => {
-      if ((e.key === 'm' || e.key === 'M') && !e.metaKey && !e.ctrlKey && !e.altKey) {
-        playing ? stop() : start();
-      }
-    });
-
-    /* Start on our own if the browser allows it; otherwise the very first
-       click or keypress anywhere on the page starts it. The play button is
-       left alone — it already starts the music itself. */
-    build();
-    const begin = () => { if (!playing) start(); };
-    ctx.resume().then(begin).catch(() => {});
-    const gesture = ev => {
-      if (ev.target && ev.target.closest && ev.target.closest('#play')) return;
-      removeEventListener('pointerdown', gesture);
-      removeEventListener('keydown', gesture);
-      ctx.resume().then(begin).catch(() => {});
+  /* mulberry32 — seeded, so the piece is reproducible rather than random */
+  function seeded(s) {
+    let a = s >>> 0;
+    return () => {
+      a = (a + 0x6d2b79f5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
-    addEventListener('pointerdown', gesture);
-    addEventListener('keydown', gesture);
-  })();
+  }
+
+  /* drone: [bar offsets within the phrase that start a swell], dl: its
+     length in beats. bright and level are the touch of that phrase. */
+  const PHRASES = [
+    {
+      bright: 1.0,
+      level: 0.92,
+      drone: [4],
+      dl: 16,
+      bars: [
+        '8.0.2.m 7.2.1.p 8.3.1.p 10.4.2.f 9.6.2.m',
+        '8.0.3.m 7.3.1.p 6.4.2.m 7.6.2.p',
+        '10.0.2.f 9.2.1.m 8.3.1.m 7.4.2.m 6.6.2.p',
+        '5.0.4.f 6.6.1.p 7.7.1.p',
+        '8.0.1.p 9.1.2.m 10.2.2.f 11.4.2.f 10.6.2.f',
+        '9.0.2.m 8.2.1.m 7.3.2.m 8.5.2.p',
+        '6.0.2.m 7.2.1.p 8.3.1.m 9.4.2.m 8.6.2.m',
+        '5.0.4.f 5.6.2.p',
+      ],
+    },
+    {
+      bright: 1.06,
+      level: 0.96,
+      drone: [0, 4],
+      dl: 14,
+      bars: [
+        '8.0.3.m 7.3.1.p 8.4.1.p 10.5.2.f 9.7.1.m',
+        '8.0.3.m 7.3.1.p 6.4.1.p 5.5.3.m',
+        '10.0.2.f 11.2.1.m 10.3.1.m 9.4.2.m 8.6.2.p',
+        '5.0.2.m 6.2.1.p 8.3.2.m 9.5.2.p',
+        '10.0.2.f 11.2.2.m 10.4.2.m 9.6.2.p',
+        '8.0.2.m 9.2.1.p 8.3.1.p 7.4.2.m 8.6.2.p',
+        '6.0.3.m 5.3.1.p 6.4.2.m 8.6.2.p',
+        '5.0.2.m 3.2.2.p 5.4.4.f',
+      ],
+    },
+    {
+      bright: 1.14,
+      level: 0.9,
+      drone: [0],
+      dl: 16,
+      bars: [
+        '11.0.3.f 10.3.1.p 9.4.3.m',
+        '9.0.4.m 10.4.2.p 9.6.2.p',
+        '11.0.2.f 10.2.2.m 9.4.2.m 8.6.2.p',
+        '',
+        '10.0.3.m 9.3.1.p 8.4.3.m 7.7.1.p',
+        '8.0.2.m 6.2.2.p 7.4.2.m 8.6.2.p',
+        '9.0.2.m 10.2.1.p 11.3.3.f 10.6.2.m',
+        '10.0.2.m 9.2.2.p 8.4.4.m',
+      ],
+    },
+    {
+      bright: 0.82,
+      level: 0.95,
+      drone: [4],
+      dl: 16,
+      bars: [
+        '3.0.2.m 2.2.1.p 3.3.1.p 5.4.2.f 4.6.2.m',
+        '3.0.3.m 2.3.1.p 3.4.2.m 2.6.2.p',
+        '5.0.2.f 4.2.1.m 3.3.1.m 2.4.2.m 3.6.2.p',
+        '5.0.4.f 3.4.2.p 4.6.1.p',
+        '3.0.1.p 4.1.2.m 5.3.2.f 6.5.2.f 5.7.2.f',
+        '4.0.2.m 3.2.1.m 2.3.2.m 3.5.2.p',
+        '2.0.2.m 3.2.1.p 4.3.1.m 5.4.2.m 4.6.2.m',
+        '5.0.4.f 3.6.2.p',
+      ],
+    },
+    {
+      bright: 1.22,
+      level: 1.02,
+      drone: [0, 4],
+      dl: 14,
+      bars: [
+        '8.0.1.p 9.1.1.p 10.2.2.f 11.4.1.f 12.5.1.f 11.6.1.m 10.7.1.m',
+        '10.0.2.f 9.2.1.m 8.3.1.m 9.4.2.m 10.6.2.m',
+        '11.0.2.f 10.2.1.m 11.3.1.m 12.4.3.f 11.7.1.m',
+        '10.0.3.f 9.3.1.m 8.4.2.m 6.6.2.p',
+        '8.0.2.m 10.2.1.p 9.3.1.p 8.4.2.m 7.6.1.p 6.7.1.p',
+        '5.0.2.f 6.2.1.p 8.3.1.m 9.4.1.m 10.5.1.m 9.6.2.m',
+        '8.0.1.p 9.1.1.p 10.2.1.m 11.3.1.m 12.4.2.f 11.6.2.m',
+        '10.0.2.f 8.2.1.m 7.3.1.p 8.4.4.m',
+      ],
+    },
+    {
+      bright: 1.02,
+      level: 0.84,
+      drone: [0],
+      dl: 16,
+      bars: [
+        '11.0.4.m 10.4.2.p 9.6.2.p',
+        '',
+        '9.0.3.m 8.3.1.p 6.4.3.m 5.7.1.p',
+        '10.0.3.m 11.3.1.p 10.4.2.p 9.6.2.p',
+        '8.0.4.m 7.4.2.p 6.6.2.p',
+        '5.0.2.m 8.2.2.p 9.4.2.m 8.6.2.p',
+        '11.0.2.m 9.2.2.p 8.4.2.m 7.6.2.p',
+        '8.0.3.m 6.3.1.p 5.4.4.m',
+      ],
+    },
+    {
+      bright: 0.94,
+      level: 0.8,
+      drone: [4],
+      dl: 14,
+      bars: [
+        '8.0.2.m 7.2.1.p 8.3.1.p',
+        '10.0.2.m 9.2.1.p 8.3.1.p 7.4.2.p',
+        '',
+        '6.0.2.p 7.2.1.p 8.3.3.m',
+        '8.0.1.p 10.1.2.m 9.3.1.p 8.4.2.m',
+        '5.0.3.m 3.3.1.p 5.4.2.p 6.6.1.p',
+        '9.0.2.m 8.2.2.p 7.4.2.p',
+        '8.0.2.m 7.2.1.p 6.3.1.p 5.4.4.f',
+      ],
+    },
+    {
+      bright: 1.1,
+      level: 0.92,
+      drone: [0, 4],
+      dl: 14,
+      bars: [
+        '6.0.2.p 8.2.2.m 7.4.2.p 9.6.2.m',
+        '8.0.2.m 10.2.2.m 9.4.2.p 11.6.2.m',
+        '10.0.2.m 11.2.2.m 12.4.2.m 11.6.2.p',
+        '10.0.3.m 9.3.1.p 8.4.2.m 7.6.1.p 6.7.1.p',
+        '7.0.2.p 8.2.2.m 9.4.2.m 10.6.2.m',
+        '9.0.2.m 8.2.1.p 7.3.1.p 6.4.2.m 5.6.2.f',
+        '8.0.2.m 6.2.1.p 5.3.1.p 6.4.2.m 8.6.2.m',
+        '9.0.4.m 8.4.2.p 7.6.2.p',
+      ],
+    },
+    {
+      bright: 1.0,
+      level: 0.9,
+      drone: [0],
+      dl: 16,
+      bars: [
+        '8.0.2.m 7.2.1.p 8.3.1.p 9.4.1.p 10.5.1.m 9.6.2.m',
+        '5.0.2.p 3.2.2.p 5.4.2.m 6.6.2.p',
+        '10.0.2.m 9.2.1.m 8.3.1.p 7.4.1.p 6.5.1.p 5.6.2.m',
+        '3.0.2.p 5.2.3.m 4.5.1.p 5.6.2.m',
+        '8.0.1.p 9.1.1.p 10.2.2.m 11.4.1.m 10.5.1.m 9.6.2.m',
+        '9.0.2.m 8.2.1.m 7.3.1.p 8.4.2.m 9.6.2.p',
+        '6.0.2.m 7.2.1.p 8.3.1.m 9.4.1.m 8.5.1.p 6.6.2.p',
+        '5.0.4.m 6.4.2.p 8.6.2.p',
+      ],
+    },
+    {
+      bright: 0.88,
+      level: 0.78,
+      drone: [0, 4],
+      dl: 16,
+      bars: [
+        '8.0.3.p 7.3.1.p 6.4.2.p 5.6.2.m',
+        '',
+        '5.0.2.m 3.2.2.p 4.4.1.p 5.5.3.m',
+        '',
+        '9.0.3.p 8.3.1.p 7.4.4.m',
+        '',
+        '5.0.6.m',
+        '3.0.6.m',
+      ],
+    },
+  ];
+
+  const BARS = [];
+  for (const ph of PHRASES) {
+    for (const [i, line] of ph.bars.entries()) {
+      const notes = [];
+      if (line) {
+        for (const tok of line.split(' ')) {
+          const f = tok.split('.');
+          notes.push({
+            m: SCALE[+f[0]],
+            b: +f[1] / 2,
+            d: +f[2] / 2,
+            g: TOUCH[f[3]],
+          });
+        }
+      }
+      BARS.push({
+        notes,
+        drone: ph.drone.indexOf(i) >= 0,
+        dl: ph.dl,
+        bright: ph.bright,
+        level: ph.level,
+      });
+    }
+  }
+  const NBARS = BARS.length;
+
+  let ctx;
+  let master;
+  let dry;
+  let verbSend;
+  let conv;
+  let echoSend;
+  let delayNode;
+  let noiseBuf;
+  let analyser;
+  let amb = [];
+  let timer = null;
+  let fadeTimer = null;
+  let playing = false;
+  let rafId = 0;
+  let bar = 0;
+  let barAt = 0;
+  let pass = 0;
+  let rand = seeded(SEED);
+  /* voices already scheduled ahead of the clock. a bar is written out in
+     one go, so pausing has to silence what is still waiting, or the next
+     play starts with two notes from the phrase that was interrupted. */
+  let pending = [];
+
+  const btn = document.getElementById('play');
+  const glyph = document.getElementById('playGlyph');
+  const label = document.getElementById('playLabel');
+  const vol = document.getElementById('vol');
+  const bars = [...document.querySelectorAll('#eq i')];
+  const data = new Uint8Array(512);
+  const BANDS = [
+    [2, 9],
+    [9, 20],
+    [20, 44],
+    [44, 90],
+    [90, 170],
+  ];
+
+  function noiseBuffer(sec) {
+    const n = Math.floor(ctx.sampleRate * sec);
+    const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    const r = seeded(0x51ed2701);
+    for (let i = 0; i < n; i++) d[i] = r() * 2 - 1;
+    return buf;
+  }
+
+  /* procedural impulse response: exponentially decaying noise */
+  function impulse(sec, decay) {
+    const n = Math.floor(ctx.sampleRate * sec);
+    const buf = ctx.createBuffer(2, n, ctx.sampleRate);
+    const r = seeded(0x27220a95);
+    for (let c = 0; c < 2; c++) {
+      const d = buf.getChannelData(c);
+      for (let i = 0; i < n; i++) d[i] = (r() * 2 - 1) * (1 - i / n) ** decay;
+    }
+    return buf;
+  }
+
+  function build() {
+    ctx = new AC();
+    noiseBuf = noiseBuffer(2);
+
+    master = ctx.createGain();
+    master.gain.value = 0;
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -20;
+    comp.ratio.value = 4;
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 1024;
+    master.connect(comp);
+    comp.connect(analyser);
+    analyser.connect(ctx.destination);
+
+    dry = ctx.createGain();
+    dry.gain.value = 0.85;
+    dry.connect(master);
+
+    conv = ctx.createConvolver();
+    conv.buffer = impulse(2.6, 3.4);
+    verbSend = ctx.createGain();
+    verbSend.gain.value = 0.3;
+    verbSend.connect(conv);
+    conv.connect(master);
+
+    echoSend = ctx.createGain();
+    echoSend.gain.value = 0.18;
+    delayNode = ctx.createDelay(1.5);
+    delayNode.delayTime.value = BEAT * 0.75;
+    const damp = ctx.createBiquadFilter();
+    damp.type = 'lowpass';
+    damp.frequency.value = 1700;
+    const fb = ctx.createGain();
+    fb.gain.value = 0.33;
+    echoSend.connect(delayNode);
+    delayNode.connect(damp);
+    damp.connect(fb);
+    fb.connect(delayNode);
+    damp.connect(master);
+  }
+
+  function route(node) {
+    node.connect(dry);
+    node.connect(verbSend);
+    node.connect(echoSend);
+  }
+
+  /* koto / shamisen pluck: inharmonic partials, fast attack, filtered decay */
+  const PARTIALS = [
+    [1, 'triangle', 1],
+    [2.004, 'sine', 0.34],
+    [3.01, 'sine', 0.13],
+    [4.98, 'sine', 0.05],
+  ];
+
+  function pluck(freq, t, gain, dur, bright) {
+    if (!(freq > 0) || !(t > 0)) return;
+    const g = Math.max(FLOOR, gain);
+    const d = Math.max(0.2, dur);
+    const b = Math.max(0.2, bright);
+
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.Q.value = 0.6;
+    lp.frequency.setValueAtTime(Math.min(freq * 9 * b, 11000), t);
+    lp.frequency.exponentialRampToValueAtTime(Math.max(freq * 1.8, 140), t + Math.min(d, 1.5));
+
+    const env = ctx.createGain();
+    env.gain.setValueAtTime(FLOOR, t);
+    env.gain.exponentialRampToValueAtTime(g, t + 0.008);
+    env.gain.exponentialRampToValueAtTime(FLOOR, t + d);
+
+    const made = [env, lp];
+    const srcs = [];
+    let last;
+    for (const [mult, type, lvl] of PARTIALS) {
+      const o = ctx.createOscillator();
+      o.type = type;
+      o.frequency.setValueAtTime(freq * mult * 0.995, t); // slight bend up into pitch
+      o.frequency.exponentialRampToValueAtTime(freq * mult, t + 0.07);
+      const pg = ctx.createGain();
+      pg.gain.value = lvl;
+      o.connect(pg);
+      pg.connect(env);
+      o.start(t);
+      o.stop(t + d + 0.05);
+      made.push(o, pg);
+      srcs.push(o);
+      last = o;
+    }
+    env.connect(lp);
+    route(lp);
+
+    const pick = ctx.createBufferSource();
+    pick.buffer = noiseBuf;
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = Math.min(freq * 5.5, 5200);
+    bp.Q.value = 1.1;
+    const pg = ctx.createGain();
+    pg.gain.setValueAtTime(g * 0.5, t);
+    pg.gain.exponentialRampToValueAtTime(FLOOR, t + 0.045);
+    pick.connect(bp);
+    bp.connect(pg);
+    pg.connect(dry);
+    pick.start(t);
+    pick.stop(t + 0.06);
+    pick.onended = () => {
+      pick.disconnect();
+      bp.disconnect();
+      pg.disconnect();
+    };
+
+    last.onended = () => {
+      for (const n of made) n.disconnect();
+    };
+    srcs.push(pick);
+    pending.push({ end: t + d + 0.05, nodes: srcs });
+  }
+
+  /* low bowed/breath swell under the phrases */
+  function drone(t, beats) {
+    const len = BEAT * Math.max(4, beats);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(FLOOR, t);
+    g.gain.exponentialRampToValueAtTime(0.05, t + 2.2);
+    g.gain.exponentialRampToValueAtTime(FLOOR, t + len);
+
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.value = HZ(38);
+    const o2 = ctx.createOscillator();
+    o2.type = 'triangle';
+    o2.frequency.value = HZ(50);
+    const g2 = ctx.createGain();
+    g2.gain.value = 0.22;
+    o.connect(g);
+    o2.connect(g2);
+    g2.connect(g);
+
+    const breath = ctx.createBufferSource();
+    breath.buffer = noiseBuf;
+    breath.loop = true;
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = HZ(50) * 2;
+    bp.Q.value = 7;
+    const bg = ctx.createGain();
+    bg.gain.value = 0.014;
+    breath.connect(bp);
+    bp.connect(bg);
+    bg.connect(g);
+
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = 4.2;
+    const lg = ctx.createGain();
+    lg.gain.value = 1.1;
+    lfo.connect(lg);
+    lg.connect(o.frequency);
+    lg.connect(o2.frequency);
+
+    g.connect(dry);
+    g.connect(verbSend);
+    const srcs = [o, o2, lfo, breath];
+    for (const x of srcs) {
+      x.start(t);
+      x.stop(t + len + 0.1);
+    }
+    o.onended = () => {
+      for (const n of srcs.concat([g, g2, bp, bg, lg])) n.disconnect();
+    };
+    pending.push({ end: t + len + 0.1, nodes: srcs });
+  }
+
+  /* the lake: slow filtered noise with a drifting cutoff */
+  function ambience() {
+    const src = ctx.createBufferSource();
+    src.buffer = noiseBuf;
+    src.loop = true;
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 420;
+    lp.Q.value = 0.4;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 90;
+    const g = ctx.createGain();
+    g.gain.value = 0.05;
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = 0.07;
+    const lg = ctx.createGain();
+    lg.gain.value = 170;
+    lfo.connect(lg);
+    lg.connect(lp.frequency);
+    src.connect(lp);
+    lp.connect(hp);
+    hp.connect(g);
+    g.connect(master);
+    src.start();
+    lfo.start();
+    amb.push(src, lfo);
+  }
+
+  /* one bar at a time, a little under half a second ahead. the bar index
+     wraps, so the memory this holds is flat however long it runs. */
+  function schedule() {
+    const now = ctx.currentTime;
+    for (let i = pending.length - 1; i >= 0; i--) {
+      if (pending[i].end <= now) pending.splice(i, 1);
+    }
+    const horizon = now + 0.5;
+    const shade = 1 + 0.05 * Math.sin(pass * 1.3 + 0.4);
+    const tone = 1 + 0.07 * Math.sin(pass * 0.9 + 1.1);
+    let guard = 0;
+    while (guard++ < 16 && barAt < horizon) {
+      const b = BARS[bar];
+      const breath = bar % 8 === 0 ? 0.04 : 0; // a breath before each phrase
+      for (let i = 0; i < b.notes.length; i++) {
+        const n = b.notes[i];
+        const t = barAt + n.b * BEAT + breath + (rand() - 0.5) * 0.024;
+        if (t > now) {
+          pluck(HZ(n.m), t, n.g * b.level * shade, n.d * BEAT * 2.2, b.bright * tone);
+        }
+      }
+      if (b.drone) drone(barAt, b.dl);
+      barAt += BAR;
+      bar++;
+      if (bar === NBARS) {
+        bar = 0;
+        pass++;
+      }
+    }
+  }
+
+  const level = () => (vol.value / 100) * 0.55;
+
+  function start() {
+    if (!ctx) build();
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    if (fadeTimer) {
+      clearTimeout(fadeTimer);
+      fadeTimer = null;
+    }
+    bar = 0;
+    pass = 0;
+    rand = seeded(SEED);
+    pending = [];
+    barAt = ctx.currentTime + 0.25;
+    ambience();
+    const t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(Math.max(master.gain.value, FLOOR), t);
+    master.gain.linearRampToValueAtTime(level(), t + 1.2);
+    timer = setInterval(schedule, 60);
+    schedule();
+    playing = true;
+    wrap.classList.add('playing');
+    btn.setAttribute('aria-pressed', 'true');
+    glyph.textContent = '❚❚';
+    label.textContent = 'Pause';
+    meter();
+  }
+
+  function stop() {
+    if (!playing) return;
+    playing = false;
+    clearInterval(timer);
+    timer = null;
+    cancelAnimationFrame(rafId);
+    rafId = 0;
+    const t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(Math.max(master.gain.value, FLOOR), t);
+    master.gain.linearRampToValueAtTime(FLOOR, t + 0.5);
+    for (const n of amb) {
+      try {
+        n.stop(t + 0.6);
+      } catch {
+        /* already stopped */
+      }
+    }
+    amb = [];
+    /* stop what was written ahead of the clock before it ever sounds */
+    for (const v of pending) {
+      for (const n of v.nodes) {
+        try {
+          n.stop(t);
+        } catch {
+          /* already stopped */
+        }
+      }
+    }
+    pending = [];
+    for (const b of bars) b.style.height = '10%';
+    wrap.classList.remove('playing');
+    btn.setAttribute('aria-pressed', 'false');
+    glyph.textContent = '▶';
+    label.textContent = 'Play';
+    /* let the fade and the last reverb tail finish, then idle the clock */
+    fadeTimer = setTimeout(() => {
+      fadeTimer = null;
+      if (!playing && ctx.state !== 'closed') ctx.suspend().catch(() => {});
+    }, 620);
+  }
+
+  function meter() {
+    if (!playing) return;
+    analyser.getByteFrequencyData(data);
+    for (const [i, el] of bars.entries()) {
+      const [a, z] = BANDS[i];
+      let s = 0;
+      for (let k = a; k < z; k++) s += data[k];
+      const v = Math.min(1, s / (z - a) / 130);
+      el.style.height = `${(10 + v * 90).toFixed(1)}%`;
+    }
+    rafId = requestAnimationFrame(meter);
+  }
+
+  btn.addEventListener('click', () => (playing ? stop() : start()));
+  const paintVol = () => vol.style.setProperty('--fill', `${vol.value}%`);
+  paintVol();
+  vol.addEventListener('input', () => {
+    paintVol();
+    if (ctx && playing) {
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setTargetAtTime(level(), ctx.currentTime, 0.05);
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if ((e.key === 'm' || e.key === 'M') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      playing ? stop() : start();
+    }
+  });
+
+  /* Start on our own if the browser allows it; otherwise the very first
+     click or keypress anywhere on the page starts it. The play button is
+     left alone — it already starts the music itself. */
+  build();
+  const begin = () => {
+    if (!playing) start();
+  };
+  ctx
+    .resume()
+    .then(begin)
+    .catch(() => {});
+  const gesture = (ev) => {
+    if (ev.target?.closest?.('#play')) return;
+    removeEventListener('pointerdown', gesture);
+    removeEventListener('keydown', gesture);
+    ctx
+      .resume()
+      .then(begin)
+      .catch(() => {});
+  };
+  addEventListener('pointerdown', gesture);
+  addEventListener('keydown', gesture);
+})();
 </script>
 </body>
 </html>

@@ -1,0 +1,125 @@
+      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="backPaper" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0"   stop-color="#fbf6ec"/>
+            <stop offset="0.5" stop-color="#f5efe2"/>
+            <stop offset="1"   stop-color="#ece3d1"/>
+          </linearGradient>
+          <filter id="grain2" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="3" seed="19" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
+          </filter>
+          <clipPath id="clipCard2"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
+        </defs>
+
+        <g clip-path="url(#clipCard2)">
+          <rect x="0" y="0" width="900" height="600" fill="url(#backPaper)"/>
+
+          <!-- printed frame -->
+          <rect x="26" y="26" width="848" height="548" fill="none" stroke="#b9a98f" stroke-width="1.4"/>
+          <rect x="31" y="31" width="838" height="538" fill="none" stroke="#b9a98f" stroke-width=".6" opacity=".7"/>
+
+          <g font-family="Georgia,'Times New Roman',serif" fill="#6f6350">
+            <text x="46" y="62" font-size="15" letter-spacing="7">POST CARD</text>
+            <text x="46" y="80" font-size="9.5" letter-spacing="2.4" opacity=".7">CORRESPONDENCE CARD · 郵便はがき</text>
+          </g>
+
+          <!-- divider -->
+          <line x1="452" y1="96" x2="452" y2="548" stroke="#b9a98f" stroke-width="1.2"/>
+          <line x1="456" y1="96" x2="456" y2="548" stroke="#b9a98f" stroke-width=".5" opacity=".6"/>
+
+          <!-- message side -->
+          <g font-family="'Snell Roundhand','Brush Script MT','Segoe Script','Bradley Hand',cursive"
+             fill="#2f3548">
+            <text x="66" y="150" font-size="30">Wish you were here.</text>
+            <text x="66" y="196" font-size="22">The mountain showed itself</text>
+            <text x="66" y="228" font-size="22">for only a moment at dawn —</text>
+            <text x="66" y="260" font-size="22">then the cloud came back,</text>
+            <text x="66" y="292" font-size="22">and everyone applauded anyway.</text>
+            <text x="236" y="352" font-size="24">See you in autumn.</text>
+          </g>
+          <g stroke="#8d8270" stroke-width=".8" opacity=".45" fill="none">
+            <path d="M66 396 H410 M66 428 H410 M66 460 H410 M66 492 H410"/>
+          </g>
+          <g font-family="Georgia,serif" font-size="10" fill="#8b7f6b" letter-spacing="1.6">
+            <text x="66" y="524">KAWAGUCHI-KO · 35.4387° N, 138.7265° E</text>
+          </g>
+
+          <!-- small fuji doodle -->
+          <g transform="translate(352 470)" fill="none" stroke="#7d7260" stroke-width="1.4" opacity=".8">
+            <path d="M-40 34 C-22 30 -10 12 -4 -6 L0 -12 L4 -6 C10 12 22 30 40 34"/>
+            <path d="M-9 4 C-6 -4 -3 -9 0 -12 C3 -9 6 -4 9 4 L4 2 L0 6 L-4 2 Z" fill="#cfd8e2"/>
+            <path d="M-46 34 H46"/>
+          </g>
+
+          <!-- address side -->
+          <g font-family="Georgia,serif" fill="#6f6350">
+            <text x="486" y="132" font-size="10" letter-spacing="2.6">TO</text>
+          </g>
+          <g stroke="#a89a83" stroke-width="1" fill="none">
+            <path d="M486 176 H854 M486 216 H854 M486 256 H854 M486 296 H854"/>
+          </g>
+          <g font-family="'Snell Roundhand','Brush Script MT','Segoe Script',cursive" fill="#2f3548">
+            <text x="500" y="170" font-size="24">Hana Sato</text>
+            <text x="500" y="210" font-size="19">4-12-3 Kitazawa, Setagaya-ku</text>
+            <text x="500" y="250" font-size="19">Tokyo 155-0031</text>
+            <text x="500" y="290" font-size="19">Japan</text>
+          </g>
+
+          <!-- postal code box -->
+          <g transform="translate(486 330)">
+            <rect x="0" y="0" width="150" height="42" rx="3" fill="none" stroke="#a89a83" stroke-width="1"/>
+            <line x1="52" y1="0" x2="52" y2="42" stroke="#a89a83" stroke-width="1"/>
+            <text x="26" y="30" text-anchor="middle" font-size="24" fill="#3a4258"
+                  font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif">〒</text>
+            <text x="100" y="29" text-anchor="middle" font-size="19" fill="#4a4a5c"
+                  font-family="Georgia,serif" letter-spacing="1.5">155-0031</text>
+          </g>
+
+          <!-- stamp box + stamp -->
+          <g transform="rotate(-1.6 786 118)">
+            <rect x="726" y="52" width="120" height="132" rx="2" fill="none"
+                  stroke="#b0a28c" stroke-width=".9" stroke-dasharray="5 4"/>
+            <g transform="translate(740 64)">
+              <path d="M0 0 h92 v100 h-92 Z" fill="#f8f3e8"/>
+              <path d="M0 0 h92 v100 h-92 Z" fill="none" stroke="#f8f3e8" stroke-width="3"
+                    stroke-dasharray="0.01 7.6" stroke-linecap="round"/>
+              <rect x="6" y="6" width="80" height="88" fill="#eef2f7"/>
+              <rect x="10" y="10" width="72" height="66" fill="#cfe0ef"/>
+              <path d="M10 76 L10 58 C30 54 48 62 62 68 C72 72 78 75 82 76 Z" fill="#7fa8c6"/>
+              <path d="M26 76 C42 72 54 56 62 38 C70 56 80 72 82 76 Z" fill="#3f5d86"/>
+              <path d="M54 40 L62 33 L70 40 L66 47 L58 47 Z" fill="#f4f8fc"/>
+              <circle cx="30" cy="30" r="8" fill="#f2c14e"/>
+              <text x="46" y="90" text-anchor="middle" font-size="9" fill="#3f5d86"
+                    letter-spacing="2" font-family="Georgia,serif">NIPPON</text>
+              <text x="46" y="102" text-anchor="middle" font-size="8" fill="#6f6350"
+                    font-family="Georgia,serif">84</text>
+            </g>
+          </g>
+
+          <!-- postmark -->
+          <g transform="translate(694 160) rotate(-11)" fill="none" stroke="#4a5570" opacity=".45">
+            <circle r="42" stroke-width="1.8"/>
+            <circle r="35" stroke-width="1"/>
+            <path d="M-35 -10 H35 M-35 0 H35 M-35 10 H35" stroke-width="1"/>
+            <text x="0" y="-18" text-anchor="middle" fill="#4a5570" stroke="none" font-size="9"
+                  letter-spacing="1.6" font-family="Georgia,serif">KAWAGUCHIKO</text>
+            <text x="0" y="26" text-anchor="middle" fill="#4a5570" stroke="none" font-size="9"
+                  letter-spacing="1.2" font-family="Georgia,serif">24.5.12</text>
+          </g>
+
+          <!-- air mail stripes -->
+          <g opacity=".55">
+            <path d="M26 574 l14 -12 h18 l-14 12 z M78 574 l14 -12 h18 l-14 12 z M130 574 l14 -12 h18 l-14 12 z"
+                  fill="#c8452f"/>
+            <path d="M52 574 l14 -12 h18 l-14 12 z M104 574 l14 -12 h18 l-14 12 z" fill="#2b3a67"/>
+            <text x="176" y="571" font-size="9" letter-spacing="3" fill="#6f6350"
+                  font-family="Georgia,serif">PAR AVION · BY AIR MAIL</text>
+          </g>
+
+          <rect x="0" y="0" width="900" height="600" filter="url(#grain2)" opacity=".12"
+                style="mix-blend-mode:multiply"/>
+        </g>
+        <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="#f8f3e8" stroke-opacity=".5" stroke-width="2"/>
+      </svg>

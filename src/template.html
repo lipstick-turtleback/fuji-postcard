@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Light on Paper — Hanga Studio · Mount Fuji at dawn</title>
+<style>
+@CSS@
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true">
+  <span class="bg-wall"></span>
+  <span class="bg-seigaiha"></span>
+  <span class="bg-pool"></span>
+  <span class="bg-grain"></span>
+  <span class="bg-vig"></span>
+</div>
+
+<div class="topbar">
+  <span class="brand"><span class="mk" aria-hidden="true">浮</span><span>Hanga&nbsp;Studio</span></span>
+  <span class="meta">Exhibition&nbsp;I · Room&nbsp;2</span>
+</div>
+
+<header class="masthead">
+  <h1>Light on Paper</h1>
+  <p class="sub"><span class="jp">富士山</span> &nbsp;·&nbsp; a single postcard, drawn in vectors</p>
+  <span class="rule" aria-hidden="true"></span>
+</header>
+
+<div class="stage">
+  <div class="card" id="card" role="img"
+       aria-label="Illustrated postcard of Mount Fuji at dawn with a torii gate, cherry blossoms and a lake; flip to see the addressed back.">
+
+    <!-- ============================ FRONT ============================ -->
+    <div class="face front">
+@SVG_FRONT@
+
+      <div class="foil" aria-hidden="true">
+        <span class="foil-holo"></span>
+        <span class="foil-sparkle"></span>
+        <span class="foil-sparkle2"></span>
+        <span class="foil-sheen"></span>
+        <span class="foil-glint"></span>
+        <span class="foil-spot"></span>
+      </div>
+    </div>
+
+    <!-- ============================ BACK ============================ -->
+    <div class="face back">
+@SVG_BACK@
+    </div>
+  </div>
+</div>
+
+<div class="plinth">
+  <figure class="label">
+    <figcaption>
+      <p class="lt">Mount Fuji at dawn, from Kawaguchi-ko</p>
+      <p class="la">Hanga Studio · 2026</p>
+      <p class="lm">Holographic laminate over ink on washi</p>
+      <p class="ld"><span>900 × 600</span><span>Ed. 01</span></p>
+    </figcaption>
+  </figure>
+
+  <div class="console" role="group" aria-label="Postcard controls">
+    <button id="flip">Turn the card<kbd aria-hidden="true">F</kbd></button>
+    <button id="dl">Save the plate</button>
+    <button id="foilBtn" aria-pressed="true"><span class="dot" aria-hidden="true"></span><span id="foilLabel">Laminate on</span></button>
+
+    <div class="sound" id="sound">
+      <button id="play" aria-pressed="false" title="Play / pause the soundtrack (press M)">
+        <span class="glyph" id="playGlyph">▶</span>
+        <span id="playLabel">Play</span>
+        <kbd aria-hidden="true">M</kbd>
+      </button>
+      <span class="eq" id="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <input id="vol" type="range" min="0" max="100" value="55" aria-label="Soundtrack volume">
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <span class="jp">河口湖にて</span>
+  <span class="pip" aria-hidden="true"></span>
+  <span>Hanga Studio</span>
+  <span class="pip" aria-hidden="true"></span>
+  <span>MMXXVI</span>
+</footer>
+
+<script>
+@JS_CARD@
+</script>
+
+<script>
+@JS_SOUNDTRACK@
+</script>
+</body>
+</html>

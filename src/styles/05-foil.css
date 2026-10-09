@@ -1,0 +1,138 @@
+/* ---------- holographic lamination ----------
+     No keyframes here: every value below is written each frame by the
+     lighting model in the script, from the card's real surface normal. */
+.face {
+  isolation: isolate;
+}
+.card {
+  --sx: 50%;
+  --sy: 50%;
+  --band: 50%;
+  --sheen: 0deg;
+  --spec: 0;
+  --foil: 1;
+}
+.foil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--foil);
+  transition: opacity 0.5s ease;
+}
+.foil > span {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.foil-holo {
+  background: conic-gradient(
+    from 210deg at var(--sx) var(--sy),
+    #ff6b81,
+    #ffd36b,
+    #9cff6b,
+    #6bd8ff,
+    #b06bff,
+    #ff6b81
+  );
+  mix-blend-mode: color-dodge;
+  opacity: calc(var(--spec) * 0.32);
+  -webkit-mask-image: radial-gradient(
+    circle at var(--sx) var(--sy),
+    #000 0 11%,
+    rgba(0, 0, 0, 0.55) 27%,
+    transparent 51%
+  );
+  mask-image: radial-gradient(
+    circle at var(--sx) var(--sy),
+    #000 0 11%,
+    rgba(0, 0, 0, 0.55) 27%,
+    transparent 51%
+  );
+}
+/* two glitter beds, each generated from a turbulence field pinned to its
+     own tile box and stitched, so the sparkle never lines up with a seam */
+.foil-sparkle {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='200' height='200'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch' seed='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+.foil-sparkle2 {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='150' height='150'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='2' stitchTiles='stitch' seed='29'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+}
+.foil-sparkle,
+.foil-sparkle2 {
+  background-repeat: repeat;
+  filter: contrast(700%) brightness(230%);
+  mix-blend-mode: color-dodge;
+  opacity: calc(var(--spec) * 0.85);
+  -webkit-mask-image: radial-gradient(
+    circle at var(--sx) var(--sy),
+    #000 0 6%,
+    rgba(0, 0, 0, 0.45) 19%,
+    transparent 37%
+  );
+  mask-image: radial-gradient(
+    circle at var(--sx) var(--sy),
+    #000 0 6%,
+    rgba(0, 0, 0, 0.45) 19%,
+    transparent 37%
+  );
+}
+.foil-sheen {
+  background: linear-gradient(
+    var(--sheen),
+    transparent calc(var(--band) - 30%),
+    rgba(255, 255, 255, 0.17) var(--band),
+    transparent calc(var(--band) + 30%)
+  );
+  filter: blur(9px);
+  mix-blend-mode: screen;
+  opacity: calc(0.06 + var(--spec) * 0.16);
+}
+.foil-glint {
+  background: linear-gradient(
+    var(--sheen),
+    transparent calc(var(--band) - 2.6%),
+    rgba(255, 255, 255, 0.42) var(--band),
+    transparent calc(var(--band) + 2.6%)
+  );
+  filter: blur(5px);
+  mix-blend-mode: overlay;
+  opacity: calc(var(--spec) * var(--spec) * 0.3);
+}
+.foil-spot {
+  background: radial-gradient(
+    circle at var(--sx) var(--sy),
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.1) 15%,
+    transparent 34%
+  );
+  mix-blend-mode: soft-light;
+  opacity: calc(var(--spec) * 0.8);
+}
+
+@media (max-width: 700px) {
+  .console {
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 520px) {
+  .topbar {
+    font-size: 8.5px;
+    letter-spacing: 0.22em;
+  }
+  button {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    padding: 8px 3px;
+  }
+  .sound input[type="range"] {
+    width: 72px;
+  }
+  .label .ld {
+    gap: 14px;
+  }
+  .label .lt {
+    font-size: 14px;
+  }
+}
