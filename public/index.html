@@ -2769,8 +2769,20 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <path d="M-35 -10 q8.75 -3 17.5 0 t17.5 0 t17.5 0 t17.5 0
                      M-35 0 q8.75 -3 17.5 0 t17.5 0 t17.5 0 t17.5 0
                      M-35 10 q8.75 -3 17.5 0 t17.5 0 t17.5 0 t17.5 0" stroke-width="1"/>
-            <text x="0" y="-18" text-anchor="middle" fill="#4a5570" stroke="none" font-size="9"
-                  letter-spacing="1.6" font-family="Georgia,serif">KAWAGUCHIKO</text>
+            <!-- A hand-struck mark takes too much ink on one side. The front's
+                 cancellation already carries this; the back's was still two
+                 perfect circles, which is the one thing a postmark struck by
+                 hand never produces. -->
+            <path d="M-41.2 -7.4 A42 42 0 0 1 24.6 -33.5" stroke-width="2.6"
+                  stroke-opacity=".45" stroke-linecap="round"/>
+            <path d="M-34.6 4.6 A35 35 0 0 0 -12 32.9" stroke-width="1.8"
+                  stroke-opacity=".4" stroke-linecap="round"/>
+            <!-- The town name ran past the outer ring: at y=-18 the ring is
+                 only 37.9 units wide either side, and eleven letters at 1.6
+                 tracking measured 38.5. Real postmarks do let ink cross the
+                 rule, but this read as a layout error rather than as a strike. -->
+            <text x="0" y="-18" text-anchor="middle" fill="#4a5570" stroke="none" font-size="8.4"
+                  letter-spacing="1.1" font-family="Georgia,serif">KAWAGUCHIKO</text>
             <text x="0" y="26" text-anchor="middle" fill="#4a5570" stroke="none" font-size="9"
                   letter-spacing="1.2" font-family="Georgia,serif">24.5.12</text>
           </g>
