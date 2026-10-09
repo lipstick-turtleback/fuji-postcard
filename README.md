@@ -44,6 +44,7 @@ scripts/
   build.mjs            concatenate the parts into public/index.html
   check.mjs            validate the built page without a browser
   test-score.mjs       verify the composition as data
+  test-contrast.mjs    keep the palette above WCAG AA
   serve.mjs            dependency-free static server
 public/
   index.html           the built page (committed, so it can be opened directly)
@@ -61,7 +62,7 @@ npm run dev        # build, then serve on http://localhost:5173
 npm run check      # fail if the built file is stale, then validate it
 npm run lint       # biome over the JS (scripts/ and src/script/)
 npm run fmt        # prettier over CSS, JSON and Markdown
-npm test           # build + check + score test + lint + format check
+npm test           # build + check + score + contrast + lint + format check
 ```
 
 `npm run check` is the interesting one. Browsers are forgiving about exactly

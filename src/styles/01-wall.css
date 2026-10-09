@@ -9,7 +9,9 @@
   --wall: #ece8df;
   --ink: #22201c;
   --ink-soft: #4d483f;
-  --muted: #8b8478;
+  /* 4.8:1 against the wall. The quiet text is 9 px and uppercase, which
+     is exactly the size WCAG refuses to forgive a low ratio at. */
+  --muted: #6a6459;
   --hair: rgba(34, 32, 28, 0.17);
   --hair-soft: rgba(34, 32, 28, 0.09);
   --vermilion: #b8402c;
