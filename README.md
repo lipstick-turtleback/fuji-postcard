@@ -173,11 +173,13 @@ ink shadow, which is set 1.2 units lower — sits 1.5 units clear of it.
 reads back what happened: the pointer walks the glint ray and tilts the card,
 `F` turns it over, `S` downloads the face that is showing (caught by wrapping
 `HTMLAnchorElement.prototype.click`), Enhance and `M` toggle, the volume slider
-paints, and no page exception is thrown. Then it loads the page again under
-`--force-prefers-reduced-motion` with `requestAnimationFrame` wrapped, and fails
-if the settled page asks for frames: it asks for none. Rule 5 of the brief says
-none of this may break, and until now the only thing enforcing that was somebody
-remembering to click the buttons.
+paints, and no page exception is thrown. It also collects the errors the
+browser itself raises while parsing the page — a malformed path is one of
+those, and it appears there and nowhere else. Then it loads the page again
+under `--force-prefers-reduced-motion` with `requestAnimationFrame` wrapped, and
+fails if the settled page asks for frames: it asks for none. Rule 5 of the brief
+says none of this may break, and until now the only thing enforcing that was
+somebody remembering to click the buttons.
 
 Headless Chrome cannot verify the audio itself: its `AudioContext` clock never
 advances, so nothing scheduled is ever rendered. What is verified is that the

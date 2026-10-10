@@ -105,7 +105,8 @@ project built tools to stop being fooled:
 - **`npm run check`** — structural checks on the built file: XML comments that
   would break the export, animation classes the export would silently drop,
   keyboard shortcuts advertised by a `<kbd>` or the README but not handled by
-  any code, ids defined and never used.
+  any code, ids defined and never used, and path data whose commands run out of
+  arguments.
 - **`npm run test`** — check, plus the score lifted out of the audio IIFE and
   evaluated as plain data (80 bars, ten phrases, 305 notes, 4.85 min), plus a
   contrast check on the ink against the paper, plus the lettering measured
@@ -137,7 +138,9 @@ The habits that keep paying off:
   driven over CDP now, and the settled page is caught asking for frames.
 - **Read page exceptions over CDP, not just pixels.** A `ReferenceError` during
   startup once left a page that looked completely fine while tilt, flip, export
-  and every shortcut were dead.
+  and every shortcut were dead. The same channel carries the errors the browser
+  raises while it parses the page, which is the only place a malformed path
+  says anything at all.
 - **Diagnose by subtraction.** The line down the left edge was found by
   rendering the page with one suspect hidden at a time and diffing the column
   profile against the baseline. Only two elements moved it; guessing would have
