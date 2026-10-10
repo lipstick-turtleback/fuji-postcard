@@ -144,7 +144,15 @@ Enhance off, 1440 × 1150, measured by `npm run perf`:
 | with it (19 more animated marks)  | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
 | with the slow petals as well (22) | 18.3 ms | 16.7 ms | 33.4 ms | 33 ms | 24/240      |
 | with the fish as well (25)        | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
-| the same, Enhance on              | 39.8 ms | 33.4 ms | 50.1 ms | 83 ms | 239/240     |
+| the page today, Enhance off       | 16.7 ms | 16.7 ms | 16.7 ms | 33 ms | 1/240       |
+| the page today, Enhance on        | 39.8 ms | 33.4 ms | 50.1 ms | 83 ms | 238/240     |
+
+The last two rows are one run of `npm run perf`, which now measures both tiers
+back to back; the rows above them are the history of the comparison, each
+measured on the page of its own day. The quiet tier has got cheaper since
+those rows were written — a 16.7 ms median with one late frame in 240 — and
+the expensive one has not moved, because the laminate is the same single
+blended layer it always was.
 
 `npm run perf` now measures both tiers in one run, and the second row is the
 answer to a question the table had never asked: what happens when somebody
