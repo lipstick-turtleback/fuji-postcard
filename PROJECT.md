@@ -169,6 +169,15 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **The fallback tier is the tier most visitors are in.** Every font this page
+  names is a macOS font; on Linux and Android the artwork is drawn in whatever
+  generic serif the system has, and the width of a line of lettering — which is
+  what puts it near a gilded rule or through it — is a property of the font.
+  Measuring it is one injected style rule (`font-family: serif !important`
+  beats the attributes the way any CSS does): the back's widest line grows 11%
+  and still clears. Report the widest mark with the gap, or the second pass
+  looks exactly like the first: the gap that is closest to a rule is a vertical
+  one, and a different font moves the width long before it moves the baseline.
 - **A flag that means two things decides two things.** `autoDropped` was set
   whenever the frame probe's window closed, whether or not the page had
   dropped anything, and the click handler read it to decide whether a person

@@ -138,12 +138,62 @@ const probe = `(() => {
         else if (gap < closest.gap) closest = { gap: +gap.toFixed(2), what: label + ' -> ' + band.name };
       }
     }
-    out.push({ face: svg.closest('.face').className, rules: bands.length, hits, closest });
+    // The widest lettering on the face, in user units. It is reported so the
+    // two passes cannot look like the same measurement twice: the gap that is
+    // closest to a rule is usually a vertical one, and a different font moves
+    // the width long before it moves the baseline.
+    const widest = Math.max(
+      ...texts.map((t) => {
+        const b = box(t);
+        return b.x2 - b.x1;
+      }),
+      0,
+    );
+    out.push({
+      face: svg.closest('.face').className,
+      rules: bands.length,
+      hits,
+      closest,
+      widest: +widest.toFixed(1),
+    });
   }
   return JSON.stringify(out);
 })()`;
 
-const faces = JSON.parse(await evaluate(probe));
+/* Two passes, because the page's typography is set in fonts that exist on one
+   platform. Iowan Old Style, Hiragino Mincho ProN, Yu Mincho, Songti SC: every
+   one of them is a macOS font, and the lettering's width — which is what puts
+   it near a rule or not — is a property of the font, not of the page. On Linux
+   and Android none of them are there, and the fallback is whatever generic
+   serif the system has, which is usually wider.
+
+   The second pass forces the worst case rather than hoping for a machine to
+   demonstrate it: every text element is told to use the generic serif, which
+   beats the font-family attributes the way any CSS does. If the lettering
+   clears the rules with the widest plausible fallback, it clears with the
+   fonts the page was drawn in. */
+const passes = [
+  { label: '', css: '' },
+  {
+    label: ' with the generic serif',
+    css: 'svg text, svg textSpan, [font-family] { font-family: serif !important }',
+  },
+];
+const results = [];
+for (const pass of passes) {
+  if (pass.css)
+    await evaluate(`(() => {
+      const st = document.createElement('style');
+      st.id = 'fallback-pass';
+      st.textContent = ${JSON.stringify(pass.css)};
+      document.head.appendChild(st);
+      return 1;
+    })()`);
+  await new Promise((r) => setTimeout(r, 400));
+  for (const f of JSON.parse(await evaluate(probe))) results.push({ ...f, pass: pass.label });
+}
+
+const faces = results;
 const problems = [];
 const notes = [];
 // A collision is a rule through letters. A gap under a unit is the same thing
@@ -152,13 +202,13 @@ const notes = [];
 const FLOOR = 1;
 for (const f of faces) {
   if (f.hits.length)
-    problems.push(`${f.face}: a gilded rule crosses the letters — ${f.hits.join('; ')}`);
+    problems.push(`${f.face}${f.pass}: a gilded rule crosses the letters — ${f.hits.join('; ')}`);
   else if (f.closest.gap < FLOOR)
     problems.push(
-      `${f.face}: ${f.closest.what} is ${f.closest.gap} units from the rule, under the ${FLOOR}-unit floor`,
+      `${f.face}${f.pass}: ${f.closest.what} is ${f.closest.gap} units from the rule, under the ${FLOOR}-unit floor`,
     );
   notes.push(
-    `${f.face}: ${f.rules} rules, ${f.hits.length ? `${f.hits.length} collision(s)` : `clear, closest ${f.closest.gap} units (${f.closest.what})`}`,
+    `${f.face}${f.pass}: ${f.rules} rules, widest mark ${f.widest} u, ${f.hits.length ? `${f.hits.length} collision(s)` : `clear, closest ${f.closest.gap} units (${f.closest.what})`}`,
   );
 }
 if (exceptions.length)

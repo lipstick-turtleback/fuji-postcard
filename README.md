@@ -362,6 +362,13 @@ page before the question:
   comparison, and the file is put into the same rest state the page is in —
   the plate carries its animation rules and runs them, and comparing a still
   page to a turning file is 17% ray field and nothing else.
+- `scripts/test-plate.mjs` measures every `<text>` on a face against every rule
+  on that face, in the artwork's own units, and it measures it twice: once in
+  the fonts the page names, once with all of them taken away. Every font the
+  page names — Iowan Old Style, Hiragino Mincho ProN, Yu Mincho, Songti SC — is
+  a macOS font, and how wide a line of lettering is belongs to the font, not to
+  the page. Under the generic serif the back's widest line grows from 263 to
+  292 units and still clears the rule.
 - `scripts/test-css.mjs` asks whether the stylesheet is telling the truth about
   the page: every selector must match something that exists, and every
   `animation` must name a `@keyframes` block that exists. A stylesheet cannot
