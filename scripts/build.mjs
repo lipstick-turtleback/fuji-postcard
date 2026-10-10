@@ -10,7 +10,13 @@
  *   node scripts/build.mjs          write public/index.html
  *   node scripts/build.mjs --check  fail if the committed file is stale
  */
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -37,14 +43,23 @@ const js = (name) => read(`script/${name}`);
    — if `git diff public/index.html` is empty after a split, the split cannot
    have changed what the page does. */
 const art = (name) => {
-  const dir = join(src, 'art', name);
-  if (existsSync(dir))
-    return readdirSync(dir)
-      .filter((f) => f.endsWith('.svg'))
-      .sort()
-      .map((f) => read(`art/${name}/${f}`))
-      .join('');
+  if (!existsSync(join(src, 'art', `${name}.svg`))) return part(`art/${name}`);
   return read(`art/${name}.svg`);
+};
+
+/* A part is a file, or a directory of parts read in sorted order — which is
+   how the front face is a scene of twelve fragments, and how its cast is one
+   file per mark. The order is the drawing: in SVG a later element is a nearer
+   one, and inside the defs it is the order marks are declared in. */
+const part = (rel) => {
+  const abs = join(src, rel);
+  if (statSync(abs).isDirectory())
+    return readdirSync(abs)
+      .sort()
+      .filter((f) => !f.startsWith('.'))
+      .map((f) => part(`${rel}/${f}`))
+      .join('');
+  return read(rel);
 };
 
 const slots = {

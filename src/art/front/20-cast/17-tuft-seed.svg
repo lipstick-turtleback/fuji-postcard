@@ -1,0 +1,14 @@
+
+          <!-- a tuft that has gone to seed: three short leaves at the base
+               and two bare stalks carrying the heads. The old tufts were all
+               leaves, so every clump on the shore was the same plant in the
+               same month. -->
+          <g id="tuftSeed" fill="none" stroke-linecap="round">
+            <path d="M-1 0 C-2 -5 -4 -9 -7 -12" stroke-width="1.1"/>
+            <path d="M0 0 C0 -6 0 -11 -1 -15" stroke-width="1.2"/>
+            <path d="M1 0 C3 -5 5 -8 7 -10" stroke-width="1"/>
+            <path d="M0 -1 C1 -8 2 -15 3 -21" stroke-width=".8"/>
+            <ellipse cx="3.2" cy="-23.4" rx="1.1" ry="2.8" stroke="none" transform="rotate(9 3.2 -23.4)"/>
+            <path d="M-1 -1 C-2 -7 -3 -12 -4.6 -17" stroke-width=".7"/>
+            <ellipse cx="-4.9" cy="-19.2" rx=".9" ry="2.4" stroke="none" transform="rotate(-14 -4.9 -19.2)"/>
+          </g>

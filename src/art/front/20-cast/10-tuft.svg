@@ -1,0 +1,12 @@
+
+          <!-- bank furniture, drawn once and placed by hand.
+               every blade is its own stroke width, so a tuft tapers as it
+               rises instead of reading as a bundle of matchsticks -->
+          <g id="tuft" fill="none" stroke-linecap="round">
+            <path d="M0 0 C-1 -6 -4 -12 -9 -17"   stroke-width="1.5"/>
+            <path d="M0 0 C0 -7 0 -14 -2 -22"     stroke-width="1.6"/>
+            <path d="M1 -1 C2 -9 4 -16 7 -21"     stroke-width="1.3"/>
+            <path d="M1 -1 C3 -6 6 -11 11 -14"    stroke-width="1.2"/>
+            <path d="M-1 -1 C-3 -5 -6 -8 -12 -10" stroke-width="1.1"/>
+            <path d="M0 0 C2 -4 4 -7 6 -8"        stroke-width="1"/>
+          </g>

@@ -1,0 +1,12 @@
+
+          <!-- the low stuff at the waterline, flattened by the water it
+               stands in: blades that lie outward instead of rising, and no
+               head at all. This is what makes the edge of the lake a shore
+               rather than a line. -->
+          <g id="waterGrass" fill="none" stroke-linecap="round">
+            <path d="M0 0 C-4 -2 -9 -3 -14 -3" stroke-width="1"/>
+            <path d="M0 0 C-3 -3 -6 -6 -9 -8" stroke-width="1.1"/>
+            <path d="M0 0 C-1 -4 -2 -8 -3 -11" stroke-width="1.2"/>
+            <path d="M0 0 C2 -3 4 -7 6 -9" stroke-width="1"/>
+            <path d="M0 0 C3 -2 7 -3 11 -3.4" stroke-width=".9"/>
+          </g>

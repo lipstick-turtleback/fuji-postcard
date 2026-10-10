@@ -1,0 +1,13 @@
+
+          <!-- a sedge: seven narrow blades packed upright, none of them the
+               same height, the outer ones curving back over the middle. A
+               tuft opens like a fan; a sedge closes like a fist. -->
+          <g id="sedge" fill="none" stroke-linecap="round">
+            <path d="M-2 0 C-3 -6 -5 -12 -7 -16" stroke-width="1"/>
+            <path d="M-1 0 C-2 -8 -3 -15 -4 -21" stroke-width="1.1"/>
+            <path d="M0 0 C0 -9 0 -18 -1 -25" stroke-width="1.2"/>
+            <path d="M0 0 C1 -8 2 -16 2 -23" stroke-width="1.1"/>
+            <path d="M1 0 C2 -7 4 -13 5 -19" stroke-width="1"/>
+            <path d="M2 0 C4 -5 6 -10 8 -13" stroke-width=".9"/>
+            <path d="M-1 0 C-4 -4 -7 -7 -10 -9" stroke-width=".8"/>
+          </g>

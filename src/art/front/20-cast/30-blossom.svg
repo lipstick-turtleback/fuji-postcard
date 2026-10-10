@@ -1,0 +1,31 @@
+
+          <!-- a cherry blossom, seen face on. the petals are filled with a
+               gradient whose centre sits up and to the right, because that
+               is where the sun is; the flower is not a flat pink disc -->
+          <g id="blossom">
+            <!-- Five petals at exactly 72 degrees, all the same size, is a
+                 rosette drawn by a program. Cherry blossoms do have five
+                 petals, so the count stays; what breaks the draw is that the
+                 spacing is 3, 74, 141, 219, 286 and no two petals share a
+                 radius or a distance from the centre. It also means the
+                 rotation on each placement now does something: a five-fold
+                 symmetric shape rotated by 6 degrees looks identical to one
+                 rotated by 78. -->
+            <g fill="url(#bloomLight)">
+              <ellipse cx="0.3" cy="-6.4" rx="4.1" ry="5.4" transform="rotate(3 0 0)"/>
+              <ellipse cx="5.9" cy="-1.7" rx="3.9" ry="5.1" transform="rotate(74 0 0)"/>
+              <ellipse cx="4.2" cy="5.1" rx="4.3" ry="5.6" transform="rotate(141 0 0)"/>
+              <ellipse cx="-3.9" cy="4.8" rx="4.0" ry="5.2" transform="rotate(219 0 0)"/>
+              <ellipse cx="-6.2" cy="-1.6" rx="4.2" ry="5.0" transform="rotate(286 0 0)"/>
+            </g>
+            <circle r="2.1" fill="#c9607a"/>
+            <g stroke="#f7e3a8" stroke-width=".7" stroke-linecap="round" fill="none">
+              <path d="M0 0 L-1.4 -3.4 M0 0 L1.5 -3.2 M0 0 L2.6 -1.2 M0 0 L-2.6 -1.4"/>
+            </g>
+            <g fill="#f7e3a8">
+              <circle cx="-1.4" cy="-3.4" r=".7"/>
+              <circle cx="1.5" cy="-3.2" r=".7"/>
+              <circle cx="2.6" cy="-1.2" r=".7"/>
+              <circle cx="-2.6" cy="-1.4" r=".7"/>
+            </g>
+          </g>

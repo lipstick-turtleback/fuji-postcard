@@ -1,0 +1,9 @@
+          <!-- a reed: one stem, two leaves that keep the stem's direction,
+               and the dark head that gives the cluster its rhythm -->
+          <g id="reed" stroke-linecap="round">
+            <path d="M0 0 C1 -14 0 -28 2 -44" fill="none" stroke-width="1.8"/>
+            <path d="M0.5 -10 C4 -20 6 -30 6.5 -40" fill="none" stroke-width="1.2"/>
+            <path d="M0 -16 C-3 -24 -5 -31 -5.5 -38" fill="none" stroke-width="1.1"/>
+            <ellipse cx="2.2" cy="-49" rx="1.9" ry="6.2" stroke="none"/>
+            <path d="M2.2 -54 L2.4 -58" fill="none" stroke-width=".9"/>
+          </g>

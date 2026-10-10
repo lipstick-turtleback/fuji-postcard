@@ -1,0 +1,11 @@
+
+          <!-- a reed that has grown too tall for its own stem and bent over
+               at the top. The head hangs: weight is the one thing a reed
+               shows, and the upright and leaning reeds both hide it. -->
+          <g id="reedC" fill="none" stroke-linecap="round">
+            <path d="M0 0 C1 -12 1 -24 3 -34 C4.6 -40 7 -44 10 -46" stroke-width="1.7"/>
+            <path d="M1 -12 C4 -19 6 -25 7 -31" stroke-width="1.1"/>
+            <path d="M2 -22 C-1 -27 -4 -31 -6 -34" stroke-width="1"/>
+            <ellipse cx="11.6" cy="-47.6" rx="1.7" ry="5" stroke="none" transform="rotate(122 11.6 -47.6)"/>
+            <path d="M13.6 -49.4 C15 -50 16 -50.4 17.2 -50.4" stroke-width=".8"/>
+          </g>

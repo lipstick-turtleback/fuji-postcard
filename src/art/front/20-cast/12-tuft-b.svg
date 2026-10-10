@@ -1,0 +1,12 @@
+          <!-- A second tuft: four blades, tighter and more upright, one bent
+               over. And a third: eight blades, low and splayed. The first
+               tuft was used thirty-one times, so every clump on the shore was
+               the same six-blade fan at a different scale - size varying on
+               its own while shape stayed fixed, which is the defect the rules
+               call out. Three shapes, cycled, so no two neighbours match. -->
+          <g id="tuftB" fill="none" stroke-linecap="round">
+            <path d="M0 0 C-1 -5 -2 -11 -5 -15" stroke-width="1.4"/>
+            <path d="M0 0 C1 -6 1 -13 0 -19" stroke-width="1.6"/>
+            <path d="M1 -1 C3 -7 5 -12 6 -14" stroke-width="1.2"/>
+            <path d="M-1 -1 C-4 -4 -8 -6 -11 -6" stroke-width="1"/>
+          </g>

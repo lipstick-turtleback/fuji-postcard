@@ -1,0 +1,9 @@
+          <!-- a reed that leans, with its head lower and one leaf crossing
+               the stem, against the upright one -->
+          <g id="reedB" stroke-linecap="round">
+            <path d="M0 0 C-2 -12 -4 -24 -8 -36" fill="none" stroke-width="1.6"/>
+            <path d="M-1 -8 C2 -16 3 -24 3 -30" fill="none" stroke-width="1.1"/>
+            <path d="M-3 -18 C-7 -24 -10 -28 -12 -32" fill="none" stroke-width="1"/>
+            <ellipse cx="-8.6" cy="-41" rx="1.7" ry="5.4" stroke="none" transform="rotate(-12 -8.6 -41)"/>
+            <path d="M-8.6 -45.5 L-9.4 -49" fill="none" stroke-width=".9"/>
+          </g>
