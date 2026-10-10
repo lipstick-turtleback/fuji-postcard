@@ -349,19 +349,45 @@ const savePlate = () => {
   clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   clone.setAttribute('width', '1800');
   clone.setAttribute('height', '1200');
-  const css = [...document.styleSheets]
-    .flatMap((s) => {
-      try {
-        return [...s.cssRules].map((r) => r.cssText);
-      } catch {
-        return [];
-      }
-    })
-    .filter((t) =>
-      /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
-        t,
-      ),
+  /* The rules the plate needs, collected one rule at a time. The page's
+     stylesheet is grouped into cascade layers, and a layer is a rule whose
+     text is every rule inside it: filtering at that level would drag the whole
+     motion layer into the file because one selector in it matched, and the
+     quality layer too — which carries a `[filter="url(#foxLarge)"]` selector
+     naming a filter that lives in the other face. So the walk goes down to the
+     rules and the choice is made there, as it was before the page had layers. */
+  const css = [];
+  // A rule that contains other rules. `r.cssRules` is not that test: in Chrome
+  // an ordinary style rule has a `cssRules` too, an empty list, so testing for
+  // it turns every real rule into a group and the walk collects nothing. A
+  // @keyframes block is deliberately not a group here — its steps are not rules
+  // the plate can use on their own, and the block is what the filter wants.
+  const group = (r) =>
+    ['CSSMediaRule', 'CSSSupportsRule', 'CSSContainerRule', 'CSSLayerBlockRule'].includes(
+      r.constructor.name,
     );
+  const walk = (rules) => {
+    for (const r of rules) {
+      if (group(r)) {
+        walk(r.cssRules);
+        continue;
+      }
+      const t = r.cssText;
+      if (
+        /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
+          t,
+        )
+      )
+        css.push(t);
+    }
+  };
+  for (const s of document.styleSheets) {
+    try {
+      walk(s.cssRules);
+    } catch {
+      /* a cross-origin sheet, which this page does not have */
+    }
+  }
   const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
   style.textContent = css.join('\n');
   clone.insertBefore(style, clone.firstChild);

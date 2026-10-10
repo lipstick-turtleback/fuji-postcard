@@ -169,6 +169,15 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **Order that is not written down is still order.** Nine stylesheets in a
+  directory sorted by name: the cascade was decided by a file listing, and two
+  files both style `.card`. The build now keeps the list, wraps each file in a
+  layer named after itself, and fails when the directory and the list disagree.
+  Proving the change moved nothing was the easy part — both faces, 9.4 million
+  pixels, zero differing — and the export came back byte for byte identical
+  once the rule walk was fixed. `r.cssRules` is not a test for "a rule that
+  contains rules": in Chrome an ordinary style rule has one, empty, and a walk
+  that trusts it collects nothing at all.
 - **A media query carries no weight.** It decides whether a rule applies, not
   how hard it applies. The reduced-motion block claimed in its own comment that
   a media query outranks a plain rule, and that was true only in the sense that

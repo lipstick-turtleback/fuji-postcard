@@ -11,6 +11,9 @@
 <meta property="og:description" content="A single postcard, drawn in vectors. Tilt it, turn it, listen to it.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b2547'/%3E%3Cpath d='M6 25 L14 9 h4 L26 25 Z' fill='%235b6488'/%3E%3Cpath d='M12.6 12 L14 9 h4 l1.6 3 q-1.6 1.6 -3.6 1.6 T12.6 12 Z' fill='%23fff'/%3E%3Ccircle cx='24' cy='9' r='3' fill='%23ffd9a0'/%3E%3C/svg%3E">
 <style>
+@layer wall, masthead, card, console, foil, motion, narrow, quality, height;
+
+@layer wall {
 :root {
   /* one measure for everything, and a rhythm that tightens as it
        approaches the work: room -> header -> object -> label -> controls */
@@ -161,7 +164,9 @@ body {
   padding: 4px 6px 3px;
   border-radius: 3px;
 }
+}
 
+@layer masthead {
 /* ---------- masthead ---------- */
 .masthead {
   display: flex;
@@ -197,7 +202,9 @@ h1 {
   background: var(--hair);
   margin: 5px auto 0;
 }
+}
 
+@layer card {
 .stage {
   perspective: 1800px;
   width: var(--col);
@@ -236,7 +243,9 @@ h1 {
   height: 100%;
   isolation: isolate;
 }
+}
 
+@layer console {
 /* ---------- control console ---------- */
 /* ---------- plinth: wall label and controls ---------- */
 .plinth {
@@ -515,7 +524,9 @@ kbd {
   outline: 1px solid var(--ink);
   outline-offset: 4px;
 }
+}
 
+@layer foil {
 /* ---------- holographic lamination ----------
      No keyframes here: every value below is written each frame by the
      lighting model in the script, from the card's real surface normal. */
@@ -659,7 +670,9 @@ kbd {
     font-size: 14px;
   }
 }
+}
 
+@layer motion {
 /* ---------- SVG animations ---------- */
 .cloud-a {
   animation: drift 46s ease-in-out infinite alternate;
@@ -1215,7 +1228,9 @@ html[data-enhance="on"] .bird.b3 {
     transform: translate(-0.3px, 0.2px);
   }
 }
+}
 
+@layer narrow {
 /* ---------- narrow viewports ----------
    The page is one column that shrinks, so nothing here is a layout change:
    it is the handful of places where a row of small, letter-spaced things
@@ -1244,7 +1259,9 @@ html[data-enhance="on"] .bird.b3 {
     text-align: right;
   }
 }
+}
 
+@layer quality {
 /* ---------- Enhance off ----------
    Set by the script on <html data-quality>. The laminate is the expensive
    thing on the page — one blended layer over the card costs about 20 ms a
@@ -1300,7 +1317,9 @@ html[data-enhance="off"] [filter="url(#grain)"],
 html[data-enhance="off"] [filter="url(#foxLarge)"] {
   display: none;
 }
+}
 
+@layer height {
 /* ---------- short windows ----------
    The card is the exhibit, so on a low window it gets the height. Measured
    at the sizes people actually have, the page is 1,162 px tall no matter how
@@ -1379,6 +1398,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
   .footer {
     margin-top: 34px;
   }
+}
 }
 </style>
 </head>
@@ -3596,19 +3616,45 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
     clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     clone.setAttribute('width', '1800');
     clone.setAttribute('height', '1200');
-    const css = [...document.styleSheets]
-      .flatMap((s) => {
-        try {
-          return [...s.cssRules].map((r) => r.cssText);
-        } catch {
-          return [];
-        }
-      })
-      .filter((t) =>
-        /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
-          t,
-        ),
+    /* The rules the plate needs, collected one rule at a time. The page's
+       stylesheet is grouped into cascade layers, and a layer is a rule whose
+       text is every rule inside it: filtering at that level would drag the whole
+       motion layer into the file because one selector in it matched, and the
+       quality layer too — which carries a `[filter="url(#foxLarge)"]` selector
+       naming a filter that lives in the other face. So the walk goes down to the
+       rules and the choice is made there, as it was before the page had layers. */
+    const css = [];
+    // A rule that contains other rules. `r.cssRules` is not that test: in Chrome
+    // an ordinary style rule has a `cssRules` too, an empty list, so testing for
+    // it turns every real rule into a group and the walk collects nothing. A
+    // @keyframes block is deliberately not a group here — its steps are not rules
+    // the plate can use on their own, and the block is what the filter wants.
+    const group = (r) =>
+      ['CSSMediaRule', 'CSSSupportsRule', 'CSSContainerRule', 'CSSLayerBlockRule'].includes(
+        r.constructor.name,
       );
+    const walk = (rules) => {
+      for (const r of rules) {
+        if (group(r)) {
+          walk(r.cssRules);
+          continue;
+        }
+        const t = r.cssText;
+        if (
+          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
+            t,
+          )
+        )
+          css.push(t);
+      }
+    };
+    for (const s of document.styleSheets) {
+      try {
+        walk(s.cssRules);
+      } catch {
+        /* a cross-origin sheet, which this page does not have */
+      }
+    }
     const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
     style.textContent = css.join('\n');
     clone.insertBefore(style, clone.firstChild);

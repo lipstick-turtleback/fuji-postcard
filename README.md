@@ -45,7 +45,9 @@ kind.
 ```
 src/
   template.html        the shell: head, wall, card, controls, footer
-  styles/              01-wall 02-masthead 03-card 04-console 05-foil 06-motion
+  styles/              nine files, in an order the build states rather than
+                       sorts: wall masthead card console foil motion narrow
+                       quality height
   art/
     front/             the picture in twelve ordered fragments (see below)
     back.svg           the addressed side: stamp, cancellation, address block
@@ -111,6 +113,23 @@ its own `<defs>` — the clips, the gradients, the mist and cloud filters — an
 places the cast 60-odd times; id scope does not cross an `<svg>` boundary, so
 separate layers would mean 48 duplicated paint servers, and SAVE THE PLATE
 clones exactly one `<svg>`.
+
+### The stylesheet's order is written down
+
+Nine CSS files, and the build reads them in an order it writes into the page:
+each file becomes a cascade layer, and the first line of the stylesheet is
+`@layer wall, masthead, card, console, foil, motion, narrow, quality, height;`.
+Before that the order was a directory listing sorted by name, which is a real
+order but not a chosen one — `.card` is styled in `03-card.css` and again in
+`05-foil.css`, and a file named `07-foo.css` would have landed between motion
+and quality without anyone deciding it. A stylesheet in the directory that is
+not in the build's list fails the build instead of sorting itself in.
+
+One consequence of layers is worth knowing before reaching for them:
+`!important` reverses layer order, so between two important declarations the
+_earlier_ layer wins. The page has exactly two — the reduced-motion promise and
+the Enhance-off kill rule — and both set `animation: none`, so the reversal
+changes nothing here.
 
 ### Some of the scene is generated, from a component
 

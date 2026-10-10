@@ -24,12 +24,57 @@ const out = join(root, 'public', 'index.html');
 
 const read = (p) => `${readFileSync(join(src, p), 'utf8').replace(/\s+$/, '')}\n`;
 
-const css = () =>
-  readdirSync(join(src, 'styles'))
+/* The cascade order is written down.
+
+   Nine files in a directory, sorted by name, concatenated: that is a real
+   order, and it decides which rule wins wherever two rules reach the same
+   element with the same weight — `.card` is styled in 03-card.css and again in
+   05-foil.css, and today they happen to set disjoint properties, which is a
+   fact about the two files and not a fact about the build. A file named
+   `07-foo.css` would land between motion and quality without anyone choosing
+   it, and nothing in the artefact would say so.
+
+   So the order is a list, the list is the build's, and each file is wrapped in
+   a layer named after itself. A stylesheet that appears in the directory and
+   not in the list fails the build rather than sorting itself in.
+
+   One consequence worth knowing: `!important` reverses layer order, so between
+   two important declarations the *earlier* layer wins. The page has exactly
+   two — the reduced-motion promise and the Enhance-off kill rule — and both
+   set `animation: none`, so the reversal changes nothing. It is written here
+   because it is the kind of thing that changes something else, later. */
+const CSS_LAYERS = [
+  ['wall', '01-wall.css'],
+  ['masthead', '02-masthead.css'],
+  ['card', '03-card.css'],
+  ['console', '04-console.css'],
+  ['foil', '05-foil.css'],
+  ['motion', '06-motion.css'],
+  ['narrow', '07-narrow.css'],
+  ['quality', '08-quality.css'],
+  ['height', '09-height.css'],
+];
+
+const css = () => {
+  const onDisk = readdirSync(join(src, 'styles'))
     .filter((f) => f.endsWith('.css'))
-    .sort()
-    .map((f) => read(`styles/${f}`))
-    .join('\n');
+    .sort();
+  const listed = CSS_LAYERS.map(([, f]) => f);
+  const unlisted = onDisk.filter((f) => !listed.includes(f));
+  const missing = listed.filter((f) => !onDisk.includes(f));
+  if (unlisted.length || missing.length) {
+    throw new Error(
+      `styles/ and CSS_LAYERS disagree — unlisted: ${unlisted.join(', ') || 'none'}; listed but absent: ${missing.join(', ') || 'none'}`,
+    );
+  }
+  const statement = `@layer ${CSS_LAYERS.map(([n]) => n).join(', ')};`;
+  return [
+    statement,
+    ...CSS_LAYERS.map(
+      ([name, f]) => `@layer ${name} {\n${read(`styles/${f}`).replace(/\n$/, '')}\n}`,
+    ),
+  ].join('\n\n');
+};
 
 /* The JavaScript is bundled, not glued. Two files dropped into two <script>
    tags share one global scope — card.js declared `const card` at the top level
