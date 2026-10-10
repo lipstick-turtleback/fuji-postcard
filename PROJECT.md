@@ -169,6 +169,13 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **An overlap is only a defect in one paint order.** A petal that drifts
+  behind the title box is part of the picture; the same petal painted after it is
+  a smudge across a glyph. Boxes alone cannot tell those apart, so the check
+  compares document positions as well — and asks it only of the cast, because
+  the cast is the part placed from data. The foxing, the grain and the
+  cancellation rings lie over the lettering on purpose; that is what sixty years
+  and a post office look like.
 - **A copy is only a copy at reading distance.** The complaint was that the
   shore was one plant repeated, and the fix — ten shapes, forty-five placements,
   each skewed, scaled and rotated — held for a while and then quietly stopped

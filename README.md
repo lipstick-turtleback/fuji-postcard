@@ -379,7 +379,11 @@ page before the question:
   against the edge of the plate, because the picture runs to that edge and the
   border prints over it: a mark past the border is standing in the blank margin,
   and a mark past the edge is a plant sliced in half by the card. It found a reed
-  at x 892–912 on a plate 900 units wide.
+  at x 892–912 on a plate 900 units wide. It also asks, of the cast alone,
+  whether anything is painted on top of a letter — paint order, not just
+  overlapping boxes, because a petal behind the title box is the picture and the
+  same petal in front of it is a smudge across a glyph. Renaming the cherry
+  fragment so it paints after the print fragment makes it fire.
 - `scripts/test-css.mjs` asks whether the stylesheet is telling the truth about
   the page: every selector must match something that exists, and every
   `animation` must name a `@keyframes` block that exists. A stylesheet cannot

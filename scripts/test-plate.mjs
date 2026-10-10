@@ -171,6 +171,39 @@ const probe = `(() => {
           );
       }
 
+    /* Nothing the cast places may be painted on top of a letter.
+
+       Paint order is the whole of it: a petal that drifts behind the title box
+       is part of the picture, and the same petal drawn after the box is a
+       smudge across a glyph. Only the use elements are asked, because only the
+       cast is placed from data and can be moved onto a letter by somebody
+       editing a number. The drawn layers — the foxing, the grain, the vignette,
+       the cancellation rings — overlap the lettering on purpose, which is what
+       sixty years and a post office look like, and they are not this rule. */
+    const onTop = [];
+    for (const t of texts) {
+      const tb = box(t);
+      for (const el of svg.querySelectorAll('use')) {
+        if (el.children.length) continue;
+        if (!(t.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
+        const b = box(el);
+        if (b.x2 - b.x1 < 0.5 || b.y2 - b.y1 < 0.5) continue;
+        const ox = Math.min(tb.x2, b.x2) - Math.max(tb.x1, b.x1);
+        const oy = Math.min(tb.y2, b.y2) - Math.max(tb.y1, b.y1);
+        if (ox > 1 && oy > 1)
+          onTop.push(
+            (t.textContent.trim().slice(0, 14) || '(text)') +
+              ' under ' +
+              (el.getAttribute('href') || el.tagName) +
+              ' (' +
+              ox.toFixed(0) +
+              'x' +
+              oy.toFixed(0) +
+              ' u)',
+          );
+      }
+    }
+
     // The widest lettering on the face, in user units. It is reported so the
     // two passes cannot look like the same measurement twice: the gap that is
     // closest to a rule is usually a vertical one, and a different font moves
@@ -189,6 +222,7 @@ const probe = `(() => {
       closest,
       widest: +widest.toFixed(1),
       strays,
+      onTop,
     });
   }
   return JSON.stringify(out);
@@ -240,6 +274,10 @@ for (const f of faces) {
   else if (f.closest.gap < FLOOR)
     problems.push(
       `${f.face}${f.pass}: ${f.closest.what} is ${f.closest.gap} units from the rule, under the ${FLOOR}-unit floor`,
+    );
+  if (f.onTop.length)
+    problems.push(
+      `${f.face}: something is painted on top of the lettering — ${f.onTop.join('; ')}`,
     );
   if (f.strays.length)
     problems.push(
