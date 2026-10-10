@@ -25,7 +25,7 @@ not break, and how change is verified here.
 | **`S`** or Save the plate    | serialises the face you are looking at out of the DOM and downloads it as a standalone `.svg`                                                                                                                                                                                                                                                                                                                                                                                                              |
 | **`M`** or Play              | a ~5-minute soundtrack: koto-ish plucks on the D hirajōshi scale, a lake drone, a dotted-eighth delay. **Nothing plays until you ask** — no autostart, and `?silent` runs the whole piece with the output closed                                                                                                                                                                                                                                                                                           |
 | **Enhance on/off**           | the effects switch, **off by default**. On adds the holographic laminate and its glow, the card's sway, the ten-petal shower, the reeds, the birds' crossing and the paper grain — about 2.3× the frame rate. Off leaves the lake: the mist, the glitter band and its crests, the wake, the boat and the man poling it, two ducks, a heron, four petals lying on the water, three birds in the far sky, three petals still coming down, slowly, and three places where something came up under the surface |
-| **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely — `.face svg *`, not a list of names, so the promise cannot go stale                                                                                                                                                                                                                                                                                                                                                                            |
+| **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely — `.face svg *` with `!important`, not a list of names, so the promise cannot go stale and does not lapse when Enhance is switched on                                                                                                                                                                                                                                                                                                           |
 
 See [docs/motion.md](docs/motion.md) for what moves in the scene, how far, how slowly, and why each of those things moves at all.
 
@@ -320,7 +320,9 @@ page before the question:
 - `scripts/test-motion.mjs` holds the page to both of its motion promises.
   Under `--force-prefers-reduced-motion` it wraps `requestAnimationFrame` and
   fails if a settled page asks for frames — it asks for none — and it fails if
-  anything inside a face still has an animation running. With motion allowed it
+  anything inside a face still has an animation running, including after the
+  laminate is switched on: Enhance's rules are more specific than the
+  reduced-motion rule, and a media query carries no weight of its own. With motion allowed it
   fails if the lake has been switched off along with the laminate, and it
   samples every animated mark twice three seconds apart to check rule 2 over
   time: no two nearby marks may share a period or be whole multiples of one

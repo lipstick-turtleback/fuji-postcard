@@ -348,15 +348,26 @@ html[data-enhance="on"] .bird.b3 {
    asked it not to. So the rule is universal — nothing inside a face animates —
    and it is the mirror image of the Enhance rule in 08-quality.css, which
    excludes by name because it is the one that has to justify what stays.
-   The order of the sheets does the rest: this block sits above the gentle set
-   in this file, and a media query outranks a plain rule regardless of where
-   the later rule would have set a duration inline. */
+
+   It is `!important`, and not because the sheet order is unreliable. A media
+   query carries no weight at all: it decides whether a rule applies, not how
+   hard it applies. The comment here used to claim that a media query outranks
+   a plain rule, and for as long as every animated thing in the scene was
+   selected by a single class, that mistake was invisible. Then Enhance grew
+   rules of its own — `html[data-enhance="on"] .bird`, two classes and an
+   attribute against this rule's one class and two elements — and switching the
+   laminate on while reduced motion was on set four marks moving again: the
+   three birds gliding and the hull rocking. Somebody who asked the system for
+   stillness and then reached for the card's Enhance got motion anyway.
+
+   The promise is the reason, and it is the one thing in this stylesheet that
+   overrides by weight rather than by order. */
 @media (prefers-reduced-motion: reduce) {
   .face svg * {
-    animation: none;
+    animation: none !important;
   }
   .card {
-    transition: none;
+    transition: none !important;
   }
 }
 

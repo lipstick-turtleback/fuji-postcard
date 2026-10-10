@@ -169,6 +169,16 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **A media query carries no weight.** It decides whether a rule applies, not
+  how hard it applies. The reduced-motion block claimed in its own comment that
+  a media query outranks a plain rule, and that was true only in the sense that
+  nothing else in the scene was more specific. The moment Enhance grew
+  `html[data-enhance="on"] .bird` — two classes and an attribute against the
+  promise's one class and two elements — switching the laminate on under
+  reduced motion set the birds gliding and the hull rocking. A promise that
+  overrides by order has to be re-checked every time anything else grows a
+  selector; this one now overrides by weight, and the test switches Enhance on
+  under reduced motion to prove it holds.
 - **A plate that is not the picture is still a plate.** The export was checked
   as a file — bytes, rules, shape counts — and never as a picture, so the only
   way to learn that the file and the card disagreed was to be unlucky. Now both

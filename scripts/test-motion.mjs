@@ -110,12 +110,44 @@ const settled = JSON.parse(
    name every animated class here, which meant the promise expired the moment a
    class was added somewhere else. Now the claim is that nothing inside a face
    animates at all, and that is what gets measured. */
-const stillMoving = await still.evaluate(`
-  [...document.querySelectorAll('.card svg *')]
+const movingInAFace = `
+  [...document.querySelectorAll('.face svg *')]
     .filter((el) => getComputedStyle(el).animationName !== 'none')
-    .map((el) => el.getAttribute('class') || el.tagName).join(', ')
-`);
+    .map((el) => (el.getAttribute('class') || el.tagName) + ' ' + getComputedStyle(el).animationName).join(', ')
+`;
+const stillMoving = await still.evaluate(movingInAFace);
 ok('and nothing in the picture animates', stillMoving === '', stillMoving.slice(0, 120));
+
+/* And the promise has to survive the thing a person is most likely to do
+   next: reach for the laminate. Enhance's own rules are more specific than the
+   reduced-motion rule — `html[data-enhance="on"] .bird` is two classes and an
+   attribute against one class and two elements — and a media query carries no
+   weight of its own, it only decides whether a rule applies. Until this was
+   measured, switching Enhance on under reduced motion set four marks moving:
+   the three birds gliding and the hull rocking.
+
+   The state is set, never assumed: this profile keeps localStorage between
+   runs, so the button may already be holding the laminate on. */
+const setStillEnhance = async (on) => {
+  const read = await still.evaluate(
+    `(() => {
+      const want = ${on ? 'true' : 'false'};
+      if ((document.documentElement.dataset.enhance === 'on') !== want)
+        document.getElementById('enhanceBtn').click();
+      return document.documentElement.dataset.enhance;
+    })()`,
+  );
+  await sleep(500);
+  return (read === 'on') === on;
+};
+ok('the laminate can be switched on under reduced motion', await setStillEnhance(true));
+const stillMovingOn = await still.evaluate(movingInAFace);
+ok(
+  'and still nothing animates, with Enhance on',
+  stillMovingOn === '',
+  stillMovingOn.slice(0, 120),
+);
+await setStillEnhance(false);
 still.close();
 
 /* ---------- the other half: the picture moves when nobody asks it to ---------- */
