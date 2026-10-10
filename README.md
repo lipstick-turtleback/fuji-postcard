@@ -45,6 +45,7 @@ src/
   art/
     front/             the picture in twelve ordered fragments (see below)
     back.svg           the addressed side: stamp, cancellation, address block
+    gen/               parts the build renders: Plants.svelte + its data
   script/
     card.js            tilt, flip, foil lighting, SVG export
     soundtrack.js      the score and the synthesis chain
@@ -99,6 +100,34 @@ its own `<defs>` — the clips, the gradients, the mist and cloud filters — an
 places the cast 60-odd times; id scope does not cross an `<svg>` boundary, so
 separate layers would mean 48 duplicated paint servers, and SAVE THE PLATE
 clones exactly one `<svg>`.
+
+### Some of the scene is generated, from a component
+
+Forty-five plant placements were forty-five hand-typed transforms. That is the
+part of a drawing nobody re-reads, and it is where the repetition crept in: the
+same five marks, mostly unrotated, rooted on three straight lines. So the
+placements are data — `src/art/gen/Plants.data.mjs`, where each entry says
+where a plant roots, how far it leans and whether it is taller than it is wide
+— and `Plants.svelte` turns that data into `<use>` elements. The fragment that
+used to hold the markup now holds one line:
+
+```
+          @GEN:Plants@
+```
+
+The build renders the component at build time and inlines the result. **Nothing
+Svelte ships**: no runtime, no hydration markers (the build strips them),
+nothing to fetch. The page is the same static SVG, and `<use>` is still the
+mechanism, because that is what SVG's own instancing is for. What the component
+buys is the ability to say a thing once, and to argue about the data instead of
+the markup.
+
+The migration was checked, not trusted: every placement in the built page was
+compared, as a set of (mark, transform) pairs, against the hand-written block
+it replaced. 45 before, 45 after, identical. And a placement that points at a
+mark which does not exist fails the build — `check.mjs` resolves every
+`url(#x)` and `href="#x"` against the ids the page declares, so renaming a mark
+is a build error, not a plant that quietly stops drawing.
 
 The split is then verifiable in a way a rewrite is not: `npm run build` after
 moving the ranges must leave `git diff public/index.html` empty. It did. The

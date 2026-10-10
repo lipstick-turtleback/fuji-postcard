@@ -2,6 +2,7 @@
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rollup } from 'rollup';
 /* Build public/index.html from the parts under src/.
  *
  * The page is one self-contained file on purpose: it works offline, it has no
@@ -13,7 +14,9 @@ import { fileURLToPath } from 'node:url';
  *   node scripts/build.mjs          write public/index.html
  *   node scripts/build.mjs --check  fail if the committed file is stale
  */
-import { rollup } from 'rollup';
+import { render } from 'svelte/server';
+// first, so Node can read a .svelte file when the scene asks for one
+import './register-svelte.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const src = join(root, 'src');
@@ -72,6 +75,24 @@ const part = (rel) => {
   return read(rel);
 };
 
+/* A generated part: a Svelte component, rendered at build time to static
+   markup and dropped into the scene where the marker line sits. Nothing
+   Svelte is shipped — no runtime, no hydration comments, nothing to fetch.
+   What the component buys is the ability to say a thing once: forty-five
+   plant placements are a loop over data instead of forty-five hand-typed
+   transforms, and the data can be measured and argued about. */
+const gen = async (name) => {
+  const dir = join(src, 'art', 'gen');
+  const component = (await import(new URL(`../src/art/gen/${name}.svelte`, import.meta.url).href))
+    .default;
+  const props = existsSync(join(dir, `${name}.data.mjs`))
+    ? await import(new URL(`../src/art/gen/${name}.data.mjs`, import.meta.url).href)
+    : {};
+  // the anchors Svelte emits for hydration are meaningless in a page that is
+  // never hydrated, and they would sit in the exported plate
+  return render(component, { props }).body.replace(/<!--\[-->|<!--\]-->/g, '');
+};
+
 const slots = {
   '@CSS@': css,
   '@SVG_FRONT@': () => art('front'),
@@ -92,7 +113,12 @@ for (const [marker, fill] of Object.entries(slots)) {
   html = html.replace(line, () => text);
 }
 
-const left = html.match(/@[A-Z_]+@/g);
+for (const name of [...html.matchAll(/^[ \t]*@GEN:([A-Za-z0-9_]+)@[ \t]*$/gm)].map((m) => m[1])) {
+  const text = await gen(name);
+  html = html.replace(new RegExp(`^[ \\t]*@GEN:${name}@[ \\t]*$`, 'm'), () => text);
+}
+
+const left = html.match(/@[A-Z_]+@|@GEN:[A-Za-z0-9_]+/g);
 if (left) {
   console.error(`build: unresolved markers in output: ${[...new Set(left)].join(', ')}`);
   process.exit(1);

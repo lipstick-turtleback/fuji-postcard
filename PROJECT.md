@@ -100,6 +100,7 @@ repo can be opened with no build step. It is concatenated from parts by
 | `src/template.html`        | the shell, with whole-line markers `@CSS@`, `@SVG_FRONT@`, … |
 | `src/art/front/`           | the picture in twelve fragments, sorted into paint order     |
 | `src/art/back.svg`         | the other side: message, address, stamp, cancellation        |
+| `src/art/gen/`             | parts rendered at build time from a component and its data   |
 | `src/styles/*.css`         | nine numbered files, applied in sorted order                 |
 | `src/script/card.js`       | tilt, lighting model, flip, export, Enhance                  |
 | `src/script/soundtrack.js` | the whole score as data, plus a small Web Audio engine       |
