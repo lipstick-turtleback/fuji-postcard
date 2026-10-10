@@ -1,44 +1,22 @@
 #!/usr/bin/env node
 /* Verify the composition without listening to it.
 
-   The score lives inside the soundtrack IIFE, so it cannot be imported.
-   It can, however, be lifted out and evaluated on its own: the region
-   between the two sentinels below is plain data and plain arithmetic —
-   no DOM, no Web Audio — so it runs in a bare vm context.
+   The score is a module — src/script/sound/score.mjs — so this file imports
+   it and asks it questions. It used to have to cut the score out of the
+   soundtrack's IIFE, between two string sentinels, and evaluate the fragment
+   in a bare vm, because that was the only way to reach data that lived inside
+   a function. A test written that way breaks when a comment moves, and it
+   tests a copy of the score rather than the one the page runs.
 
-   What this catches is the kind of mistake that is silent in the browser
-   and only ever heard: a step index off the end of the scale, a note that
-   starts past the end of its bar, two notes of the same voice overlapping,
-   a phrase that is not eight bars, a piece that is not the length the
-   README claims.
+   What this catches is the kind of mistake that is silent in the browser and
+   only ever heard: a step index off the end of the scale, a note that starts
+   past the end of its bar, two notes of the same voice overlapping, a phrase
+   that is not eight bars, a piece that is not the length the README claims.
 
      node scripts/test-score.mjs
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import vm from 'node:vm';
+import { BAR, BARS, BPM, NBARS, PHRASES, SCALE, TOUCH } from '../src/script/sound/score.mjs';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const src = readFileSync(join(root, 'src', 'script', 'soundtrack.js'), 'utf8');
-
-const START = 'const BPM = 66;';
-const END = 'const NBARS = BARS.length;';
-const a = src.indexOf(START);
-const b = src.indexOf(END);
-if (a < 0 || b < 0) {
-  console.error('test-score: sentinels not found in soundtrack.js — the score region moved');
-  process.exit(1);
-}
-
-const box = { SCALE: null, BARS: null, PHRASES: null };
-const context = vm.createContext(box);
-vm.runInContext(
-  `${src.slice(a, b + END.length)}\nObject.assign(this, { BPM, BEAT, BAR, SCALE, TOUCH, PHRASES, BARS, NBARS });`,
-  context,
-);
-
-const { BPM, BAR, SCALE, TOUCH, PHRASES, BARS, NBARS } = box;
 const problems = [];
 const fail = (m) => problems.push(m);
 

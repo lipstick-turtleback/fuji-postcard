@@ -36,9 +36,11 @@ impossible to review. So the source is split into parts, and the single file is
 the build artefact. The parts are real: the JavaScript is ES modules bundled by
 rollup into one inlined IIFE per entry, not two files dropped into two script
 tags sharing a global scope. Rollup rather than esbuild because it prints the
-source as it was written — all 92 of the comments that explain why the audio
-does what it does survive into the artefact, and this project's reasoning lives
-in those comments. The page still ships with no runtime dependency of any kind.
+source as it was written — all 83 of the comments that explain why the audio
+does what it does survive into the artefact (counted both sides: 83 in
+`src/script/`, 83 in the two bundles in the page), and this project's reasoning
+lives in those comments. The page still ships with no runtime dependency of any
+kind.
 
 ```
 src/
@@ -47,12 +49,14 @@ src/
   art/
     front/             the picture in twelve ordered fragments (see below)
     back.svg           the addressed side: stamp, cancellation, address block
-    gen/               parts the build renders: Plants.svelte + its data
+    gen/               parts the build renders: Plants Ducks Heron Birds
+                       Floaters Petals, each with its data, plus place.mjs
   script/
     card.js            tilt, flip, foil lighting, SVG export
-    soundtrack.js      the score and the synthesis chain
+    soundtrack.js      the synthesis chain and the transport
+    sound/score.mjs    the composition as data: tempo, scale, eighty bars
 scripts/
-  build.mjs            concatenate the parts into public/index.html
+  build.mjs            bundle the JS, render the generated parts, fill the slots
   check.mjs            validate the built page without a browser
   cdp.mjs              the DevTools client the browser tests share
   checks.mjs           the collect-and-report shape the browser tests share
