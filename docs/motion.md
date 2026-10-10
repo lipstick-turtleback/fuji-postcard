@@ -55,18 +55,19 @@ cycle that reverses is a breath.
 Each entry states the cause first. Rule 1: if there is no cause, the motion is
 deleted, not tuned.
 
-| thing                      | cause                                          | motion                                                       | period                  | default?                                |
-| -------------------------- | ---------------------------------------------- | ------------------------------------------------------------ | ----------------------- | --------------------------------------- |
-| petals on the water        | the same water that already ripples under them | vertical bob, ±0.5 u, and a 0.4 u sideways slide             | 11, 17, 19, 23 s        | **yes**                                 |
-| the boat's hull            | water                                          | ±0.5 u rise and fall, 0.3° roll                              | 9.5, 13 s               | **yes**                                 |
-| the boatman                | he is rowing                                   | torso rotates 1.1° about the hips, arms follow               | 7.5 s                   | **yes**                                 |
-| the ducks                  | water                                          | ±0.4 u bob, no two in phase                                  | 8.5, 11.5 s             | **yes**                                 |
-| the heron                  | it is alive                                    | weight shift ±0.3 u; head turn is a discrete event (phase 3) | 23, 31 s                | **yes**                                 |
-| the birds                  | they are flying                                | drift along their heading, 2 u over the cycle                | 67, 89, 113 s           | **yes**                                 |
-| the far tree line's mirror | water                                          | already `reflBreathe`                                        | 39 s                    | yes (already)                           |
-| reeds and grass            | wind                                           | sway, 1.2°                                                   | 19–41 s                 | no — Enhance                            |
-| falling petals             | wind off the branch                            | the fall itself                                              | 3 of 10 at 71, 83, 97 s | **yes**; all 10 at 13–25 s with Enhance |
-| the card's laminate        | the lamp                                       | foil, glint, grain                                           | —                       | no — Enhance                            |
+| thing                         | cause                                          | motion                                                                             | period                  | default?                                |
+| ----------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------- | --------------------------------------- |
+| petals on the water           | the same water that already ripples under them | vertical bob, ±0.5 u, and a 0.4 u sideways slide                                   | 11, 17, 19, 23 s        | **yes**                                 |
+| the boat's hull               | water                                          | ±0.5 u rise and fall, 0.3° roll                                                    | 9.5, 13 s               | **yes**                                 |
+| the boatman                   | he is rowing                                   | torso rotates 1.1° about the hips, arms follow                                     | 7.5 s                   | **yes**                                 |
+| the ducks                     | water                                          | ±0.4 u bob, no two in phase                                                        | 8.3, 11.9 s             | **yes**                                 |
+| the heron                     | it is alive                                    | weight shift ±0.3 u                                                                | 37 s                    | **yes**                                 |
+| three places the fish came up | something under the water                      | a ring spreads from tight to gone, two or three times per period at uneven spacing | 97, 127, 179 s          | **yes**                                 |
+| the birds                     | they are flying                                | drift along their heading, 2 u over the cycle                                      | 67, 89, 113 s           | **yes**                                 |
+| the far tree line's mirror    | water                                          | already `reflBreathe`                                                              | 39 s                    | yes (already)                           |
+| reeds and grass               | wind                                           | sway, 1.2°                                                                         | 19–41 s                 | no — Enhance                            |
+| falling petals                | wind off the branch                            | the fall itself                                                                    | 3 of 10 at 71, 83, 97 s | **yes**; all 10 at 13–25 s with Enhance |
+| the card's laminate           | the lamp                                       | foil, glint, grain                                                                 | —                       | no — Enhance                            |
 
 The reeds stay in Enhance. Forty-five of them swaying is the single most
 expensive thing on the page, and their motion is the one that reads as "the
@@ -118,12 +119,19 @@ composited and costs nothing per frame in the main thread; a rAF loop that
 writes 25 transforms every frame is exactly the cost the perf harness exists to
 catch. The page's one rAF loop stays what it is: pointer-driven lighting.
 
-Discrete, seeded events — the heron turning its head, a fish breaking the
-surface, a wing beat — are phase 3, and they need the clock. They are also the
-only place where "nothing repeats at even intervals" cannot be satisfied by
-choosing prime periods, because an event either happens or it does not. Those
-get a seeded timer (the mulberry32 the soundtrack already uses), with the
-interval drawn from a range, never a fixed one.
+Discrete events — the heron turning its head, a fish breaking the surface, a
+wing beat — were supposed to need the clock, and the plan said so. The fish
+were built without one, and the cheaper answer turned out to be the better
+one: a keyframes block that holds the surface still for most of its period and
+lets the ring spread two or three times at uneven distances through it. The
+gaps between risings differ from each other and from the period, so nothing a
+viewer can count is countable; and because it is CSS, it costs nothing per
+frame, it survives the reduced-motion rule like everything else, and it
+travels into the exported plate, which a JavaScript timer never would.
+
+A seeded timer is still the right answer for an event that must not merely look
+irregular but actually differ between visits. It is not needed for anything on
+the page today, so nothing has one.
 
 ## Budget
 
@@ -134,6 +142,7 @@ Enhance off, 1440 × 1150, measured by `npm run perf`:
 | before the gentle set             | 18.2 ms | 16.7 ms | 33.3 ms | 50 ms | 22/240      |
 | with it (19 more animated marks)  | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
 | with the slow petals as well (22) | 18.3 ms | 16.7 ms | 33.4 ms | 33 ms | 24/240      |
+| with the fish as well (25)        | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
 
 The criterion was p95 under 40 ms and mean under 22 ms. Both hold, and the
 worst frame got better. Nineteen more moving things cost 0.2 ms of mean frame
@@ -143,7 +152,7 @@ picture's own motion was never the expensive part.
 
 ## What the measurements found on the way
 
-Three things that were already wrong, each found by a check rather than by
+Four things that were already wrong, each found by a check rather than by
 looking:
 
 - **`.water-a` was animating nothing.** The stylesheet had a rule and keyframes
@@ -157,6 +166,25 @@ looking:
   periods came from `nth-child(2n)` and `nth-child(3n)`, which hands the same
   duration to rows that are twenty-five units apart and one glance apart. Each
   crest now has its own period: 17, 23, 29, 19, 25, 31 s.
+- **The ducks, the heron and the fish were not on the lake.** A CSS transform
+  does not compose with a `transform` attribute, it replaces it, so a mark
+  positioned by the attribute and animated by the stylesheet is positioned at
+  the origin of the picture and animated there. All three had been bobbing in
+  the top-left corner of the card, under the shore, since the day they started
+  bobbing. Nothing saw it because every screenshot and every geometry test runs
+  with motion switched off — reduced motion is the only way to get two renders
+  that agree pixel for pixel — and the bug lived in the half of the page nobody
+  photographs. The fix is the shape the birds and the petals already had: a
+  group carries the placement, the animation is applied to the group, never to
+  the element that holds the placement. `test-motion.mjs` now asserts that no
+  element in a face both carries a `transform` attribute and has an animation
+  running on it.
+
+  The bug had a second half. Once the ducks were where they are supposed to be,
+  they were a hand's width from the ripple crests, and their periods — 8.5 and
+  11.5 s, the first numbers written down — turned out to be exact halves of two
+  of the crests, 17 and 23 s. The rhythm check failed on marks that had never
+  been near enough to compare.
 
 The rule those three break is rule 2, and the check that catches them is
 `test-motion.mjs`: every animated mark in a face is sampled twice three seconds

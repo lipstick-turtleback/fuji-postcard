@@ -1056,6 +1056,139 @@ html[data-enhance="on"] .bird.b3 {
     transform: translate(0.2px, -0.4px);
   }
 }
+/* Something under the lake came up for a second. Three of these, and the
+   point is that they are not cycles: the surface holds still for most of each
+   period and the ring spreads two or three times at uneven distances through
+   it, so the gaps between risings differ from each other and from the period.
+   The ring starts tight and bright and ends wide and gone, which is how a
+   ripple dies. Nothing is visible between the risings, so the jump back to
+   the small radius at the end of a cycle cannot be seen. */
+.fish {
+  animation: rise-a 97s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+.rise-b {
+  animation-name: rise-b;
+}
+.rise-c {
+  animation-name: rise-c;
+}
+@keyframes rise-a {
+  0% {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  2% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  3% {
+    opacity: 0.32;
+    transform: scale(0.62);
+  }
+  7% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  46% {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  47% {
+    opacity: 0.26;
+    transform: scale(0.58);
+  }
+  52% {
+    opacity: 0;
+    transform: scale(1.42);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+}
+@keyframes rise-b {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  19% {
+    opacity: 0;
+    transform: scale(0.36);
+  }
+  20% {
+    opacity: 0.3;
+    transform: scale(0.58);
+  }
+  25% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+  63% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  65% {
+    opacity: 0.22;
+    transform: scale(0.7);
+  }
+  69% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+@keyframes rise-c {
+  0% {
+    opacity: 0;
+    transform: scale(0.34);
+  }
+  8% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  9% {
+    opacity: 0.28;
+    transform: scale(0.6);
+  }
+  13% {
+    opacity: 0;
+    transform: scale(1.48);
+  }
+  37% {
+    opacity: 0;
+    transform: scale(0.34);
+  }
+  38% {
+    opacity: 0.34;
+    transform: scale(0.66);
+  }
+  42% {
+    opacity: 0;
+    transform: scale(1.36);
+  }
+  78% {
+    opacity: 0;
+    transform: scale(0.34);
+  }
+  80% {
+    opacity: 0.2;
+    transform: scale(0.72);
+  }
+  84% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.34);
+  }
+}
 /* The heron does not bob - it is standing in the water, not floating on it.
    What it does, over half a minute, is put weight on the other leg. */
 .wader {
@@ -1130,8 +1263,9 @@ html[data-enhance="off"] .foil {
    off except these: the mist, the surface and what moves with it - the wake,
    the glitter band on it, the reflections, the boat and the man poling it, the two
    ducks, the heron, the petals lying on the lake, and the birds in the far
-   sky, and three petals falling off the branch in still air. Each of those
-   is something the lake does, not something the card
+   sky, three petals falling off the branch in still air, and three places
+   where something comes up under the surface. Each of those is something the
+   lake does, not something the card
    does; the amplitudes are under a unit and the periods share no factors.
    Adding a name here is a claim about the picture, and it should come with
    the cause written beside it in 06-motion.css. */
@@ -1140,7 +1274,7 @@ html[data-enhance="off"]
   svg
   *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.boat):not(
     .boatman
-  ):not(.duck):not(.wader):not(.floater):not(.bird):not(.slow) {
+  ):not(.duck):not(.wader):not(.floater):not(.bird):not(.slow):not(.fish) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
@@ -1812,6 +1946,18 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <path d="M0 0 q7 -4 13 -1 q6 -3 11 0"/>
           </g>
 
+          <!-- Something under the lake came up for a second. The mark is two
+               rings seen almost edge-on, because a ripple on water this far
+               away is a flattened ellipse, not a circle, and the second ring
+               is what says it is spreading rather than blinking. It is drawn
+               at the origin so the placement can say where the fish was, and
+               it is barely visible on purpose: the test is that the lake is
+               not finished, not that you can see the fish. -->
+          <g id="fish" fill="none" stroke="#f2e6d4" stroke-linecap="round">
+            <ellipse cx="0" cy="0" rx="7" ry="1.9" stroke-width=".9"/>
+            <ellipse cx="0" cy=".7" rx="3.2" ry=".9" stroke-width=".7"/>
+          </g>
+
           <!-- a cherry blossom, seen face on. the petals are filled with a
                gradient whose centre sits up and to the right, because that
                is where the sun is; the flower is not a flat pink disc -->
@@ -2191,7 +2337,15 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                  happening to it — the sun's path, and the water moving
                  around the posts, the hull and the birds. Thirty-odd pale
                  and dark dashes used to be scattered over the whole surface
-                 as "texture", and texture with no cause reads as noise. -->
+                 as "texture", and texture with no cause reads as noise.
+
+                 Three of the happenings are these: places where something
+                 came up under the surface. They are inside the lake's clip,
+                 after the water and its glitter, because a ripple is on the
+                 lake — placed before the water was drawn, they were simply
+                 painted over, which is the failure mode of a scene built in
+                 layers and the reason paint order is named in the file names. -->
+<g class="fish rise-a" opacity="0" style="animation-duration:97s; animation-delay:-31s"><use href="#fish" transform="translate(150 468) scale(1)"></use></g><g class="fish rise-b" opacity="0" style="animation-duration:127s; animation-delay:-74s"><use href="#fish" transform="translate(300 548) rotate(-4) scale(1.25 1)"></use></g><g class="fish rise-c" opacity="0" style="animation-duration:179s; animation-delay:-12s"><use href="#fish" transform="translate(498 478) rotate(3) scale(0.85 1)"></use></g>
           </g>
   <!--
   The near bank: torii, boat, stones, driftwood, ducks, the heron,
@@ -2396,7 +2550,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 
           <!-- Two ducks in open water, between the gate and the boatman,
                where the water is widest. -->
-<g fill="#141a2c" stroke="#141a2c"><use class="duck" href="#duck" transform="translate(392 519)" style="animation-duration:8.5s; animation-delay:-2.5s"></use><use class="duck" href="#duck" transform="translate(418 525) scale(0.84)" style="animation-duration:11.5s; animation-delay:-7s"></use></g>
+<g fill="#141a2c" stroke="#141a2c"><g class="duck" style="animation-duration:8.3s; animation-delay:-2.5s"><use href="#duck" transform="translate(392 519)"></use></g><g class="duck" style="animation-duration:11.9s; animation-delay:-7s"><use href="#duck" transform="translate(418 525) scale(0.84)"></use></g></g>
           <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
             <path d="M382 522 h22 M410 528 h18"/>
           </g>
@@ -2406,7 +2560,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <ellipse cx="418" cy="530" rx="6.2" ry="1.4"/>
           </g>
 
-<g fill="#101627" stroke="#101627"><use class="wader" href="#heron" transform="translate(772 546) scale(-1 1)" style="animation-duration:31s; animation-delay:-13s"></use></g>
+<g fill="#101627" stroke="#101627"><g class="wader" style="animation-duration:37s; animation-delay:-13s"><use href="#heron" transform="translate(772 546) scale(-1 1)"></use></g></g>
           <!-- the folded wing, said with one hairline: the body is an oval
                and the eye needs to know which end is the back -->
           <path d="M766 531 C774 528 782 530 786 535 C781 538 772 538 766 535 Z"
@@ -3440,7 +3594,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
         }
       })
       .filter((t) =>
-        /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
+        /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
           t,
         ),
       );

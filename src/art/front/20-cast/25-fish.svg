@@ -1,0 +1,12 @@
+
+          <!-- Something under the lake came up for a second. The mark is two
+               rings seen almost edge-on, because a ripple on water this far
+               away is a flattened ellipse, not a circle, and the second ring
+               is what says it is spreading rather than blinking. It is drawn
+               at the origin so the placement can say where the fish was, and
+               it is barely visible on purpose: the test is that the lake is
+               not finished, not that you can see the fish. -->
+          <g id="fish" fill="none" stroke="#f2e6d4" stroke-linecap="round">
+            <ellipse cx="0" cy="0" rx="7" ry="1.9" stroke-width=".9"/>
+            <ellipse cx="0" cy=".7" rx="3.2" ry=".9" stroke-width=".7"/>
+          </g>

@@ -100,7 +100,7 @@ ok('Enhance is off', await setEnhance(false));
 const running = await living.evaluate(`
   (() => {
     const want = ['mist-a', 'mist-b', 'ripple', 'wake', 'water-b', 'refl',
-                  'boat', 'boatman', 'duck', 'wader', 'floater', 'bird', 'slow'];
+                  'boat', 'boatman', 'duck', 'wader', 'floater', 'bird', 'slow', 'fish'];
     const out = {};
     for (const c of want) {
       const els = [...document.querySelectorAll('.card svg .' + c)];
@@ -130,6 +130,29 @@ ok(
     `getComputedStyle(document.querySelector('.card svg .bird')).animationName`,
   ),
 );
+
+/* A CSS transform does not compose with a transform attribute — it replaces it
+   outright. So a mark that is positioned by the attribute and animated by the
+   stylesheet is positioned at the origin of the picture and animated there.
+   That is what the ducks, the heron and the fish were doing: bobbing in the
+   top-left corner of the card, hidden under the shore, for as long as they had
+   been bobbing at all. Every screenshot taken to check them was taken with
+   motion switched off — reduced motion is the only way to get two renders that
+   agree — and the geometry tests run the same way. The bug lived in the half of
+   the page nobody photographs. */
+const overridden = await living.evaluate(`
+  (() => {
+    const bad = [];
+    for (const e of document.querySelectorAll('.face svg *')) {
+      if (!e.getAttribute('transform')) continue;
+      const name = getComputedStyle(e).animationName;
+      if (name === 'none') continue;
+      bad.push((e.getAttribute('class') || e.tagName) + ' ' + name);
+    }
+    return bad.join(' | ');
+  })()
+`);
+ok('nothing animates a transform over a placement', overridden === '', overridden.slice(0, 160));
 
 /* Rule 2 over time. Nothing in the scene may repeat at even intervals, and the
    smallest way to break that is two marks a hand's width apart keeping step.

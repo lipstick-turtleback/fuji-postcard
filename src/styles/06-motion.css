@@ -394,6 +394,139 @@ html[data-enhance="on"] .bird.b3 {
     transform: translate(0.2px, -0.4px);
   }
 }
+/* Something under the lake came up for a second. Three of these, and the
+   point is that they are not cycles: the surface holds still for most of each
+   period and the ring spreads two or three times at uneven distances through
+   it, so the gaps between risings differ from each other and from the period.
+   The ring starts tight and bright and ends wide and gone, which is how a
+   ripple dies. Nothing is visible between the risings, so the jump back to
+   the small radius at the end of a cycle cannot be seen. */
+.fish {
+  animation: rise-a 97s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+.rise-b {
+  animation-name: rise-b;
+}
+.rise-c {
+  animation-name: rise-c;
+}
+@keyframes rise-a {
+  0% {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  2% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  3% {
+    opacity: 0.32;
+    transform: scale(0.62);
+  }
+  7% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  46% {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  47% {
+    opacity: 0.26;
+    transform: scale(0.58);
+  }
+  52% {
+    opacity: 0;
+    transform: scale(1.42);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+}
+@keyframes rise-b {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  19% {
+    opacity: 0;
+    transform: scale(0.36);
+  }
+  20% {
+    opacity: 0.3;
+    transform: scale(0.58);
+  }
+  25% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+  63% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  65% {
+    opacity: 0.22;
+    transform: scale(0.7);
+  }
+  69% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+@keyframes rise-c {
+  0% {
+    opacity: 0;
+    transform: scale(0.34);
+  }
+  8% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  9% {
+    opacity: 0.28;
+    transform: scale(0.6);
+  }
+  13% {
+    opacity: 0;
+    transform: scale(1.48);
+  }
+  37% {
+    opacity: 0;
+    transform: scale(0.34);
+  }
+  38% {
+    opacity: 0.34;
+    transform: scale(0.66);
+  }
+  42% {
+    opacity: 0;
+    transform: scale(1.36);
+  }
+  78% {
+    opacity: 0;
+    transform: scale(0.34);
+  }
+  80% {
+    opacity: 0.2;
+    transform: scale(0.72);
+  }
+  84% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.34);
+  }
+}
 /* The heron does not bob - it is standing in the water, not floating on it.
    What it does, over half a minute, is put weight on the other leg. */
 .wader {
