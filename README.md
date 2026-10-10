@@ -27,6 +27,8 @@ not break, and how change is verified here.
 | **Enhance on/off**           | the effects switch, **off by default**. On adds the holographic laminate and its glow, the card's sway, the falling petals, the drifting water and the paper grain — about 2.3× the frame rate                   |
 | **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely                                                                                                                                                       |
 
+See [docs/motion.md](docs/motion.md) for what moves in the scene, how far, how slowly, and why each of those things moves at all.
+
 ## The repository
 
 The page is one file because that is the point — but one 4,100-line file is
