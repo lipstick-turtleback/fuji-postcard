@@ -129,10 +129,11 @@ interval drawn from a range, never a fixed one.
 
 Enhance off, 1440 × 1150, measured by `npm run perf`:
 
-|                                  | mean    | median  | p95     | worst | late frames |
-| -------------------------------- | ------- | ------- | ------- | ----- | ----------- |
-| before the gentle set            | 18.2 ms | 16.7 ms | 33.3 ms | 50 ms | 22/240      |
-| with it (19 more animated marks) | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
+|                                   | mean    | median  | p95     | worst | late frames |
+| --------------------------------- | ------- | ------- | ------- | ----- | ----------- |
+| before the gentle set             | 18.2 ms | 16.7 ms | 33.3 ms | 50 ms | 22/240      |
+| with it (19 more animated marks)  | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
+| with the slow petals as well (22) | 18.3 ms | 16.7 ms | 33.4 ms | 33 ms | 24/240      |
 
 The criterion was p95 under 40 ms and mean under 22 ms. Both hold, and the
 worst frame got better. Nineteen more moving things cost 0.2 ms of mean frame
