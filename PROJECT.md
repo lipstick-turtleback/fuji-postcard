@@ -132,6 +132,12 @@ The habits that keep paying off:
   the card that is four pixels of faint type, and no screenshot at any zoom was
   going to make it a fact. `scripts/test-plate.mjs` compares every `<text>` box
   with every rule band and reports the clearance in user units.
+- **A test that skips half of what it measures is worse than no test**, because
+  it reports a pass. The plate test named the front's gilded rules in its
+  selectors, so the back — a plain double rule with different names, drawn
+  through its own caption — produced no rules and was skipped in silence. Select
+  by what a thing is, not by what it was called, and print how many of each the
+  test actually looked at.
 - **A promise nobody can test is a promise that quietly breaks.** Flip,
   export, the shortcuts and reduced-motion are rule 5, and the only thing
   enforcing them was somebody remembering to click the buttons. They are

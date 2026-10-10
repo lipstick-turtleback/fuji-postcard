@@ -209,7 +209,12 @@
               <path d="M104.3 573.8 l14 -12 h18 l-14 12 z" opacity=".95"/>
             </g>
             <path d="M30 570 l6 -5 h4 l-6 5 z" fill="#efe6d4" opacity=".5"/>
-            <text x="176" y="571" font-size="9" letter-spacing="3" fill="#6f6350"
+            <!-- the caption sits above the border, not in it: at y=571 its box
+                 ran 562.4 to 572.9, so the inner rule at 569 was printed through
+                 the middle of the letters and the outer rule at 574 was 0.4 units
+                 under them. the stripes straddle the rules because a printed
+                 border does; type should not. -->
+            <text x="176" y="564.5" font-size="9" letter-spacing="3" fill="#6f6350"
                   font-family="Georgia,serif">PAR AVION · BY AIR MAIL</text>
           </g>
 

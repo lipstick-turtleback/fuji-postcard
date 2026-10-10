@@ -162,15 +162,27 @@ page that simply needed scrolling. A caption and a colophon may scroll; the
 controls may not. If Chrome is not installed the test says so and passes — a
 missing browser is not a broken page.
 
-`scripts/test-plate.mjs` measures the lettering against the gilded frame, in the
-artwork's own user units, and fails if a rule crosses a letter or comes within a
-unit of one. The plate inscription had been set at y=588, below both frame rules
-at 579 and 586, so both rules and the bright glint that rides the outer one were
-drawn straight through `KAWAGUCHI-KO · JAPAN`. Every screenshot of the card was
-taken at a size where that is four pixels, and the type is deliberately faint, so
-it survived. The frame is what makes the card a plate, so the type moved: its
-baseline now rests 5 units above the inner rule, and the closest letter box — the
-ink shadow, which is set 1.2 units lower — sits 1.5 units clear of it.
+`scripts/test-plate.mjs` measures the lettering against the rules of the frame,
+in the artwork's own user units, and fails if a rule crosses a letter or comes
+within a unit of one. The plate inscription had been set at y=588, below both
+frame rules at 579 and 586, so both rules and the bright glint that rides the
+outer one were drawn straight through `KAWAGUCHI-KO · JAPAN`. Every screenshot
+of the card was taken at a size where that is four pixels, and the type is
+deliberately faint, so it survived. The frame is what makes the card a plate, so
+the type moved: its baseline now rests 5 units above the inner rule, and the
+closest letter box — the ink shadow, which is set 1.2 units lower — sits 1.5
+units clear of it.
+
+The same test then found the same bug on the face nobody had measured. Its rule
+list was a pair of selectors naming the front's gilded frame, and the back's
+frame is a plain double rule with different names, so the back produced no rules
+and was skipped without a word. It also mapped boxes through the back's matrix,
+which is mirrored — `a` is negative — so the boxes came out inside-out. The rule
+set is now found by what a rule is: a stroked, unfilled outline, or a straight
+mark with no rise, running most of the way across the plate. 34 bands on the
+front, 16 on the back. The back's `PAR AVION · BY AIR MAIL` was sitting at
+y=571 with the inner rule at 569 printed through the middle of the word and the
+outer rule 0.4 units under it; it now rests above the border, 2.29 units clear.
 
 `scripts/test-interactions.mjs` makes the page do the things it promises and
 reads back what happened: the pointer walks the glint ray and tilts the card,
