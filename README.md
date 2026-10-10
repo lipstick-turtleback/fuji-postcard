@@ -47,6 +47,7 @@ scripts/
   build.mjs            concatenate the parts into public/index.html
   check.mjs            validate the built page without a browser
   cdp.mjs              the DevTools client the browser tests share
+  checks.mjs           the collect-and-report shape the browser tests share
   test-score.mjs       verify the composition as data
   test-contrast.mjs    keep the palette above WCAG AA
   test-layout.mjs      drive headless Chrome at real window sizes
@@ -54,6 +55,8 @@ scripts/
   test-ink.mjs         measure the contrast of the type printed on the card
   test-export.mjs      check the .svg the save button hands out
   test-interactions.mjs drive the buttons and shortcuts and read what happened
+  test-motion.mjs      hold the page to its reduced-motion promise
+  test-sound.mjs       the soundtrack, on a page nobody has touched
   perf.mjs             measure frame times over CDP
   serve.mjs            dependency-free static server
 public/
@@ -258,17 +261,25 @@ none was examined. It printed a pass. The count of rules examined is in the
 output line now (34 on the front, 0 on the back, which carries no classes),
 and giving a mark a class the export filter drops fails the test.
 
-`scripts/test-interactions.mjs` makes the page do the things it promises and
-reads back what happened: the pointer walks the glint ray and tilts the card,
-`F` turns it over, `S` downloads the face that is showing (caught by wrapping
-`HTMLAnchorElement.prototype.click`), Enhance and `M` toggle, the volume slider
-paints, and no page exception is thrown. It also collects the errors the
-browser itself raises while parsing the page — a malformed path is one of
-those, and it appears there and nowhere else. Then it loads the page again
-under `--force-prefers-reduced-motion` with `requestAnimationFrame` wrapped, and
-fails if the settled page asks for frames: it asks for none. Rule 5 of the brief
-says none of this may break, and until now the only thing enforcing that was
-somebody remembering to click the buttons.
+Three browser tests ask the three questions that need a browser, each with its
+own Chrome and its own page, because the answers depend on what has happened to
+the page before the question:
+
+- `scripts/test-interactions.mjs` makes the page do the things it promises and
+  reads back what happened: the pointer walks the glint ray and tilts the card,
+  `F` turns it over, `S` downloads the face that is showing (caught by wrapping
+  `HTMLAnchorElement.prototype.click`), Enhance and the volume slider respond,
+  and no page exception is thrown. It also collects the errors the browser
+  itself raises while parsing the page — a malformed path is one of those, and
+  it appears there and nowhere else.
+- `scripts/test-motion.mjs` loads the page under `--force-prefers-reduced-motion`
+  with `requestAnimationFrame` wrapped, and fails if the settled page asks for
+  frames: it asks for none.
+- `scripts/test-sound.mjs` gets a page nothing has touched, which is the only
+  place its bug was visible.
+
+Rule 5 of the brief says none of this may break, and until now the only thing
+enforcing that was somebody remembering to click the buttons.
 
 Headless Chrome will not let anyone _hear_ the soundtrack, but with
 `--autoplay-policy=no-user-gesture-required` its `AudioContext` clock runs, so

@@ -21,6 +21,13 @@ const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/M
  *  all still run, so the thing under test is the real thing. */
 export const silentPage = (href) => `${href}${href.includes('?') ? '&' : '?'}silent`;
 
+/** A real key event, not a synthetic one: the page's shortcuts are checked by
+ *  pressing keys the way a person does. */
+export const key = async (send, k) => {
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: k, code: `Key${k.toUpperCase()}` });
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: k, code: `Key${k.toUpperCase()}` });
+};
+
 /**
  * Launch headless Chrome and attach to its first page target. Runtime and Log
  * are enabled before anything navigates, so the caller gets two arrays: the
