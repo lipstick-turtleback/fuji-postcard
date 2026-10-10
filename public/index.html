@@ -714,10 +714,19 @@ kbd {
   }
 }
 
+/* The period is not in the stylesheet. Each petal carries two of them as
+   custom properties — the one it falls on when the laminate is off, and the
+   one it falls on when it is on — and the tier is chosen here, in one rule,
+   rather than ten times over in ten class rules. */
 .petal {
-  animation: petalFall linear infinite;
+  animation: petalFall var(--dur, 17s) linear infinite;
+  animation-delay: var(--delay, 0s);
   transform-box: fill-box;
   transform-origin: center;
+}
+html[data-enhance="on"] .petal {
+  animation-duration: var(--dur-on);
+  animation-delay: var(--delay-on);
 }
 @keyframes petalFall {
   0% {
@@ -734,46 +743,6 @@ kbd {
     transform: translate(-150px, 430px) rotate(340deg);
     opacity: 0;
   }
-}
-.p1 {
-  animation-duration: 15s;
-  animation-delay: -1s;
-}
-.p2 {
-  animation-duration: 19s;
-  animation-delay: -6s;
-}
-.p3 {
-  animation-duration: 13s;
-  animation-delay: -9s;
-}
-.p4 {
-  animation-duration: 21s;
-  animation-delay: -3s;
-}
-.p5 {
-  animation-duration: 17s;
-  animation-delay: -12s;
-}
-.p6 {
-  animation-duration: 23s;
-  animation-delay: -8s;
-}
-.p7 {
-  animation-duration: 14s;
-  animation-delay: -15s;
-}
-.p8 {
-  animation-duration: 20s;
-  animation-delay: -5s;
-}
-.p9 {
-  animation-duration: 16s;
-  animation-delay: -11s;
-}
-.p10 {
-  animation-duration: 25s;
-  animation-delay: -2s;
 }
 
 .ripple {
@@ -1161,7 +1130,8 @@ html[data-enhance="off"] .foil {
    off except these: the mist, the surface and what moves with it - the wake,
    the glitter band on it, the reflections, the boat and the man poling it, the two
    ducks, the heron, the petals lying on the lake, and the birds in the far
-   sky. Each of those is something the lake does, not something the card
+   sky, and three petals falling off the branch in still air. Each of those
+   is something the lake does, not something the card
    does; the amplitudes are under a unit and the periods share no factors.
    Adding a name here is a claim about the picture, and it should come with
    the cause written beside it in 06-motion.css. */
@@ -1170,7 +1140,7 @@ html[data-enhance="off"]
   svg
   *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.boat):not(
     .boatman
-  ):not(.duck):not(.wader):not(.floater):not(.bird) {
+  ):not(.duck):not(.wader):not(.floater):not(.bird):not(.slow) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
@@ -2531,19 +2501,9 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             </g>
           </g>
 
-          <!-- falling petals -->
-          <g fill="#f4c3d0">
-            <g class="petal p1"><use href="#petalShape" transform="translate(150 150) rotate(-24) scale(.92 .78)"/></g>
-            <g class="petal p2"><use href="#petalShape" transform="translate(210 120) rotate(58) scale(.85 .6)"/></g>
-            <g class="petal p3"><use href="#petalShape" transform="translate(96 190) rotate(-71) scale(.9 .9)"/></g>
-            <g class="petal p4"><use href="#petalShape" transform="translate(260 170) rotate(13) scale(.75 .5)"/></g>
-            <g class="petal p5"><use href="#petalShape" transform="translate(180 240) rotate(-41) scale(1 .85)"/></g>
-            <g class="petal p6"><use href="#petalShape" transform="translate(320 130) rotate(76) scale(.8 .62)"/></g>
-            <g class="petal p7"><use href="#petalShape" transform="translate(60 260) rotate(-8) scale(.7 .7)"/></g>
-            <g class="petal p8"><use href="#petalShape" transform="translate(240 280) rotate(34) scale(.9 .55)"/></g>
-            <g class="petal p9"><use href="#petalShape" transform="translate(130 320) rotate(-56) scale(.75 .8)"/></g>
-            <g class="petal p10"><use href="#petalShape" transform="translate(300 240) rotate(21) scale(.85 .68)"/></g>
-          </g>
+          <!-- falling petals: ten of them, three of them in still air.
+               The periods are in src/art/gen/Petals.data.mjs. -->
+<g fill="#f4c3d0"><g class="petal p1" style="--dur: 17s; --delay: 0s; --dur-on: 15s; --delay-on: -1s"><use href="#petalShape" transform="translate(150 150) rotate(-24) scale(0.92 0.78)"></use></g><g class="petal p2 slow" style="--dur: 71s; --delay: -23s; --dur-on: 19s; --delay-on: -6s"><use href="#petalShape" transform="translate(210 120) rotate(58) scale(0.85 0.6)"></use></g><g class="petal p3" style="--dur: 17s; --delay: 0s; --dur-on: 13s; --delay-on: -9s"><use href="#petalShape" transform="translate(96 190) rotate(-71) scale(0.9)"></use></g><g class="petal p4" style="--dur: 17s; --delay: 0s; --dur-on: 21s; --delay-on: -3s"><use href="#petalShape" transform="translate(260 170) rotate(13) scale(0.75 0.5)"></use></g><g class="petal p5" style="--dur: 17s; --delay: 0s; --dur-on: 17s; --delay-on: -12s"><use href="#petalShape" transform="translate(180 240) rotate(-41) scale(1 0.85)"></use></g><g class="petal p6 slow" style="--dur: 83s; --delay: -51s; --dur-on: 23s; --delay-on: -8s"><use href="#petalShape" transform="translate(320 130) rotate(76) scale(0.8 0.62)"></use></g><g class="petal p7 slow" style="--dur: 97s; --delay: -70s; --dur-on: 14s; --delay-on: -15s"><use href="#petalShape" transform="translate(60 260) rotate(-8) scale(0.7)"></use></g><g class="petal p8" style="--dur: 17s; --delay: 0s; --dur-on: 20s; --delay-on: -5s"><use href="#petalShape" transform="translate(240 280) rotate(34) scale(0.9 0.55)"></use></g><g class="petal p9" style="--dur: 17s; --delay: 0s; --dur-on: 16s; --delay-on: -11s"><use href="#petalShape" transform="translate(130 320) rotate(-56) scale(0.75 0.8)"></use></g><g class="petal p10" style="--dur: 17s; --delay: 0s; --dur-on: 25s; --delay-on: -2s"><use href="#petalShape" transform="translate(300 240) rotate(21) scale(0.85 0.68)"></use></g></g>
   <!--
   Things stuck or stamped onto the card rather than drawn on it:
   the title strip, the stamp, the cancellation, the plate inscription.

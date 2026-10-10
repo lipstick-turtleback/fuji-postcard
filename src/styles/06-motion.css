@@ -52,10 +52,19 @@
   }
 }
 
+/* The period is not in the stylesheet. Each petal carries two of them as
+   custom properties — the one it falls on when the laminate is off, and the
+   one it falls on when it is on — and the tier is chosen here, in one rule,
+   rather than ten times over in ten class rules. */
 .petal {
-  animation: petalFall linear infinite;
+  animation: petalFall var(--dur, 17s) linear infinite;
+  animation-delay: var(--delay, 0s);
   transform-box: fill-box;
   transform-origin: center;
+}
+html[data-enhance="on"] .petal {
+  animation-duration: var(--dur-on);
+  animation-delay: var(--delay-on);
 }
 @keyframes petalFall {
   0% {
@@ -72,46 +81,6 @@
     transform: translate(-150px, 430px) rotate(340deg);
     opacity: 0;
   }
-}
-.p1 {
-  animation-duration: 15s;
-  animation-delay: -1s;
-}
-.p2 {
-  animation-duration: 19s;
-  animation-delay: -6s;
-}
-.p3 {
-  animation-duration: 13s;
-  animation-delay: -9s;
-}
-.p4 {
-  animation-duration: 21s;
-  animation-delay: -3s;
-}
-.p5 {
-  animation-duration: 17s;
-  animation-delay: -12s;
-}
-.p6 {
-  animation-duration: 23s;
-  animation-delay: -8s;
-}
-.p7 {
-  animation-duration: 14s;
-  animation-delay: -15s;
-}
-.p8 {
-  animation-duration: 20s;
-  animation-delay: -5s;
-}
-.p9 {
-  animation-duration: 16s;
-  animation-delay: -11s;
-}
-.p10 {
-  animation-duration: 25s;
-  animation-delay: -2s;
 }
 
 .ripple {

@@ -55,22 +55,48 @@ cycle that reverses is a breath.
 Each entry states the cause first. Rule 1: if there is no cause, the motion is
 deleted, not tuned.
 
-| thing                      | cause                                          | motion                                                       | period           | default?      |
-| -------------------------- | ---------------------------------------------- | ------------------------------------------------------------ | ---------------- | ------------- |
-| petals on the water        | the same water that already ripples under them | vertical bob, ±0.5 u, and a 0.4 u sideways slide             | 11, 17, 19, 23 s | **yes**       |
-| the boat's hull            | water                                          | ±0.5 u rise and fall, 0.3° roll                              | 9.5, 13 s        | **yes**       |
-| the boatman                | he is rowing                                   | torso rotates 1.1° about the hips, arms follow               | 7.5 s            | **yes**       |
-| the ducks                  | water                                          | ±0.4 u bob, no two in phase                                  | 8.5, 11.5 s      | **yes**       |
-| the heron                  | it is alive                                    | weight shift ±0.3 u; head turn is a discrete event (phase 3) | 23, 31 s         | **yes**       |
-| the birds                  | they are flying                                | drift along their heading, 2 u over the cycle                | 67, 89, 113 s    | **yes**       |
-| the far tree line's mirror | water                                          | already `reflBreathe`                                        | 39 s             | yes (already) |
-| reeds and grass            | wind                                           | sway, 1.2°                                                   | 19–41 s          | no — Enhance  |
-| falling petals             | wind off the branch                            | the full fall                                                | 13–25 s          | no — Enhance  |
-| the card's laminate        | the lamp                                       | foil, glint, grain                                           | —                | no — Enhance  |
+| thing                      | cause                                          | motion                                                       | period                  | default?                                |
+| -------------------------- | ---------------------------------------------- | ------------------------------------------------------------ | ----------------------- | --------------------------------------- |
+| petals on the water        | the same water that already ripples under them | vertical bob, ±0.5 u, and a 0.4 u sideways slide             | 11, 17, 19, 23 s        | **yes**                                 |
+| the boat's hull            | water                                          | ±0.5 u rise and fall, 0.3° roll                              | 9.5, 13 s               | **yes**                                 |
+| the boatman                | he is rowing                                   | torso rotates 1.1° about the hips, arms follow               | 7.5 s                   | **yes**                                 |
+| the ducks                  | water                                          | ±0.4 u bob, no two in phase                                  | 8.5, 11.5 s             | **yes**                                 |
+| the heron                  | it is alive                                    | weight shift ±0.3 u; head turn is a discrete event (phase 3) | 23, 31 s                | **yes**                                 |
+| the birds                  | they are flying                                | drift along their heading, 2 u over the cycle                | 67, 89, 113 s           | **yes**                                 |
+| the far tree line's mirror | water                                          | already `reflBreathe`                                        | 39 s                    | yes (already)                           |
+| reeds and grass            | wind                                           | sway, 1.2°                                                   | 19–41 s                 | no — Enhance                            |
+| falling petals             | wind off the branch                            | the fall itself                                              | 3 of 10 at 71, 83, 97 s | **yes**; all 10 at 13–25 s with Enhance |
+| the card's laminate        | the lamp                                       | foil, glint, grain                                           | —                       | no — Enhance                            |
 
 The reeds stay in Enhance. Forty-five of them swaying is the single most
 expensive thing on the page, and their motion is the one that reads as "the
 card is alive" rather than "the lake is alive".
+
+## The branch lets go, slowly
+
+The petals were the one row the first version of this document put in the
+Enhance column, and that was wrong on its own terms. A branch that has dropped
+its blossoms, and is dropping them still, is the picture. What is an effect is
+the _shower_ — ten petals crossing the card in 13 to 25 seconds, which is a
+gust.
+
+So the same ten petals carry two periods. Three of them, spaced along the
+branch, fall in still air at 71, 83 and 97 seconds: primes, none a multiple of
+another, staggered by negative delays so that none of them is at the top of its
+fall when you arrive. With the laminate on, all ten fall at 13 to 25 seconds.
+The test measures the same three elements in both modes — `71s 83s 97s` off,
+`19s 23s 14s` on.
+
+Each petal carries both numbers from its placement data:
+
+```
+--dur: 71s; --delay: -23s; --dur-on: 19s; --delay-on: -6s
+```
+
+and one rule in the stylesheet chooses the tier. The data states both; the
+stylesheet decides. That is what keeps two intensities of one motion from
+becoming two sets of markup — and it replaced ten `.p1` … `.p10` rules that
+hard-coded the same numbers in a different file from the petals themselves.
 
 ## Mechanism
 

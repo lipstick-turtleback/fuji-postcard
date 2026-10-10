@@ -55,16 +55,6 @@
             </g>
           </g>
 
-          <!-- falling petals -->
-          <g fill="#f4c3d0">
-            <g class="petal p1"><use href="#petalShape" transform="translate(150 150) rotate(-24) scale(.92 .78)"/></g>
-            <g class="petal p2"><use href="#petalShape" transform="translate(210 120) rotate(58) scale(.85 .6)"/></g>
-            <g class="petal p3"><use href="#petalShape" transform="translate(96 190) rotate(-71) scale(.9 .9)"/></g>
-            <g class="petal p4"><use href="#petalShape" transform="translate(260 170) rotate(13) scale(.75 .5)"/></g>
-            <g class="petal p5"><use href="#petalShape" transform="translate(180 240) rotate(-41) scale(1 .85)"/></g>
-            <g class="petal p6"><use href="#petalShape" transform="translate(320 130) rotate(76) scale(.8 .62)"/></g>
-            <g class="petal p7"><use href="#petalShape" transform="translate(60 260) rotate(-8) scale(.7 .7)"/></g>
-            <g class="petal p8"><use href="#petalShape" transform="translate(240 280) rotate(34) scale(.9 .55)"/></g>
-            <g class="petal p9"><use href="#petalShape" transform="translate(130 320) rotate(-56) scale(.75 .8)"/></g>
-            <g class="petal p10"><use href="#petalShape" transform="translate(300 240) rotate(21) scale(.85 .68)"/></g>
-          </g>
+          <!-- falling petals: ten of them, three of them in still air.
+               The periods are in src/art/gen/Petals.data.mjs. -->
+          @GEN:Petals@

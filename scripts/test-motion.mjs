@@ -100,7 +100,7 @@ ok('Enhance is off', await setEnhance(false));
 const running = await living.evaluate(`
   (() => {
     const want = ['mist-a', 'mist-b', 'ripple', 'wake', 'water-b', 'refl',
-                  'boat', 'boatman', 'duck', 'wader', 'floater', 'bird'];
+                  'boat', 'boatman', 'duck', 'wader', 'floater', 'bird', 'slow'];
     const out = {};
     for (const c of want) {
       const els = [...document.querySelectorAll('.card svg .' + c)];
@@ -147,7 +147,9 @@ ok(
    travelling is not a neighbour either: a bird crossing the sky is next to a
    duck for four seconds and then is not, so its period is a duration of
    passage, not a step the eye can compare. That is measured, not guessed —
-   anything that moves more than 8 px in three seconds is a traveller.
+   anything that moves more than 4 px in three seconds is a traveller. The
+   number is measured, not guessed: every mark that stays put moves 0 px in
+   that window at this scale, and a petal in transit moves 5-6.
 
    This runs with Enhance off, and only with Enhance off. The reeds sway in
    stands, all blades of one stand on one period, which is correct — a gust
@@ -179,7 +181,7 @@ const rhythm = JSON.parse(
       const els = first.filter((e, i) => {
         if (e.w > 200 || e.h > 200) return false;
         if (!second[i]) return true;
-        return Math.hypot(second[i].x - e.x, second[i].y - e.y) < 8;
+        return Math.hypot(second[i].x - e.x, second[i].y - e.y) < 4;
       });
       const bad = [];
       for (let i = 0; i < els.length; i++)
@@ -209,7 +211,25 @@ ok(
   living.exceptions.length === 0,
   living.exceptions.join(' | '),
 );
+/* The two tiers, measured on the same element: a petal carries both periods
+   as custom properties and the stylesheet chooses. If the wiring is wrong the
+   petal falls at one speed in both modes, which is the failure this catches. */
+const slowFirst = JSON.parse(
+  await living.evaluate(
+    `JSON.stringify([...document.querySelectorAll('.card svg .petal.slow')].map((e) => getComputedStyle(e).animationDuration))`,
+  ),
+);
 ok('the laminate can be switched on', await setEnhance(true));
+const slowSecond = JSON.parse(
+  await living.evaluate(
+    `JSON.stringify([...document.querySelectorAll('.card svg .petal.slow')].map((e) => getComputedStyle(e).animationDuration))`,
+  ),
+);
+ok(
+  'and the same petals fall faster with it on',
+  slowFirst.join() !== slowSecond.join() && slowFirst.length === 3,
+  `${slowFirst.join(' ')} off → ${slowSecond.join(' ')} on`,
+);
 ok(
   'and then the birds cross',
   (await living.evaluate(

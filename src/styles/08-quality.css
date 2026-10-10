@@ -27,7 +27,8 @@ html[data-enhance="off"] .foil {
    off except these: the mist, the surface and what moves with it - the wake,
    the glitter band on it, the reflections, the boat and the man poling it, the two
    ducks, the heron, the petals lying on the lake, and the birds in the far
-   sky. Each of those is something the lake does, not something the card
+   sky, and three petals falling off the branch in still air. Each of those
+   is something the lake does, not something the card
    does; the amplitudes are under a unit and the periods share no factors.
    Adding a name here is a claim about the picture, and it should come with
    the cause written beside it in 06-motion.css. */
@@ -36,7 +37,7 @@ html[data-enhance="off"]
   svg
   *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.boat):not(
     .boatman
-  ):not(.duck):not(.wader):not(.floater):not(.bird) {
+  ):not(.duck):not(.wader):not(.floater):not(.bird):not(.slow) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
