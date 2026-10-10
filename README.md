@@ -52,6 +52,7 @@ scripts/
   test-layout.mjs      drive headless Chrome at real window sizes
   test-plate.mjs       keep the lettering off the frame rules
   test-ink.mjs         measure the contrast of the type printed on the card
+  test-export.mjs      check the .svg the save button hands out
   test-interactions.mjs drive the buttons and shortcuts and read what happened
   perf.mjs             measure frame times over CDP
   serve.mjs            dependency-free static server
@@ -207,6 +208,22 @@ first version skipped a mark that painted nothing, on the grounds that the
 turned-away face cannot be measured; that is how a postmark whose type had been
 translated twice — and was off the plate — passed. A mark on the face being
 looked at that paints nothing is now a failure. 43 marks measured.
+
+`scripts/test-export.mjs` checks the file SAVE THE PLATE hands out. The export
+is its own program — it clones one face, gives it an xmlns and a size, and
+pastes in the subset of the page's CSS that a regular expression thinks the
+file needs — and every step there can fail in a way the page never shows. It
+catches the Blob the page produces and runs the same path-data and id rules
+over those bytes that `check.mjs` runs over the page (both now live in
+`scripts/svg-check.mjs`), then adds two that only exist here: every rule the
+page applies to a class inside that face has to be in the file, and the file
+has to open in a browser as the same number of shapes it came from. The first
+version of the class check looked at nothing, because it asked every rule
+whether it had a `cssRules` list before asking whether it had a selector — and
+a style rule has one now, for nesting, so every rule was descended into and
+none was examined. It printed a pass. The count of rules examined is in the
+output line now (34 on the front, 0 on the back, which carries no classes),
+and giving a mark a class the export filter drops fails the test.
 
 `scripts/test-interactions.mjs` makes the page do the things it promises and
 reads back what happened: the pointer walks the glint ray and tilts the card,

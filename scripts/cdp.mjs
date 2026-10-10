@@ -100,11 +100,14 @@ export async function openPage({ port, userDataDir, args = [] }) {
       ws.send(JSON.stringify({ id, method, params }));
     });
 
-  /** Run an expression in the page and get its value back, not a remote handle. */
+  /** Run an expression in the page and get its value back, not a remote handle.
+   *  An async expression is awaited: without that a promise comes back as an
+   *  empty object, which reads like the page returned nothing. */
   const evaluate = async (expression) => {
     const { result, exceptionDetails } = await send('Runtime.evaluate', {
       expression,
       returnByValue: true,
+      awaitPromise: true,
     });
     if (exceptionDetails)
       throw new Error(exceptionDetails.exception?.description || exceptionDetails.text);

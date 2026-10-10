@@ -12,6 +12,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { pathProblems } from './svg-check.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const file = join(root, 'public', 'index.html');
@@ -90,53 +91,9 @@ for (const m of html.matchAll(/aria-(?:labelledby|describedby)="([^"]*)"/g))
 for (const r of refs) if (!ids.has(r[1])) fail(r.index, `reference to missing id "#${r[1]}"`);
 
 /* ---- every path has to be a path --------------------------------------- */
-// A malformed `d` is the quietest bug this page can have. The SVG parser
-// stops at the first command whose arguments run out and drops the rest of
-// the string, so the shape does not fail to exist — it exists as something
-// else, filled along a straight line where a curve was meant to be. The
-// stamp on the back carried exactly that for its whole life: a cubic written
-// with two control points instead of three, which closed the shadow half of
-// the snow cap into a pale shard across the mountain, and put one line in
-// the console that nobody was reading. Both stamps on the card carry the same
-// drawing, and both carried the same broken curve, in different coordinates.
-const ARITY = { m: 2, l: 2, h: 1, v: 1, c: 6, s: 4, q: 4, t: 2, a: 7, z: 0 };
-const NUM = /[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?/y;
-for (const d of html.matchAll(/\sd="([^"]*)"/g)) {
-  const value = d[1];
-  let i = 0;
-  let command = null;
-  let seen = 0;
-  let bad = null;
-  while (i < value.length && !bad) {
-    const ch = value[i];
-    if (/\s|,/.test(ch)) {
-      i++;
-      continue;
-    }
-    if (/[MmLlHhVvCcSsQqTtAaZz]/.test(ch)) {
-      if (command && ARITY[command] > 0 && seen && seen % ARITY[command])
-        bad = `${command.toUpperCase()} wants ${ARITY[command]} arguments, saw ${seen} since it was named`;
-      command = ch.toLowerCase();
-      seen = 0;
-      i++;
-      continue;
-    }
-    NUM.lastIndex = i;
-    const n = NUM.exec(value);
-    if (!n) {
-      bad = `unexpected "${ch}" in path data`;
-      break;
-    }
-    if (!command) bad = 'a path has to start with a command';
-    else if (ARITY[command] === 0) bad = `${command.toUpperCase()} takes no arguments`;
-    seen++;
-    i = n.index + n[0].length;
-  }
-  if (!bad && command && ARITY[command] > 0 && seen % ARITY[command])
-    bad = `${command.toUpperCase()} wants ${ARITY[command]} arguments, saw ${seen} since it was named`;
-  if (bad)
-    fail(d.index, `malformed path d near "${value.slice(Math.max(0, i - 12), i + 12)}": ${bad}`);
-}
+// the rules live in svg-check.mjs because the same rules have to hold over a
+// .svg file this page hands out, not only over the page itself
+for (const p of pathProblems(html)) fail(p.index, p.message);
 
 /* ---- every picture has to say what it is ------------------------------- */
 // The artwork is the page. An <svg> with no <title> is invisible to a screen

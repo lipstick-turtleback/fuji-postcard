@@ -137,7 +137,10 @@ The habits that keep paying off:
   selectors, so the back — a plain double rule with different names, drawn
   through its own caption — produced no rules and was skipped in silence. Select
   by what a thing is, not by what it was called, and print how many of each the
-  test actually looked at.
+  test actually looked at. The counts caught a second instance the same week: a
+  check that asked every CSS rule whether it had a `cssRules` list before asking
+  whether it had a selector — a style rule has one now, for nesting — so it
+  descended into every rule, examined none of them, and reported a pass.
 - **Measure the pixels, not the hex.** The artwork's type sat at 2.19:1 against
   its paper while the palette looked quiet and correct, because the ink is a
   gradient, the paper is a gradient, and a group faded for the sake of one mark
