@@ -288,13 +288,16 @@ ok(
    number is measured, not guessed: every mark that stays put moves 0 px in
    that window at this scale, and a petal in transit moves 5-6.
 
-   This runs with Enhance off, and only with Enhance off. The reeds sway in
-   stands, all blades of one stand on one period, which is correct — a gust
-   moves a stand, not a blade — and telling a stand apart from a pair of
-   neighbours would need a notion of "one object" that the page does not carry. */
-const rhythm = JSON.parse(
-  await living.evaluate(
-    `(async () => {
+   It runs in both tiers. It used to run with Enhance off only, on the grounds
+   that the reeds sway in stands and the check would confuse a stand with a
+   pair of neighbours — but a stand is one element, one group, one animation,
+   so the check was already comparing stands to one another rather than blades.
+   Running it once the laminate is on found fourteen pairs keeping step: three
+   stands of reeds on 13 s and 17 s beside each other, a bird crossing the lake
+   on exactly twice the period of the ripple below it, a hull rocking at half a
+   reed's period. Those were the numbers the second tier was built from, and
+   nothing had ever compared them. */
+const rhythmProbe = `(async () => {
       const collect = () =>
         [...document.querySelectorAll('.card svg *')]
           .map((el) => {
@@ -334,10 +337,8 @@ const rhythm = JSON.parse(
             );
         }
       return JSON.stringify({ n: els.length, bad });
-    })()`,
-    { awaitPromise: true },
-  ),
-);
+    })()`;
+const rhythm = JSON.parse(await living.evaluate(rhythmProbe, { awaitPromise: true }));
 ok(
   'no two nearby marks keep step',
   rhythm.bad.length === 0,
@@ -375,6 +376,15 @@ ok(
   await living.evaluate(
     `getComputedStyle(document.querySelector('.card svg .bird')).animationName`,
   ),
+);
+/* The same comparison with the laminate on, where the second tier's periods
+   are the ones in play: the birds glide, the hull rocks harder, the reeds
+   sway, the petals fall. */
+const rhythmOn = JSON.parse(await living.evaluate(rhythmProbe, { awaitPromise: true }));
+ok(
+  'and none of them keep step with the laminate on either',
+  rhythmOn.bad.length === 0,
+  `${rhythmOn.n} marks compared · ${rhythmOn.bad.slice(0, 3).join(' | ')}`,
 );
 living.close();
 finish();

@@ -305,11 +305,16 @@ html[data-enhance="on"] .boat {
   animation-duration: 113s;
   animation-delay: -57s;
 }
+/* 34 s and 46 s were the original crossings, and both were wrong in a way
+   nothing measured: 34 is exactly twice the 17 s ripple under the bird on the
+   left of the lake, and 46 is the period of a cloud. The numbers below are
+   chosen so that no bird period is equal to, or a multiple of, anything within
+   a couple of hundred pixels of it. */
 html[data-enhance="on"] .bird {
-  animation: glide 34s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  animation: glide 31.9s cubic-bezier(0.42, 0, 0.58, 1) infinite;
 }
 html[data-enhance="on"] .bird.b2 {
-  animation-duration: 46s;
+  animation-duration: 43.7s;
   animation-delay: -16s;
 }
 html[data-enhance="on"] .bird.b3 {

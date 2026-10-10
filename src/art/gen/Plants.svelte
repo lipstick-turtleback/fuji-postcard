@@ -9,7 +9,7 @@
   import { place as t } from './place.mjs';
 </script>
 {#each stands as s}
-  <g fill={s.fill} stroke={s.fill} stroke-linecap="round" class={s.sway || null} style={s.delay ? `animation-delay:${s.delay}` : null}>
+  <g fill={s.fill} stroke={s.fill} stroke-linecap="round" class={s.sway || null} style={s.sway ? `animation-duration:${s.dur}; animation-delay:${s.delay || '0s'}` : null}>
     {#each s.items as p}
       <use href={`#${p.h}`} transform={t(p)}/>
     {/each}

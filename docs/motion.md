@@ -55,19 +55,20 @@ cycle that reverses is a breath.
 Each entry states the cause first. Rule 1: if there is no cause, the motion is
 deleted, not tuned.
 
-| thing                         | cause                                          | motion                                                                             | period                  | default?                                |
-| ----------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------- | --------------------------------------- |
-| petals on the water           | the same water that already ripples under them | vertical bob, ±0.5 u, and a 0.4 u sideways slide                                   | 11, 17, 19, 23 s        | **yes**                                 |
-| the boat's hull               | water                                          | ±0.5 u rise and fall, 0.3° roll                                                    | 9.5, 13 s               | **yes**                                 |
-| the boatman                   | he is rowing                                   | torso rotates 1.1° about the hips, arms follow                                     | 7.5 s                   | **yes**                                 |
-| the ducks                     | water                                          | ±0.4 u bob, no two in phase                                                        | 8.3, 11.9 s             | **yes**                                 |
-| the heron                     | it is alive                                    | weight shift ±0.3 u                                                                | 37 s                    | **yes**                                 |
-| three places the fish came up | something under the water                      | a ring spreads from tight to gone, two or three times per period at uneven spacing | 97, 127, 179 s          | **yes**                                 |
-| the birds                     | they are flying                                | drift along their heading, 2 u over the cycle                                      | 67, 89, 113 s           | **yes**                                 |
-| the far tree line's mirror    | water                                          | already `reflBreathe`                                                              | 39 s                    | yes (already)                           |
-| reeds and grass               | wind                                           | sway, 1.2°                                                                         | 19–41 s                 | no — Enhance                            |
-| falling petals                | wind off the branch                            | the fall itself                                                                    | 3 of 10 at 71, 83, 97 s | **yes**; all 10 at 13–25 s with Enhance |
-| the card's laminate           | the lamp                                       | foil, glint, grain                                                                 | —                       | no — Enhance                            |
+| thing                         | cause                                          | motion                                                                             | period                               | default?                                |
+| ----------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------ | --------------------------------------- |
+| petals on the water           | the same water that already ripples under them | vertical bob, ±0.5 u, and a 0.4 u sideways slide                                   | 11, 17, 19, 23 s                     | **yes**                                 |
+| the boat's hull               | water                                          | ±0.5 u rise and fall, 0.3° roll                                                    | 9.5, 13 s                            | **yes**                                 |
+| the boatman                   | he is rowing                                   | torso rotates 1.1° about the hips, arms follow                                     | 7.5 s                                | **yes**                                 |
+| the ducks                     | water                                          | ±0.4 u bob, no two in phase                                                        | 8.3, 11.9 s                          | **yes**                                 |
+| the heron                     | it is alive                                    | weight shift ±0.3 u                                                                | 37 s                                 | **yes**                                 |
+| three places the fish came up | something under the water                      | a ring spreads from tight to gone, two or three times per period at uneven spacing | 97, 127, 179 s                       | **yes**                                 |
+| the birds                     | they are flying                                | drift along their heading, 2 u over the cycle                                      | 67, 89, 113 s                        | **yes**                                 |
+| the birds, crossing           | they are flying, and the wind is up            | the same drift, 34 u over the cycle                                                | 31.9, 43.7, 39 s                     | no — Enhance                            |
+| the far tree line's mirror    | water                                          | already `reflBreathe`                                                              | 39 s                                 | yes (already)                           |
+| reeds and grass               | wind                                           | sway, 1.2°, one stand as one object                                                | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s | no — Enhance                            |
+| falling petals                | wind off the branch                            | the fall itself                                                                    | 3 of 10 at 71, 83, 97 s              | **yes**; all 10 at 13–25 s with Enhance |
+| the card's laminate           | the lamp                                       | foil, glint, grain                                                                 | —                                    | no — Enhance                            |
 
 The reeds stay in Enhance. Forty-five of them swaying is the single most
 expensive thing on the page, and their motion is the one that reads as "the
@@ -194,10 +195,19 @@ exclusions, both claims about the picture rather than conveniences: a mark
 wider than 200 px is a surface — mist, the glitter path, the ray field — and a
 surface is not anybody's neighbour; and a mark that travels more than 8 px in
 three seconds is passing through, so its period is a duration of passage and
-not a step the eye can compare. The check runs with Enhance off. The reeds
-sway in stands, all blades of one stand on one period, which is correct — a
-gust moves a stand, not a blade — and separating a stand from a pair of
-neighbours would need a notion of "one object" the page does not carry.
+not a step the eye can compare.
+
+The check runs in both tiers, and only started running in both when the excuse
+for not doing so turned out to be false. It used to stop at Enhance off, on the
+grounds that the reeds sway in stands and the check would mistake a stand for a
+pair of neighbours. But a stand is one element — one group, one animation — so
+the check was already comparing stands to one another, which is exactly what
+should be compared. Running it with the laminate on found fourteen pairs
+keeping step: three stands of reeds sharing 13 s and 17 s within 60 px of each
+other, a bird crossing the lake on exactly twice the period of the ripple under
+it, a hull rocking at half a reed's period. Six stands and two bird crossings
+were renumbered; the rest state of the page is 9.4 million pixels identical
+before and after.
 
 ## Phases
 

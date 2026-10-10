@@ -1,5 +1,11 @@
 /* Every plant on the shore, as data: where it roots, how far it leans,
- * whether it is taller than it is wide. The component that reads it is
+ * whether it is taller than it is wide, and how long a stand takes to
+ * breathe. The six swaying stands each get their own period: two clumps
+ * 60 units apart on the same period sway as one clump however they are
+ * phased, and the page's rule is that nothing near anything else keeps
+ * step. The numbers are chosen against the periods of everything nearby
+ * — the ripples at 17, 21, 23 and 24 s, the heron at 37, the hull at 6.5
+ * — so that no pair is equal and none is a multiple of the other. The component that reads it is
  * src/art/gen/Plants.svelte; the marks it places are the files under
  * src/art/front/20-cast/. This is the only place a placement is written,
  * which is the point: 'lift the left stand two units' is an edit here,
@@ -20,6 +26,7 @@ export const stands = [
   {
     fill: '#0f1322',
     sway: 'sway-a',
+    dur: '13.7s',
     items: [
       { h: 'reedB', x: 30.0, y: 573.0, rot: 5.0, sx: 1.15, sy: 0.96 },
       { h: 'reed', x: 60.0, y: 575.0, rot: -4.0, sx: 0.95, sy: 1.04 },
@@ -39,6 +46,7 @@ export const stands = [
   {
     fill: '#0f1322',
     sway: 'sway-b',
+    dur: '19.7s',
     delay: '-5s',
     items: [
       { h: 'reed', x: 838.0, y: 557.0, rot: -3.0, sx: 0.95, sy: 1.02 },
@@ -52,6 +60,7 @@ export const stands = [
   {
     fill: '#0f1322',
     sway: 'sway-b',
+    dur: '15.1s',
     delay: '-2.5s',
     items: [
       { h: 'reed', x: 876.0, y: 555.0, rot: -5.0, sx: 0.88, sy: 0.96 },
@@ -63,6 +72,7 @@ export const stands = [
   {
     fill: '#0f1322',
     sway: 'sway-a',
+    dur: '16.3s',
     delay: '-7.5s',
     items: [
       { h: 'tuftB', x: 168.0, y: 557.0, rot: 4.0, sx: 0.68, sy: 0.94 },
@@ -74,6 +84,7 @@ export const stands = [
   {
     fill: '#0f1322',
     sway: 'sway-b',
+    dur: '29.3s',
     delay: '-3.5s',
     items: [
       { h: 'grassPair', x: 388.0, y: 553.0, rot: -4.0, sx: 0.6 },
@@ -85,6 +96,7 @@ export const stands = [
   {
     fill: '#0f1322',
     sway: 'sway-a',
+    dur: '22.7s',
     delay: '-11s',
     items: [
       { h: 'waterGrass', x: 206.0, y: 560.0, rot: 2.0, sx: 0.62 },

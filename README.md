@@ -345,7 +345,8 @@ page before the question:
   fails if the lake has been switched off along with the laminate, and it
   samples every animated mark twice three seconds apart to check rule 2 over
   time: no two nearby marks may share a period or be whole multiples of one
-  another. And it asks where each mark is in the still page and in the living
+  another — in either tier, because the second tier's periods were chosen by
+  hand and had never been compared to each other. And it asks where each mark is in the still page and in the living
   one, because a mark that has been moved to the origin of the picture by a
   stylesheet transform looks exactly like a mark that was never drawn.
 - `scripts/test-export.mjs` photographs the plate. The face on the card is
