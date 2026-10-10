@@ -84,7 +84,12 @@ external `src`/`href`/`url()`, which would break the offline property (and the
 SVG export) outright. It also cross-checks the export: every class the page
 animates has to be matched by the filter in `card.js` that decides which CSS
 rules get inlined into the downloaded `.svg`, or the plate you save is a still
-image and nothing tells you.
+image and nothing tells you. And every `d` in the file has to be a path: a
+cubic written with two control points where it wants three does not fail, it
+stops the parser at that command and the shape closes itself with a straight
+line. Both stamps on this card carry the same little mountain, and both carried
+the same broken curve — a pale shard across its right shoulder, and one line in
+the console that nobody was reading.
 
 ### Performance, measured
 
