@@ -59,6 +59,53 @@ ok(
   still.consoleErrors.slice(0, 3).join(' | '),
 );
 
+/* The classes the lake is made of. Each has a cause written beside it in
+   06-motion.css; the tests below ask that the cause is not switched off along
+   with the laminate, and that each mark is where the picture puts it. */
+const WANT = [
+  'mist-a',
+  'mist-b',
+  'ripple',
+  'wake',
+  'water-b',
+  'refl',
+  'boat',
+  'boatman',
+  'duck',
+  'wader',
+  'floater',
+  'bird',
+  'slow',
+  'fish',
+];
+
+/* Where every one of them is with motion switched off. The same question gets
+   asked of the living page below and the two answers are compared, because the
+   bug this catches is invisible in either one alone: a CSS transform replaces
+   a transform attribute instead of composing with it, and a mark positioned by
+   the attribute and animated by the stylesheet is positioned at the origin of
+   the picture and animated there. A mark that stays put may move a few pixels
+   between the two pages. A mark that has been yanked to the origin moves by
+   hundreds.
+
+   Three classes are exempt because travelling is what they are for: the birds
+   drift along their heading, and the petals fall. */
+const EXEMPT = new Set(['bird', 'slow']);
+const settled = JSON.parse(
+  await still.evaluate(`
+  (() => {
+    const out = {};
+    for (const c of ${JSON.stringify(WANT)}) {
+      out[c] = [...document.querySelectorAll('.card svg .' + c)].map((e) => {
+        const r = e.getBoundingClientRect();
+        return [Math.round(r.x + r.width / 2), Math.round(r.y + r.height / 2)];
+      });
+    }
+    return JSON.stringify(out);
+  })()
+`),
+);
+
 /* The promise, stated as a fact rather than as a list. The stylesheet used to
    name every animated class here, which meant the promise expired the moment a
    class was added somewhere else. Now the claim is that nothing inside a face
@@ -99,10 +146,8 @@ const setEnhance = async (on) => {
 ok('Enhance is off', await setEnhance(false));
 const running = await living.evaluate(`
   (() => {
-    const want = ['mist-a', 'mist-b', 'ripple', 'wake', 'water-b', 'refl',
-                  'boat', 'boatman', 'duck', 'wader', 'floater', 'bird', 'slow', 'fish'];
     const out = {};
-    for (const c of want) {
+    for (const c of ${JSON.stringify(WANT)}) {
       const els = [...document.querySelectorAll('.card svg .' + c)];
       out[c] = els.length + ':' + els.filter((e) => getComputedStyle(e).animationName !== 'none').length;
     }
@@ -153,6 +198,43 @@ const overridden = await living.evaluate(`
   })()
 `);
 ok('nothing animates a transform over a placement', overridden === '', overridden.slice(0, 160));
+
+/* The same question, asked of the picture rather than of the stylesheet. The
+   check above catches one cause of a mark being in the wrong place; this one
+   catches the fact of it, whatever the cause. */
+const where = JSON.parse(
+  await living.evaluate(`
+  (() => {
+    const out = {};
+    for (const c of ${JSON.stringify(WANT)}) {
+      out[c] = [...document.querySelectorAll('.card svg .' + c)].map((e) => {
+        const r = e.getBoundingClientRect();
+        return [Math.round(r.x + r.width / 2), Math.round(r.y + r.height / 2)];
+      });
+    }
+    return JSON.stringify(out);
+  })()
+`),
+);
+const drifted = [];
+for (const c of Object.keys(settled)) {
+  if (EXEMPT.has(c)) continue;
+  const a = settled[c];
+  const b = where[c];
+  if (a.length !== b.length) {
+    drifted.push(`${c}: ${a.length} marks at rest, ${b.length} running`);
+    continue;
+  }
+  for (let i = 0; i < a.length; i++) {
+    const d = Math.round(Math.hypot(a[i][0] - b[i][0], a[i][1] - b[i][1]));
+    if (d > 8) drifted.push(`${c}[${i}] ${a[i]} -> ${b[i]}, ${d} px`);
+  }
+}
+ok(
+  'every mark stays where the picture puts it',
+  drifted.length === 0,
+  drifted.slice(0, 3).join(' | '),
+);
 
 /* Rule 2 over time. Nothing in the scene may repeat at even intervals, and the
    smallest way to break that is two marks a hand's width apart keeping step.
