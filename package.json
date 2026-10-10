@@ -2,7 +2,7 @@
   "name": "fuji-postcard",
   "version": "1.0.0",
   "private": true,
-  "description": "Mount Fuji at dawn, drawn in vectors \u2014 one self-contained postcard page.",
+  "description": "Mount Fuji at dawn, drawn in vectors — one self-contained postcard page.",
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -22,6 +22,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "rollup": "^4.64.5",
+    "svelte": "^5.57.2"
   }
 }

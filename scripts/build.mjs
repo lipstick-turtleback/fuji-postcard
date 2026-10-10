@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 /* Build public/index.html from the parts under src/.
  *
  * The page is one self-contained file on purpose: it works offline, it has no
@@ -10,15 +13,7 @@
  *   node scripts/build.mjs          write public/index.html
  *   node scripts/build.mjs --check  fail if the committed file is stale
  */
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-  writeFileSync,
-} from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { rollup } from 'rollup';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const src = join(root, 'src');
@@ -33,7 +28,22 @@ const css = () =>
     .map((f) => read(`styles/${f}`))
     .join('\n');
 
-const js = (name) => read(`script/${name}`);
+/* The JavaScript is bundled, not glued. Two files dropped into two <script>
+   tags share one global scope — card.js declared `const card` at the top level
+   and only got away with it because soundtrack.js happened to be an IIFE.
+   Rollup gives every module its own scope and lets the parts under
+   src/script/ import each other for real. The output is one IIFE per entry,
+   inlined, so the page still ships with zero runtime dependencies and still
+   opens from the file system. Rollup rather than esbuild because it prints
+   the source as it wrote it: the comments that explain why a drone is
+   anchored to the clock survive into the artefact, and this project's
+   reasoning lives in those comments. */
+const js = async (entry) => {
+  const bundle = await rollup({ input: join(src, 'script', entry) });
+  const { output } = await bundle.generate({ format: 'iife' });
+  await bundle.close();
+  return `${output[0].code.replace(/\s+$/, '')}\n`;
+};
 
 /* A face of the artwork is either one file (the back, 261 lines) or a
    directory of ordered fragments (the front, which is a whole scene). The
@@ -78,7 +88,8 @@ for (const [marker, fill] of Object.entries(slots)) {
     console.error(`build: ${marker} is missing from src/template.html`);
     process.exit(1);
   }
-  html = html.replace(line, () => fill().replace(/\n+$/, ''));
+  const text = String(await fill()).replace(/\n+$/, '');
+  html = html.replace(line, () => text);
 }
 
 const left = html.match(/@[A-Z_]+@/g);

@@ -29,9 +29,14 @@ not break, and how change is verified here.
 
 ## The repository
 
-The page is one file because that is the point — but one 2,300-line file is
-impossible to review. So the source is split, and the single file is the
-build artefact:
+The page is one file because that is the point — but one 4,100-line file is
+impossible to review. So the source is split into parts, and the single file is
+the build artefact. The parts are real: the JavaScript is ES modules bundled by
+rollup into one inlined IIFE per entry, not two files dropped into two script
+tags sharing a global scope. Rollup rather than esbuild because it prints the
+source as it was written — all 92 of the comments that explain why the audio
+does what it does survive into the artefact, and this project's reasoning lives
+in those comments. The page still ships with no runtime dependency of any kind.
 
 ```
 src/
@@ -103,7 +108,7 @@ comments above.
 ## Commands
 
 ```bash
-npm run build      # src/ → public/index.html
+npm run build      # src/ → public/index.html (rollup bundles the JS)
 npm run dev        # build, then serve on http://localhost:5173
 npm run check      # fail if the built file is stale, then validate it
 npm run lint       # biome over the JS (scripts/ and src/script/)

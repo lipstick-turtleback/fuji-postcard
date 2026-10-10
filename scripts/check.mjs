@@ -128,7 +128,9 @@ const unused = [...ids].filter(([name]) => !named.has(name));
 // "S — Save the plate" being advertised for the whole life of the README
 // while only F and M were ever wired up.
 const scripts = [...html.matchAll(/<script\b[\s\S]*?<\/script>/gi)].map((m) => m[0]).join('\n');
-const handled = new Set([...scripts.matchAll(/e\.key === '(.)'/g)].map((m) => m[1].toUpperCase()));
+const handled = new Set(
+  [...scripts.matchAll(/e\.key\s*===\s*['"](.+?)['"]/g)].map((m) => m[1].toUpperCase()),
+);
 for (const m of markup.matchAll(/<kbd[^>]*>\s*([A-Za-z])\s*<\/kbd>/g)) {
   const key = m[1].toUpperCase();
   if (!handled.has(key))

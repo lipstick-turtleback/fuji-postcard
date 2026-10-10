@@ -76,8 +76,13 @@ down the left edge.
    every change, verified rather than assumed.
 6. **The exported plate is the full artwork.** A saved `.svg` is always the
    whole drawing, whatever the page is currently rendering.
-7. **Zero dependencies is a feature worth defending.** The build, the checks
-   and the perf harness are all plain Node with no packages.
+7. **The page ships with zero dependencies.** The artefact is one
+   self-contained file: nothing to fetch, nothing to install, it opens from the
+   file system and works on a plane. The checks and the perf harness are plain
+   Node over the DevTools protocol. The _toolchain_ may use packages — a
+   bundler, a component compiler — provided what they emit is static markup and
+   script that stands entirely on its own. A devDependency is allowed; a
+   runtime dependency is not, and the bundle is inlined rather than linked.
 8. **Sound is never imposed.** Nothing starts the piece but the Play button
    and `M`, and the audio graph is not built until one of them is used. A
    page that makes sound at someone who did not ask for music has decided
