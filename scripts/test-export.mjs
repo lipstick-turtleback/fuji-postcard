@@ -21,6 +21,7 @@
 
    Needs Chrome; skips, like the layout test, when it is not installed. */
 import { openPage, silentPage } from './cdp.mjs';
+import { comparePng, decodePng, downsample } from './png.mjs';
 import { danglingRefs, pathProblems } from './svg-check.mjs';
 
 const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
@@ -114,6 +115,24 @@ const grab = async () =>
 
 const problems = [];
 const exports = {};
+const screens = {};
+const rects = {};
+const diffs = {};
+
+/* The plate has to be the picture. Everything above asks questions of the
+   bytes; this asks the only question that matters, which is what the file
+   looks like. The face on the card is photographed, the file is opened in a
+   browser and photographed at the same size, and the two images are compared
+   pixel by pixel. A gradient defined in the other face, a rule scoped to
+   `.face` that travels into the file and then matches nothing there, a font
+   inherited from an element the export did not copy — none of those show up
+   in a shape count, and all of them show up here.
+
+   The laminate is switched off first. It is an effect on the card, not part
+   of the artwork, and it is not in the file by design; photographing the face
+   with it on would compare a picture against a picture of a picture. */
+await evaluate(`document.querySelector('.foil').style.display = 'none'`);
+await new Promise((r) => setTimeout(r, 200));
 for (const face of ['front', 'back']) {
   // the export is the face you are looking at, so the face has to be turned
   // over before the second file is asked for
@@ -128,6 +147,21 @@ for (const face of ['front', 'back']) {
   }
   exports[face] = got.text;
   const svg = got.text;
+
+  const rect = JSON.parse(
+    await evaluate(
+      `JSON.stringify(document.querySelector('.face.${face} svg').getBoundingClientRect())`,
+    ),
+  );
+  const shot = await send('Page.captureScreenshot', {
+    format: 'png',
+    // at the page's own scale, not zoomed in: a clipped screenshot of a
+    // composited layer is resampled, and the resampling, not the artwork, is
+    // what dominates the difference at 1.28×
+    clip: { x: rect.x, y: rect.y, width: rect.width, height: rect.height, scale: 1 },
+  });
+  screens[face] = Buffer.from(shot.data, 'base64');
+  rects[face] = rect;
 
   if (!svg.startsWith('<?xml'))
     problems.push(`${face}: the file does not start with an XML declaration`);
@@ -165,6 +199,18 @@ for (const [face, svg] of Object.entries(exports)) {
   const url = `data:image/svg+xml;base64,${Buffer.from(svg, 'utf8').toString('base64')}`;
   await send('Page.navigate', { url });
   await new Promise((r) => setTimeout(r, 900));
+  // The plate carries its animation rules and runs them when it is opened;
+  // the page was photographed with motion forced off. Comparing those two
+  // would compare a picture against a picture of a picture mid-turn — the ray
+  // field alone is 17% of the pixels out. So the file is put into the same
+  // rest state the page is in before either is photographed.
+  await evaluate(`(() => {
+    const st = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    st.textContent = '* { animation: none !important }';
+    document.documentElement.appendChild(st);
+    return 1;
+  })()`);
+  await new Promise((r) => setTimeout(r, 300));
   const loaded = JSON.parse(
     await evaluate(`JSON.stringify({
       root: document.documentElement.tagName,
@@ -180,6 +226,34 @@ for (const [face, svg] of Object.entries(exports)) {
     problems.push(
       `${face}: a browser opening the file complains ${raised} time(s): ${(exceptions.at(-1) || consoleErrors.at(-1) || '').slice(0, 160)}`,
     );
+
+  // the same file, photographed. the exported plate is 1800×1200, so the
+  // viewport is made that size and the clip is scaled down to the 1200×800
+  // the face on the card was photographed at
+  await send('Emulation.setDeviceMetricsOverride', {
+    width: 1800,
+    height: 1200,
+    deviceScaleFactor: 1,
+    mobile: false,
+  });
+  await new Promise((r) => setTimeout(r, 400));
+  const file = await send('Page.captureScreenshot', {
+    format: 'png',
+    clip: { x: 0, y: 0, width: 1800, height: 1200, scale: rects[face].width / 1800 },
+  });
+  const diff = comparePng(
+    downsample(decodePng(screens[face]), 4),
+    downsample(decodePng(Buffer.from(file.data, 'base64')), 4),
+    24,
+  );
+  if (diff.error) problems.push(`${face}: cannot compare the plate — ${diff.error}`);
+  else {
+    diffs[face] = diff;
+    if (diff.pctOver > 1)
+      problems.push(
+        `${face}: the plate differs from the card — ${diff.pctOver}% of pixels by more than 24/255, worst ${diff.worst} at ${diff.worstAt}`,
+      );
+  }
 }
 
 if (exceptions.length)
@@ -193,5 +267,8 @@ if (problems.length) {
 }
 console.log(
   `test-export: both faces exported — ${exports.front.length} + ${exports.back.length} bytes, ` +
-    `${classRules.front.rules.length}/${classRules.back.rules.length} class rules and matching shape counts intact, both open clean`,
+    `${classRules.front.rules.length}/${classRules.back.rules.length} class rules and matching shape counts intact, ` +
+    `both open clean, and the plates are the pictures: front ${diffs.front?.pctDiffering}% of pixels ` +
+    `differ by any amount and ${diffs.front?.pctOver}% by more than 24/255 (worst ${diffs.front?.worst}), ` +
+    `back ${diffs.back?.pctDiffering}% / ${diffs.back?.pctOver}% (worst ${diffs.back?.worst})`,
 );

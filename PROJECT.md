@@ -169,6 +169,16 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **A plate that is not the picture is still a plate.** The export was checked
+  as a file — bytes, rules, shape counts — and never as a picture, so the only
+  way to learn that the file and the card disagreed was to be unlucky. Now both
+  are photographed and compared, and the comparison had to be made honest
+  before it could be made tight: the saved plate carries the animation rules
+  and runs them when it is opened, so a still page compared against a turning
+  file is 17% ray field, and a composited layer screenshotted at 1.28× is
+  resampled in a way a document on its own is not. Averaging both down 4×4
+  leaves the differences that occupy more than a pixel, which is where the
+  failures live: 0.19% clean, 18.8% with one gradient deleted from the file.
 - **A stylesheet cannot be seen to be dead.** A rule whose class no longer
   exists costs nothing and changes nothing, so the page looks exactly as it
   should: `.water-a` drifted a band of water sideways over 47 seconds for as

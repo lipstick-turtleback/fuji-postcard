@@ -68,7 +68,8 @@ scripts/
   test-layout.mjs      drive headless Chrome at real window sizes
   test-plate.mjs       keep the lettering off the frame rules
   test-ink.mjs         measure the contrast of the type printed on the card
-  test-export.mjs      check the .svg the save button hands out
+  test-export.mjs      check the .svg the save button hands out, and photograph it
+  png.mjs              enough of a PNG decoder to compare two of them
   test-interactions.mjs drive the buttons and shortcuts and read what happened
   test-motion.mjs      hold the page to its reduced-motion promise
   test-css.mjs         no rule selects nothing, no animation names nothing
@@ -326,6 +327,16 @@ page before the question:
   another. And it asks where each mark is in the still page and in the living
   one, because a mark that has been moved to the origin of the picture by a
   stylesheet transform looks exactly like a mark that was never drawn.
+- `scripts/test-export.mjs` photographs the plate. The face on the card is
+  captured, the file the Save button produced is opened in a browser and
+  captured at the same size, and the two images are compared — averaged down
+  4×4 first, because two rasterisers of the same vector artwork disagree along
+  every edge and that disagreement is not what the check is for. Clean, the
+  front differs by 0.19% of pixels and the back by 0.55%; delete one gradient
+  from the file and it is 18.8%. The laminate is switched off for the
+  comparison, and the file is put into the same rest state the page is in —
+  the plate carries its animation rules and runs them, and comparing a still
+  page to a turning file is 17% ray field and nothing else.
 - `scripts/test-css.mjs` asks whether the stylesheet is telling the truth about
   the page: every selector must match something that exists, and every
   `animation` must name a `@keyframes` block that exists. A stylesheet cannot
