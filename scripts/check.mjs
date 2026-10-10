@@ -36,11 +36,14 @@ for (let i = html.indexOf('<!--'); i !== -1; i = html.indexOf('<!--', i + 4)) {
 }
 
 /* ---- tag nesting -------------------------------------------------------- */
-// script and style bodies are not markup; blank them out (same length, so
+// script and style bodies are not markup, and neither is a comment: a note
+// saying "<defs> is closed by the next file" was being counted as an element,
+// which unbalanced the whole front face. Blank both out (same length, so
 // every reported line number still points at the real file)
-const markup = html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, (block) =>
-  block.replace(/[^\n]/g, ' '),
-);
+const blank = (block) => block.replace(/[^\n]/g, ' ');
+const markup = html
+  .replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, blank)
+  .replace(/<!--[\s\S]*?-->/g, blank);
 const stack = [];
 const VOID = new Set([
   'area',

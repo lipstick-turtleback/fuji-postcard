@@ -93,7 +93,7 @@ repo can be opened with no build step. It is concatenated from parts by
 | Part                       | Role                                                         |
 | -------------------------- | ------------------------------------------------------------ |
 | `src/template.html`        | the shell, with whole-line markers `@CSS@`, `@SVG_FRONT@`, … |
-| `src/art/front.svg`        | the picture: mountain, lake, torii, bank, birds, lettering   |
+| `src/art/front/`           | the picture in twelve fragments, sorted into paint order     |
 | `src/art/back.svg`         | the other side: message, address, stamp, cancellation        |
 | `src/styles/*.css`         | nine numbered files, applied in sorted order                 |
 | `src/script/card.js`       | tilt, lighting model, flip, export, Enhance                  |
@@ -156,6 +156,11 @@ The habits that keep paying off:
   the ink measurement ignored any text with no ink in its box, reasoning that a
   turned-away face cannot be measured. That is exactly how type that had been
   translated twice — and was off the plate — reported as fine.
+- **A split must change no bytes.** The front face went from one 1,461-line
+  file to twelve fragments in a directory, and the only thing that proved the
+  move was a move was `git diff public/index.html` coming back empty. Paint
+  order is the picture, so the fragment names sort into the drawing; a split
+  that reorders is a redraw wearing a refactor's clothes.
 - **A promise nobody can test is a promise that quietly breaks.** Flip,
   export, the shortcuts and reduced-motion are rule 5, and the only thing
   enforcing them was somebody remembering to click the buttons. They are

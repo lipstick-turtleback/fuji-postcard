@@ -1157,6 +1157,13 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           foreground. A vertical paper strip at left carries the title 富士山 and the place 河口湖 above
           a red seal. A stamp cancelled TOKYO sits at the top right. Lettering along the bottom edge
           reads 富嶽, MT. FUJI, 3,776 M, KAWAGUCHI-KO · JAPAN.</desc>
+  <!--
+  The paint: every gradient, filter and mask the picture is
+  printed with, and the clips that keep it inside the card.
+  Opened here, closed by 20-cast.svg. Order in this directory is paint
+  order — a later fragment is a nearer one — so the file list *is* the
+  drawing, and a split that changes no bytes changes no picture.
+  -->
         <defs>
           <!-- sky: zenith indigo down to a low gold. the last two stops are
                deliberately close so the light gathers at the horizon. -->
@@ -1523,6 +1530,12 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           <clipPath id="clipCard"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
 
           <path id="petalShape" d="M0 0 C3 -5.5 11 -6.5 14.5 -1 C11 5 3 5.5 0 0 Z"/>
+  <!--
+  The cast: marks drawn once and placed by hand — grass tufts, reeds,
+  a heron, a duck, a blossom, a bud. Closes the defs block opened by
+  10-paint.svg and opens the card: everything after this is painted
+  inside clipCard, until 90-age.svg closes it.
+  -->
 
           <!-- bank furniture, drawn once and placed by hand.
                every blade is its own stroke width, so a tuft tapers as it
@@ -1642,6 +1655,9 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                   fill="#e79fb2"/>
             <path d="M0.2 0.4 C-1.8 -0.4 -2.8 -2 -2.6 -3.8 L1.2 -3 C1.8 -1.2 1.4 0.2 0.2 0.4 Z" fill="#8c4a52"/>
           </g>
+  <!--
+  The farthest thing in the picture: sky, sun, its rays, high clouds.
+  -->
         </defs>
 
         <g clip-path="url(#clipCard)">
@@ -1735,6 +1751,10 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <path d="M700 128 C760 122 812 126 848 133 C878 139 866 147 812 146 C748 145 716 140 700 135 Z"
                   fill="url(#cloudCool)" opacity=".32"/>
           </g>
+  <!--
+  The mountain, and the ridges in front of it, each lighter than the
+  last because of air between the eye and the rock.
+  -->
 
           <!-- distant ridges, each one lighter than the last: air in the way -->
           <path d="M0 404 L0 336 C56 328 116 352 172 378 C214 396 246 402 276 404 Z" fill="#7484a8" opacity=".8"/>
@@ -1834,6 +1854,10 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
               <path d="M428 168 C404 250 372 326 322 396"/>
             </g>
           </g>
+  <!--
+  The far shore, the mist that sits on it, the birds, and the water
+  with what it keeps of all of them.
+  -->
 
           <!-- the far shore of the lake: a line of trees at the foot of
                the mountain. it runs the whole width with gaps, and the
@@ -1976,6 +2000,11 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                  and dark dashes used to be scattered over the whole surface
                  as "texture", and texture with no cause reads as noise. -->
           </g>
+  <!--
+  The near bank: torii, boat, stones, driftwood, ducks, the heron,
+  grass and reeds. The busiest fragment, and the one most things
+  collide with.
+  -->
 
           <!-- torii — every member mirrored exactly about x = 230.
                The whole group is lifted 30 units because it was standing 14
@@ -2291,6 +2320,9 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <path d="M232 527 h13 M406 539 h12 M534 523 h11 M662 537 h13"/>
           </g>
           </g>
+  <!--
+  The branch at the top left and the petals coming off it.
+  -->
 
           <!-- cherry branch, top-left -->
           <g>
@@ -2358,6 +2390,10 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <g class="petal p9"><use href="#petalShape" transform="translate(130 320) rotate(-56) scale(.75 .8)"/></g>
             <g class="petal p10"><use href="#petalShape" transform="translate(300 240) rotate(21) scale(.85 .68)"/></g>
           </g>
+  <!--
+  Things stuck or stamped onto the card rather than drawn on it:
+  the title strip, the stamp, the cancellation, the plate inscription.
+  -->
 
           <!-- tanzaku title strip: a separate piece of paper laid on the
                picture, so it has its own tone and its own shadow -->
@@ -2532,6 +2568,10 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
               <text x="450" y="574" text-anchor="middle" font-size="7.6" letter-spacing="3.2">KAWAGUCHI-KO · JAPAN</text>
             </g>
           </g>
+  <!--
+  What a century does to the paper, then the vignette. Closes the
+  clipCard group opened by 20-cast.svg.
+  -->
 
           <!-- age: foxing in the paper, soiling along the edges, the
                corners where it has been handled, one crease -->
@@ -2589,6 +2629,10 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
              bare paper - a highlight off nothing. The metal has to be there
              first, and the ray then rides on top of it, exactly as the
              lettering is #gold with #goldShine over it. -->
+  <!--
+  The gilded rules, outside the clip: the frame is the plate, and the
+  lettering is measured against it by scripts/test-plate.mjs.
+  -->
         <g fill="none" stroke="url(#goldFrame)">
           <rect x="14" y="14" width="872" height="572" rx="4"
                 stroke-width="1.6" stroke-opacity=".55"/>

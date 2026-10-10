@@ -1,0 +1,61 @@
+  <!--
+  What a century does to the paper, then the vignette. Closes the
+  clipCard group opened by 20-cast.svg.
+  -->
+
+          <!-- age: foxing in the paper, soiling along the edges, the
+               corners where it has been handled, one crease -->
+          <rect x="0" y="0" width="900" height="600" filter="url(#foxLarge)" opacity=".075"
+                style="mix-blend-mode:multiply"/>
+          <rect x="0" y="0" width="900" height="600" filter="url(#fox)" opacity=".115"
+                style="mix-blend-mode:multiply"/>
+          <!-- Foxing blooms drawn by hand, over the top of the two noise scales.
+               Turbulence gives a size distribution that is the same everywhere,
+               and real age is not: a sheet picks up a few distinct marks where
+               something wet sat on it, each one lopsided, each a different size,
+               each fading out on one side faster than the other. Seven of them,
+               radii 20 to 62, filled with a radial gradient so the edge is a
+               fade and not a boundary. -->
+          <g fill="url(#foxBloom)" opacity=".13">
+              <path d="M186.0 120.0 Q163.4 139.2 174.7 129.6 Q140.0 163.4 151.7 151.3 Q112.4 142.7 126.2 153.0 Q81.1 120.0 96.7 131.3 Q114.6 99.2 97.9 109.6 Q140.0 84.2 127.3 91.7 Q175.8 90.7 157.9 87.4 Q186.0 120.0 180.9 105.3 Z"/>
+              <path d="M727.0 92.0 Q725.5 112.9 726.2 102.4 Q700.0 110.5 712.7 111.7 Q677.7 110.3 688.9 110.4 Q674.5 92.0 676.1 101.1 Q675.6 72.0 675.1 82.0 Q700.0 68.6 687.8 70.3 Q717.0 78.1 708.5 73.4 Q727.0 92.0 722.0 85.0 Z"/>
+              <path d="M890.2 300.0 Q857.1 328.8 873.6 314.4 Q822.0 350.8 839.5 339.8 Q793.5 323.4 807.8 337.1 Q750.7 300.0 772.1 311.7 Q782.5 267.6 766.6 283.8 Q822.0 236.4 802.3 252.0 Q854.9 273.0 838.4 254.7 Q890.2 300.0 872.5 286.5 Z"/>
+              <path d="M88.4 402.0 Q87.6 426.2 88.0 414.1 Q58.0 439.4 72.8 432.8 Q33.8 421.8 45.9 430.6 Q31.4 402.0 32.6 411.9 Q29.8 378.9 30.6 390.4 Q58.0 366.2 43.9 372.5 Q80.8 383.3 69.4 374.7 Q88.4 402.0 84.6 392.6 Z"/>
+              <path d="M456.0 58.0 Q446.4 69.8 451.2 63.9 Q432.0 80.6 439.2 75.2 Q415.9 71.2 423.9 75.9 Q412.8 58.0 414.3 64.6 Q413.3 42.7 413.1 50.3 Q432.0 40.3 422.7 41.5 Q449.8 43.4 440.9 41.8 Q456.0 58.0 452.9 50.7 Z"/>
+              <path d="M691.3 468.0 Q685.8 505.6 688.6 486.8 Q640.0 503.4 662.9 504.5 Q598.0 502.4 619.0 502.9 Q599.5 468.0 598.7 485.2 Q601.8 436.7 600.7 452.3 Q640.0 428.1 620.9 432.4 Q683.9 432.0 662.0 430.1 Q691.3 468.0 687.6 450.0 Z"/>
+              <path d="M274.0 296.0 Q264.7 306.4 269.4 301.2 Q252.0 312.4 258.4 309.4 Q240.7 305.3 246.3 308.8 Q228.0 296.0 234.3 300.6 Q238.6 285.0 233.3 290.5 Q252.0 282.1 245.3 283.5 Q266.8 283.8 259.4 282.9 Q274.0 296.0 270.4 289.9 Z"/>
+          </g>
+          <!-- Edge soiling, widened from 5 units to 11 and halved in strength.
+               Narrow and strong, it sat hard against the cut edge and read as a
+               dark line running the length of the card; wide and faint, it reads
+               as the edge of the paper being dirtier than the middle. -->
+          <rect x="9" y="9" width="882" height="582" rx="7" fill="none" stroke="#6d5c44"
+                stroke-opacity=".05" stroke-width="11" filter="url(#tiny)"/>
+          <g transform="rotate(-13 450 300)">
+            <rect x="292" y="-80" width="24" height="760" fill="url(#crease)"/>
+          </g>
+
+          <!-- paper grain, film grain, vignette -->
+          <rect x="0" y="0" width="900" height="600" filter="url(#grain)" opacity=".13"
+                style="mix-blend-mode:multiply"/>
+          <rect x="0" y="0" width="900" height="600" filter="url(#film)" opacity=".075"
+                style="mix-blend-mode:overlay"/>
+          <rect x="0" y="0" width="900" height="600" fill="none" stroke="#080c18" stroke-opacity=".30"
+                stroke-width="34" filter="url(#soft)"/>
+        </g>
+
+        <!-- deckled card edge -->
+        <rect x="4" y="4" width="892" height="592" rx="5" fill="none" stroke="url(#paperEdge)" stroke-opacity=".15" stroke-width="1.1"/>
+        <!-- The frame is gilded, and the light on it is the same ray that
+             crosses the lettering - so it has to sit at the same x, not walk
+             around the perimeter on its own schedule. One straight path per
+             side, each drawn in the +x or +y direction, so a dashoffset of -X
+             puts the glint at exactly x=X on both the top and the bottom at
+             once, and the same for y down the sides. The bottom glint lands
+             under the lit part of the inscription; the top one is directly
+             above it. -->
+        <!-- Two concentric gilded rules, the way a printed plate is framed.
+             Without them the travelling glint was a bright dash floating on
+             bare paper - a highlight off nothing. The metal has to be there
+             first, and the ray then rides on top of it, exactly as the
+             lettering is #gold with #goldShine over it. -->

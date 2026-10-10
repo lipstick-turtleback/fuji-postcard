@@ -1,0 +1,178 @@
+  <!--
+  Things stuck or stamped onto the card rather than drawn on it:
+  the title strip, the stamp, the cancellation, the plate inscription.
+  -->
+
+          <!-- tanzaku title strip: a separate piece of paper laid on the
+               picture, so it has its own tone and its own shadow -->
+          <g transform="rotate(-1.2 76 344)">
+            <rect x="51" y="180" width="58" height="336" rx="2" fill="#0b1020" opacity=".16"
+                  filter="url(#tiny)"/>
+            <rect x="48" y="176" width="58" height="336" rx="2" fill="url(#tanzakuPaper)" opacity=".95"/>
+            <rect x="48" y="176" width="58" height="336" rx="2" fill="none" stroke="#c9b79a" stroke-width="1" opacity=".85"/>
+            <rect x="53" y="181" width="48" height="326" fill="none" stroke="#c9b79a" stroke-width=".6" opacity=".7"/>
+            <rect x="48" y="176" width="6" height="336" fill="#fffaf0" opacity=".35"/>
+            <!-- The strip is a separate piece of paper, so it ages separately:
+                 a warm wash along the edge that faced the light, and three
+                 foxing marks. It is paler than the card underneath because it
+                 covered that part of the card - the paper beneath a pasted
+                 strip stays protected, and this is the strip's own turn. -->
+            <rect x="48" y="176" width="58" height="336" fill="url(#tanzakuAge)"/>
+            <ellipse cx="60" cy="300" rx="4.4" ry="6.2" fill="#8a6a3c" opacity=".09"/>
+            <ellipse cx="97" cy="212" rx="3.2" ry="4.4" fill="#8a6a3c" opacity=".07"/>
+            <ellipse cx="88" cy="452" rx="5.6" ry="3.2" fill="#8a6a3c" opacity=".08"/>
+            <!-- The right edge was one unbroken line for 336 units, and a
+                 measured 226-to-151 luminance step in a single unit. Paper
+                 worn along an edge is not unbroken: four short stretches
+                 where the border is lighter, at uneven intervals. -->
+            <g stroke="#f6efdf" stroke-width="1.2" stroke-linecap="round" opacity=".55">
+              <path d="M106 214 v18 M106 288 v9 M106 356 v24 M106 448 v13"/>
+            </g>
+            <g fill="#22283a" font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Songti SC',serif"
+               font-size="38" text-anchor="middle">
+              <text x="77" y="234">富</text>
+              <text x="77" y="284">士</text>
+              <text x="77" y="334">山</text>
+            </g>
+            <g fill="#5d6478" font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif"
+               font-size="15" text-anchor="middle">
+              <text x="77" y="374">河</text>
+              <text x="77" y="394">口</text>
+              <text x="77" y="414">湖</text>
+            </g>
+            <!-- A hanko pressed by hand: the rim is not a perfect circle, the
+                 ink runs thin in places, and the carved border is heavier on
+                 the side the thumb pushed. -->
+            <g transform="translate(77 462)">
+              <circle r="17" fill="#c8452f" opacity=".92"/>
+              <circle r="17" fill="none" stroke="#f2ece0" stroke-width="1.7" opacity=".5"
+                      stroke-dasharray="0.7 3.6 1.5 5.4 0.5 4.2 2.1 6.3 0.9 3.1" stroke-linecap="round"/>
+              <circle r="14.2" fill="none" stroke="#a3341f" stroke-width="1.3" opacity=".85"
+                      stroke-dasharray="30 3.5 22 5 26 4.2"/>
+              <path d="M-9 -11 C-3 -14 5 -13 9 -9 C4 -11 -3 -11.5 -8 -9.5 Z" fill="#d4694f" opacity=".5"/>
+              <path d="M6 10 C10 7 13 3 13.5 -1 C14 4 11 9 6.5 11.5 Z" fill="#b23c28" opacity=".45"/>
+              <text x="0" y="6" text-anchor="middle" fill="#f8f3e8" font-size="18"
+                    font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif">旅</text>
+            </g>
+          </g>
+
+          <!-- stamp, top-right -->
+          <g transform="rotate(-2.4 806 78)">
+            <!-- A contact shadow. The stamp is glued to the card, so its edge
+                 is a fraction of a millimetre above the paper, and after a
+                 century one corner has lifted more than the rest. Without it
+                 the stamp was paint applied directly to the card - the
+                 flattest thing on a page whose whole subject is paper. -->
+            <path d="M762 34 h88 v88 h-88 Z" fill="#141a2c" opacity=".22"
+                  filter="url(#tiny)" transform="translate(2.4 3)"/>
+            <g fill="#f8f3e8">
+              <path d="M762 34 h88 v88 h-88 Z"/>
+            </g>
+            <g fill="#f8f3e8" stroke="#f8f3e8" stroke-width="2.6">
+              <path d="M762 34 h88 v88 h-88 Z" fill="none" stroke-dasharray="0.01 7.3" stroke-linecap="round"/>
+            </g>
+            <rect x="768" y="40" width="76" height="76" fill="#e8eef6"/>
+            <rect x="768" y="40" width="76" height="76" fill="none" stroke="#9fb0cc" stroke-width="1"/>
+            <g>
+              <rect x="772" y="44" width="68" height="56" fill="#cfe0ef"/>
+              <path d="M772 100 L772 84 C790 80 806 88 822 94 C832 98 838 100 840 100 Z" fill="#7fa8c6"/>
+              <path d="M786 100 C800 96 812 82 820 66 C828 82 840 96 840 100 Z" fill="#3f5d86"/>
+              <!-- the flank the sun is on, a shade lighter than the other -->
+              <path d="M820 66 C828 82 840 96 840 100 L826 100 C825 88 823 76 820 66 Z" fill="#47688f"/>
+              <!-- and the snow, which ends in a scalloped snowline the way
+                   the real mountain's does, not in a cut diamond -->
+              <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C818.6 83 816.2 79.4 813.8 82 L812 82 Z"
+                    fill="#f4f8fc"/>
+              <!-- the shadow half of the snow cap, the half away from the sun.
+                   its second curve was written with two control points where a
+                   cubic wants three, so the parser stopped there and the shape
+                   closed itself into a sliver: a hard pale shard across the
+                   right shoulder of the mountain. The back's stamp carries the
+                   same drawing and had the same broken curve. -->
+              <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C821.2 76 820.6 71 820 66 Z"
+                    fill="#dfe8f2"/>
+              <circle cx="796" cy="60" r="7" fill="#f2c14e"/>
+              <text x="806" y="112" text-anchor="middle" fill="#3f5d86" font-size="9"
+                    letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>
+            </g>
+            <!-- Age on the stamp itself. Paper yellows where it is exposed and
+                 stays paler under whatever lay on top of it, so the wash is
+                 diagonal and uneven rather than a flat tint. Two foxing marks,
+                 small and few, because this is the one part of the card that
+                 spent most of its life face down. -->
+            <rect x="762" y="34" width="88" height="88" fill="url(#stampAge)"/>
+            <ellipse cx="779" cy="96" rx="5.5" ry="3.4" fill="#8a6a3c" opacity=".1"/>
+            <ellipse cx="839" cy="44" rx="3.6" ry="2.4" fill="#8a6a3c" opacity=".08"/>
+            <!-- one lifted corner: the paper is lighter where it has curled
+                 away from the ink, and it throws its own small shadow -->
+            <path d="M850 122 L850 112 L840 122 Z" fill="#fffaf0" opacity=".5"/>
+            <path d="M850 122 L840 122 L845 117 Z" fill="#141a2c" opacity=".12"/>
+          </g>
+          <!-- cancellation rings: a postmark straddles the corner of the
+               stamp it killed, it does not sit beside it -->
+          <g transform="translate(792 110) rotate(-14)" fill="none" stroke="#3f4a63" opacity=".55">
+            <circle r="34" stroke-width="1.6"/>
+            <circle r="28" stroke-width="1"/>
+            <!-- Wavy, not straight: a cancellation is rolled, not ruled. The
+                 killer lines cross the whole inner circle. They used to stop
+                 two thirds of the way, which left the right half of the mark
+                 un-inked and made the whole thing look drawn rather than
+                 stamped. -->
+            <path d="M-28 -8 q7 -3 14 0 t14 0 t14 0 t14 0
+                     M-28 0 q7 -3 14 0 t14 0 t14 0 t14 0
+                     M-28 8 q7 -3 14 0 t14 0 t14 0 t14 0"
+                  stroke-width="1"/>
+            <!-- a hand-struck mark takes too much ink on one side. one
+                 heavier arc over the upper-left of the outer ring, and the
+                 ring stops being a perfect circle drawn by a program -->
+            <path d="M-33.4 -6 A34 34 0 0 1 20 -27.2" stroke-width="2.4" stroke-opacity=".5"
+                  stroke-linecap="round"/>
+            <text x="0" y="-14" text-anchor="middle" fill="#3f4a63" stroke="none" font-size="8"
+                  letter-spacing="1.4" font-family="Georgia,serif">TOKYO</text>
+            <text x="0" y="22" text-anchor="middle" fill="#3f4a63" stroke="none" font-size="7.5"
+                  letter-spacing="1" font-family="Georgia,serif">24.5.12</text>
+          </g>
+
+          <!-- The plate inscription, along the whole bottom edge, the way a
+               fine print is lettered: the old name of the mountain at left,
+               the title in the middle, its height at right, the place beneath,
+               and a hairline rule with diamond terminals holding the three
+               apart. It is deliberately small and low in contrast — a mark,
+               not a caption. Nothing here is invented: 富嶽 (Fugaku) is the
+               classical name Hokusai lettered on his own Fuji prints, and
+               3,776 m is the height of the mountain.
+               The block sits 14 units higher than it did, and its rule 6
+               higher with it. The gilded frame closes at y=579 and y=586, and
+               the place line was set at y=588 — below both of them, so both
+               rules, and the travelling glint that rides the outer one, were
+               drawn straight through the letters. The frame is what makes the
+               card a plate, so the type moves rather than the frame: its
+               baseline now rests 5 units above the inner rule, which is where
+               a line of type wants to sit in the first place. -->
+          <g font-family="Georgia,'Times New Roman',serif">
+            <g stroke="url(#gold)" opacity=".38" fill="none">
+              <path d="M118 546 H782" stroke-width=".7"/>
+              <path d="M118 546 H782" stroke="url(#goldShine)" stroke-width="1.1"
+                    opacity=".85"/>
+              <path d="M106 546 l4 -3.4 4 3.4 -4 3.4 z M786 546 l4 -3.4 4 3.4 -4 3.4 z"
+                    stroke="none" fill="url(#gold)" opacity=".55"/>
+            </g>
+            <g fill="#0b0f1c" opacity=".55" transform="translate(1 1.2)">
+              <text x="118" y="564" font-size="12.5" letter-spacing="2.4">富嶽</text>
+              <text x="450" y="564" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
+              <text x="782" y="564" text-anchor="end" font-size="9.5" letter-spacing="2.2">3,776 M</text>
+              <text x="450" y="574" text-anchor="middle" font-size="7.6" letter-spacing="3.2">KAWAGUCHI-KO · JAPAN</text>
+            </g>
+            <g fill="url(#gold)">
+              <text x="118" y="564" font-size="12.5" letter-spacing="2.4" opacity=".82">富嶽</text>
+              <text x="450" y="564" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
+              <text x="782" y="564" text-anchor="end" font-size="9.5" letter-spacing="2.2" opacity=".82">3,776 M</text>
+              <text x="450" y="574" text-anchor="middle" font-size="7.6" letter-spacing="3.2" opacity=".78">KAWAGUCHI-KO · JAPAN</text>
+            </g>
+            <g id="wmShine" fill="url(#goldShine)" opacity="0">
+              <text x="118" y="564" font-size="12.5" letter-spacing="2.4">富嶽</text>
+              <text x="450" y="564" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
+              <text x="782" y="564" text-anchor="end" font-size="9.5" letter-spacing="2.2">3,776 M</text>
+              <text x="450" y="574" text-anchor="middle" font-size="7.6" letter-spacing="3.2">KAWAGUCHI-KO · JAPAN</text>
+            </g>
+          </g>

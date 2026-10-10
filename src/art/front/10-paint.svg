@@ -1,0 +1,373 @@
+  <!--
+  The paint: every gradient, filter and mask the picture is
+  printed with, and the clips that keep it inside the card.
+  Opened here, closed by 20-cast.svg. Order in this directory is paint
+  order — a later fragment is a nearer one — so the file list *is* the
+  drawing, and a split that changes no bytes changes no picture.
+  -->
+        <defs>
+          <!-- sky: zenith indigo down to a low gold. the last two stops are
+               deliberately close so the light gathers at the horizon. -->
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#1b2547"/>
+            <stop offset="0.20" stop-color="#33456e"/>
+            <stop offset="0.40" stop-color="#68688a"/>
+            <stop offset="0.56" stop-color="#a67e79"/>
+            <stop offset="0.70" stop-color="#d6905f"/>
+            <stop offset="0.84" stop-color="#f0b678"/>
+            <stop offset="0.94" stop-color="#f9dcab"/>
+            <stop offset="1"    stop-color="#fbe7c6"/>
+          </linearGradient>
+
+          <!-- aerial perspective: the air itself thickens toward the water -->
+          <linearGradient id="air" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#ffd9a8" stop-opacity="0"/>
+            <stop offset=".62" stop-color="#ffd2a0" stop-opacity=".10"/>
+            <stop offset="1"   stop-color="#f6d3ac" stop-opacity=".30"/>
+          </linearGradient>
+
+          <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0"    stop-color="#fff3d2" stop-opacity=".92"/>
+            <stop offset="0.22" stop-color="#ffdda4" stop-opacity=".52"/>
+            <stop offset="0.52" stop-color="#ffc98d" stop-opacity=".22"/>
+            <stop offset="1"    stop-color="#ffb87c" stop-opacity="0"/>
+          </radialGradient>
+
+          <!-- clouds at dawn: lit from underneath, so the warmth sits on
+               the lower edge and the shade on the upper -->
+          <linearGradient id="cloudWarm" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#a9b0c4" stop-opacity=".42"/>
+            <stop offset=".55" stop-color="#e7c6ae" stop-opacity=".70"/>
+            <stop offset="1"   stop-color="#ffe3c2" stop-opacity=".92"/>
+          </linearGradient>
+          <linearGradient id="cloudCool" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"   stop-color="#9aa4bc" stop-opacity=".38"/>
+            <stop offset="1"   stop-color="#f0d3b6" stop-opacity=".78"/>
+          </linearGradient>
+
+          <radialGradient id="sunDisc" cx="0.42" cy="0.38" r="0.72">
+            <stop offset="0"   stop-color="#fff8e4"/>
+            <stop offset=".62" stop-color="#ffe6b4"/>
+            <stop offset=".93" stop-color="#ffcf92"/>
+            <stop offset="1"   stop-color="#f7c283"/>
+          </radialGradient>
+
+          <linearGradient id="fujiBody" x1="0.15" y1="0" x2="0.9" y2="1">
+            <stop offset="0"    stop-color="#666c9b"/>
+            <stop offset="0.42" stop-color="#474e7c"/>
+            <stop offset="0.76" stop-color="#343b62"/>
+            <stop offset="1"    stop-color="#2b3154"/>
+          </linearGradient>
+
+          <!-- the terminator: one soft sweep instead of a hard vertical seam -->
+          <!-- The lit flank fades in from the centre line instead of starting
+               there. It used to be a flat fill closed by a straight edge down
+               x=452, which put a hard vertical tone break exactly where the
+               eye travels the most — the summit. The fade has to run along x
+               alone and start at zero on that edge; a diagonal gradient still
+               reaches full strength at the bottom of the edge and the seam
+               comes straight back. -->
+          <linearGradient id="litSide" gradientUnits="userSpaceOnUse" x1="452" y1="0" x2="556" y2="0">
+            <stop offset="0"   stop-color="#8d92b4" stop-opacity="0"/>
+            <stop offset=".55" stop-color="#8d92b4" stop-opacity=".16"/>
+            <stop offset="1"   stop-color="#8d92b4" stop-opacity=".16"/>
+          </linearGradient>
+
+          <linearGradient id="terminator" gradientUnits="userSpaceOnUse" x1="300" y1="180" x2="486" y2="420">
+            <stop offset="0"    stop-color="#141a30" stop-opacity=".62"/>
+            <stop offset="0.46" stop-color="#161c34" stop-opacity=".46"/>
+            <stop offset="0.78" stop-color="#1b2140" stop-opacity=".14"/>
+            <stop offset="1"    stop-color="#1b2140" stop-opacity="0"/>
+          </linearGradient>
+
+          <radialGradient id="bloomLight" cx="0.68" cy="0.3" r="0.8">
+            <stop offset="0"   stop-color="#fce4ea"/>
+            <stop offset="0.55" stop-color="#f4c3d0"/>
+            <stop offset="1"   stop-color="#e2a2b5"/>
+          </radialGradient>
+
+          <linearGradient id="snow" x1="0.1" y1="0" x2="0.72" y2="1">
+            <stop offset="0"    stop-color="#ffffff"/>
+            <stop offset="0.46" stop-color="#f4f7fb"/>
+            <stop offset="1"    stop-color="#dbe4f0"/>
+          </linearGradient>
+
+          <linearGradient id="snowShade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#aab8cf" stop-opacity="0"/>
+            <stop offset="1" stop-color="#8fa0bd" stop-opacity=".55"/>
+          </linearGradient>
+
+          <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#e6c8a4"/>
+            <stop offset="0.10" stop-color="#c2b4ac"/>
+            <stop offset="0.34" stop-color="#8593b2"/>
+            <stop offset="0.68" stop-color="#606d95"/>
+            <stop offset="1"    stop-color="#4b5680"/>
+          </linearGradient>
+
+          <linearGradient id="glitter" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"    stop-color="#ffe3b8" stop-opacity="0"/>
+            <stop offset="0.30" stop-color="#ffe9c6" stop-opacity=".22"/>
+            <stop offset="0.50" stop-color="#fff3d8" stop-opacity=".40"/>
+            <stop offset="0.70" stop-color="#ffe9c6" stop-opacity=".22"/>
+            <stop offset="1"    stop-color="#ffe3b8" stop-opacity="0"/>
+          </linearGradient>
+
+          <linearGradient id="shore" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#2b3252"/>
+            <stop offset="0.45" stop-color="#1d2338"/>
+            <stop offset="1"    stop-color="#12162a"/>
+          </linearGradient>
+
+          <!-- The cut edge of the paper. The gradient used to run bright at the
+               top-left to pale at the bottom-right, which put almost all of its
+               light along the left side of the card and read as a line drawn
+               down the page rather than as an edge. It is flatter now. -->
+          <linearGradient id="paperEdge" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fdf8ee"/>
+            <stop offset="1" stop-color="#f2ead9"/>
+          </linearGradient>
+
+          <filter id="grain" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="1.05" numOctaves="3" seed="7" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0.42" intercept="-0.04"/></feComponentTransfer>
+          </filter>
+
+          <!-- age: a slow field thresholded into sparse, soft-edged patina -->
+          <!-- Foxing in two scales, the way paper actually ages. The fine one
+               is the dust: thousands of small rust-coloured specks. The coarse
+               one is the blooms: a handful of large soft rings where something
+               wet sat on the sheet for a decade. The back of the card has had
+               the fine one all along; the front only had a broad wash, which
+               read as a tint rather than as age. -->
+          <filter id="fox" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05 0.043" numOctaves="4" seed="23" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 0.45
+                      0 0 0 0 0.32
+                      0 0 0 0 0.19
+                      0 0 0 -5.0 2.1"/>
+            <!-- A per-pixel lookup on alpha, not another turbulence pass. The
+                 colour matrix above gives every speck the same ramp, so the
+                 dust is all one strength; this table makes the distribution
+                 uneven - some specks barely there, some dark - which is what
+                 real foxing looks like. A table is a lookup, so it costs
+                 almost nothing next to generating the noise. -->
+            <feComponentTransfer>
+              <feFuncA type="table" tableValues="0 0.85 0.12 0.55 0 0.3 1 0.18"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="1.1"/>'
+          </filter>
+          <filter id="foxLarge" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="0.0115 0.0145" numOctaves="3" seed="91" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 0.47
+                      0 0 0 0 0.33
+                      0 0 0 0 0.19
+                      0 0 0 -4.4 1.72"/>
+            <feComponentTransfer>
+              <feFuncA type="table" tableValues="0 0.4 0 0.9 0.15 0 0.65 0.25"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2.4"/>'
+          </filter>
+          <radialGradient id="foxBloom">
+            <stop offset="0"   stop-color="#8a6a3c" stop-opacity=".85"/>
+            <stop offset=".45" stop-color="#8a6a3c" stop-opacity=".5"/>
+            <stop offset=".8"  stop-color="#8a6a3c" stop-opacity=".18"/>
+            <stop offset="1"   stop-color="#8a6a3c" stop-opacity="0"/>
+          </radialGradient>
+          <!-- filter regions are pinned in user space: a blur that runs out
+               of room leaves a hard rectangular edge, and nothing here
+               should ever have a rectangular edge -->
+          <filter id="soft" filterUnits="userSpaceOnUse" x="-40" y="-40" width="980" height="680">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+          <!-- Mist is not one colour. It is water in the air, and the sun is
+               low and to the right, so the same band is cool grey-blue where it
+               is away from the light and warm where the light goes through it.
+               Painted flat cream over a dark mountain it read as a grey smear. -->
+          <linearGradient id="mistLit" gradientUnits="userSpaceOnUse" x1="110" y1="0" x2="790" y2="0">
+            <stop offset="0"   stop-color="#dfe4ee"/>
+            <stop offset=".55" stop-color="#f2e3d3"/>
+            <stop offset="1"   stop-color="#ffe5c2"/>
+          </linearGradient>
+          <filter id="mist" filterUnits="userSpaceOnUse" x="-60" y="180" width="1020" height="300">
+            <feGaussianBlur stdDeviation="9"/>
+          </filter>
+          <filter id="cloudSoft" filterUnits="userSpaceOnUse" x="-60" y="-60" width="1020" height="520">
+            <feGaussianBlur stdDeviation="4.2"/>
+          </filter>
+          <filter id="bloom" filterUnits="userSpaceOnUse" x="440" y="26" width="360" height="360">
+            <feGaussianBlur stdDeviation="14"/>
+          </filter>
+          <filter id="rim" filterUnits="userSpaceOnUse" x="300" y="40" width="600" height="480">
+            <feGaussianBlur stdDeviation="3.6"/>
+          </filter>
+          <filter id="edgeWear" filterUnits="userSpaceOnUse" x="300" y="170" width="320" height="140">
+            <feGaussianBlur stdDeviation="2.4"/>
+          </filter>
+          <filter id="gully" filterUnits="userSpaceOnUse" x="120" y="150" width="700" height="300">
+            <feGaussianBlur stdDeviation="4.5"/>
+          </filter>
+          <filter id="tiny" filterUnits="userSpaceOnUse" x="-20" y="-20" width="940" height="640">
+            <feGaussianBlur stdDeviation="1.4"/>
+          </filter>
+
+          <!-- film grain: finer than the paper fibre and barely visible. it
+               is what stops the long soft gradients from reading as flat
+               vector fills, and it masks the hairlines just enough -->
+          <filter id="film" filterUnits="userSpaceOnUse" x="0" y="0" width="900" height="600">
+            <feTurbulence type="fractalNoise" baseFrequency="1.7" numOctaves="2" seed="57" result="n"/>
+            <feColorMatrix in="n" type="saturate" values="0"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0" intercept="1"/></feComponentTransfer>
+          </filter>
+
+          <!-- age. a card that has been carried is lighter at the very
+               corners, soiled a little inside them, and creased where it
+               was bent; none of it is drawn as a line -->
+          <linearGradient id="crease" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"   stop-color="#0b1020" stop-opacity="0"/>
+            <stop offset=".30" stop-color="#0b1020" stop-opacity=".026"/>
+            <stop offset=".50" stop-color="#fff6e2" stop-opacity=".032"/>
+            <stop offset=".70" stop-color="#0b1020" stop-opacity=".014"/>
+            <stop offset="1"   stop-color="#0b1020" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="tanzakuAge" x1="0" y1="0" x2="1" y2=".2">
+            <stop offset="0"   stop-color="#d8c49a" stop-opacity="0"/>
+            <stop offset=".6"  stop-color="#d8c49a" stop-opacity=".1"/>
+            <stop offset="1"   stop-color="#c9ae7e" stop-opacity=".22"/>
+          </linearGradient>
+          <linearGradient id="tanzakuPaper" x1="0" y1="0" x2=".35" y2="1">
+            <stop offset="0"   stop-color="#fbf7ee"/>
+            <stop offset=".55" stop-color="#f4ecdb"/>
+            <stop offset="1"   stop-color="#eae0cb"/>
+          </linearGradient>
+
+          <linearGradient id="rimLight" gradientUnits="userSpaceOnUse" x1="470" y1="150" x2="740" y2="400">
+            <stop offset="0"   stop-color="#ffe2b0" stop-opacity=".80"/>
+            <stop offset=".42" stop-color="#ffc48c" stop-opacity=".40"/>
+            <stop offset="1"   stop-color="#ffab74" stop-opacity="0"/>
+          </linearGradient>
+
+          <!-- the mountain, reused for fill + reflection + clipping -->
+          <path id="fujiPath" d="M150 404
+            C268 386 356 296 404 196
+            C412 178 420 168 428 160
+            L440 152 L452 158 L466 152 L478 162
+            C486 170 494 182 502 200
+            C548 296 636 386 754 404 Z"/>
+
+          <linearGradient id="reflFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#ffffff" stop-opacity=".62"/>
+            <stop offset="0.34" stop-color="#ffffff" stop-opacity=".34"/>
+            <stop offset="0.68" stop-color="#ffffff" stop-opacity=".14"/>
+            <stop offset="1"    stop-color="#ffffff" stop-opacity="0"/>
+          </linearGradient>
+          <!-- the mirror is not a mirror: the surface cuts it into bands that
+               widen as they come toward the viewer, then blurs the cuts -->
+          <filter id="reflBreak" filterUnits="userSpaceOnUse" x="0" y="404" width="900" height="146">
+            <feGaussianBlur stdDeviation="1.7"/>
+          </filter>
+          <mask id="reflMask" maskUnits="userSpaceOnUse" x="0" y="404" width="900" height="146">
+            <rect x="0" y="404" width="900" height="146" fill="url(#reflFade)"/>
+            <g fill="#000" filter="url(#reflBreak)">
+              <rect x="120" y="419" width="300" height="2.2" rx="1.1"/>
+              <rect x="470" y="423" width="250" height="2" rx="1"/>
+              <rect x="180" y="437" width="410" height="2.8" rx="1.4"/>
+              <rect x="620" y="441" width="210" height="2.4" rx="1.2"/>
+              <rect x="90"  y="457" width="370" height="3.2" rx="1.6"/>
+              <rect x="500" y="461" width="320" height="3" rx="1.5"/>
+              <rect x="150" y="481" width="450" height="3.8" rx="1.9"/>
+              <rect x="640" y="485" width="230" height="3.2" rx="1.6"/>
+              <rect x="60"  y="507" width="410" height="4.4" rx="2.2"/>
+              <rect x="520" y="511" width="330" height="3.8" rx="1.9"/>
+              <rect x="140" y="533" width="500" height="5" rx="2.5"/>
+            </g>
+          </mask>
+
+          <!-- the rays are cut off by nothing but distance from the lamp -->
+          <radialGradient id="rayFall" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0"   stop-color="#ffffff" stop-opacity=".9"/>
+            <stop offset=".30" stop-color="#ffffff" stop-opacity=".55"/>
+            <stop offset=".68" stop-color="#ffffff" stop-opacity=".16"/>
+            <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
+          </radialGradient>
+          <mask id="rayMask"><circle cx="620" cy="206" r="330" fill="url(#rayFall)"/></mask>
+
+          <linearGradient id="stampAge" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0"   stop-color="#d8c49a" stop-opacity="0"/>
+            <stop offset=".55" stop-color="#d8c49a" stop-opacity=".16"/>
+            <stop offset="1"   stop-color="#c9ae7e" stop-opacity=".3"/>
+          </linearGradient>
+          <!-- hot-stamped metal for the wordmark -->
+          <linearGradient id="gold" gradientUnits="userSpaceOnUse" x1="90" y1="548" x2="90" y2="592">
+            <stop offset="0"   stop-color="#fdf4d2"/>
+            <stop offset=".28" stop-color="#dcb458"/>
+            <stop offset=".52" stop-color="#8e6524"/>
+            <stop offset=".74" stop-color="#eed488"/>
+            <stop offset="1"   stop-color="#7c5518"/>
+          </linearGradient>
+          <!-- One ray, travelling. The gradient is a narrow band in full card
+               space (0..210) and the script slides it from off the left edge to
+               off the right, so the highlight crosses the whole width of the
+               plate instead of a tenth of it. The lettering and the rule under
+               it share this one gradient, so they light up at the same place -
+               it is the same ray hitting both. -->
+          <linearGradient id="goldShine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="210" y2="0">
+            <stop offset="0"   stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset=".5"  stop-color="#fffbe8" stop-opacity=".95"/>
+            <stop offset="1"   stop-color="#ffffff" stop-opacity="0"/>
+          </linearGradient>
+
+          <!-- The border of the plate is gilded too and the light runs around
+               it. A linear gradient cannot follow a perimeter, so this is a
+               bright dash on a stroke that goes all the way round: the script
+               moves stroke-dashoffset and the glint walks the frame. The second,
+               fainter dash is the far side of the same ray. -->
+          <!-- The frame is hot-stamped with the same metal as the lettering,
+               so it is drawn with the same kind of gradient. It runs top to
+               bottom rather than across, because that is how a lamp above a
+               gilded frame falls: the top rule catches most of it, the bottom
+               rule is in the shadow of the picture. -->
+          <linearGradient id="goldFrame" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="600">
+            <stop offset="0"   stop-color="#fdf4d2"/>
+            <stop offset=".3"  stop-color="#dcb458"/>
+            <stop offset=".62" stop-color="#b5883c"/>
+            <stop offset="1"   stop-color="#8e6524"/>
+          </linearGradient>
+
+          <!-- the torii's reflection: a shallow band of water, so the
+               mirror is compressed and gone within a few tens of units -->
+          <linearGradient id="toriiReflFade" gradientUnits="userSpaceOnUse" x1="0" y1="524" x2="0" y2="578">
+            <stop offset="0"   stop-color="#fff" stop-opacity="1"/>
+            <stop offset=".5"  stop-color="#fff" stop-opacity=".42"/>
+            <stop offset="1"   stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+          <mask id="toriiReflMask" maskUnits="userSpaceOnUse" x="140" y="523" width="184" height="58">
+            <rect x="140" y="523" width="184" height="58" fill="url(#toriiReflFade)"/>
+          </mask>
+
+          <!-- The snowline is where snow stops and rock starts, and it does
+               not do that at regular intervals. The old edge had seven lobes
+               all about 26 units wide alternating between y=222 and y=250 -
+               the same wave, seven times, which is a fence and not a melting
+               edge. The lobes here run 10 to 26 units wide and reach down to
+               anywhere between 214 and 258. -->
+          <path id="snowCapPath" d="M336 126 H564 V206
+                   C562 216 558 228 554 232
+                   C548 236 542 218 536 214
+                   C528 210 524 238 518 244
+                   C510 250 500 226 492 222
+                   C484 218 478 246 470 252
+                   C462 258 458 234 452 230
+                   C444 226 440 254 428 258
+                   C418 261 416 240 410 236
+                   C402 231 396 250 384 248
+                   C372 246 372 232 360 228
+                   C350 225 344 222 336 218 Z"/>
+          <clipPath id="clipFuji"><use href="#fujiPath"/></clipPath>
+          <clipPath id="clipLake"><rect x="0" y="404" width="900" height="146"/></clipPath>
+          <clipPath id="clipCard"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>
+
+          <path id="petalShape" d="M0 0 C3 -5.5 11 -6.5 14.5 -1 C11 5 3 5.5 0 0 Z"/>

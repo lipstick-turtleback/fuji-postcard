@@ -38,7 +38,7 @@ src/
   template.html        the shell: head, wall, card, controls, footer
   styles/              01-wall 02-masthead 03-card 04-console 05-foil 06-motion
   art/
-    front.svg          the picture: sky, sun, Fuji, lake, torii, bank
+    front/             the picture in twelve ordered fragments (see below)
     back.svg           the addressed side: stamp, cancellation, address block
   script/
     card.js            tilt, flip, foil lighting, SVG export
@@ -63,6 +63,39 @@ public/
 `src/` is the truth. `public/index.html` is generated, and it is committed on
 purpose: the repo stays openable with a double-click, and `npm run check`
 fails if it has drifted from `src/`.
+
+### The front is twelve fragments, in paint order
+
+```
+src/art/front/
+  00-open.svg     the <svg>, its title, its description
+  10-paint.svg    every gradient, filter and mask the picture is printed with
+  20-cast.svg     the marks drawn once and placed by hand: tufts, reeds,
+                  a heron, a duck, a blossom, a bud
+  30-sky.svg      sky, sun, its rays, high clouds
+  40-mountain.svg the ridges and the mountain, each ridge lighter than the last
+  50-lake.svg     far shore, mist, low clouds, birds, the water and its mirrors
+  60-shore.svg    torii, boat, bank, stones, driftwood, ducks, heron, grass
+  70-cherry.svg   the branch and the petals coming off it
+  80-print.svg    title strip, stamp, cancellation, plate inscription
+  90-age.svg      foxing, soiling, grain, vignette
+  95-frame.svg    the gilded rules, outside the clip
+  99-close.svg    the </svg>
+```
+
+The build concatenates the directory in sorted order, and the sort order _is_
+the drawing: in SVG a later element is a nearer one, so the file list is not
+bookkeeping, it is the scene. That is also why the layers are fragments of one
+`<svg>` rather than six stacked ones. The scene references 48 ids defined in
+its own `<defs>` — the clips, the gradients, the mist and cloud filters — and
+places the cast 60-odd times; id scope does not cross an `<svg>` boundary, so
+separate layers would mean 48 duplicated paint servers, and SAVE THE PLATE
+clones exactly one `<svg>`.
+
+The split is then verifiable in a way a rewrite is not: `npm run build` after
+moving the ranges must leave `git diff public/index.html` empty. It did. The
+only diff the fragments themselves introduce is the twelve orientation
+comments above.
 
 ## Commands
 

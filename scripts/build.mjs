@@ -29,10 +29,28 @@ const css = () =>
 
 const js = (name) => read(`script/${name}`);
 
+/* A face of the artwork is either one file (the back, 261 lines) or a
+   directory of ordered fragments (the front, which is a whole scene). The
+   names sort into paint order, and paint order *is* the drawing: a later
+   element is a nearer one, so the file order is not bookkeeping, it is the
+   picture. Splitting it into files must not change a byte of the built page
+   — if `git diff public/index.html` is empty after a split, the split cannot
+   have changed what the page does. */
+const art = (name) => {
+  const dir = join(src, 'art', name);
+  if (existsSync(dir))
+    return readdirSync(dir)
+      .filter((f) => f.endsWith('.svg'))
+      .sort()
+      .map((f) => read(`art/${name}/${f}`))
+      .join('');
+  return read(`art/${name}.svg`);
+};
+
 const slots = {
   '@CSS@': css,
-  '@SVG_FRONT@': () => read('art/front.svg'),
-  '@SVG_BACK@': () => read('art/back.svg'),
+  '@SVG_FRONT@': () => art('front'),
+  '@SVG_BACK@': () => art('back'),
   '@JS_CARD@': () => js('card.js'),
   '@JS_SOUNDTRACK@': () => js('soundtrack.js'),
 };

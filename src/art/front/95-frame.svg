@@ -1,0 +1,17 @@
+  <!--
+  The gilded rules, outside the clip: the frame is the plate, and the
+  lettering is measured against it by scripts/test-plate.mjs.
+  -->
+        <g fill="none" stroke="url(#goldFrame)">
+          <rect x="14" y="14" width="872" height="572" rx="4"
+                stroke-width="1.6" stroke-opacity=".55"/>
+          <rect x="21" y="21" width="858" height="558" rx="3"
+                stroke-width=".7" stroke-opacity=".3"/>
+        </g>
+        <g id="edgeGlint" fill="none" stroke="url(#goldShine)" stroke-width="2"
+           stroke-linecap="round">
+          <path class="rail" d="M16 14 H884" stroke-dasharray="170 698" stroke-dashoffset="0"/>
+          <path class="rail" d="M16 586 H884" stroke-dasharray="170 698" stroke-dashoffset="0"/>
+          <path class="rail-v" d="M14 16 V584" stroke-dasharray="170 398" stroke-dashoffset="0"/>
+          <path class="rail-v" d="M886 16 V584" stroke-dasharray="170 398" stroke-dashoffset="0"/>
+        </g>

@@ -1,0 +1,320 @@
+  <!--
+  The near bank: torii, boat, stones, driftwood, ducks, the heron,
+  grass and reeds. The busiest fragment, and the one most things
+  collide with.
+  -->
+
+          <!-- torii — every member mirrored exactly about x = 230.
+               The whole group is lifted 30 units because it was standing 14
+               units off the near shore: a gate in a lake you can almost step
+               to. The mask, the fade and the reflection are all in this
+               group's own space, so they come with it and nothing else had to
+               move. -->
+          <g transform="translate(0 -30)">
+            <!-- contact shadow where the posts meet the water -->
+            <ellipse cx="230" cy="526" rx="68" ry="4.5" fill="#101426" opacity=".22" filter="url(#tiny)"/>
+            <g id="toriiBody" fill="#c8452f" stroke="#8f2f20" stroke-width=".8" stroke-opacity=".45">
+              <path d="M171 524 L177 428 L188 428 L185 524 Z"/>
+              <path d="M289 524 L283 428 L272 428 L275 524 Z"/>
+              <rect x="225" y="432" width="10" height="24" rx="1"/>
+              <rect x="168" y="456" width="124" height="10" rx="2"/>
+              <path d="M164 429 C194 421 266 421 296 429 L296 438 C266 430 194 430 164 438 Z"/>
+              <path d="M158 420 C190 410 270 410 302 420 L302 429 C270 419 190 419 158 429 Z"/>
+            </g>
+            <!-- shaded inner edges -->
+            <g fill="#8f2f20" opacity=".42">
+              <path d="M171 524 L177 428 L180 428 L174 524 Z"/>
+              <path d="M289 524 L283 428 L280 428 L286 524 Z"/>
+            </g>
+            <!-- lit outer edges, catching the low sun -->
+            <g fill="#f08a5e" opacity=".5">
+              <path d="M185 524 L188 428 L186 428 L182.5 524 Z"/>
+              <path d="M275 524 L272 428 L274 428 L277.5 524 Z"/>
+            </g>
+            <!-- the reflection is the gate itself: mirrored about the
+                 waterline and compressed by the viewing angle. the water
+                 breaks it into bands, so the bands are drawn over it in
+                 the colour of the water, not left out of the drawing -->
+            <!-- Stronger than it looks like it should be, because the band of
+                 water between the gate and the near shore is only fourteen
+                 units deep: the whole reflection has to say itself in that.
+                 Measured at the post bases, y=528: the water there was
+                 (64,57,77) with the old .62 and reads (60,41,50) - red, not
+                 merely shadowed - once the fade starts at full strength. -->
+            <g mask="url(#toriiReflMask)" filter="url(#tiny)" opacity=".8"
+               style="mix-blend-mode:multiply">
+              <use href="#toriiBody" transform="translate(0 786) scale(1 -0.5)"/>
+            </g>
+            <g stroke="#98a1bb" stroke-linecap="round" fill="none" opacity=".3">
+              <path d="M170 533 h120 M176 543 h108" stroke-width="2.4"/>
+            </g>
+            <path d="M168 528 C198 534 262 534 292 528" stroke="#f2e6d4" stroke-opacity=".34"
+                  stroke-width="1.6" fill="none"/>
+            <!-- where each post meets the water: one tight ring each, because
+                 the lake is being disturbed by something standing in it -->
+            <g stroke="#e6dcc8" fill="none" stroke-linecap="round">
+              <path d="M170 524 C174 526.4 186 526.4 190 524" stroke-opacity=".3" stroke-width="1.1"/>
+              <path d="M270 524 C274 526.4 286 526.4 290 524" stroke-opacity=".3" stroke-width="1.1"/>
+              <path d="M174 528.5 C178 530 184 530 188 528.5" stroke-opacity=".16" stroke-width=".9"/>
+              <path d="M274 528.5 C278 530 284 530 288 528.5" stroke-opacity=".16" stroke-width=".9"/>
+            </g>
+          </g>
+
+          <!-- boat -->
+          <g class="boat">
+            <g fill="#1b2036">
+              <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
+              <!-- the body leans into the stroke and one arm is out on the
+                   pole: a silhouette is read entirely by its outline, and a
+                   rectangle with a hat on it reads as a person-shaped gap -->
+              <path d="M623 499 L625 482 C628 477.5 634 476.5 638 480 L641 499 Z"/>
+              <path d="M635 485 C640 484 645 481.5 649 478" stroke="#1b2036" stroke-width="2.8"
+                    stroke-linecap="round" fill="none"/>
+              <circle cx="631" cy="475" r="4"/>
+              <path d="M619 473 L643 473 L631 464 Z"/>
+              <!-- the pole goes into the water and is seen to, which is the
+                   only thing that says the boat is being poled at all -->
+              <path d="M646 470 L648.5 471 L666 519 L663 520.5 Z"/>
+            </g>
+            <!-- What the water does around the boat. Almost invisible on
+                 purpose: the test is that the lake is not frozen, not that
+                 you can see rings. Three arcs leave the paddle and never are
+                 in step - the .ripple phases put them at 17s, 23s and 29s -
+                 so one is always fading while another brightens, which is how
+                 ripples read: as something continually setting off, not as a
+                 thing pulsing. The wake under the hull breathes more slowly
+                 and drifts, because the boat is moving through the water and
+                 the water is not level with it. -->
+            <g class="wake" fill="none" stroke="#f2e6d4" stroke-opacity=".3" stroke-width="1.4">
+              <path d="M600 512 C618 517 646 517 662 512"/>
+            </g>
+            <g class="wake wake-b" fill="none" stroke="#f2e6d4" stroke-opacity=".15" stroke-width="1.1">
+              <path d="M592 516 C612 522 650 522 670 516"/>
+            </g>
+            <g fill="none" stroke="#f2e6d4" stroke-linecap="round">
+              <path class="ripple" d="M657 521 C661 522.6 669 522.6 673 521" stroke-opacity=".26" stroke-width="1.2"/>
+              <path class="ripple" d="M660 525 C663 526.2 669 526.2 672 525" stroke-opacity=".2" stroke-width="1.1"/>
+              <path class="ripple" d="M663 529 C665.5 530 670.5 530 673 529" stroke-opacity=".14" stroke-width="1"/>
+            </g>
+          </g>
+
+          <!-- the near bank. one irregular waterline, then the small things
+               that live on it: wet sand, stones, driftwood, grass, reeds,
+               two ducks in the shallows and a heron standing at the edge. -->
+          <!-- Everything in the bank sits 14 units higher than it did. The plate
+               inscription along the bottom edge needs a foreground deep enough to
+               hold it, and the bank was too thin: the small line of type was
+               sitting on the card's own border. -->
+          <g transform="translate(0 -14)">
+          <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
+                   C450 541 520 549 596 545 C670 541 740 548 812 544
+                   C852 542 878 546 900 544 L900 620 L0 620 Z" fill="url(#shore)"/>
+          <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
+                   C450 541 520 549 596 545 C670 541 740 548 812 544
+                   C852 542 878 546 900 544 L900 556 C878 558 852 554 812 556
+                   C740 560 670 553 596 557 C520 561 450 553 372 556
+                   C300 559 240 553 168 558 C110 562 60 556 0 564 Z"
+                fill="#4d5878" opacity=".42"/>
+          <!-- The bank between the water and the lettering was a flat band of
+               gradient with four stones on it - the largest empty area on the
+               card, and the one doing least. What it needs is ground, not
+               more objects: five wide low patches where the wet sand is
+               holding a little of the sky, and seventeen pebbles, most of them
+               barely a unit tall. The pebbles cluster and then leave stretches
+               of nothing, because that is how shingle lies. Contrast is kept
+               under .25 so none of it reads as a thing to look at. -->
+          <g fill="#39456a">
+              <ellipse cx="140" cy="578" rx="86" ry="7" opacity="0.22"/>
+              <ellipse cx="390" cy="592" rx="64" ry="5" opacity="0.18"/>
+              <ellipse cx="600" cy="570" rx="96" ry="8" opacity="0.2"/>
+              <ellipse cx="760" cy="596" rx="58" ry="4" opacity="0.16"/>
+              <ellipse cx="250" cy="600" rx="72" ry="6" opacity="0.14"/>
+          </g>
+          <g fill="#4a5678" opacity=".38">
+              <ellipse cx="38" cy="572" rx="2.4" ry="1.1"/>
+              <ellipse cx="52" cy="578" rx="1.5" ry="0.7"/>
+              <ellipse cx="96" cy="584" rx="1.6" ry="0.8"/>
+              <ellipse cx="163" cy="566" rx="3.0" ry="1.3"/>
+              <ellipse cx="178" cy="574" rx="1.3" ry="0.6"/>
+              <ellipse cx="212" cy="590" rx="1.9" ry="0.9"/>
+              <ellipse cx="318" cy="562" rx="1.4" ry="0.7"/>
+              <ellipse cx="340" cy="576" rx="2.1" ry="1.0"/>
+              <ellipse cx="352" cy="586" rx="2.8" ry="1.2"/>
+              <ellipse cx="470" cy="594" rx="2.3" ry="1.0"/>
+              <ellipse cx="522" cy="566" rx="3.1" ry="1.4"/>
+              <ellipse cx="536" cy="574" rx="1.2" ry="0.6"/>
+              <ellipse cx="618" cy="572" rx="2.6" ry="1.1"/>
+              <ellipse cx="724" cy="564" rx="1.8" ry="0.8"/>
+              <ellipse cx="778" cy="580" rx="2.9" ry="1.2"/>
+              <ellipse cx="830" cy="570" rx="1.6" ry="0.8"/>
+              <ellipse cx="872" cy="588" rx="2.4" ry="1.0"/>
+          </g>
+          <path d="M0 552 C60 544 110 550 168 546 C240 541 300 547 372 544
+                   C450 541 520 549 596 545 C670 541 740 548 812 544
+                   C852 542 878 546 900 544"
+                fill="none" stroke="#e6dcc8" stroke-opacity=".20" stroke-width="1.4"/>
+
+          <!-- Stones. Pure black ellipses on a dark bank read as holes, so
+               each one is a shade lighter than the sand it sits in, flattened
+               and not quite symmetrical, with the thin lit arc the water leaves
+               along its top and a contact shadow where it meets the wet sand.
+               Four, not five: the fifth was filler. -->
+          <!-- The shadow has to hug the base. Sitting a unit or two lower it
+               separated from the stone and read as a second, darker stone
+               underneath. -->
+          <g fill="#0f1424" opacity=".5">
+            <ellipse cx="133" cy="554.5" rx="13" ry="2.8"/>
+            <ellipse cx="467" cy="552.5" rx="10" ry="2.2"/>
+            <ellipse cx="701" cy="551.5" rx="8.5" ry="1.9"/>
+            <ellipse cx="869" cy="551" rx="11" ry="2.3"/>
+          </g>
+          <g fill="#242e49">
+            <path d="M120 553 C122 548 129 546 136 547 C143 548 147 551 146 554
+                     C138 556 127 556 120 553 Z"/>
+            <path d="M458 551 C461 547 469 546 475 549 C477 551 475 553 470 553
+                     C464 554 459 553 458 551 Z"/>
+            <path d="M694 550 C696 547 703 546 708 548 C710 550 708 552 703 552
+                     C698 553 695 552 694 550 Z"/>
+            <path d="M858 549 C861 545 870 544 877 547 C880 549 878 552 872 552
+                     C865 553 860 552 858 549 Z"/>
+          </g>
+          <g fill="none" stroke="#8d97b3" stroke-opacity=".5" stroke-width="1">
+            <path d="M122 550 C127 546.5 138 546 145 549.5"/>
+            <path d="M459 549 C463 546.5 471 546.2 475 548.5"/>
+            <path d="M695 548 C698 546 704 545.8 708 547.5"/>
+            <path d="M860 546 C865 543.8 873 543.6 877 546"/>
+          </g>
+
+          <!-- a length of driftwood with one chip beside it, and the low
+               bushes behind the bank — their tops are ragged, not scalloped,
+               so they read as growth and not as rocks -->
+          <g stroke="#1a2033" fill="none" stroke-linecap="round">
+            <path d="M330 551 C352 547 378 549 400 546" stroke-width="3.6"/>
+            <path d="M406 549 L418 548" stroke-width="2.2"/>
+          </g>
+
+          <!-- Two ducks in open water. They used to sit hard against the
+               torii's right post, which made them look like part of the
+               gate, and put them in the shallowest, least interesting part of
+               the lake. Out here they are between the gate and the boatman,
+               where the water is widest. -->
+          <g fill="#141a2c" stroke="#141a2c">
+            <use href="#duck" transform="translate(392 519)"/>
+            <use href="#duck" transform="translate(418 525) scale(.84)"/>
+          </g>
+          <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
+            <path d="M382 522 h22 M410 528 h18"/>
+          </g>
+          <!-- and what the water keeps of them -->
+          <g fill="#141a2c" opacity=".16">
+            <ellipse cx="392" cy="524" rx="7.5" ry="1.7"/>
+            <ellipse cx="418" cy="530" rx="6.2" ry="1.4"/>
+          </g>
+
+          <!-- the heron: still, and the only tall thing on the right -->
+          <g fill="#101627" stroke="#101627">
+            <use href="#heron" transform="translate(772 546) scale(-1 1)"/>
+          </g>
+          <!-- the folded wing, said with one hairline: the body is an oval
+               and the eye needs to know which end is the back -->
+          <path d="M766 531 C774 528 782 530 786 535 C781 538 772 538 766 535 Z"
+                fill="#1b2338" opacity=".9"/>
+          <path d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
+          <g stroke="#e6dcc8" stroke-opacity=".16" stroke-width="1" fill="none" stroke-linecap="round">
+            <path d="M763 548 C767 549.6 775 549.6 779 548"/>
+            <path d="M766 552 C769 553.2 774 553.2 777 552"/>
+          </g>
+
+          <!-- The whole stand lifts 10 units so it roots at the waterline and
+               stops growing through the inscription rule. The rule is printed on the
+               paper; the grass is in the scene, and the scene sits above the lettering. -->
+          <g transform="translate(0 -10)">
+          <!-- Grass and reeds grow in stands, not at intervals. The left bank
+               has a dense one that thins as it runs right; the right bank has a
+               smaller one; between them growth goes thin and scattered rather
+               than absent. Each stand has a back row, a
+               little lighter and taller, and a front row - the overlap is what
+               makes it read as growth rather than a row of stick figures. Three
+               sway phases, so the clumps are never in step. -->
+          <g fill="#161d31" stroke="#161d31" stroke-linecap="round">
+            <use href="#reed" transform="translate(20 566) scale(1.02)"/>
+            <use href="#reedB" transform="translate(46 564) rotate(-5) scale(.88)"/>
+            <use href="#reed" transform="translate(98 562) rotate(3) scale(.82)"/>
+            <use href="#tuft" transform="translate(34 568) scale(.9)"/>
+            <use href="#tuftB" transform="translate(72 566) scale(1.02)"/>
+            <use href="#tuftC" transform="translate(116 562) scale(.78)"/>
+          </g>
+          <g class="sway-a" fill="#0f1322" stroke="#0f1322" stroke-linecap="round">
+            <use href="#reedB" transform="translate(30 572) rotate(4) scale(1.15)"/>
+            <use href="#reed" transform="translate(60 574) rotate(-3) scale(.95)"/>
+            <use href="#reedB" transform="translate(110 568) rotate(-6) scale(.9)"/>
+            <use href="#tuft" transform="translate(12 576) scale(1.05)"/>
+            <use href="#tuftB" transform="translate(26 578) scale(.8)"/>
+            <use href="#tuftC" transform="translate(40 576) scale(1.12)"/>
+            <use href="#tuft" transform="translate(54 578) scale(.72)"/>
+            <use href="#tuftB" transform="translate(68 574) scale(.92)"/>
+            <use href="#tuftC" transform="translate(84 572) scale(.76)"/>
+            <use href="#tuft" transform="translate(96 570) scale(.88)"/>
+            <use href="#tuftB" transform="translate(124 566) scale(.66)"/>
+            <use href="#tuftC" transform="translate(140 562) scale(.58)"/>
+          </g>
+          <g class="sway-b" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-5s">
+            <use href="#reed" transform="translate(838 558) scale(.95)"/>
+            <use href="#reedB" transform="translate(858 560) rotate(5) scale(.76)"/>
+            <use href="#tuft" transform="translate(802 560) scale(.9)"/>
+            <use href="#tuftB" transform="translate(818 562) scale(.7)"/>
+            <use href="#tuftC" transform="translate(830 564) scale(.85)"/>
+            <use href="#tuft" transform="translate(848 566) scale(.6)"/>
+          </g>
+          <g class="sway-b" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-2.5s">
+            <use href="#reed" transform="translate(876 556) rotate(-4) scale(.88)"/>
+            <use href="#tuftB" transform="translate(864 562) scale(.74)"/>
+            <use href="#tuftC" transform="translate(884 558) scale(.98)"/>
+            <use href="#tuft" transform="translate(896 560) scale(.7)"/>
+          </g>
+          <!-- Out in the open the shore is not bare, it is thin. Three
+               survivors were not enough: the middle of the bank read as an
+               omission, a gap in the drawing rather than water's edge. Real
+               growth comes in clusters and then leaves a stretch - so the
+               gaps here are 82, 86 and 14 units, not a rhythm, and the
+               heights run .38 to .68. Three reeds stand up among the tufts
+               so the open ground is not all the same shape.
+               Split across three sway phases, so nothing is ever in step. -->
+          <g class="sway-a" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-7.5s">
+            <use href="#tuftB" transform="translate(168 558) rotate(3) scale(.68)"/>
+            <use href="#tuftC" transform="translate(244 554) scale(.52)"/>
+            <use href="#reedB" transform="translate(292 552) rotate(-4) scale(.58)"/>
+            <use href="#tuft" transform="translate(306 556) scale(.42)"/>
+          </g>
+          <g class="sway-b" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-3.5s">
+            <use href="#tuftB" transform="translate(388 554) scale(.6)"/>
+            <use href="#reed" transform="translate(432 550) rotate(5) scale(.5)"/>
+            <use href="#tuftC" transform="translate(474 552) scale(.46)"/>
+            <use href="#tuft" transform="translate(556 554) rotate(-3) scale(.56)"/>
+          </g>
+          <g class="sway-a" fill="#0f1322" stroke="#0f1322" stroke-linecap="round"
+             style="animation-delay:-11s">
+            <use href="#tuftB" transform="translate(206 556) scale(.62)"/>
+            <use href="#tuftC" transform="translate(508 550) scale(.4)"/>
+            <use href="#tuft" transform="translate(642 552) scale(.54)"/>
+            <use href="#tuftB" transform="translate(654 556) scale(.38)"/>
+            <use href="#reedB" transform="translate(668 550) rotate(4) scale(.5)"/>
+            <use href="#tuftC" transform="translate(726 554) scale(.44)"/>
+            <use href="#tuft" transform="translate(762 556) rotate(-5) scale(.62)"/>
+          </g>
+          </g>
+          <!-- petals that have already reached the water -->
+          <g fill="#f4c3d0" opacity=".75">
+            <ellipse cx="238" cy="524" rx="5" ry="1.7"/>
+            <ellipse cx="412" cy="536" rx="4.4" ry="1.5"/>
+            <ellipse cx="540" cy="520" rx="3.8" ry="1.3"/>
+            <ellipse cx="668" cy="534" rx="4.6" ry="1.6"/>
+          </g>
+          <g stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none">
+            <path d="M232 527 h13 M406 539 h12 M534 523 h11 M662 537 h13"/>
+          </g>
+          </g>

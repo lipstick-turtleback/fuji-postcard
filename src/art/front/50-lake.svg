@@ -1,0 +1,146 @@
+  <!--
+  The far shore, the mist that sits on it, the birds, and the water
+  with what it keeps of all of them.
+  -->
+
+          <!-- the far shore of the lake: a line of trees at the foot of
+               the mountain. it runs the whole width with gaps, and the
+               heights are never repeated twice in a row -->
+          <path d="M0 403 C60 401 110 402 168 400 C240 398 300 401 372 399
+                   C450 397 520 402 596 400 C670 398 740 401 812 399
+                   C852 398 878 401 900 400 L900 407 L0 407 Z" fill="#252b47" opacity=".75"/>
+          <g fill="#20263e" opacity=".85">
+            <path d="            M40 401.6 l2.4 -6.2 l2.4 6.2 z  M62 402.0 l2.0 -5.0 l2.0 5.0 z
+            M88 401.0 l2.6 -7.0 l2.6 7.0 z  M112 402.2 l1.7 -4.2 l1.7 4.2 z
+            M132 401.4 l2.0 -5.2 l2.0 5.2 z  M158 402.0 l2.4 -6.4 l2.4 6.4 z
+            M196 401.2 l3.0 -8.0 l3.0 8.0 z  M214 401.8 l2.5 -5.8 l2.5 5.8 z
+            M232 401.0 l3.0 -8.6 l3.0 8.6 z  M252 402.1 l2.5 -6.0 l2.5 6.0 z
+            M286 401.5 l2.0 -4.8 l2.0 4.8 z  M318 401.2 l2.6 -7.2 l2.6 7.2 z
+            M352 402.0 l2.0 -4.4 l2.0 4.4 z  M560 401.3 l3.0 -7.6 l3.0 7.6 z
+            M578 401.9 l2.5 -6.0 l2.5 6.0 z  M596 401.1 l3.0 -8.6 l3.0 8.6 z
+            M618 402.0 l2.5 -6.0 l2.5 6.0 z  M640 401.4 l3.0 -7.0 l3.0 7.0 z
+            M668 401.8 l2.0 -5.0 l2.0 5.0 z  M700 401.2 l2.6 -6.6 l2.6 6.6 z
+            M742 402.1 l2.0 -5.0 l2.0 5.0 z  M786 401.5 l2.4 -6.0 l2.4 6.0 z
+            M830 401.9 l2.0 -4.4 l2.0 4.4 z  M868 401.3 l2.4 -6.2 l2.4 6.2 z"/>
+          </g>
+          <!-- a distant tree line mirrors as a smudge, not as trees -->
+          <path d="M0 407 H900 V413 C700 415 300 415 0 413 Z" fill="#1d2338" opacity=".26"
+                filter="url(#tiny)"/>
+
+          <!-- mist at the foot, and a band crossing the cone: both blurred,
+               both drifting, neither one a hard stripe -->
+          <!-- each band is two masses of different length and height,
+               never one long lens: a single lens blurs into a stripe -->
+          <!-- The drift lives on the wrapper, not on the filtered group. A
+               transform on an element that carries a blur makes the browser
+               re-run the blur every frame; a transform on its parent lets it
+               cache the filtered result and just move it. -->
+          <g class="mist-a">
+          <g filter="url(#mist)" opacity=".40">
+            <path d="M120 306 C210 298 300 303 386 307 C470 311 540 306 604 302
+                     C640 300 646 316 606 322 C520 330 420 326 330 322
+                     C240 318 160 322 122 318 C98 316 98 308 120 306 Z" fill="url(#mistLit)"/>
+            <path d="M470 330 C560 324 660 328 742 334 C776 337 770 348 726 350
+                     C640 353 540 349 476 344 C448 342 446 333 470 330 Z"
+                  fill="url(#mistLit)" opacity=".7"/>
+          </g>
+          </g>
+          <g class="mist-b">
+          <g filter="url(#mist)" opacity=".28">
+            <path d="M150 386 C250 379 340 384 420 381 C480 379 520 384 560 388
+                     C580 390 574 400 540 401 L180 401 C148 401 132 392 150 386 Z" fill="url(#mistLit)"/>
+            <path d="M596 390 C660 385 720 389 768 394 C788 396 782 402 752 402
+                     L610 402 C588 401 580 393 596 390 Z" fill="url(#mistLit)" opacity=".8"/>
+          </g>
+          </g>
+
+          <!-- the air itself, thickening toward the water -->
+          <rect x="0" y="150" width="900" height="256" fill="url(#air)"/>
+
+          <!-- low clouds in front -->
+          <g class="cloud-c" filter="url(#cloudSoft)" opacity=".5">
+            <path d="M196 358 C300 348 404 352 476 359 C536 365 522 375 428 374 C316 373 240 367 196 364 Z"
+                  fill="url(#cloudWarm)"/>
+            <path d="M596 346 C676 339 744 343 790 350 C828 356 816 366 742 365 C656 364 622 356 596 352 Z"
+                  fill="url(#cloudWarm)" opacity=".8"/>
+          </g>
+
+          <!-- Three birds, and no two of them the same shape. A bird far away
+               is a flap caught mid-way: one wing is up, the other is coming
+               down, and the whole pair is tilted. Three identical double arcs
+               of different sizes is a glyph stamped out three times, and the
+               eye knows it. -->
+          <g class="bird" stroke="#3a4463" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".75">
+            <path d="M300 151 q8 -8 16 -1 q7 -8 16 -3"/>
+          </g>
+          <g class="bird b2" stroke="#3a4463" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".6">
+            <path d="M356 128 q6 -3 12 1 q8 -8 13 -4"/>
+          </g>
+          <g class="bird b3" stroke="#3a4463" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5">
+            <path d="M262 187 q7 -4 13 -1 q6 -3 11 0"/>
+          </g>
+
+          <!-- lake -->
+          <!-- The water's edge at the far shore was the top of a rectangle,
+               so it was one dead straight line for 900 units - the only truly
+               straight horizontal on the card, and the one a lake is least
+               likely to have. The edge now wanders by three units. It never
+               goes above y=404, because that is where the reflection clip
+               starts, and a reflection cut off above the waterline would be
+               a seam. (No angle brackets in these comments: the tag-balance
+               check counts them, which is a fair price for catching real
+               imbalance.) -->
+          <path d="M0 405 C80 404 160 407 240 405 C330 404 420 407 510 405
+                   C600 404 690 407 780 405 C840 404 870 406 900 405
+                   L900 550 L0 550 Z" fill="url(#lake)"/>
+          <g clip-path="url(#clipLake)">
+            <!-- mirrored mountain, compressed and cut into bands by the water.
+                 the clip is applied inside the mirrored space, so the snow
+                 cannot spill outside the reflected body of the mountain -->
+            <g class="refl" mask="url(#reflMask)">
+              <g transform="matrix(1 0 0 -0.46 0 590)">
+                <g clip-path="url(#clipFuji)">
+                  <use href="#fujiPath" fill="#333b60"/>
+                  <path d="M336 126 H564 V206
+                           C560 220 552 236 542 238 C532 240 528 222 518 222
+                           C508 222 504 248 492 250 C480 252 476 230 466 230
+                           C456 230 452 254 440 256 C428 258 424 234 414 234
+                           C404 234 400 250 388 248 C376 246 348 226 336 218 Z" fill="#b4c2d6"/>
+                  <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
+                </g>
+              </g>
+            </g>
+
+            <!-- the glitter path: narrow at the far shore, opening as it
+                 comes in, and never a solid sheet of light -->
+            <g class="water-b">
+              <path d="M594 404 H646 C678 452 706 504 742 550 Q620 561 498 550 C536 502 566 452 594 404 Z"
+                    fill="url(#glitter)" opacity=".42" filter="url(#soft)"/>
+                <!-- Six rows, not nine. Each row is one long crest with one
+                   short answer beside it, and the pair steps outward as the
+                   path opens toward the viewer. Anything more than this stops
+                   being the sun on water and becomes texture. -->
+              <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
+                <!-- The bands widen, thicken, fade and spread as the water
+                     comes toward the viewer, which is perspective and correct.
+                     But the old ladder advanced by a near-constant step in
+                     every quantity at once - widths +16, gaps +28, stroke
+                     +0.3, opacity -.06 - and four progressions in lockstep is
+                     a gradient, not a lake. The rows now hold a different
+                     number of breaks, and the steps vary. -->
+                <path d="M598 412 h44 M652 412 h14 M676 412 h7" stroke-width="2.4" opacity=".55"/>
+                <path d="M578 431 h62 M650 431 h22" stroke-width="2.7" opacity=".44"/>
+                <path d="M560 453 h71 M644 453 h34 M690 453 h11" stroke-width="2.9" opacity=".37"/>
+                <path d="M534 477 h96 M640 477 h40" stroke-width="3.3" opacity=".29"/>
+                <path d="M512 507 h104 M632 507 h58 M704 507 h16" stroke-width="3.4" opacity=".23"/>
+                <path d="M486 535 h128 M626 535 h62" stroke-width="3.9" opacity=".17"/>
+              </g>
+            </g>
+
+            <!-- The rest of the lake is left alone. A dawn lake this still
+                 holds almost no marks of its own: what is on it is what is
+                 happening to it — the sun's path, and the water moving
+                 around the posts, the hull and the birds. Thirty-odd pale
+                 and dark dashes used to be scattered over the whole surface
+                 as "texture", and texture with no cause reads as noise. -->
+          </g>
