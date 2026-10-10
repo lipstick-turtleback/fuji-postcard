@@ -75,6 +75,7 @@ scripts/
   png.mjs              enough of a PNG decoder to compare two of them
   test-interactions.mjs drive the buttons and shortcuts and read what happened
   test-motion.mjs      hold the page to its reduced-motion promise
+  test-nojs.mjs        load the page with script switched off and see what is left
   test-css.mjs         no rule selects nothing, no animation names nothing
   test-sound.mjs       the soundtrack, on a page nobody has touched
   perf.mjs             measure frame times over CDP
@@ -384,6 +385,12 @@ page before the question:
   overlapping boxes, because a petal behind the title box is the picture and the
   same petal in front of it is a smudge across a glyph. Renaming the cherry
   fragment so it paints after the print fragment makes it fire.
+- `scripts/test-nojs.mjs` switches script execution off and loads the page. The
+  artwork is in the markup and the motion is opt-in, so the picture is there
+  whole; what cannot work is the row of controls, so they are not allowed to look
+  like they do — no underline, no pointer, no key hints, and a line that says
+  what is the case. The same measurements are then taken with script running and
+  every one must differ, or the test is measuring the layout rather than the tier.
 - `scripts/test-css.mjs` asks whether the stylesheet is telling the truth about
   the page: every selector must match something that exists, and every
   `animation` must name a `@keyframes` block that exists. A stylesheet cannot

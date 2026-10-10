@@ -1,3 +1,10 @@
+/* The page works without script: the artwork is in the markup, drawn at build
+   time, the motion is opt-in and the default is off. What does not work is the
+   row of buttons, and a button that looks live and is not is a mark that lies.
+   So the script announces itself here, on the first line that runs, and the
+   stylesheet spends that tier's rules on saying what is inert. */
+document.documentElement.classList.add('js');
+
 const card = document.getElementById('card');
 const goldShine = document.getElementById('goldShine');
 const edgeGlint = document.getElementById('edgeGlint');

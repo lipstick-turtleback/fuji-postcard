@@ -113,6 +113,35 @@ button[aria-pressed="false"] {
   color: var(--muted);
 }
 
+/* The no-script tier. The artwork is in the markup and the motion is opt-in, so
+   the page is the picture either way; what cannot work is the controls. They are
+   not left looking live: the underline, the pointer and the hover all go, the
+   key hints go with them — F, S and M are shortcuts to nothing — and the
+   noscript line says what is the case. The script adds .js to the html element
+   on its first line, which is what makes these rules stop applying. */
+html:not(.js) button {
+  color: var(--muted);
+  border-bottom-color: transparent;
+  cursor: default;
+}
+html:not(.js) button:hover {
+  color: var(--muted);
+  border-bottom-color: transparent;
+}
+html:not(.js) kbd {
+  display: none;
+}
+html:not(.js) .eq,
+html:not(.js) input[type="range"] {
+  opacity: 0.4;
+}
+.console noscript {
+  font-size: 10.5px;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
 kbd {
   font-family: var(--serif);
   font-size: 9px;

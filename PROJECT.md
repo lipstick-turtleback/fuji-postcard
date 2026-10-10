@@ -169,6 +169,15 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **A button that looks live and is not is a mark that lies.** This page works
+  without script — the artwork is drawn at build time, the motion is opt-in — and
+  the tier had never been loaded. Script blocked, the picture was whole and a row
+  of underlined, pointer-cursored buttons promised a turn, a save and a soundtrack
+  that could not happen. The script now announces itself on its first line and the
+  stylesheet owns the other tier: the underlines, the cursors and the key hints go,
+  and a line says what is the case. Test it by loading the page twice, once with
+  script off and once with it on, and requiring every measurement to differ — a
+  check that cannot tell the tiers apart is checking the layout twice.
 - **An overlap is only a defect in one paint order.** A petal that drifts
   behind the title box is part of the picture; the same petal painted after it is
   a smudge across a glyph. Boxes alone cannot tell those apart, so the check
