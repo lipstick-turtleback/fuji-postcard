@@ -32,7 +32,7 @@ export const stands = [
       { h: 'reed', x: 60.0, y: 575.0, rot: -4.0, sx: 0.95, sy: 1.04 },
       { h: 'sedge', x: 86.0, y: 569.0, rot: 3.0, sx: 0.86 },
       { h: 'reedC', x: 110.0, y: 567.0, rot: -7.0, sx: 0.9, sy: 1.02 },
-      { h: 'tuft', x: 12.0, y: 577.0, rot: 4.0, sx: 1.05, sy: 0.92 },
+      { h: 'tuft', x: 30.0, y: 577.0, rot: 4.0, sx: 1.05, sy: 0.92 },
       { h: 'grassPair', x: 26.0, y: 580.0, rot: -6.0, sx: 0.8, sy: 0.95 },
       { h: 'tuftC', x: 40.0, y: 574.0, rot: 9.0, sx: 1.12, sy: 0.88 },
       { h: 'tuft', x: 54.0, y: 579.0, rot: -3.0, skew: 4.0, sx: 0.72 },
@@ -63,10 +63,10 @@ export const stands = [
     dur: '15.1s',
     delay: '-2.5s',
     items: [
-      { h: 'reed', x: 876.0, y: 555.0, rot: -5.0, sx: 0.88, sy: 0.96 },
-      { h: 'grassPair', x: 864.0, y: 564.0, rot: 3.0, sx: 0.74, sy: 1.05 },
-      { h: 'tuftC', x: 884.0, y: 558.0, rot: -7.0, sx: 0.98 },
-      { h: 'reedC', x: 896.0, y: 561.0, rot: 5.0, sx: 0.7, sy: 0.92 },
+      { h: 'reed', x: 866.0, y: 555.0, rot: 6.0, sx: 0.74, sy: 1.04, skew: -3.0 },
+      { h: 'grassPair', x: 852.0, y: 564.0, rot: 3.0, sx: 0.74, sy: 1.05 },
+      { h: 'tuftC', x: 874.0, y: 558.0, rot: -7.0, sx: 0.98 },
+      { h: 'reedC', x: 862.0, y: 561.0, rot: -10.0, sx: 0.7, sy: 0.92 },
     ],
   },
   {

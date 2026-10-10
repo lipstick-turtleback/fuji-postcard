@@ -169,6 +169,18 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **A copy is only a copy at reading distance.** The complaint was that the
+  shore was one plant repeated, and the fix — ten shapes, forty-five placements,
+  each skewed, scaled and rotated — held for a while and then quietly stopped
+  holding: a reed went in 38 units from its twin at 2° and 0.07 of scale apart,
+  which is the same reed. `test-cast.mjs` answers that from the data alone, with
+  distance as the whole of the rule: two marks of one shape within 40 units must
+  differ by rotation, scale or skew, and no two placements on the card may share
+  a shape and a transform. The same question asked in the browser found a reed at
+  x 892–912 on a plate 900 units wide — a plant standing in the blank margin and
+  sliced in half by the edge of the card. The picture runs to the edge and the
+  border prints over it, so the edge is a rule about placements, not about
+  layers; the cherry branch is allowed past both, and it leaves as a path.
 - **The fallback tier is the tier most visitors are in.** Every font this page
   names is a macOS font; on Linux and Android the artwork is drawn in whatever
   generic serif the system has, and the width of a line of lettering — which is

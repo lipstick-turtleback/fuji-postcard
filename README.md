@@ -70,6 +70,7 @@ scripts/
   test-layout.mjs      drive headless Chrome at real window sizes
   test-plate.mjs       keep the lettering off the frame rules
   test-ink.mjs         measure the contrast of the type printed on the card
+  test-cast.mjs        no mark in the cast is the same mark twice
   test-export.mjs      check the .svg the save button hands out, and photograph it
   png.mjs              enough of a PNG decoder to compare two of them
   test-interactions.mjs drive the buttons and shortcuts and read what happened
@@ -362,13 +363,23 @@ page before the question:
   comparison, and the file is put into the same rest state the page is in —
   the plate carries its animation rules and runs them, and comparing a still
   page to a turning file is 17% ray field and nothing else.
+- `scripts/test-cast.mjs` reads the data the build places and asks one question
+  with a yes/no answer: is any mark the same mark twice? Two placements of one
+  shape within 40 units have to differ visibly — by rotation, by scale, by skew
+  — and no two placements anywhere may share a shape and a transform. It found a
+  reed on the right shore 38 units from its twin with 2° and 0.07 of scale
+  between them.
 - `scripts/test-plate.mjs` measures every `<text>` on a face against every rule
   on that face, in the artwork's own units, and it measures it twice: once in
   the fonts the page names, once with all of them taken away. Every font the
   page names — Iowan Old Style, Hiragino Mincho ProN, Yu Mincho, Songti SC — is
   a macOS font, and how wide a line of lettering is belongs to the font, not to
   the page. Under the generic serif the back's widest line grows from 263 to
-  292 units and still clears the rule.
+  292 units and still clears the rule. The same pass measures the placed marks
+  against the edge of the plate, because the picture runs to that edge and the
+  border prints over it: a mark past the border is standing in the blank margin,
+  and a mark past the edge is a plant sliced in half by the card. It found a reed
+  at x 892–912 on a plate 900 units wide.
 - `scripts/test-css.mjs` asks whether the stylesheet is telling the truth about
   the page: every selector must match something that exists, and every
   `animation` must name a `@keyframes` block that exists. A stylesheet cannot

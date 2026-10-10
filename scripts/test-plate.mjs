@@ -138,6 +138,39 @@ const probe = `(() => {
         else if (gap < closest.gap) closest = { gap: +gap.toFixed(2), what: label + ' -> ' + band.name };
       }
     }
+    /* Nothing that was placed may be cut off by the edge of the plate.
+       The picture runs to the edge and the border is printed on top of it, so
+       a mark that crosses the border is standing in the blank margin, and one
+       that crosses the edge is a plant sliced in half by the card. The edge is
+       the largest stroked, unfilled outline on the face — on both faces it is
+       a rect at 4..896 × 4..596 — and the rule is structural rather than a
+       list of ids, because the front's frame is gilded and the back's is not.
+       The cherry branch is the one thing that leaves the picture on purpose,
+       and it leaves as a path, not as a placement. */
+    const edge = rules
+      .map((r) => r.b)
+      .filter((b) => b.x1 > 0 && b.x2 < vb.width && b.y1 > 0 && b.y2 < vb.height)
+      .sort((p, q) => q.x2 - q.x1 - (p.x2 - p.x1))[0];
+    const strays = [];
+    if (edge)
+      for (const el of svg.querySelectorAll('use')) {
+        const b = box(el);
+        if (b.x2 - b.x1 < 0.01 && b.y2 - b.y1 < 0.01) continue; // a mark that is not drawn
+        if (b.x1 < edge.x1 - 0.5 || b.x2 > edge.x2 + 0.5 || b.y1 < edge.y1 - 0.5 || b.y2 > edge.y2 + 0.5)
+          strays.push(
+            el.getAttribute('href') +
+              ' [' +
+              b.x1.toFixed(0) +
+              ',' +
+              b.x2.toFixed(0) +
+              ']x[' +
+              b.y1.toFixed(0) +
+              ',' +
+              b.y2.toFixed(0) +
+              ']',
+          );
+      }
+
     // The widest lettering on the face, in user units. It is reported so the
     // two passes cannot look like the same measurement twice: the gap that is
     // closest to a rule is usually a vertical one, and a different font moves
@@ -155,6 +188,7 @@ const probe = `(() => {
       hits,
       closest,
       widest: +widest.toFixed(1),
+      strays,
     });
   }
   return JSON.stringify(out);
@@ -206,6 +240,10 @@ for (const f of faces) {
   else if (f.closest.gap < FLOOR)
     problems.push(
       `${f.face}${f.pass}: ${f.closest.what} is ${f.closest.gap} units from the rule, under the ${FLOOR}-unit floor`,
+    );
+  if (f.strays.length)
+    problems.push(
+      `${f.face}: a placed mark is cut off by the edge of the plate — ${f.strays.join('; ')}`,
     );
   notes.push(
     `${f.face}${f.pass}: ${f.rules} rules, widest mark ${f.widest} u, ${f.hits.length ? `${f.hits.length} collision(s)` : `clear, closest ${f.closest.gap} units (${f.closest.what})`}`,

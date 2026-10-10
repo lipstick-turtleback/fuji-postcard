@@ -1,8 +1,10 @@
 /* Where the fish are, and how long they take.
 
- * The periods are 97, 131 and 179 seconds: primes, none a multiple of another,
+ * The periods are 97, 127 and 179 seconds: primes, none a multiple of another,
  * none of them sharing a factor with anything else on the water (the crests
- * are 17, 19, 21, 22, 23, 25, 29 and 31; the wake 19 and 25; the hull 13).
+ * are 17, 19, 21, 23, 24, 25, 29 and 31; the wake 19 and 25; the hull 13).
+ * 131 was the number written down first, and it is 11 times the duck's 11.9 s
+ * period, which is a countable relationship between a fish and a bird.
  * The negative delays put each one partway through its own period when the
  * page opens, so nobody arrives at a lake where everything starts together.
  *

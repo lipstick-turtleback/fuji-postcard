@@ -1,4 +1,4 @@
-<!-- The plant stands. Forty-five placements of thirteen marks, written once
+<!-- The plant stands. Forty-five placements of ten marks, written once
      as data instead of forty-five hand-typed transforms: the shape of a
      placement (where it roots, how far it leans, whether it is taller than it
      is wide) is the interesting part, and repeating it by hand is how every
