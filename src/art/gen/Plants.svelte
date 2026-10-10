@@ -6,12 +6,7 @@
 <script>
   let { stands = [] } = $props();
 
-  // transform order matters: translate, then lean, then stretch
-  const t = (p) =>
-    `translate(${p.x} ${p.y})` +
-    (p.rot ? ` rotate(${p.rot})` : '') +
-    (p.skew ? ` skewX(${p.skew})` : '') +
-    (p.sx === undefined ? '' : ` scale(${p.sx}${p.sy !== undefined && p.sy !== p.sx ? ` ${p.sy}` : ''})`);
+  import { place as t } from './place.mjs';
 </script>
 {#each stands as s}
   <g fill={s.fill} stroke={s.fill} stroke-linecap="round" class={s.sway || null} style={s.delay ? `animation-delay:${s.delay}` : null}>

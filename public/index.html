@@ -1669,6 +1669,28 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <path d="M9 -12 L14 -11 L9 -10 Z"/>
           </g>
 
+          <!-- Three birds, and no two of them the same shape. A bird far
+               away is a flap caught mid-way: one wing is up, the other is
+               coming down, and the whole pair is tilted. Three identical
+               double arcs of different sizes is a glyph stamped out three
+               times, and the eye knows it. Drawn at the origin so the
+               placement can say where each one is. -->
+          <g id="birdA" fill="none" stroke-linecap="round">
+            <path d="M0 0 q8 -8 16 -1 q7 -8 16 -3"/>
+          </g>
+
+          <!-- the second bird: the far wing is the shorter one, so the pair
+               is caught on the down-stroke -->
+          <g id="birdB" fill="none" stroke-linecap="round">
+            <path d="M0 0 q6 -3 12 1 q8 -8 13 -4"/>
+          </g>
+
+          <!-- the third is the smallest and the most level: it is the farthest
+               off, and at that distance a flap is almost a line -->
+          <g id="birdC" fill="none" stroke-linecap="round">
+            <path d="M0 0 q7 -4 13 -1 q6 -3 11 0"/>
+          </g>
+
           <!-- a cherry blossom, seen face on. the petals are filled with a
                gradient whose centre sits up and to the right, because that
                is where the sun is; the flower is not a flat pink disc -->
@@ -1982,20 +2004,9 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                   fill="url(#cloudWarm)" opacity=".8"/>
           </g>
 
-          <!-- Three birds, and no two of them the same shape. A bird far away
-               is a flap caught mid-way: one wing is up, the other is coming
-               down, and the whole pair is tilted. Three identical double arcs
-               of different sizes is a glyph stamped out three times, and the
-               eye knows it. -->
-          <g class="bird" stroke="#3a4463" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".75">
-            <path d="M300 151 q8 -8 16 -1 q7 -8 16 -3"/>
-          </g>
-          <g class="bird b2" stroke="#3a4463" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".6">
-            <path d="M356 128 q6 -3 12 1 q8 -8 13 -4"/>
-          </g>
-          <g class="bird b3" stroke="#3a4463" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5">
-            <path d="M262 187 q7 -4 13 -1 q6 -3 11 0"/>
-          </g>
+          <!-- Three birds, each its own shape, each its own distance: see
+               src/art/gen/Birds.data.mjs for where they are. -->
+<g class="bird" stroke="#3a4463" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.75"><use href="#birdA" transform="translate(300 151)"></use></g><g class="bird b2" stroke="#3a4463" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.6"><use href="#birdB" transform="translate(356 128)"></use></g><g class="bird b3" stroke="#3a4463" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.5"><use href="#birdC" transform="translate(262 187)"></use></g>
 
           <!-- lake -->
           <!-- The water's edge at the far shore was the top of a rectangle,
@@ -2127,14 +2138,20 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           <g class="boat">
             <g fill="#1b2036">
               <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
-              <!-- the body leans into the stroke and one arm is out on the
+              <!-- The man is one group, so that later he can move on his
+                   own: the hull bobs with the water and he shifts his weight
+                   inside it. The pole stays out of the group, because a pole
+                   that is planted in the lake does not follow a shrug.
+                   The body leans into the stroke and one arm is out on the
                    pole: a silhouette is read entirely by its outline, and a
-                   rectangle with a hat on it reads as a person-shaped gap -->
-              <path d="M623 499 L625 482 C628 477.5 634 476.5 638 480 L641 499 Z"/>
-              <path d="M635 485 C640 484 645 481.5 649 478" stroke="#1b2036" stroke-width="2.8"
-                    stroke-linecap="round" fill="none"/>
-              <circle cx="631" cy="475" r="4"/>
-              <path d="M619 473 L643 473 L631 464 Z"/>
+                   rectangle with a hat on it reads as a person-shaped gap. -->
+              <g class="boatman">
+                <path d="M623 499 L625 482 C628 477.5 634 476.5 638 480 L641 499 Z"/>
+                <path d="M635 485 C640 484 645 481.5 649 478" stroke="#1b2036" stroke-width="2.8"
+                      stroke-linecap="round" fill="none"/>
+                <circle cx="631" cy="475" r="4"/>
+                <path d="M619 473 L643 473 L631 464 Z"/>
+              </g>
               <!-- the pole goes into the water and is seen to, which is the
                    only thing that says the boat is being poled at all -->
               <path d="M646 470 L648.5 471 L666 519 L663 520.5 Z"/>
@@ -2256,15 +2273,9 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <path d="M406 549 L418 548" stroke-width="2.2"/>
           </g>
 
-          <!-- Two ducks in open water. They used to sit hard against the
-               torii's right post, which made them look like part of the
-               gate, and put them in the shallowest, least interesting part of
-               the lake. Out here they are between the gate and the boatman,
+          <!-- Two ducks in open water, between the gate and the boatman,
                where the water is widest. -->
-          <g fill="#141a2c" stroke="#141a2c">
-            <use href="#duck" transform="translate(392 519)"/>
-            <use href="#duck" transform="translate(418 525) scale(.84)"/>
-          </g>
+<g fill="#141a2c" stroke="#141a2c"><use href="#duck" transform="translate(392 519)"></use><use href="#duck" transform="translate(418 525) scale(0.84)"></use></g>
           <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
             <path d="M382 522 h22 M410 528 h18"/>
           </g>
@@ -2274,10 +2285,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <ellipse cx="418" cy="530" rx="6.2" ry="1.4"/>
           </g>
 
-          <!-- the heron: still, and the only tall thing on the right -->
-          <g fill="#101627" stroke="#101627">
-            <use href="#heron" transform="translate(772 546) scale(-1 1)"/>
-          </g>
+<g fill="#101627" stroke="#101627"><use href="#heron" transform="translate(772 546) scale(-1 1)"></use></g>
           <!-- the folded wing, said with one hairline: the body is an oval
                and the eye needs to know which end is the back -->
           <path d="M766 531 C774 528 782 530 786 535 C781 538 772 538 766 535 Z"

@@ -64,14 +64,20 @@
           <g class="boat">
             <g fill="#1b2036">
               <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
-              <!-- the body leans into the stroke and one arm is out on the
+              <!-- The man is one group, so that later he can move on his
+                   own: the hull bobs with the water and he shifts his weight
+                   inside it. The pole stays out of the group, because a pole
+                   that is planted in the lake does not follow a shrug.
+                   The body leans into the stroke and one arm is out on the
                    pole: a silhouette is read entirely by its outline, and a
-                   rectangle with a hat on it reads as a person-shaped gap -->
-              <path d="M623 499 L625 482 C628 477.5 634 476.5 638 480 L641 499 Z"/>
-              <path d="M635 485 C640 484 645 481.5 649 478" stroke="#1b2036" stroke-width="2.8"
-                    stroke-linecap="round" fill="none"/>
-              <circle cx="631" cy="475" r="4"/>
-              <path d="M619 473 L643 473 L631 464 Z"/>
+                   rectangle with a hat on it reads as a person-shaped gap. -->
+              <g class="boatman">
+                <path d="M623 499 L625 482 C628 477.5 634 476.5 638 480 L641 499 Z"/>
+                <path d="M635 485 C640 484 645 481.5 649 478" stroke="#1b2036" stroke-width="2.8"
+                      stroke-linecap="round" fill="none"/>
+                <circle cx="631" cy="475" r="4"/>
+                <path d="M619 473 L643 473 L631 464 Z"/>
+              </g>
               <!-- the pole goes into the water and is seen to, which is the
                    only thing that says the boat is being poled at all -->
               <path d="M646 470 L648.5 471 L666 519 L663 520.5 Z"/>
@@ -193,15 +199,9 @@
             <path d="M406 549 L418 548" stroke-width="2.2"/>
           </g>
 
-          <!-- Two ducks in open water. They used to sit hard against the
-               torii's right post, which made them look like part of the
-               gate, and put them in the shallowest, least interesting part of
-               the lake. Out here they are between the gate and the boatman,
+          <!-- Two ducks in open water, between the gate and the boatman,
                where the water is widest. -->
-          <g fill="#141a2c" stroke="#141a2c">
-            <use href="#duck" transform="translate(392 519)"/>
-            <use href="#duck" transform="translate(418 525) scale(.84)"/>
-          </g>
+          @GEN:Ducks@
           <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
             <path d="M382 522 h22 M410 528 h18"/>
           </g>
@@ -211,10 +211,7 @@
             <ellipse cx="418" cy="530" rx="6.2" ry="1.4"/>
           </g>
 
-          <!-- the heron: still, and the only tall thing on the right -->
-          <g fill="#101627" stroke="#101627">
-            <use href="#heron" transform="translate(772 546) scale(-1 1)"/>
-          </g>
+          @GEN:Heron@
           <!-- the folded wing, said with one hairline: the body is an oval
                and the eye needs to know which end is the back -->
           <path d="M766 531 C774 528 782 530 786 535 C781 538 772 538 766 535 Z"

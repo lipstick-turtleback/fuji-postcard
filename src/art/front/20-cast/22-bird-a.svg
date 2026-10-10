@@ -1,0 +1,10 @@
+
+          <!-- Three birds, and no two of them the same shape. A bird far
+               away is a flap caught mid-way: one wing is up, the other is
+               coming down, and the whole pair is tilted. Three identical
+               double arcs of different sizes is a glyph stamped out three
+               times, and the eye knows it. Drawn at the origin so the
+               placement can say where each one is. -->
+          <g id="birdA" fill="none" stroke-linecap="round">
+            <path d="M0 0 q8 -8 16 -1 q7 -8 16 -3"/>
+          </g>

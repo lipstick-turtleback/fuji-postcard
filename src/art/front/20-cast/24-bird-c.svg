@@ -1,0 +1,6 @@
+
+          <!-- the third is the smallest and the most level: it is the farthest
+               off, and at that distance a flap is almost a line -->
+          <g id="birdC" fill="none" stroke-linecap="round">
+            <path d="M0 0 q7 -4 13 -1 q6 -3 11 0"/>
+          </g>

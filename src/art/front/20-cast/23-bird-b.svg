@@ -1,0 +1,6 @@
+
+          <!-- the second bird: the far wing is the shorter one, so the pair
+               is caught on the down-stroke -->
+          <g id="birdB" fill="none" stroke-linecap="round">
+            <path d="M0 0 q6 -3 12 1 q8 -8 13 -4"/>
+          </g>

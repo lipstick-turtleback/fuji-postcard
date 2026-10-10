@@ -65,20 +65,9 @@
                   fill="url(#cloudWarm)" opacity=".8"/>
           </g>
 
-          <!-- Three birds, and no two of them the same shape. A bird far away
-               is a flap caught mid-way: one wing is up, the other is coming
-               down, and the whole pair is tilted. Three identical double arcs
-               of different sizes is a glyph stamped out three times, and the
-               eye knows it. -->
-          <g class="bird" stroke="#3a4463" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".75">
-            <path d="M300 151 q8 -8 16 -1 q7 -8 16 -3"/>
-          </g>
-          <g class="bird b2" stroke="#3a4463" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".6">
-            <path d="M356 128 q6 -3 12 1 q8 -8 13 -4"/>
-          </g>
-          <g class="bird b3" stroke="#3a4463" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5">
-            <path d="M262 187 q7 -4 13 -1 q6 -3 11 0"/>
-          </g>
+          <!-- Three birds, each its own shape, each its own distance: see
+               src/art/gen/Birds.data.mjs for where they are. -->
+          @GEN:Birds@
 
           <!-- lake -->
           <!-- The water's edge at the far shore was the top of a rectangle,
