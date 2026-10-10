@@ -169,6 +169,16 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **A flag that means two things decides two things.** `autoDropped` was set
+  whenever the frame probe's window closed, whether or not the page had
+  dropped anything, and the click handler read it to decide whether a person
+  was overruling the machine. So the page measured the machine exactly once per
+  visit, and any later switch-on after that was treated as an override and
+  never measured again. Split into `probeDone` (this period has been measured)
+  and `autoDropped` (the page actually turned the laminate off), and reset when
+  the laminate goes on, the page re-measures every time it is asked to be
+  expensive. The same bug hid in the window itself: the gaps array was never
+  cleared, so a third toggle judged the machine with frames from the first.
 - **Order that is not written down is still order.** Nine stylesheets in a
   directory sorted by name: the cascade was decided by a file listing, and two
   files both style `.card`. The build now keeps the list, wraps each file in a

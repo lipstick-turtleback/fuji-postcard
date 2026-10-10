@@ -333,7 +333,10 @@ page before the question:
   reads back what happened: the pointer walks the glint ray and tilts the card,
   `F` turns it over, `S` downloads the face that is showing (caught by wrapping
   `HTMLAnchorElement.prototype.click`), Enhance and the volume slider respond,
-  and no page exception is thrown. It also collects the errors the browser
+  and no page exception is thrown. It also throttles the CPU eight times over
+  CDP and waits: the page is supposed to notice the frame rate and turn its own
+  expensive mode off, and it is checked that it does — and that it leaves the
+  laminate alone when the frames are coming. It also collects the errors the browser
   itself raises while parsing the page — a malformed path is one of those, and
   it appears there and nowhere else.
 - `scripts/test-motion.mjs` holds the page to both of its motion promises.

@@ -144,6 +144,18 @@ Enhance off, 1440 × 1150, measured by `npm run perf`:
 | with it (19 more animated marks)  | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
 | with the slow petals as well (22) | 18.3 ms | 16.7 ms | 33.4 ms | 33 ms | 24/240      |
 | with the fish as well (25)        | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
+| the same, Enhance on              | 39.8 ms | 33.4 ms | 50.1 ms | 83 ms | 239/240     |
+
+`npm run perf` now measures both tiers in one run, and the second row is the
+answer to a question the table had never asked: what happens when somebody
+switches the laminate on. Software rasterisation — headless Chrome with
+`--disable-gpu`, which is what the harness always uses — puts that tier at
+25 fps, over the criterion by itself. It is not a defect, it is the situation
+the page's own frame probe exists for: with the same 33 ms median, the page
+measures the machine, turns Enhance off by itself, and says so in the button
+label and the live region. `test-interactions.mjs` throttles the CPU eight
+times over CDP and asserts that it does, and asserts that an unthrottled page
+is left alone.
 
 The criterion was p95 under 40 ms and mean under 22 ms. Both hold, and the
 worst frame got better. Nineteen more moving things cost 0.2 ms of mean frame

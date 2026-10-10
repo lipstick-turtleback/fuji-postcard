@@ -148,7 +148,32 @@ const sweep = setInterval(async () => {
   }
 }, 600);
 
-await sample('idle, pointer on card');
+/* Both tiers. The page's cheap mode is the one that ships by default and the
+   one the budget was written against, but the expensive mode is the one that
+   can actually miss a frame, and a number nobody measures is a number nobody
+   promised.
+
+   The state is set, not toggled, and the label comes from what the page says
+   it is. The first version of this clicked the button and called the result
+   "on", which was wrong whenever the profile had already remembered an earlier
+   run's choice: the labels came out swapped and the numbers made no sense. */
+const setEnhance = async (want) => {
+  const r = await send('Runtime.evaluate', {
+    expression:
+      '(() => {' +
+      `  const on = document.documentElement.dataset.enhance === 'on';` +
+      '  if (on !== ' +
+      String(want) +
+      ') document.getElementById("enhanceBtn").click();' +
+      '  return document.documentElement.dataset.enhance;' +
+      '})()',
+    returnByValue: true,
+  });
+  await sleep(1200);
+  return r.result?.value || '?';
+};
+await sample(`idle, enhance ${await setEnhance(false)}`);
+await sample(`idle, enhance ${await setEnhance(true)}`);
 clearInterval(sweep);
 
 const quality = await send('Runtime.evaluate', {

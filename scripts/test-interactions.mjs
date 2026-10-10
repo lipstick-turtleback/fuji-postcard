@@ -132,6 +132,56 @@ const volOk = await evaluate(`(() => {
 })()`);
 ok('the volume slider paints', volOk === '40%', volOk);
 
+/* The page changes its own state: when Enhance is on and the frames stop
+   coming, it drops Enhance and says so in the label and the live region. The
+   only evidence that this worked was a comment claiming it did, so here is
+   some. The slowness is supplied rather than hoped for — eight times CPU
+   throttling over CDP is what a slow laptop is, and it is reproducible on a
+   fast one.
+
+   The state is set, never assumed: this profile remembers the last run's
+   choice, so a bare click could be switching Enhance off rather than on. */
+const setEnhance = async (want) => {
+  await evaluate(
+    `(() => {
+      const on = document.documentElement.dataset.enhance === 'on';
+      if (on !== ${want}) document.getElementById('enhanceBtn').click();
+      return document.documentElement.dataset.enhance;
+    })()`,
+  );
+  await sleep(500);
+};
+const readProbe = () =>
+  evaluate(`(() => {
+    const d = document.documentElement.dataset;
+    return d.enhance + ' | ' + (d.probe || 'no probe') + ' | ' + document.getElementById('enhanceLabel').textContent;
+  })()`);
+
+/* The control first, because the page remembers: once it has dropped the
+   laminate by itself, switching it back on is treated as a person overruling
+   the machine and the probe stops. So the unthrottled wait has to happen
+   before the throttled one, and the laminate has to go off and on between
+   them to open a fresh window. */
+await setEnhance(true);
+await sleep(4000);
+const kept = await readProbe();
+ok(
+  'the page left Enhance alone while the frames were coming',
+  kept.startsWith('on |') && /median/.test(kept),
+  kept,
+);
+await setEnhance(false);
+await setEnhance(true);
+await send('Emulation.setCPUThrottlingRate', { rate: 8 });
+await sleep(4000);
+const dropped = await readProbe();
+ok(
+  'and dropped it when the frames stopped coming',
+  dropped.startsWith('off |') && /median/.test(dropped) && /smooth/.test(dropped),
+  dropped,
+);
+await send('Emulation.setCPUThrottlingRate', { rate: 1 });
+
 ok('no page exceptions', exceptions.length === 0, exceptions.join(' | '));
 ok(
   'the browser raised no errors parsing the page',
