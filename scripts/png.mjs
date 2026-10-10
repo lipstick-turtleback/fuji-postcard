@@ -63,6 +63,26 @@ export function decodePng(buf) {
   return { width, height, channels, data: out };
 }
 
+/* A rectangle out of a decoded image, in the same shape decodePng returns.
+   Used to compare one mark's patch of the page against the page as a whole,
+   which is one screenshot instead of two per mark. */
+export function cropPng(img, x, y, w, h) {
+  const X = Math.max(0, Math.min(img.width, Math.round(x)));
+  const Y = Math.max(0, Math.min(img.height, Math.round(y)));
+  const W = Math.max(0, Math.min(img.width - X, Math.round(w)));
+  const H = Math.max(0, Math.min(img.height - Y, Math.round(h)));
+  const ch = img.channels;
+  const out = Buffer.alloc(W * H * ch);
+  for (let r = 0; r < H; r++)
+    img.data.copy(
+      out,
+      r * W * ch,
+      (Y + r) * img.width * ch + X * ch,
+      (Y + r) * img.width * ch + (X + W) * ch,
+    );
+  return { width: W, height: H, channels: ch, data: out };
+}
+
 /* Averaging down. Two renders of the same vector artwork through different
    rasterisation paths — one a composited layer on a page, one a document on
    its own — differ along every edge by a pixel here and there, and that noise

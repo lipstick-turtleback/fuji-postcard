@@ -17,7 +17,7 @@
     "lint:fix": "biome check --write .",
     "fmt": "prettier --write \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
     "fmt:check": "prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
-    "test": "npm run build && npm run check && node scripts/test-score.mjs && node scripts/test-contrast.mjs && node scripts/test-layout.mjs && node scripts/test-cast.mjs && node scripts/test-plate.mjs && node scripts/test-ink.mjs && node scripts/test-export.mjs && node scripts/test-interactions.mjs && node scripts/test-motion.mjs && node scripts/test-css.mjs && node scripts/test-nojs.mjs && node scripts/test-sound.mjs && biome check . && prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
+    "test": "npm run build && npm run check && node scripts/test-score.mjs && node scripts/test-contrast.mjs && node scripts/test-layout.mjs && node scripts/test-cast.mjs && node scripts/test-visible.mjs && node scripts/test-plate.mjs && node scripts/test-ink.mjs && node scripts/test-export.mjs && node scripts/test-interactions.mjs && node scripts/test-motion.mjs && node scripts/test-css.mjs && node scripts/test-nojs.mjs && node scripts/test-sound.mjs && biome check . && prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
     "perf": "node scripts/perf.mjs"
   },
   "devDependencies": {

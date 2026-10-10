@@ -71,6 +71,7 @@ scripts/
   test-plate.mjs       keep the lettering off the frame rules
   test-ink.mjs         measure the contrast of the type printed on the card
   test-cast.mjs        no mark in the cast is the same mark twice
+  test-visible.mjs     hide every placed mark in turn and see whether the page notices
   test-export.mjs      check the .svg the save button hands out, and photograph it
   png.mjs              enough of a PNG decoder to compare two of them
   test-interactions.mjs drive the buttons and shortcuts and read what happened
@@ -370,6 +371,14 @@ page before the question:
   — and no two placements anywhere may share a shape and a transform. It found a
   reed on the right shore 38 units from its twin with 2° and 0.07 of scale
   between them.
+- `scripts/test-visible.mjs` renders the page, hides one placed mark, renders the
+  patch where it lives, and compares. A mark that changes no pixels is a mark
+  that is not there, whatever the data says. The question is asked at the middle
+  of every animation's period with all of them paused — and, for anything that
+  fails, again at fifty points across the period, because a ring that spreads
+  across the lake takes four seconds out of ninety-seven and sampling at tenths
+  steps straight over it. It found a fish whose ring was spreading under the
+  near shore, on dry washi, twice a minute and a quarter, forever.
 - `scripts/test-plate.mjs` measures every `<text>` on a face against every rule
   on that face, in the artwork's own units, and it measures it twice: once in
   the fonts the page names, once with all of them taken away. Every font the

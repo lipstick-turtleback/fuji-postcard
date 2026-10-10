@@ -185,6 +185,18 @@ The habits that keep paying off:
   the cast is the part placed from data. The foxing, the grain and the
   cancellation rings lie over the lettering on purpose; that is what sixty years
   and a post office look like.
+- **A mark that changes nothing is a mark that is not there.** The dead-rule
+  habit has a twin in the data: a placement can be drawn, clipped, painted over
+  and seen by nobody. The middle fish was ringing on the shore — under the near
+  bank, which is painted after the lake — twice a minute and a quarter, forever.
+  The only question that cannot be argued with is a pixel one: render the page,
+  hide the mark, render its patch again. Ask it at the middle of every animation's
+  period with them all paused, and ask it again at fifty points across the period
+  for anything that fails, because a ring takes four seconds out of ninety-seven
+  and sampling at tenths steps straight over it. `getComputedTiming()` reports
+  `activeDuration: Infinity` for anything that runs forever and
+  `iterationDuration: undefined` in Chrome; the number to seek by is
+  `getTiming().duration`.
 - **A copy is only a copy at reading distance.** The complaint was that the
   shore was one plant repeated, and the fix — ten shapes, forty-five placements,
   each skewed, scaled and rotated — held for a while and then quietly stopped
