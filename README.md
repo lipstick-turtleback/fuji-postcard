@@ -18,14 +18,14 @@ not break, and how change is verified here.
 
 ## What it does
 
-| Interaction                  | What happens                                                                                                                                                                                   |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Move the pointer**         | the card tilts in 3D and the laminate is re-lit by a real lighting model — sheen, specular band and sparkle are computed from the lamp, not looped                                             |
-| **`F`** or click the card    | turn it over: the back is a real postcard, addressed and stamped                                                                                                                               |
-| **`S`** or Save the plate    | serialises the face you are looking at out of the DOM and downloads it as a standalone `.svg`                                                                                                  |
-| **`M`** or Play              | a ~5-minute soundtrack: koto-ish plucks on the D hirajōshi scale, a lake drone, a dotted-eighth delay                                                                                          |
-| **Enhance on/off**           | the effects switch, **off by default**. On adds the holographic laminate and its glow, the card's sway, the falling petals, the drifting water and the paper grain — about 2.3× the frame rate |
-| **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely                                                                                                                                     |
+| Interaction                  | What happens                                                                                                                                                                                                     |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Move the pointer**         | the card tilts in 3D and the laminate is re-lit by a real lighting model — sheen, specular band and sparkle are computed from the lamp, not looped                                                               |
+| **`F`** or click the card    | turn it over: the back is a real postcard, addressed and stamped                                                                                                                                                 |
+| **`S`** or Save the plate    | serialises the face you are looking at out of the DOM and downloads it as a standalone `.svg`                                                                                                                    |
+| **`M`** or Play              | a ~5-minute soundtrack: koto-ish plucks on the D hirajōshi scale, a lake drone, a dotted-eighth delay. **Nothing plays until you ask** — no autostart, and `?silent` runs the whole piece with the output closed |
+| **Enhance on/off**           | the effects switch, **off by default**. On adds the holographic laminate and its glow, the card's sway, the falling petals, the drifting water and the paper grain — about 2.3× the frame rate                   |
+| **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely                                                                                                                                                       |
 
 ## The repository
 
@@ -243,15 +243,32 @@ the graph can be measured instead: how many nodes it creates, when each was
 told to start, and whether the melody keeps its place. That is how both
 soundtrack bugs were reproduced, and both are now asserted.
 
-The first was reported, not measured: _the music restarts by itself_. It did.
-The page starts the piece on the first gesture, and a gesture on the play
-button was not treated as a gesture — its autostart listeners were only removed
-by a gesture somewhere else. So the ordinary sequence, press Play, press Play
-again to stop it, then pick the card up, threw the whole piece back from bar 1.
-The test drives exactly that order on a page nothing has touched, and counts
-audio nodes rather than trusting what the button says: 27 → 27 now, 27 → 54
-then. A button reading Play while the scheduler writes another bar is the
-difference between an indicator and a fact.
+The page answers to `?silent`: the piece is built, the clock runs, the meter
+moves, and the last gain before the speakers is closed, so nothing reaches the
+room. Every harness loads the page that way, and so can you. It is there
+because a test run presses Play and presses M on a real browser, and a browser
+on a desk has speakers — four test passes a minute is a room full of koto. The
+output is gated rather than the graph skipped, because a soundtrack that was
+never built is not the soundtrack being tested. Chrome is also launched with
+`--mute-audio`; the query parameter is the part that works in a real browser.
+
+And the page no longer starts the music itself. It used to: if the browser
+allowed it the piece began on load, and failing that the first click or
+keypress anywhere began it. A preview reload, a harness, or a permissive
+autoplay policy made sound at people who had not asked for any, and picking the
+card up — the first thing anyone does — counted as permission. The Play button
+and `M` are the only ways in now, and the audio graph is not built until one of
+them is used. The interaction test runs with autoplay allowed, which is the
+condition the old code autostarted under, and its first assertion is that
+nothing is playing: `aria-pressed false, audio nodes 0`.
+
+The first bug was reported, not measured: _the music restarts by itself_. It
+did — a gesture on the play button was not treated as a gesture, so the
+ordinary sequence, press Play, press Play again to stop it, then pick the card
+up, threw the whole piece back from bar 1. The test drives exactly that order
+on a page nothing has touched, and counts audio nodes rather than trusting what
+the button says: 27 → 27 now, 27 → 54 then. A button reading Play while the
+scheduler writes another bar is the difference between an indicator and a fact.
 
 The second only shows up when the page stops getting time — a background tab, a
 long collection, a wake from sleep. The test blocks the main thread for five

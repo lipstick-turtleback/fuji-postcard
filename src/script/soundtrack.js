@@ -7,6 +7,16 @@
     return;
   }
 
+  /* ?silent — the piece runs and the clock runs and the meter still moves,
+     but the last gain before the speakers is closed, so nothing reaches the
+     room. It exists because a test run that presses Play and M on a real
+     browser plays four and a half minutes at whoever is sitting at the
+     machine, and because someone opening this page at a desk in the morning
+     may want the picture without the koto. Closing the output rather than
+     skipping the graph is the point: a soundtrack that was not built is not
+     the soundtrack being tested. */
+  const silent = /[?&]silent\b/.test(location.search);
+
   /* =============================================================
      Soundtrack — synthesised live with the Web Audio API.
      No audio files, no network requests.
@@ -261,14 +271,11 @@
   let delayNode;
   let noiseBuf;
   let analyser;
+  let sink;
   let amb = [];
   let timer = null;
   let fadeTimer = null;
   let playing = false;
-  /* has a human spoken about the music? the play button and M are the only
-     answers; until one of them is given the page may start the piece on its
-     own, and after one it never may */
-  let chosen = false;
   let rafId = 0;
   let bar = 0;
   let barAt = 0;
@@ -325,9 +332,13 @@
     comp.ratio.value = 4;
     analyser = ctx.createAnalyser();
     analyser.fftSize = 1024;
+    // the analyser sits before the gate, so ?silent still meters real signal
+    sink = ctx.createGain();
+    sink.gain.value = silent ? 0 : 1;
     master.connect(comp);
     comp.connect(analyser);
-    analyser.connect(ctx.destination);
+    analyser.connect(sink);
+    sink.connect(ctx.destination);
 
     dry = ctx.createGain();
     dry.gain.value = 0.85;
@@ -640,10 +651,8 @@
     rafId = requestAnimationFrame(meter);
   }
 
-  /* the two ways a person talks about the music. both mean the same thing,
-     and both mean the page is no longer allowed to have an opinion */
+  /* the two ways a person asks for music. both mean the same thing */
   const toggle = () => {
-    chosen = true;
     if (playing) stop();
     else start();
   };
@@ -661,37 +670,17 @@
     if ((e.key === 'm' || e.key === 'M') && !e.metaKey && !e.ctrlKey && !e.altKey) toggle();
   });
 
-  /* Start on our own if the browser allows it; otherwise the very first
-     click or keypress anywhere on the page starts it. The play button is
-     left alone — it already starts the music itself.
+  /* Nothing starts the music but a person. The Play button and M are the
+     only ways in, and the audio graph is not built until one of them is
+     used — a page that opens making sound is a page that did not ask.
 
-     "On our own" ends the moment a person has made a choice. It used to not
-     end: the gesture listeners were only removed by a gesture that was not
-     on the play button, so somebody who started the piece, stopped it, and
-     then clicked the card to look at it got the whole thing thrown back at
-     them from bar 1 — by itself, mid-handling, with the button still
-     reading Play. `chosen` is the memory that a human has spoken about the
-     music, and after that nothing but a human starts or stops it. */
-  build();
-  const begin = () => {
-    if (!chosen && !playing) start();
-  };
-  ctx
-    .resume()
-    .then(begin)
-    .catch(() => {});
-  const gesture = (ev) => {
-    removeEventListener('pointerdown', gesture);
-    removeEventListener('keydown', gesture);
-    if (ev.target?.closest?.('#play')) {
-      chosen = true;
-      return;
-    }
-    ctx
-      .resume()
-      .then(begin)
-      .catch(() => {});
-  };
-  addEventListener('pointerdown', gesture);
-  addEventListener('keydown', gesture);
+     It used to start itself: if the browser allowed it the piece began on
+     load, and failing that the first click or keypress anywhere began it. A
+     preview reload, a test harness, or any browser with a permissive
+     autoplay policy then played four and a half minutes at people who had
+     not asked for music, and clicking the card — the first thing anyone does
+     — counted as permission. That is also what made the old restart bug
+     possible: the piece stopped, a later click started it again from bar 1,
+     and the button still read Play. With no autostart there is nothing left
+     to restart, and the flag that remembered a human's choice went with it. */
 })();

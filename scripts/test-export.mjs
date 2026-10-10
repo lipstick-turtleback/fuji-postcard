@@ -20,10 +20,10 @@
      node scripts/test-export.mjs
 
    Needs Chrome; skips, like the layout test, when it is not installed. */
-import { openPage } from './cdp.mjs';
+import { openPage, silentPage } from './cdp.mjs';
 import { danglingRefs, pathProblems } from './svg-check.mjs';
 
-const PAGE = new URL('../public/index.html', import.meta.url).href;
+const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
 
 const page = await openPage({
   port: 9390,

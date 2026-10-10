@@ -25,9 +25,9 @@
 
    Needs Chrome; skips, like the layout test, when it is not installed. */
 import { inflateSync } from 'node:zlib';
-import { openPage } from './cdp.mjs';
+import { openPage, silentPage } from './cdp.mjs';
 
-const PAGE = new URL('../public/index.html', import.meta.url).href;
+const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
 const FLOOR = 3;
 const SCALE = 2;
 

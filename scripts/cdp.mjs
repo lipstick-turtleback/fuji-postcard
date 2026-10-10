@@ -14,6 +14,13 @@ import { setTimeout as sleep } from 'node:timers/promises';
 
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
+/** The page, asked to be quiet. Every harness that drives this page presses
+ *  the buttons it finds, and one of those buttons starts four and a half
+ *  minutes of music at whoever is sitting at the machine. `?silent` closes
+ *  the last gain before the speakers — the graph, the clock and the meter
+ *  all still run, so the thing under test is the real thing. */
+export const silentPage = (href) => `${href}${href.includes('?') ? '&' : '?'}silent`;
+
 /**
  * Launch headless Chrome and attach to its first page target. Runtime and Log
  * are enabled before anything navigates, so the caller gets two arrays: the
@@ -33,6 +40,11 @@ export async function openPage({ port, userDataDir, args = [] }) {
       `--user-data-dir=${userDataDir}`,
       '--no-sandbox',
       '--disable-gpu',
+      // The soundtrack tests press Play and press M, and a headless Chrome
+      // on a Mac still has speakers. A test run that fills the room with a
+      // koto line is a test run nobody will start. The tests read the audio
+      // graph over CDP, never the air.
+      '--mute-audio',
       ...args,
       'about:blank',
     ]);

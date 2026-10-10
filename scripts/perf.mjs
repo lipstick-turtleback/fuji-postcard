@@ -17,7 +17,7 @@ import { setTimeout as sleep } from 'node:timers/promises';
 
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT = 9333;
-const url = process.argv[2] || new URL('../public/index.html', import.meta.url).href;
+const url = process.argv[2] || `${new URL('../public/index.html', import.meta.url).href}?silent`;
 const seconds = Number(process.argv[3] || 4);
 
 const chrome = spawn(
@@ -27,6 +27,7 @@ const chrome = spawn(
     `--remote-debugging-port=${PORT}`,
     '--user-data-dir=/tmp/fuji-perf-profile',
     '--no-sandbox',
+    '--mute-audio',
     ...(process.env.PERF_GPU ? [] : ['--disable-gpu']),
     '--disable-breakpad',
     '--noerrdialogs',

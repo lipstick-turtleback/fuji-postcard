@@ -27,10 +27,10 @@
      node scripts/test-plate.mjs
 
    Needs Chrome; skips, like the layout test, when it is not installed. */
-import { openPage } from './cdp.mjs';
+import { openPage, silentPage } from './cdp.mjs';
 
 const PORT = 9379;
-const PAGE = new URL('../public/index.html', import.meta.url).href;
+const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
 
 const page = await openPage({
   port: PORT,

@@ -18,10 +18,10 @@
    a missing browser is not a broken page, and this must not turn a
    machine without Chrome into a red build. */
 import { setTimeout as sleep } from 'node:timers/promises';
-import { openPage } from './cdp.mjs';
+import { openPage, silentPage } from './cdp.mjs';
 
 const PORT = 9377;
-const PAGE = new URL('../public/index.html', import.meta.url).href;
+const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
 
 // width, height, label. The first four are ordinary laptop and desktop
 // windows; the last two are a phone and a phone turned sideways.

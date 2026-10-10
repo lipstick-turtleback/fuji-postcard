@@ -31,9 +31,9 @@
 
    Needs Chrome; skips, like the other browser tests, when it is not there. */
 import { setTimeout as sleep } from 'node:timers/promises';
-import { openPage } from './cdp.mjs';
+import { openPage, silentPage } from './cdp.mjs';
 
-const PAGE = new URL('../public/index.html', import.meta.url).href;
+const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
 const results = [];
 const ok = (name, pass, detail = '') => results.push({ name, pass, detail });
 
@@ -211,14 +211,23 @@ if (still) {
 }
 
 /* ---------- the soundtrack, on a page nobody has touched yet ----------
-   Order is the whole point. The bug was that a gesture on the play button
-   was not treated as a gesture: the listeners that let the page start the
-   music on its own were only removed by a gesture somewhere else. So the
-   sequence that broke was the ordinary one — press Play, press Play again
-   to stop it, then pick the card up — and the piece came back from bar 1
-   by itself. Any keypress earlier in the session hides it, which is why
+   This pass runs with autoplay allowed, which is the condition under which
+   the page used to start the music by itself — a permissive policy, a test
+   harness, a preview reload. The first thing it asserts is that the page no
+   longer does that: nothing but the button and M can start the piece.
+
+   Order still matters for the rest of it. The other bug was that a gesture
+   on the play button was not treated as a gesture: the listeners that let
+   the page start the music were only removed by a gesture somewhere else.
+   The sequence that broke was the ordinary one — press Play, press Play
+   again to stop it, then pick the card up — and the piece came back from
+   bar 1 by itself. Any keypress earlier in the session hid it, which is why
    this gets its own browser and its own page. */
-const sound = await openPage({ port: 9387, userDataDir: '/tmp/fuji-interactions-sound' });
+const sound = await openPage({
+  port: 9387,
+  userDataDir: '/tmp/fuji-interactions-sound',
+  args: ['--autoplay-policy=no-user-gesture-required'],
+});
 if (sound) {
   await sound.send('Page.enable');
   await sound.send('Runtime.enable');
@@ -263,18 +272,18 @@ if (sound) {
   await sleep(1800);
   const play = () => sound.evaluate(`document.getElementById('play').getAttribute('aria-pressed')`);
   const src = () => sound.evaluate(`window.__src`);
-  const autostarted = (await play()) === 'true';
+  ok(
+    'the page does not start the music itself',
+    (await play()) === 'false' && (await src()) === 0,
+    `aria-pressed ${await play()}, audio nodes ${await src()}`,
+  );
   await sound.evaluate(`document.getElementById('play').click()`);
   await sleep(900);
-  if ((await play()) === 'true') {
-    await sound.evaluate(`document.getElementById('play').click()`);
-    await sleep(900);
-  }
-  ok(
-    'Play stops the soundtrack',
-    (await play()) === 'false',
-    autostarted ? 'the page had started it' : 'started by the first Play',
-  );
+  const on = await src();
+  ok('Play starts it', (await play()) === 'true' && on > 0, `audio nodes ${on}`);
+  await sound.evaluate(`document.getElementById('play').click()`);
+  await sleep(900);
+  ok('Play stops it', (await play()) === 'false', `audio nodes ${await src()}`);
   const off = await src();
   await sound.send('Input.dispatchMouseEvent', {
     type: 'mousePressed',

@@ -78,6 +78,11 @@ down the left edge.
    whole drawing, whatever the page is currently rendering.
 7. **Zero dependencies is a feature worth defending.** The build, the checks
    and the perf harness are all plain Node with no packages.
+8. **Sound is never imposed.** Nothing starts the piece but the Play button
+   and `M`, and the audio graph is not built until one of them is used. A
+   page that makes sound at someone who did not ask for music has decided
+   something about them that is not its business. Tests load the page with
+   `?silent`, which runs the real graph with the output closed.
 
 ## How it is put together
 
