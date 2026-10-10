@@ -70,7 +70,7 @@
 
           <g font-family="Georgia,'Times New Roman',serif" fill="#6f6350">
             <text x="46" y="62" font-size="15" letter-spacing="7">POST CARD</text>
-            <text x="46" y="80" font-size="9.5" letter-spacing="2.4" opacity=".7">CORRESPONDENCE CARD · 郵便はがき</text>
+            <text x="46" y="80" font-size="9.5" letter-spacing="2.4" opacity=".82">CORRESPONDENCE CARD · 郵便はがき</text>
           </g>
 
           <!-- divider -->
@@ -181,14 +181,22 @@
                   stroke-opacity=".45" stroke-linecap="round"/>
             <path d="M-34.6 4.6 A35 35 0 0 0 -12 32.9" stroke-width="1.8"
                   stroke-opacity=".4" stroke-linecap="round"/>
-            <!-- The town name ran past the outer ring: at y=-18 the ring is
-                 only 37.9 units wide either side, and eleven letters at 1.6
-                 tracking measured 38.5. Real postmarks do let ink cross the
-                 rule, but this read as a layout error rather than as a strike. -->
-            <text x="0" y="-18" text-anchor="middle" fill="#4a5570" stroke="none" font-size="8.4"
-                  letter-spacing="1.1" font-family="Georgia,serif">KAWAGUCHIKO</text>
-            <text x="0" y="26" text-anchor="middle" fill="#4a5570" stroke="none" font-size="9"
-                  letter-spacing="1.2" font-family="Georgia,serif">24.5.12</text>
+          </g>
+          <!-- The struck type leaves the faded group. A hand strike smears
+               at the ring and stays crisp at the letters, and the letters
+               are the part a reader wants: at the group's .45 the date
+               measured 2.37:1 against the paper. A group opacity cannot be
+               undone from inside it, so the two marks now sit in their own
+               group, sharing the postmark's position and tilt and nothing
+               else. The town name ran past the outer ring once — at y=-18
+               the ring is only 37.9 units wide either side and eleven
+               letters at 1.6 tracking measured 38.5 — and stays inside. -->
+          <g transform="translate(694 160) rotate(-11)" opacity=".72" fill="#4a5570"
+             font-family="Georgia,serif">
+            <text x="0" y="-18" text-anchor="middle" stroke="none" font-size="8.4"
+                  letter-spacing="1.1">KAWAGUCHIKO</text>
+            <text x="0" y="26" text-anchor="middle" stroke="none" font-size="9"
+                  letter-spacing="1.2">24.5.12</text>
           </g>
 
           <!-- Air-mail border. A printed border is regular, so the 26-unit
@@ -209,14 +217,19 @@
               <path d="M104.3 573.8 l14 -12 h18 l-14 12 z" opacity=".95"/>
             </g>
             <path d="M30 570 l6 -5 h4 l-6 5 z" fill="#efe6d4" opacity=".5"/>
-            <!-- the caption sits above the border, not in it: at y=571 its box
-                 ran 562.4 to 572.9, so the inner rule at 569 was printed through
-                 the middle of the letters and the outer rule at 574 was 0.4 units
-                 under them. the stripes straddle the rules because a printed
-                 border does; type should not. -->
-            <text x="176" y="564.5" font-size="9" letter-spacing="3" fill="#6f6350"
-                  font-family="Georgia,serif">PAR AVION · BY AIR MAIL</text>
           </g>
+          <!-- the caption sits above the border, not in it: at y=571 its box
+               ran 562.4 to 572.9, so the inner rule at 569 was printed through
+               the middle of the letters and the outer rule at 574 was 0.4 units
+               under them. the stripes straddle the rules because a printed
+               border does; type should not.
+
+               it also leaves the border's .55. the stripes are the part that
+               has faded; the caption was printed type and measured 2.19:1
+               against the paper at that opacity, which is not age, it is
+               absence. -->
+          <text x="176" y="564.5" font-size="9" letter-spacing="3" fill="#6f6350"
+                opacity=".78" font-family="Georgia,serif">PAR AVION · BY AIR MAIL</text>
 
           <!-- age, then grain -->
           <rect x="0" y="0" width="900" height="600" filter="url(#foxB)" opacity=".055"

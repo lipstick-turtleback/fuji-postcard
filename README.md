@@ -50,7 +50,8 @@ scripts/
   test-score.mjs       verify the composition as data
   test-contrast.mjs    keep the palette above WCAG AA
   test-layout.mjs      drive headless Chrome at real window sizes
-  test-plate.mjs       keep the lettering off the gilded frame
+  test-plate.mjs       keep the lettering off the frame rules
+  test-ink.mjs         measure the contrast of the type printed on the card
   test-interactions.mjs drive the buttons and shortcuts and read what happened
   perf.mjs             measure frame times over CDP
   serve.mjs            dependency-free static server
@@ -183,6 +184,29 @@ mark with no rise, running most of the way across the plate. 34 bands on the
 front, 16 on the back. The back's `PAR AVION · BY AIR MAIL` was sitting at
 y=571 with the inner rule at 569 printed through the middle of the word and the
 outer rule 0.4 units under it; it now rests above the border, 2.29 units clear.
+
+`scripts/test-ink.mjs` measures the contrast of the type printed on the card,
+which `test-contrast.mjs` never covered — that one reads CSS custom properties,
+and the artwork's ink is a gradient over paper that is itself a gradient, foxed,
+grained and vignetted, under group opacities. It takes one screenshot per face
+and reads the pixels: the background for a mark is the median of the ring of
+paper just outside it, in the same frame, because two screenshots of this page
+are never identical — the mist and the water are moving. The ink is the pixel
+inside the box that differs from that background most, which is the most
+generous reading a mark can be given. The floor is WCAG's large-print 3:1, not
+the 4.5:1 the chrome is held to: this is a hundred-year-old card and some of its
+marks are meant to be weak strikes, but none of them is meant to be gone.
+
+It found three on the back — the air-mail caption at 2.19:1, the postmark's date
+at 2.37:1, `CORRESPONDENCE CARD · 郵便はがき` at 2.98:1 — all of them faint
+because a whole group had been faded for the sake of the marks inside it. A
+group opacity cannot be undone from inside, so the type left the groups: the
+stripes and rings keep their .55 and .45, the letters now sit at .78 and .72,
+and the three measure 3.24, 3.36 and 3.75. It also caught a bug in itself. The
+first version skipped a mark that painted nothing, on the grounds that the
+turned-away face cannot be measured; that is how a postmark whose type had been
+translated twice — and was off the plate — passed. A mark on the face being
+looked at that paints nothing is now a failure. 43 marks measured.
 
 `scripts/test-interactions.mjs` makes the page do the things it promises and
 reads back what happened: the pointer walks the glint ray and tilts the card,

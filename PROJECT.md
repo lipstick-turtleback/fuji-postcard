@@ -138,6 +138,16 @@ The habits that keep paying off:
   through its own caption — produced no rules and was skipped in silence. Select
   by what a thing is, not by what it was called, and print how many of each the
   test actually looked at.
+- **Measure the pixels, not the hex.** The artwork's type sat at 2.19:1 against
+  its paper while the palette looked quiet and correct, because the ink is a
+  gradient, the paper is a gradient, and a group faded for the sake of one mark
+  fades every mark inside it. `scripts/test-ink.mjs` reads the colour that
+  arrives at the screen. A group opacity cannot be undone from inside the group:
+  when one mark needs to be stronger than its neighbours, it leaves them.
+- **A mark that paints nothing is a failure, not a skip.** The first version of
+  the ink measurement ignored any text with no ink in its box, reasoning that a
+  turned-away face cannot be measured. That is exactly how type that had been
+  translated twice — and was off the plate — reported as fine.
 - **A promise nobody can test is a promise that quietly breaks.** Flip,
   export, the shortcuts and reduced-motion are rule 5, and the only thing
   enforcing them was somebody remembering to click the buttons. They are
