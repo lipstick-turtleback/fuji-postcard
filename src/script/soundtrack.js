@@ -539,7 +539,14 @@
           pluck(HZ(n.m), t, n.g * b.level * shade, n.d * BEAT * 2.2, b.bright * tone);
         }
       }
-      if (b.drone) drone(barAt, b.dl);
+      /* the drone is the one voice that rises out of silence, which makes it
+         the one that must not be told to start in the past. a page starved
+         for seconds — a background tab, a wake from sleep — gets here with
+         the bar already gone: the notes guard themselves, but the drone's
+         swell would be two thirds over before it was scheduled, arriving as
+         a wash out of nowhere, which is the one sound on this page that
+         reads as a beginning. anchor it to where the clock actually is. */
+      if (b.drone) drone(Math.max(barAt, now + 0.02), b.dl);
       barAt += BAR;
       bar++;
       if (bar === NBARS) {

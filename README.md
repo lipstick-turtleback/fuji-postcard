@@ -181,10 +181,30 @@ fails if the settled page asks for frames: it asks for none. Rule 5 of the brief
 says none of this may break, and until now the only thing enforcing that was
 somebody remembering to click the buttons.
 
-Headless Chrome cannot verify the audio itself: its `AudioContext` clock never
-advances, so nothing scheduled is ever rendered. What is verified is that the
-graph builds, the context resumes, the play button toggles, and the scheduler
-is bounded.
+Headless Chrome will not let anyone _hear_ the soundtrack, but with
+`--autoplay-policy=no-user-gesture-required` its `AudioContext` clock runs, so
+the graph can be measured instead: how many nodes it creates, when each was
+told to start, and whether the melody keeps its place. That is how both
+soundtrack bugs were reproduced, and both are now asserted.
+
+The first was reported, not measured: _the music restarts by itself_. It did.
+The page starts the piece on the first gesture, and a gesture on the play
+button was not treated as a gesture — its autostart listeners were only removed
+by a gesture somewhere else. So the ordinary sequence, press Play, press Play
+again to stop it, then pick the card up, threw the whole piece back from bar 1.
+The test drives exactly that order on a page nothing has touched, and counts
+audio nodes rather than trusting what the button says: 27 → 27 now, 27 → 54
+then. A button reading Play while the scheduler writes another bar is the
+difference between an indicator and a fact.
+
+The second only shows up when the page stops getting time — a background tab, a
+long collection, a wake from sleep. The test blocks the main thread for five
+seconds with the music running and then asks whether anything was told to start
+behind the audio clock. One thing had been: the drone, whose gain was ordered
+to rise from silence at a moment two seconds gone, so it arrived two thirds
+swelled, out of nowhere, and fell away again. It is the one sound on this page
+that reads as a beginning, and it was arriving without one. The notes already
+guarded themselves; the drone is now anchored to where the clock actually is.
 
 ## Deploying to Vercel
 

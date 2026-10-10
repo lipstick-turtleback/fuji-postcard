@@ -227,7 +227,37 @@ if (sound) {
       for (const m of ['createOscillator', 'createBufferSource']) {
         const f = AudioContext.prototype[m];
         AudioContext.prototype[m] = function (...a) { window.__src++; return f.apply(this, a); };
-      }`,
+      }
+      // The drone is the only voice that rises out of silence, and the only
+      // one that is ruined by being scheduled late: told to start rising at a
+      // time already gone, it arrives two thirds swelled, which sounds like
+      // the piece beginning. Count drones, and count anything told to start
+      // behind the clock.
+      window.__drones = 0;
+      window.__past = [];
+      const cg = AudioContext.prototype.createGain;
+      AudioContext.prototype.createGain = function () {
+        const g = cg.call(this);
+        const ctx = this;
+        let opened = null;
+        const sv = g.gain.setValueAtTime.bind(g.gain);
+        g.gain.setValueAtTime = (v, t) => {
+          if (t < ctx.currentTime - 0.05) window.__past.push(+t.toFixed(2));
+          opened = t;
+          return sv(v, t);
+        };
+        const er = g.gain.exponentialRampToValueAtTime.bind(g.gain);
+        g.gain.exponentialRampToValueAtTime = (v, t) => {
+          // the drone is the only voice here that takes more than a second to
+          // arrive; a pluck is up in eight milliseconds
+          if (opened !== null) {
+            if (t - opened > 1) window.__drones++;
+            opened = null;
+          }
+          return er(v, t);
+        };
+        return g;
+      };`,
   });
   await sound.send('Page.navigate', { url: PAGE });
   await sleep(1800);
@@ -276,6 +306,24 @@ if (sound) {
   await key(sound.send, 'm');
   await sleep(900);
   ok('and M stops it', (await play()) === 'false');
+
+  /* Starve the page for five seconds with the music running — the same
+     thing a background tab, a long collection or a wake from sleep does —
+     and check what the scheduler does with the bars it missed. The notes
+     guard themselves; the drone has to be anchored to the clock or it
+     arrives mid-swell, out of nowhere. */
+  await key(sound.send, 'm');
+  await sleep(14000);
+  await sound.evaluate(`const t = Date.now(); while (Date.now() - t < 5000) {}`);
+  await sleep(7000);
+  const drones = await sound.evaluate(`window.__drones`);
+  const behind = await sound.evaluate(`window.__past.length`);
+  ok('a drone did fire in that window', drones > 0, `${drones} drone(s) started`);
+  ok(
+    'nothing is told to start behind the clock, even when the page loses time',
+    behind === 0,
+    `${behind} event(s) scheduled in the past`,
+  );
   ok(
     'no page exceptions in the soundtrack pass',
     sound.exceptions.length === 0,

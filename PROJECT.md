@@ -136,6 +136,15 @@ The habits that keep paying off:
   export, the shortcuts and reduced-motion are rule 5, and the only thing
   enforcing them was somebody remembering to click the buttons. They are
   driven over CDP now, and the settled page is caught asking for frames.
+- **Assert on the thing, not on its indicator.** `aria-pressed="false"` says
+  what the play button believes; the number of oscillators the page creates says
+  what the audio is doing. They disagreed — the button read Play while a bar was
+  being written — and only the second one is the music.
+- **A scheduler is only correct while the page is given time.** Starve it for
+  five seconds, the way a background tab or a wake from sleep does, and guards
+  that look sufficient for notes (`if (t > now)`) say nothing about a voice that
+  takes two seconds to rise. The test blocks the main thread and fails if
+  anything is scheduled behind the audio clock.
 - **Read page exceptions over CDP, not just pixels.** A `ReferenceError` during
   startup once left a page that looked completely fine while tilt, flip, export
   and every shortcut were dead. The same channel carries the errors the browser
