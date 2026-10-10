@@ -36,9 +36,9 @@ impossible to review. So the source is split into parts, and the single file is
 the build artefact. The parts are real: the JavaScript is ES modules bundled by
 rollup into one inlined IIFE per entry, not two files dropped into two script
 tags sharing a global scope. Rollup rather than esbuild because it prints the
-source as it was written — all 83 of the comments that explain why the audio
-does what it does survive into the artefact (counted both sides: 83 in
-`src/script/`, 83 in the two bundles in the page), and this project's reasoning
+source as it was written — all 86 of the comments that explain why the audio
+does what it does survive into the artefact (counted both sides: 86 in
+`src/script/`, 86 in the two bundles in the page), and this project's reasoning
 lives in those comments. The page still ships with no runtime dependency of any
 kind.
 
@@ -53,8 +53,11 @@ src/
                        Floaters Petals, each with its data, plus place.mjs
   script/
     card.js            tilt, flip, foil lighting, SVG export
-    soundtrack.js      the synthesis chain and the transport
-    sound/score.mjs    the composition as data: tempo, scale, eighty bars
+    soundtrack.js      the transport: the bar clock, the meter, the Play button
+    sound/
+      score.mjs        the composition as data: tempo, scale, eighty bars
+      graph.mjs        the signal path, built only when a person asks
+      voices.mjs       the pluck, the drone, the lake
 scripts/
   build.mjs            bundle the JS, render the generated parts, fill the slots
   check.mjs            validate the built page without a browser
