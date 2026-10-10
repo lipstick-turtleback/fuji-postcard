@@ -71,6 +71,7 @@ scripts/
   test-export.mjs      check the .svg the save button hands out
   test-interactions.mjs drive the buttons and shortcuts and read what happened
   test-motion.mjs      hold the page to its reduced-motion promise
+  test-css.mjs         no rule selects nothing, no animation names nothing
   test-sound.mjs       the soundtrack, on a page nobody has touched
   perf.mjs             measure frame times over CDP
   serve.mjs            dependency-free static server
@@ -304,9 +305,9 @@ none was examined. It printed a pass. The count of rules examined is in the
 output line now (34 on the front, 0 on the back, which carries no classes),
 and giving a mark a class the export filter drops fails the test.
 
-Three browser tests ask the three questions that need a browser, each with its
-own Chrome and its own page, because the answers depend on what has happened to
-the page before the question:
+Four browser tests ask the questions that need a browser, each with its own
+Chrome and its own page, because the answers depend on what has happened to the
+page before the question:
 
 - `scripts/test-interactions.mjs` makes the page do the things it promises and
   reads back what happened: the pointer walks the glint ray and tilts the card,
@@ -315,9 +316,19 @@ the page before the question:
   and no page exception is thrown. It also collects the errors the browser
   itself raises while parsing the page — a malformed path is one of those, and
   it appears there and nowhere else.
-- `scripts/test-motion.mjs` loads the page under `--force-prefers-reduced-motion`
-  with `requestAnimationFrame` wrapped, and fails if the settled page asks for
-  frames: it asks for none.
+- `scripts/test-motion.mjs` holds the page to both of its motion promises.
+  Under `--force-prefers-reduced-motion` it wraps `requestAnimationFrame` and
+  fails if a settled page asks for frames — it asks for none — and it fails if
+  anything inside a face still has an animation running. With motion allowed it
+  fails if the lake has been switched off along with the laminate, and it
+  samples every animated mark twice three seconds apart to check rule 2 over
+  time: no two nearby marks may share a period or be whole multiples of one
+  another.
+- `scripts/test-css.mjs` asks whether the stylesheet is telling the truth about
+  the page: every selector must match something that exists, and every
+  `animation` must name a `@keyframes` block that exists. A stylesheet cannot
+  be seen to be dead, which is how a rule drifting a water band sideways for
+  47 seconds survived years of nobody having an element with that class.
 - `scripts/test-sound.mjs` gets a page nothing has touched, which is the only
   place its bug was visible.
 

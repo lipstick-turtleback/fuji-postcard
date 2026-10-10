@@ -118,11 +118,13 @@ project built tools to stop being fooled:
   keyboard shortcuts advertised by a `<kbd>` or the README but not handled by
   any code, ids defined and never used, and path data whose commands run out of
   arguments.
-- **`npm run test`** — check, plus the score lifted out of the audio IIFE and
-  evaluated as plain data (80 bars, ten phrases, 305 notes, 4.85 min), plus a
-  contrast check on the ink against the paper, plus the lettering measured
-  against the gilded frame in user units, plus the buttons and shortcuts driven
-  over CDP and their effects read back, plus Biome and Prettier.
+- **`npm run test`** — check, plus the score imported as the module it is
+  (80 bars, ten phrases, 305 notes, 4.85 min), plus a contrast check on the ink
+  against the paper, plus the lettering measured against the gilded frame in
+  user units, plus the buttons and shortcuts driven over CDP and their effects
+  read back, plus the stylesheet asked whether every selector matches something
+  on the page and every animation names keyframes that exist, plus Biome and
+  Prettier.
 - **`npm run perf`** — a zero-dependency Chrome DevTools Protocol harness that
   puts the pointer on the card so the lighting model actually runs, then
   samples `requestAnimationFrame` intervals. Screenshots cannot tell you any of
@@ -167,6 +169,14 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **A stylesheet cannot be seen to be dead.** A rule whose class no longer
+  exists costs nothing and changes nothing, so the page looks exactly as it
+  should: `.water-a` drifted a band of water sideways over 47 seconds for as
+  long as anyone can remember, and no element in the scene had that class. The
+  same failure one level up is an `animation` naming a `@keyframes` block that
+  was never written. `scripts/test-css.mjs` asks both questions of the built
+  page, and only of the _subject_ of each selector — whether the laminate
+  happens to be on when the test runs is not the bird's business.
 - **A promise nobody can test is a promise that quietly breaks.** Flip,
   export, the shortcuts and reduced-motion are rule 5, and the only thing
   enforcing them was somebody remembering to click the buttons. They are
