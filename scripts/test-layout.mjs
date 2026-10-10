@@ -40,7 +40,7 @@ if (!page) {
   console.log('test-layout: no Chrome, or Chrome did not come up - skipped');
   process.exit(0);
 }
-const { send, exceptions, close } = page;
+const { send, exceptions, consoleErrors, close } = page;
 
 await send('Page.enable');
 await send('Runtime.enable');
@@ -73,6 +73,7 @@ for (const [w, h, label] of VIEWPORTS) {
     mobile: false,
   });
   exceptions.length = 0;
+  consoleErrors.length = 0;
   await send('Page.navigate', { url: PAGE });
   await sleep(1200);
   const { result } = await send('Runtime.evaluate', { expression: probe, returnByValue: true });
@@ -84,6 +85,10 @@ for (const [w, h, label] of VIEWPORTS) {
   if (r.overflowX) problems.push(`${at} (${label}): the page scrolls sideways`);
   if (r.offscreen.length) problems.push(`${at} (${label}): off screen - ${r.offscreen.join(', ')}`);
   if (exceptions.length) problems.push(`${at} (${label}): ${exceptions.length} page exception(s)`);
+  if (consoleErrors.length)
+    problems.push(
+      `${at} (${label}): ${consoleErrors.length} browser error(s): ${consoleErrors[0]}`,
+    );
   report.push(`${at} ${r.offscreen.length ? 'OFF' : 'ok'}`);
 }
 

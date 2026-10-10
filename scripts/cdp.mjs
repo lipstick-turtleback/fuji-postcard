@@ -15,7 +15,10 @@ import { setTimeout as sleep } from 'node:timers/promises';
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 /**
- * Launch headless Chrome and attach to its first page target.
+ * Launch headless Chrome and attach to its first page target. Runtime and Log
+ * are enabled before anything navigates, so the caller gets two arrays: the
+ * exceptions the page threw, and the errors the browser raised while parsing
+ * it — which is where a malformed path shows up, and it shows up exactly once.
  *
  * Resolves to null when Chrome is not there or does not come up. Callers are
  * expected to skip rather than fail: a machine without Chrome is not a machine
@@ -67,10 +70,22 @@ export async function openPage({ port, userDataDir, args = [] }) {
   let seq = 0;
   const waiting = new Map();
   const exceptions = [];
+  const consoleErrors = [];
   ws.addEventListener('message', (e) => {
     const msg = JSON.parse(e.data);
     if (msg.method === 'Runtime.exceptionThrown')
       exceptions.push(msg.params.exceptionDetails?.exception?.description || msg.params.text);
+    if (msg.method === 'Log.entryAdded' && msg.params.entry?.level === 'error')
+      consoleErrors.push(`${msg.params.entry.source || 'log'}: ${msg.params.entry.text}`);
+    if (
+      msg.method === 'Runtime.consoleAPICalled' &&
+      (msg.params.type === 'error' || msg.params.type === 'warning')
+    )
+      consoleErrors.push(
+        `${msg.params.type}: ${(msg.params.args || [])
+          .map((a) => a.value ?? a.description ?? a.type)
+          .join(' ')}`,
+      );
     const done = waiting.get(msg.id);
     if (done) {
       waiting.delete(msg.id);
@@ -96,10 +111,17 @@ export async function openPage({ port, userDataDir, args = [] }) {
     return result.value;
   };
 
+  // Enabled here, before anything navigates, because the errors worth catching
+  // are the ones the browser raises while it parses the page: a malformed path
+  // is a Log entry, not an exception, and it arrives exactly once.
+  await send('Runtime.enable');
+  await send('Log.enable');
+
   return {
     send,
     evaluate,
     exceptions,
+    consoleErrors,
     chromePath: CHROME,
     close: () => {
       ws.close();

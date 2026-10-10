@@ -2439,7 +2439,14 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                    the real mountain's does, not in a cut diamond -->
               <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C818.6 83 816.2 79.4 813.8 82 L812 82 Z"
                     fill="#f4f8fc"/>
-              <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C821 74 820 66 Z" fill="#dfe8f2"/>
+              <!-- the shadow half of the snow cap, the half away from the sun.
+                   its second curve was written with two control points where a
+                   cubic wants three, so the parser stopped there and the shape
+                   closed itself into a sliver: a hard pale shard across the
+                   right shoulder of the mountain. The back's stamp carries the
+                   same drawing and had the same broken curve. -->
+              <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C821.2 76 820.6 71 820 66 Z"
+                    fill="#dfe8f2"/>
               <circle cx="796" cy="60" r="7" fill="#f2c14e"/>
               <text x="806" y="112" text-anchor="middle" fill="#3f5d86" font-size="9"
                     letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>
@@ -2761,7 +2768,14 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
               <path d="M62 38 C70 56 80 72 82 76 L66 76 C65 62 63 48 62 38 Z" fill="#47688f"/>
               <path d="M62 38 L70 54 C67.5 51.4 65.4 55 63 52.4 C60.6 55 58.2 51.4 55.8 54 L54 54 Z"
                     fill="#f4f8fc"/>
-              <path d="M62 38 L70 54 C67.5 51.4 65.4 55 63 52.4 C63 46 62 38 Z" fill="#dfe8f2"/>
+              <!-- the shadow half of the snow cap, the half away from the sun.
+                   its second curve was written with two control points where a
+                   cubic wants three, so the parser stopped there and the shape
+                   closed itself into a sliver: a hard pale shard across the
+                   right shoulder of the mountain, and a console error nobody
+                   was reading. -->
+              <path d="M62 38 L70 54 C67.5 51.4 65.4 55 63 52.4 C63.2 48 62.6 43 62 38 Z"
+                    fill="#dfe8f2"/>
               <circle cx="30" cy="30" r="8" fill="#f2c14e"/>
               <text x="46" y="90" text-anchor="middle" font-size="9" fill="#3f5d86"
                     letter-spacing="2" font-family="Georgia,serif">NIPPON</text>
@@ -3546,6 +3560,10 @@ document.addEventListener('keydown', (e) => {
   let timer = null;
   let fadeTimer = null;
   let playing = false;
+  /* has a human spoken about the music? the play button and M are the only
+     answers; until one of them is given the page may start the piece on its
+     own, and after one it never may */
+  let chosen = false;
   let rafId = 0;
   let bar = 0;
   let barAt = 0;
@@ -3910,7 +3928,14 @@ document.addEventListener('keydown', (e) => {
     rafId = requestAnimationFrame(meter);
   }
 
-  btn.addEventListener('click', () => (playing ? stop() : start()));
+  /* the two ways a person talks about the music. both mean the same thing,
+     and both mean the page is no longer allowed to have an opinion */
+  const toggle = () => {
+    chosen = true;
+    if (playing) stop();
+    else start();
+  };
+  btn.addEventListener('click', toggle);
   const paintVol = () => vol.style.setProperty('--fill', `${vol.value}%`);
   paintVol();
   vol.addEventListener('input', () => {
@@ -3921,26 +3946,35 @@ document.addEventListener('keydown', (e) => {
     }
   });
   document.addEventListener('keydown', (e) => {
-    if ((e.key === 'm' || e.key === 'M') && !e.metaKey && !e.ctrlKey && !e.altKey) {
-      playing ? stop() : start();
-    }
+    if ((e.key === 'm' || e.key === 'M') && !e.metaKey && !e.ctrlKey && !e.altKey) toggle();
   });
 
   /* Start on our own if the browser allows it; otherwise the very first
      click or keypress anywhere on the page starts it. The play button is
-     left alone — it already starts the music itself. */
+     left alone — it already starts the music itself.
+
+     "On our own" ends the moment a person has made a choice. It used to not
+     end: the gesture listeners were only removed by a gesture that was not
+     on the play button, so somebody who started the piece, stopped it, and
+     then clicked the card to look at it got the whole thing thrown back at
+     them from bar 1 — by itself, mid-handling, with the button still
+     reading Play. `chosen` is the memory that a human has spoken about the
+     music, and after that nothing but a human starts or stops it. */
   build();
   const begin = () => {
-    if (!playing) start();
+    if (!chosen && !playing) start();
   };
   ctx
     .resume()
     .then(begin)
     .catch(() => {});
   const gesture = (ev) => {
-    if (ev.target?.closest?.('#play')) return;
     removeEventListener('pointerdown', gesture);
     removeEventListener('keydown', gesture);
+    if (ev.target?.closest?.('#play')) {
+      chosen = true;
+      return;
+    }
     ctx
       .resume()
       .then(begin)

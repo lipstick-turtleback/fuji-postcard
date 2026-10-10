@@ -1294,7 +1294,14 @@
                    the real mountain's does, not in a cut diamond -->
               <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C818.6 83 816.2 79.4 813.8 82 L812 82 Z"
                     fill="#f4f8fc"/>
-              <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C821 74 820 66 Z" fill="#dfe8f2"/>
+              <!-- the shadow half of the snow cap, the half away from the sun.
+                   its second curve was written with two control points where a
+                   cubic wants three, so the parser stopped there and the shape
+                   closed itself into a sliver: a hard pale shard across the
+                   right shoulder of the mountain. The back's stamp carries the
+                   same drawing and had the same broken curve. -->
+              <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C821.2 76 820.6 71 820 66 Z"
+                    fill="#dfe8f2"/>
               <circle cx="796" cy="60" r="7" fill="#f2c14e"/>
               <text x="806" y="112" text-anchor="middle" fill="#3f5d86" font-size="9"
                     letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>

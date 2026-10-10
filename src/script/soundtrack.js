@@ -265,6 +265,10 @@
   let timer = null;
   let fadeTimer = null;
   let playing = false;
+  /* has a human spoken about the music? the play button and M are the only
+     answers; until one of them is given the page may start the piece on its
+     own, and after one it never may */
+  let chosen = false;
   let rafId = 0;
   let bar = 0;
   let barAt = 0;
@@ -629,7 +633,14 @@
     rafId = requestAnimationFrame(meter);
   }
 
-  btn.addEventListener('click', () => (playing ? stop() : start()));
+  /* the two ways a person talks about the music. both mean the same thing,
+     and both mean the page is no longer allowed to have an opinion */
+  const toggle = () => {
+    chosen = true;
+    if (playing) stop();
+    else start();
+  };
+  btn.addEventListener('click', toggle);
   const paintVol = () => vol.style.setProperty('--fill', `${vol.value}%`);
   paintVol();
   vol.addEventListener('input', () => {
@@ -640,26 +651,35 @@
     }
   });
   document.addEventListener('keydown', (e) => {
-    if ((e.key === 'm' || e.key === 'M') && !e.metaKey && !e.ctrlKey && !e.altKey) {
-      playing ? stop() : start();
-    }
+    if ((e.key === 'm' || e.key === 'M') && !e.metaKey && !e.ctrlKey && !e.altKey) toggle();
   });
 
   /* Start on our own if the browser allows it; otherwise the very first
      click or keypress anywhere on the page starts it. The play button is
-     left alone — it already starts the music itself. */
+     left alone — it already starts the music itself.
+
+     "On our own" ends the moment a person has made a choice. It used to not
+     end: the gesture listeners were only removed by a gesture that was not
+     on the play button, so somebody who started the piece, stopped it, and
+     then clicked the card to look at it got the whole thing thrown back at
+     them from bar 1 — by itself, mid-handling, with the button still
+     reading Play. `chosen` is the memory that a human has spoken about the
+     music, and after that nothing but a human starts or stops it. */
   build();
   const begin = () => {
-    if (!playing) start();
+    if (!chosen && !playing) start();
   };
   ctx
     .resume()
     .then(begin)
     .catch(() => {});
   const gesture = (ev) => {
-    if (ev.target?.closest?.('#play')) return;
     removeEventListener('pointerdown', gesture);
     removeEventListener('keydown', gesture);
+    if (ev.target?.closest?.('#play')) {
+      chosen = true;
+      return;
+    }
     ctx
       .resume()
       .then(begin)

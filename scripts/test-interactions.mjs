@@ -23,7 +23,9 @@
    The second pass runs with --force-prefers-reduced-motion, where the card
    is required to stop asking for frames once it has come to rest. A page
    that promises stillness and burns a core rendering stillness is not
-   keeping the promise.
+   keeping the promise. The third pass is the soundtrack on a page nothing
+   has touched, because the bug it guards depends on which gesture comes
+   first.
 
      node scripts/test-interactions.mjs
 
@@ -52,7 +54,7 @@ if (!page) {
   console.log('test-interactions: no Chrome, or Chrome did not come up - skipped');
   process.exit(0);
 }
-const { send, evaluate, exceptions, close } = page;
+const { send, evaluate, exceptions, consoleErrors, close } = page;
 await send('Page.enable');
 await send('Runtime.enable');
 await send('Emulation.setDeviceMetricsOverride', {
@@ -140,11 +142,8 @@ ok('and the page knows which way', dataOn === (nowOn === 'true' ? 'on' : 'off'),
 await evaluate(`document.getElementById('enhanceBtn').click()`);
 await sleep(300);
 
-const audioBefore = await evaluate(`document.getElementById('play').getAttribute('aria-pressed')`);
-await key(send, 'm');
-await sleep(600);
-const audioAfter = await evaluate(`document.getElementById('play').getAttribute('aria-pressed')`);
-ok('M toggles the soundtrack', audioBefore !== audioAfter, `${audioBefore} -> ${audioAfter}`);
+/* The soundtrack gets its own pass below, on a page nothing has touched
+   yet: the bug it guards is about which gesture comes first. */
 
 const volOk = await evaluate(`(() => {
   const v = document.getElementById('vol');
@@ -155,6 +154,11 @@ const volOk = await evaluate(`(() => {
 ok('the volume slider paints', volOk === '40%', volOk);
 
 ok('no page exceptions', exceptions.length === 0, exceptions.join(' | '));
+ok(
+  'the browser raised no errors parsing the page',
+  consoleErrors.length === 0,
+  consoleErrors.slice(0, 3).join(' | '),
+);
 close();
 
 /* ---------- the same page, asked to hold still ---------- */
@@ -196,9 +200,95 @@ if (still) {
     still.exceptions.length === 0,
     still.exceptions.join(' | '),
   );
+  ok(
+    'no browser errors under reduced motion',
+    still.consoleErrors.length === 0,
+    still.consoleErrors.slice(0, 3).join(' | '),
+  );
   still.close();
 } else {
   ok('reduced-motion pass', false, 'Chrome did not come up');
+}
+
+/* ---------- the soundtrack, on a page nobody has touched yet ----------
+   Order is the whole point. The bug was that a gesture on the play button
+   was not treated as a gesture: the listeners that let the page start the
+   music on its own were only removed by a gesture somewhere else. So the
+   sequence that broke was the ordinary one — press Play, press Play again
+   to stop it, then pick the card up — and the piece came back from bar 1
+   by itself. Any keypress earlier in the session hides it, which is why
+   this gets its own browser and its own page. */
+const sound = await openPage({ port: 9387, userDataDir: '/tmp/fuji-interactions-sound' });
+if (sound) {
+  await sound.send('Page.enable');
+  await sound.send('Runtime.enable');
+  await sound.send('Page.addScriptToEvaluateOnNewDocument', {
+    source: `window.__src = 0;
+      for (const m of ['createOscillator', 'createBufferSource']) {
+        const f = AudioContext.prototype[m];
+        AudioContext.prototype[m] = function (...a) { window.__src++; return f.apply(this, a); };
+      }`,
+  });
+  await sound.send('Page.navigate', { url: PAGE });
+  await sleep(1800);
+  const play = () => sound.evaluate(`document.getElementById('play').getAttribute('aria-pressed')`);
+  const src = () => sound.evaluate(`window.__src`);
+  const autostarted = (await play()) === 'true';
+  await sound.evaluate(`document.getElementById('play').click()`);
+  await sleep(900);
+  if ((await play()) === 'true') {
+    await sound.evaluate(`document.getElementById('play').click()`);
+    await sleep(900);
+  }
+  ok(
+    'Play stops the soundtrack',
+    (await play()) === 'false',
+    autostarted ? 'the page had started it' : 'started by the first Play',
+  );
+  const off = await src();
+  await sound.send('Input.dispatchMouseEvent', {
+    type: 'mousePressed',
+    x: 700,
+    y: 500,
+    button: 'left',
+    clickCount: 1,
+  });
+  await sound.send('Input.dispatchMouseEvent', {
+    type: 'mouseReleased',
+    x: 700,
+    y: 500,
+    button: 'left',
+    clickCount: 1,
+  });
+  await sleep(1200);
+  await key(sound.send, 'f');
+  await sleep(1400);
+  const idle = await src();
+  ok(
+    'handling the card does not start the music again',
+    (await play()) === 'false' && idle === off,
+    `audio nodes ${off} -> ${idle}`,
+  );
+  await key(sound.send, 'm');
+  await sleep(1000);
+  const withM = await src();
+  ok('M starts it', (await play()) === 'true' && withM > off, `audio nodes ${off} -> ${withM}`);
+  await key(sound.send, 'm');
+  await sleep(900);
+  ok('and M stops it', (await play()) === 'false');
+  ok(
+    'no page exceptions in the soundtrack pass',
+    sound.exceptions.length === 0,
+    sound.exceptions.join(' | '),
+  );
+  ok(
+    'no browser errors in the soundtrack pass',
+    sound.consoleErrors.length === 0,
+    sound.consoleErrors.slice(0, 3).join(' | '),
+  );
+  sound.close();
+} else {
+  ok('soundtrack pass', false, 'Chrome did not come up');
 }
 
 const failed = results.filter((r) => !r.pass);

@@ -150,7 +150,14 @@
               <path d="M62 38 C70 56 80 72 82 76 L66 76 C65 62 63 48 62 38 Z" fill="#47688f"/>
               <path d="M62 38 L70 54 C67.5 51.4 65.4 55 63 52.4 C60.6 55 58.2 51.4 55.8 54 L54 54 Z"
                     fill="#f4f8fc"/>
-              <path d="M62 38 L70 54 C67.5 51.4 65.4 55 63 52.4 C63 46 62 38 Z" fill="#dfe8f2"/>
+              <!-- the shadow half of the snow cap, the half away from the sun.
+                   its second curve was written with two control points where a
+                   cubic wants three, so the parser stopped there and the shape
+                   closed itself into a sliver: a hard pale shard across the
+                   right shoulder of the mountain, and a console error nobody
+                   was reading. -->
+              <path d="M62 38 L70 54 C67.5 51.4 65.4 55 63 52.4 C63.2 48 62.6 43 62 38 Z"
+                    fill="#dfe8f2"/>
               <circle cx="30" cy="30" r="8" fill="#f2c14e"/>
               <text x="46" y="90" text-anchor="middle" font-size="9" fill="#3f5d86"
                     letter-spacing="2" font-family="Georgia,serif">NIPPON</text>
