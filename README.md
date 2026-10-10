@@ -145,8 +145,11 @@ full artwork.
 of the soundtrack IIFE and evaluates it as plain data — no DOM, no Web Audio.
 It checks the form (80 bars, ten eight-bar phrases, ~4 min 50 s), that every
 pitch is in D hirajōshi, that no note starts outside its bar or overlaps
-another note of the same voice, and that at least 70 of the 80 bars are
-distinct, which is what "through-composed" has to mean if it means anything.
+another note of the same voice, that at least 70 of the 80 bars are
+distinct, and that no bar comes back at a distance it comes back at every
+other time — rule 2 applies to what you hear as much as to what you see, and
+a listener can count an interval just as well as an eye. No phrase is a copy
+of another phrase.
 Those are mistakes you can only hear, and by the time you hear them you have
 listened to four and a half minutes.
 

@@ -84,6 +84,29 @@ for (const [i, bar] of BARS.entries()) {
 const distinct = new Set(PHRASES.flatMap((ph) => ph.bars)).size;
 if (distinct < 70) fail(`only ${distinct} distinct bars out of ${NBARS} — it is looping`);
 
+/* Rule 2 belongs to the audio as much as to the light. A bar that comes
+   back at the same distance every time is a loop a listener can count, and
+   the countability is what makes it a loop rather than a piece. */
+const where = new Map();
+for (const [i, b] of BARS.entries()) {
+  const k = b.notes.map((n) => `${n.m}.${n.b}`).join(' ');
+  if (!k) continue;
+  if (!where.has(k)) where.set(k, []);
+  where.get(k).push(i);
+}
+for (const [k, v] of where) {
+  if (v.length < 3) continue;
+  const gaps = new Set(v.slice(1).map((x, j) => x - v[j]));
+  if (gaps.size === 1)
+    fail(`the bar "${k}" recurs at bars ${v.join(', ')} — every ${[...gaps][0]} bars`);
+}
+const seenPhrase = new Set();
+for (const [i, ph] of PHRASES.entries()) {
+  const k = ph.bars.join('|');
+  if (seenPhrase.has(k)) fail(`phrase ${i + 1} is a copy of an earlier phrase`);
+  seenPhrase.add(k);
+}
+
 /* ---- the raw tokens parse exactly as the builder reads them ------------ */
 for (const ph of PHRASES)
   for (const line of ph.bars)
