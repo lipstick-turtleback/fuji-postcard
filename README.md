@@ -51,6 +51,7 @@ scripts/
   test-contrast.mjs    keep the palette above WCAG AA
   test-layout.mjs      drive headless Chrome at real window sizes
   test-plate.mjs       keep the lettering off the gilded frame
+  test-interactions.mjs drive the buttons and shortcuts and read what happened
   perf.mjs             measure frame times over CDP
   serve.mjs            dependency-free static server
 public/
@@ -69,7 +70,7 @@ npm run dev        # build, then serve on http://localhost:5173
 npm run check      # fail if the built file is stale, then validate it
 npm run lint       # biome over the JS (scripts/ and src/script/)
 npm run fmt        # prettier over CSS, JSON and Markdown
-npm test           # build + check + score + contrast + layout + lint + format check
+npm test           # build + check + score + contrast + layout + plate + interactions + lint + format
 npm run perf       # real frame times in headless Chrome over CDP, no dependencies
 ```
 
@@ -162,6 +163,16 @@ taken at a size where that is four pixels, and the type is deliberately faint, s
 it survived. The frame is what makes the card a plate, so the type moved: its
 baseline now rests 5 units above the inner rule, and the closest letter box — the
 ink shadow, which is set 1.2 units lower — sits 1.5 units clear of it.
+
+`scripts/test-interactions.mjs` makes the page do the things it promises and
+reads back what happened: the pointer walks the glint ray and tilts the card,
+`F` turns it over, `S` downloads the face that is showing (caught by wrapping
+`HTMLAnchorElement.prototype.click`), Enhance and `M` toggle, the volume slider
+paints, and no page exception is thrown. Then it loads the page again under
+`--force-prefers-reduced-motion` with `requestAnimationFrame` wrapped, and fails
+if the settled page asks for frames: it asks for none. Rule 5 of the brief says
+none of this may break, and until now the only thing enforcing that was somebody
+remembering to click the buttons.
 
 Headless Chrome cannot verify the audio itself: its `AudioContext` clock never
 advances, so nothing scheduled is ever rendered. What is verified is that the

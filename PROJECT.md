@@ -109,7 +109,8 @@ project built tools to stop being fooled:
 - **`npm run test`** — check, plus the score lifted out of the audio IIFE and
   evaluated as plain data (80 bars, ten phrases, 305 notes, 4.85 min), plus a
   contrast check on the ink against the paper, plus the lettering measured
-  against the gilded frame in user units, plus Biome and Prettier.
+  against the gilded frame in user units, plus the buttons and shortcuts driven
+  over CDP and their effects read back, plus Biome and Prettier.
 - **`npm run perf`** — a zero-dependency Chrome DevTools Protocol harness that
   puts the pointer on the card so the lighting model actually runs, then
   samples `requestAnimationFrame` intervals. Screenshots cannot tell you any of
@@ -130,6 +131,10 @@ The habits that keep paying off:
   the card that is four pixels of faint type, and no screenshot at any zoom was
   going to make it a fact. `scripts/test-plate.mjs` compares every `<text>` box
   with every rule band and reports the clearance in user units.
+- **A promise nobody can test is a promise that quietly breaks.** Flip,
+  export, the shortcuts and reduced-motion are rule 5, and the only thing
+  enforcing them was somebody remembering to click the buttons. They are
+  driven over CDP now, and the settled page is caught asking for frames.
 - **Read page exceptions over CDP, not just pixels.** A `ReferenceError` during
   startup once left a page that looked completely fine while tilt, flip, export
   and every shortcut were dead.
