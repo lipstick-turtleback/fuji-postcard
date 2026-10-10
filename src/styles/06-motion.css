@@ -117,13 +117,49 @@
 .ripple {
   animation: shimmer 17s ease-in-out infinite alternate;
 }
-.ripple:nth-child(2n) {
+/* One period per crest, not a parity rule. `2n` and `3n` gave the six rows of
+   the glitter band three pairs of twins — rows two and four both at 23 s,
+   twenty-five units apart, shimmering in step, which is rule 2 broken in the
+   most literal way the page had left. Six primes, none a multiple of another,
+   and the boat's three ripples fall on the first three of them. */
+.ripple:nth-child(2) {
   animation-duration: 23s;
   animation-delay: -6s;
 }
-.ripple:nth-child(3n) {
+.ripple:nth-child(3) {
   animation-duration: 29s;
   animation-delay: -11s;
+}
+.ripple:nth-child(4) {
+  animation-duration: 19s;
+  animation-delay: -3s;
+}
+.ripple:nth-child(5) {
+  animation-duration: 25s;
+  animation-delay: -14s;
+}
+.ripple:nth-child(6) {
+  animation-duration: 31s;
+  animation-delay: -8s;
+}
+.ripple:nth-child(7) {
+  animation-duration: 17s;
+  animation-delay: -20s;
+}
+/* The three ripples off the paddle are named rather than counted, because
+   counting put the middle one on the same 23 s as the whole glitter band a
+   hand's width away. 21 and 27 share no multiple with anything else at the
+   boat: the hull is 13, the wake 19 and 25, the man 7.5. */
+.ripple.rb {
+  animation-duration: 21s;
+  animation-delay: -9s;
+}
+.ripple.rc {
+  /* 27 s was twice the period of the petal floating four units below it; 22 s
+     was twice the period of the one below that. 24 s is twice nothing near it:
+     the hull is 13, the wake 19 and 25, the other two crests 17 and 21. */
+  animation-duration: 24s;
+  animation-delay: -4s;
 }
 /* The wake off the hull: slower than the ripples and it drifts, because the
    boat is moving through the water rather than sitting in still water. */
@@ -131,7 +167,10 @@
   animation: wake 19s ease-in-out infinite alternate;
 }
 .wake-b {
-  animation-duration: 23s;
+  /* 23s was the same period as one of the ripples three units away, which is
+     rule 2 broken in the smallest possible way: two marks at the hull keeping
+     step. 25s shares no factor with 17, 19 or 23. */
+  animation-duration: 25s;
   animation-delay: -8s;
 }
 @keyframes wake {
@@ -154,25 +193,23 @@
   }
 }
 
-/* the water: three slow drifts, deliberately unsynchronised. nothing here
-     moves fast enough to be followed with the eye — it is only ever noticed
-     having moved, which is exactly how a lake at dawn behaves */
-.water-a {
-  animation: waterA 47s ease-in-out infinite alternate;
-}
+/* the water: two slow drifts and a breath, deliberately unsynchronised.
+   nothing here moves fast enough to be followed with the eye — it is only
+   ever noticed having moved, which is exactly how a lake at dawn behaves.
+
+   There used to be a third rule here, `.water-a`, drifting a band of the
+   surface sideways over 47 seconds. Nothing in the scene had that class: the
+   rule and its keyframes had been animating nothing for as long as the lake
+   has been drawn the way it is drawn now, which is the shape of dead code in a
+   stylesheet — it cannot be seen to do nothing. The lake is left alone on
+   purpose (see 50-lake.svg): what moves on it is the glitter band, the
+   reflections, and what the water does around the posts, the hull and the
+   birds. */
 .water-b {
   animation: waterB 61s ease-in-out infinite alternate;
 }
 .refl {
   animation: reflBreathe 39s ease-in-out infinite alternate;
-}
-@keyframes waterA {
-  from {
-    transform: translateX(-9px);
-  }
-  to {
-    transform: translateX(11px);
-  }
 }
 @keyframes waterB {
   from {
@@ -212,15 +249,49 @@
   }
 }
 
+/* The boat lies on the water, so it bobs whether or not anybody switched the
+   laminate on. What Enhance changes is how lively the water is, not whether
+   the lake is alive: off, the hull moves better than half a unit over
+   thirteen seconds; on, the same motion at twice the amplitude and half the
+   period. Two keyframe sets rather than one with a scaled amplitude, because
+   CSS cannot scale a keyframe. */
 .boat {
-  animation: bob 6.5s ease-in-out infinite alternate;
+  animation: bob 13s ease-in-out infinite alternate;
+}
+html[data-enhance="on"] .boat {
+  animation-name: bobLively;
+  animation-duration: 6.5s;
 }
 @keyframes bob {
   from {
     transform: translate(0, 0);
   }
   to {
+    transform: translate(1.2px, -0.6px);
+  }
+}
+@keyframes bobLively {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
     transform: translate(6px, -3px);
+  }
+}
+/* The man shifts his weight while the pole stays planted. 1.1 degrees about
+   the hips, on a period that shares nothing with the hull's, so the two never
+   lock into a step. */
+.boatman {
+  animation: shift 7.5s ease-in-out infinite alternate;
+  transform-box: view-box;
+  transform-origin: 632px 499px;
+}
+@keyframes shift {
+  from {
+    transform: rotate(-0.5deg);
+  }
+  to {
+    transform: rotate(0.6deg);
   }
 }
 
@@ -246,19 +317,43 @@
   }
 }
 
+/* A bird in the far sky is a thing you check twice: two units of drift over
+   a minute and a half, no fade, no flap. The crossing - a bird arriving from
+   nowhere, gliding 168 units and leaving - is an event, and events are what
+   Enhance is for. The durations are primes that share no factor with the
+   clouds the birds cross, so nothing in the sky is ever in step. */
 .bird {
   --bo: 0.72;
-  animation: glide 34s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  animation: drift-far 67s ease-in-out infinite alternate;
 }
 .bird.b2 {
   --bo: 0.5;
-  animation-duration: 46s;
-  animation-delay: -16s;
+  animation-duration: 89s;
+  animation-delay: -31s;
 }
 .bird.b3 {
   --bo: 0.6;
+  animation-duration: 113s;
+  animation-delay: -57s;
+}
+html[data-enhance="on"] .bird {
+  animation: glide 34s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+html[data-enhance="on"] .bird.b2 {
+  animation-duration: 46s;
+  animation-delay: -16s;
+}
+html[data-enhance="on"] .bird.b3 {
   animation-duration: 39s;
   animation-delay: -28s;
+}
+@keyframes drift-far {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(2px, -0.8px);
+  }
 }
 /* ~4s of fade at each end, so the loop point is never visible */
 @keyframes glide {
@@ -278,27 +373,70 @@
   }
 }
 
+/* Reduced motion is a promise, and a promise written as a list of names is a
+   promise that expires: every new animated thing in the scene has to be added
+   to the list, and the one that is not gets away with moving for somebody who
+   asked it not to. So the rule is universal — nothing inside a face animates —
+   and it is the mirror image of the Enhance rule in 08-quality.css, which
+   excludes by name because it is the one that has to justify what stays.
+   The order of the sheets does the rest: this block sits above the gentle set
+   in this file, and a media query outranks a plain rule regardless of where
+   the later rule would have set a duration inline. */
 @media (prefers-reduced-motion: reduce) {
-  .cloud-a,
-  .cloud-b,
-  .cloud-c,
-  .mist-a,
-  .mist-b,
-  .petal,
-  .ripple,
-  .wake,
-  .boat,
-  .rays,
-  .glow,
-  .bird,
-  .water-a,
-  .water-b,
-  .refl,
-  .sway-a,
-  .sway-b {
+  .face svg * {
     animation: none;
   }
   .card {
     transition: none;
+  }
+}
+
+/* ---------- the water's surface, and what floats on it ---------- */
+/* A petal that has reached the lake lies on a surface that is moving. Before
+   this, the surface rippled and the petal did not, which is the kind of
+   contradiction the eye reads as a still image with something animated on
+   top. Each one bobs on its own period, none of them sharing a factor with
+   the ripples three units away. */
+.floater {
+  animation: float 11s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes float {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(0.4px, -0.5px);
+  }
+}
+/* Two ducks, two periods. They sit eight units apart, so a shared period
+   would read as one bird reflected from the other. */
+.duck {
+  animation: duck-bob 8.5s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes duck-bob {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(0.2px, -0.4px);
+  }
+}
+/* The heron does not bob - it is standing in the water, not floating on it.
+   What it does, over half a minute, is put weight on the other leg. */
+.wader {
+  animation: settle 31s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+@keyframes settle {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-0.3px, 0.2px);
   }
 }

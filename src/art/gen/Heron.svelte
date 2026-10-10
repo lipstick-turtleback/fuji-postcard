@@ -6,6 +6,6 @@
 </script>
 <g fill="#101627" stroke="#101627">
   {#each herons as p}
-    <use href={`#${p.h}`} transform={t(p)}/>
+    <use class="wader" href={`#${p.h}`} transform={t(p)} style={`animation-duration:${p.dur}s; animation-delay:${p.delay}s`}/>
   {/each}
 </g>

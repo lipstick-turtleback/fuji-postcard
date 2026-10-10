@@ -7,6 +7,6 @@
 </script>
 <g fill="#141a2c" stroke="#141a2c">
   {#each ducks as p}
-    <use href={`#${p.h}`} transform={t(p)}/>
+    <use class="duck" href={`#${p.h}`} transform={t(p)} style={`animation-duration:${p.dur}s; animation-delay:${p.delay}s`}/>
   {/each}
 </g>

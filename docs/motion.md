@@ -103,42 +103,75 @@ interval drawn from a range, never a fixed one.
 
 Enhance off, 1440 × 1150, measured by `npm run perf`:
 
-- today, measured on the current build (`npm run perf`, pointer on the card,
-  Enhance off): mean 18.2 ms, median 16.7 ms, p95 33.3 ms, worst 50 ms,
-  22 frames in 240 above 33 ms — about 55 fps
-- the gentle set adds roughly 25 animated elements. **Abort criterion: if p95
-  goes above 40 ms or the mean above 22 ms, the set is cut back** — starting
-  with the birds (largest painted area) and the boatman.
+|                                  | mean    | median  | p95     | worst | late frames |
+| -------------------------------- | ------- | ------- | ------- | ----- | ----------- |
+| before the gentle set            | 18.2 ms | 16.7 ms | 33.3 ms | 50 ms | 22/240      |
+| with it (19 more animated marks) | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
 
-The measurement is taken before phase 2 is committed, not after.
+The criterion was p95 under 40 ms and mean under 22 ms. Both hold, and the
+worst frame got better. Nineteen more moving things cost 0.2 ms of mean frame
+time because they are composited transforms on small groups, not repaints: the
+page's cost is in its filters, which is why Enhance switches those off and the
+picture's own motion was never the expensive part.
+
+## What the measurements found on the way
+
+Three things that were already wrong, each found by a check rather than by
+looking:
+
+- **`.water-a` was animating nothing.** The stylesheet had a rule and keyframes
+  for a slow sideways drift of a water band; no element in the scene had that
+  class. Dead code in a stylesheet has exactly this shape — it cannot be seen
+  to do nothing. It is gone, and the comment that said "three slow drifts" now
+  says two and a breath, which is what the lake has.
+- **The wake and a ripple were keeping step.** Both on 23 s, three units apart
+  at the hull.
+- **The six crests of the glitter band were three pairs of twins.** Their
+  periods came from `nth-child(2n)` and `nth-child(3n)`, which hands the same
+  duration to rows that are twenty-five units apart and one glance apart. Each
+  crest now has its own period: 17, 23, 29, 19, 25, 31 s.
+
+The rule those three break is rule 2, and the check that catches them is
+`test-motion.mjs`: every animated mark in a face is sampled twice three seconds
+apart, and any two that stay put, are under 200 px across and within 200 px of
+each other must not share a period or be whole multiples of one another. Two
+exclusions, both claims about the picture rather than conveniences: a mark
+wider than 200 px is a surface — mist, the glitter path, the ray field — and a
+surface is not anybody's neighbour; and a mark that travels more than 8 px in
+three seconds is passing through, so its period is a duration of passage and
+not a step the eye can compare. The check runs with Enhance off. The reeds
+sway in stands, all blades of one stand on one period, which is correct — a
+gust moves a stand, not a blade — and separating a stand from a pair of
+neighbours would need a notion of "one object" the page does not carry.
 
 ## Phases
 
-1. **The creatures become parts.** The heron, the two ducks, the boat and its
-   man, and the three birds move from hand-placed markup into the cast
-   (`src/art/front/20-cast/`) and the placement data, each with `dur` and
-   `delay` fields. No motion yet. Proved the way the plant migration was
-   proved: the set of (mark, transform) pairs in the built page, before and
-   after, identical.
-2. **The gentle set, on by default.** The six rows marked _yes_ above. The
-   exception list in `08-quality.css` grows from four names to ten, and each
-   name has to be justified by its cause in the comment beside it. Perf
-   measured against the budget in the same commit.
-3. **Seeded events.** The clock, only for things that happen rather than
-   cycle: the heron's head, a ripple that starts somewhere and dies. Only if
-   phase 2 left headroom.
-4. **The tests.** `test-motion.mjs` gains three assertions:
-   - with Enhance off, the gentle set still has an animation running
-     (computed `animation-name` is not `none`) — today the opposite is asserted
-     for everything else, and that is correct, but nothing says these must live
-   - with `prefers-reduced-motion`, nothing in the scene animates at all
-   - no two animated elements in the built page share a duration, and no
-     duration in a group is an integer multiple of another in the same group —
-     rule 2, checked over time instead of over space
+1. **The creatures become parts.** Done. The birds became marks in the cast
+   (`birdA`, `birdB`, `birdC`) placed from `Birds.data.mjs`; the ducks and the
+   heron became `Ducks.data.mjs` and `Heron.data.mjs`; the man inside the boat
+   became a group of his own. Proved by pixels: with reduced motion the page
+   renders identically run to run (0 differing pixels in 9.4 million), and
+   before against after 2,019 pixels differ, all of them anti-aliased stroke
+   edges on the three birds, none by more than 2/255 — what Chrome does when it
+   rasterises `<use>` content instead of an inline path.
+2. **The gentle set, on by default.** Done. The exception list in
+   `08-quality.css` grew from four names to thirteen, and the reduced-motion
+   block stopped naming things at all: `.face svg *` holds still, which is the
+   promise, and cannot go stale the way a list does. Periods and phases for the
+   placed creatures live in their data files; the boat's and the man's stay in
+   CSS, because the boat is one drawing and not a placement.
+3. **Seeded events.** Not started. The clock is still only for lighting.
+4. **The tests.** Three of the four assertions are in `test-motion.mjs`, which
+   went from 4 checks to 12. The fourth — that the exported plate carries the
+   gentle set — turned out to be a build-time property, and `check.mjs` now
+   enforces it: every class that animates must survive the export filter in
+   `card.js`. That check found and fixed its own bug on the way: it read CSS
+   comments as selectors, so a sentence mentioning `50-lake.svg` became a class
+   named `.svg`.
 
 ## What this document does not propose
 
 No animation framework, no GSAP, no runtime Svelte, no parallax layers. The
 scene is 726 static elements and one lighting loop; the motion it needs is
-twenty-five CSS animations with argued-over periods and a data table that says
+thirty-odd CSS animations with argued-over periods and a data table that says
 which one is in phase with what.

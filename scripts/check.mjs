@@ -146,7 +146,12 @@ for (const m of readme.matchAll(/\*\*`([A-Za-z])`\*\*/g)) {
 // "Save the plate" clones the live SVG and inlines only the CSS rules its
 // filter regex matches. A class that animates but is not in that regex
 // exports as a still image, silently.
-const styleBlock = html.slice(html.indexOf('<style>'), html.indexOf('</style>'));
+// comments blanked first, for the same reason the tag scan blanks them: the
+// selector of a rule is everything back to the previous `}`, so a sentence
+// that mentions a filename — "see 50-lake.svg" — becomes a class named `.svg`
+const styleBlock = html
+  .slice(html.indexOf('<style>'), html.indexOf('</style>'))
+  .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
 const animClasses = new Set();
 for (const rule of styleBlock.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
   const [, selector, body] = rule;

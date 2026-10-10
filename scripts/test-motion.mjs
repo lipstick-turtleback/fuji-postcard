@@ -58,5 +58,166 @@ ok(
   still.consoleErrors.length === 0,
   still.consoleErrors.slice(0, 3).join(' | '),
 );
+
+/* The promise, stated as a fact rather than as a list. The stylesheet used to
+   name every animated class here, which meant the promise expired the moment a
+   class was added somewhere else. Now the claim is that nothing inside a face
+   animates at all, and that is what gets measured. */
+const stillMoving = await still.evaluate(`
+  [...document.querySelectorAll('.card svg *')]
+    .filter((el) => getComputedStyle(el).animationName !== 'none')
+    .map((el) => el.getAttribute('class') || el.tagName).join(', ')
+`);
+ok('and nothing in the picture animates', stillMoving === '', stillMoving.slice(0, 120));
 still.close();
+
+/* ---------- the other half: the picture moves when nobody asks it to ---------- */
+/* Enhance is off, which is the default, and the lake is still a lake. Each of
+   these has a cause written beside it in 06-motion.css; the test is that the
+   cause is not switched off along with the laminate. */
+const living = await openPage({ port: 9388, userDataDir: '/tmp/fuji-living' });
+if (!living) skipped('test-motion');
+await living.send('Page.enable');
+await living.send('Runtime.enable');
+await living.send('Page.navigate', { url: PAGE });
+await sleep(2500);
+
+/* The state is set, not assumed. The profile this test uses keeps its
+   localStorage between runs, so a click in an earlier run is a stored
+   preference in this one, and a test that reads whatever the page happens to
+   come up with fails for reasons that have nothing to do with the page. */
+const setEnhance = async (on) => {
+  const now = await living.evaluate(`document.documentElement.dataset.enhance`);
+  if ((now === 'on') !== on) {
+    await living.evaluate(`document.getElementById('enhanceBtn').click()`);
+    await sleep(500);
+  }
+  return (
+    (await living.evaluate(`document.documentElement.dataset.enhance`)) === (on ? 'on' : 'off')
+  );
+};
+ok('Enhance is off', await setEnhance(false));
+const running = await living.evaluate(`
+  (() => {
+    const want = ['mist-a', 'mist-b', 'ripple', 'wake', 'water-b', 'refl',
+                  'boat', 'boatman', 'duck', 'wader', 'floater', 'bird'];
+    const out = {};
+    for (const c of want) {
+      const els = [...document.querySelectorAll('.card svg .' + c)];
+      out[c] = els.length + ':' + els.filter((e) => getComputedStyle(e).animationName !== 'none').length;
+    }
+    return JSON.stringify(out);
+  })()
+`);
+const counts = JSON.parse(running);
+const dead = Object.entries(counts).filter(([, v]) => {
+  const [n, live] = v.split(':').map(Number);
+  return n === 0 || live !== n;
+});
+ok(
+  'the lake keeps moving with Enhance off',
+  dead.length === 0,
+  Object.entries(counts)
+    .map(([k, v]) => `${k} ${v}`)
+    .join(' · ') || 'nothing found',
+);
+ok(
+  'a far bird drifts rather than crosses when nothing is switched on',
+  (await living.evaluate(
+    `getComputedStyle(document.querySelector('.card svg .bird')).animationName`,
+  )) === 'drift-far',
+  await living.evaluate(
+    `getComputedStyle(document.querySelector('.card svg .bird')).animationName`,
+  ),
+);
+
+/* Rule 2 over time. Nothing in the scene may repeat at even intervals, and the
+   smallest way to break that is two marks a hand's width apart keeping step.
+   Two things this found, both of which had been true for a long time: the wake
+   and one ripple were both on 23 s, and the six crests of the glitter band —
+   given their periods by `nth-child(2n)` and `nth-child(3n)` — were three
+   pairs of twins.
+
+   Adjacency is what the eye compares, so adjacency is what the rule is about:
+   within 200 CSS pixels (about 190 units of the artwork), two animated marks
+   must not share a period and neither may be a whole multiple of the other.
+   Two exclusions, both of them claims about the picture. A mark wider or
+   taller than 200 px is a surface — a mist band, the glitter path, the ray
+   field — and a surface is not a neighbour of anything. And a mark that is
+   travelling is not a neighbour either: a bird crossing the sky is next to a
+   duck for four seconds and then is not, so its period is a duration of
+   passage, not a step the eye can compare. That is measured, not guessed —
+   anything that moves more than 8 px in three seconds is a traveller.
+
+   This runs with Enhance off, and only with Enhance off. The reeds sway in
+   stands, all blades of one stand on one period, which is correct — a gust
+   moves a stand, not a blade — and telling a stand apart from a pair of
+   neighbours would need a notion of "one object" that the page does not carry. */
+const rhythm = JSON.parse(
+  await living.evaluate(
+    `(async () => {
+      const collect = () =>
+        [...document.querySelectorAll('.card svg *')]
+          .map((el) => {
+            const s = getComputedStyle(el);
+            if (s.animationName === 'none') return null;
+            const r = el.getBoundingClientRect();
+            if (!r.width && !r.height) return null;
+            return {
+              dur: parseFloat(s.animationDuration),
+              x: r.x + r.width / 2,
+              y: r.y + r.height / 2,
+              w: r.width,
+              h: r.height,
+              cls: el.getAttribute('class') || el.tagName,
+            };
+          })
+          .filter(Boolean);
+      const first = collect();
+      await new Promise((r) => setTimeout(r, 3000));
+      const second = collect();
+      const els = first.filter((e, i) => {
+        if (e.w > 200 || e.h > 200) return false;
+        if (!second[i]) return true;
+        return Math.hypot(second[i].x - e.x, second[i].y - e.y) < 8;
+      });
+      const bad = [];
+      for (let i = 0; i < els.length; i++)
+        for (let j = i + 1; j < els.length; j++) {
+          const a = els[i], b = els[j];
+          if (Math.hypot(a.x - b.x, a.y - b.y) > 200) continue;
+          const [hi, lo] = a.dur > b.dur ? [a.dur, b.dur] : [b.dur, a.dur];
+          const equal = Math.abs(a.dur - b.dur) < 0.01;
+          const multiple = Math.abs(hi / lo - Math.round(hi / lo)) < 0.01 && Math.round(hi / lo) > 1;
+          if (equal || multiple)
+            bad.push(
+              \`\${a.cls} (\${a.dur}s, \${Math.round(a.x)},\${Math.round(a.y)}) and \${b.cls} (\${b.dur}s, \${Math.round(b.x)},\${Math.round(b.y)}) \${equal ? 'share' : 'are a multiple of'} a period\`,
+            );
+        }
+      return JSON.stringify({ n: els.length, bad });
+    })()`,
+    { awaitPromise: true },
+  ),
+);
+ok(
+  'no two nearby marks keep step',
+  rhythm.bad.length === 0,
+  `${rhythm.n} marks compared · ${rhythm.bad.slice(0, 3).join(' | ')}`,
+);
+ok(
+  'no page exceptions with the gentle set running',
+  living.exceptions.length === 0,
+  living.exceptions.join(' | '),
+);
+ok('the laminate can be switched on', await setEnhance(true));
+ok(
+  'and then the birds cross',
+  (await living.evaluate(
+    `getComputedStyle(document.querySelector('.card svg .bird')).animationName`,
+  )) === 'glide',
+  await living.evaluate(
+    `getComputedStyle(document.querySelector('.card svg .bird')).animationName`,
+  ),
+);
+living.close();
 finish();
