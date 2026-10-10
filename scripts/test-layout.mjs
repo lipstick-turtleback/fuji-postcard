@@ -17,10 +17,9 @@
    It needs Chrome. If Chrome is not there the test says so and passes -
    a missing browser is not a broken page, and this must not turn a
    machine without Chrome into a red build. */
-import { spawn } from 'node:child_process';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { openPage } from './cdp.mjs';
 
-const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT = 9377;
 const PAGE = new URL('../public/index.html', import.meta.url).href;
 
@@ -36,62 +35,12 @@ const VIEWPORTS = [
   [360, 760, 'phone'],
 ];
 
-let chrome;
-try {
-  chrome = spawn(CHROME, [
-    '--headless=new',
-    `--remote-debugging-port=${PORT}`,
-    '--user-data-dir=/tmp/fuji-layout-test',
-    '--no-sandbox',
-    '--disable-gpu',
-    'about:blank',
-  ]);
-  chrome.on('error', () => {});
-} catch {
-  console.log(`test-layout: no Chrome at ${CHROME} - skipped`);
+const page = await openPage({ port: PORT, userDataDir: '/tmp/fuji-layout-test' });
+if (!page) {
+  console.log('test-layout: no Chrome, or Chrome did not come up - skipped');
   process.exit(0);
 }
-
-let target = null;
-for (let i = 0; i < 120 && !target; i++) {
-  await sleep(250);
-  try {
-    const list = await (await fetch(`http://127.0.0.1:${PORT}/json/list`)).json();
-    target = list.find((t) => t.type === 'page');
-  } catch {
-    /* not up yet */
-  }
-}
-if (!target) {
-  chrome.kill('SIGKILL');
-  console.log('test-layout: Chrome did not come up - skipped');
-  process.exit(0);
-}
-
-const ws = new WebSocket(target.webSocketDebuggerUrl);
-await new Promise((res, rej) => {
-  ws.addEventListener('open', res);
-  ws.addEventListener('error', rej);
-});
-let seq = 0;
-const waiting = new Map();
-const exceptions = [];
-ws.addEventListener('message', (e) => {
-  const msg = JSON.parse(e.data);
-  if (msg.method === 'Runtime.exceptionThrown')
-    exceptions.push(msg.params.exceptionDetails?.exception?.description || msg.params.text);
-  const done = waiting.get(msg.id);
-  if (done) {
-    waiting.delete(msg.id);
-    done(msg);
-  }
-});
-const send = (method, params = {}) =>
-  new Promise((res, rej) => {
-    const id = ++seq;
-    waiting.set(id, (m) => (m.error ? rej(new Error(m.error.message)) : res(m.result)));
-    ws.send(JSON.stringify({ id, method, params }));
-  });
+const { send, exceptions, close } = page;
 
 await send('Page.enable');
 await send('Runtime.enable');
@@ -139,8 +88,7 @@ for (const [w, h, label] of VIEWPORTS) {
 }
 
 await send('Emulation.clearDeviceMetricsOverride');
-ws.close();
-chrome.kill('SIGKILL');
+close();
 
 if (problems.length) {
   console.error(`test-layout: ${problems.length} problem(s)\n${problems.join('\n')}`);

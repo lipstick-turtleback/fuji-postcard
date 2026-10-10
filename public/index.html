@@ -2489,32 +2489,40 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                apart. It is deliberately small and low in contrast — a mark,
                not a caption. Nothing here is invented: 富嶽 (Fugaku) is the
                classical name Hokusai lettered on his own Fuji prints, and
-               3,776 m is the height of the mountain. -->
+               3,776 m is the height of the mountain.
+               The block sits 14 units higher than it did, and its rule 6
+               higher with it. The gilded frame closes at y=579 and y=586, and
+               the place line was set at y=588 — below both of them, so both
+               rules, and the travelling glint that rides the outer one, were
+               drawn straight through the letters. The frame is what makes the
+               card a plate, so the type moves rather than the frame: its
+               baseline now rests 5 units above the inner rule, which is where
+               a line of type wants to sit in the first place. -->
           <g font-family="Georgia,'Times New Roman',serif">
             <g stroke="url(#gold)" opacity=".38" fill="none">
-              <path d="M118 552 H782" stroke-width=".7"/>
-              <path id="ruleGlint" d="M118 552 H782" stroke="url(#goldShine)" stroke-width="1.1"
+              <path d="M118 546 H782" stroke-width=".7"/>
+              <path d="M118 546 H782" stroke="url(#goldShine)" stroke-width="1.1"
                     opacity=".85"/>
-              <path d="M106 552 l4 -3.4 4 3.4 -4 3.4 z M786 552 l4 -3.4 4 3.4 -4 3.4 z"
+              <path d="M106 546 l4 -3.4 4 3.4 -4 3.4 z M786 546 l4 -3.4 4 3.4 -4 3.4 z"
                     stroke="none" fill="url(#gold)" opacity=".55"/>
             </g>
             <g fill="#0b0f1c" opacity=".55" transform="translate(1 1.2)">
-              <text x="118" y="574" font-size="12.5" letter-spacing="2.4">富嶽</text>
-              <text x="450" y="574" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
-              <text x="782" y="574" text-anchor="end" font-size="9.5" letter-spacing="2.2">3,776 M</text>
-              <text x="450" y="588" text-anchor="middle" font-size="7.6" letter-spacing="3.2">KAWAGUCHI-KO · JAPAN</text>
+              <text x="118" y="564" font-size="12.5" letter-spacing="2.4">富嶽</text>
+              <text x="450" y="564" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
+              <text x="782" y="564" text-anchor="end" font-size="9.5" letter-spacing="2.2">3,776 M</text>
+              <text x="450" y="574" text-anchor="middle" font-size="7.6" letter-spacing="3.2">KAWAGUCHI-KO · JAPAN</text>
             </g>
             <g fill="url(#gold)">
-              <text x="118" y="574" font-size="12.5" letter-spacing="2.4" opacity=".82">富嶽</text>
-              <text x="450" y="574" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
-              <text x="782" y="574" text-anchor="end" font-size="9.5" letter-spacing="2.2" opacity=".82">3,776 M</text>
-              <text x="450" y="588" text-anchor="middle" font-size="7.6" letter-spacing="3.2" opacity=".78">KAWAGUCHI-KO · JAPAN</text>
+              <text x="118" y="564" font-size="12.5" letter-spacing="2.4" opacity=".82">富嶽</text>
+              <text x="450" y="564" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
+              <text x="782" y="564" text-anchor="end" font-size="9.5" letter-spacing="2.2" opacity=".82">3,776 M</text>
+              <text x="450" y="574" text-anchor="middle" font-size="7.6" letter-spacing="3.2" opacity=".78">KAWAGUCHI-KO · JAPAN</text>
             </g>
             <g id="wmShine" fill="url(#goldShine)" opacity="0">
-              <text x="118" y="574" font-size="12.5" letter-spacing="2.4">富嶽</text>
-              <text x="450" y="574" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
-              <text x="782" y="574" text-anchor="end" font-size="9.5" letter-spacing="2.2">3,776 M</text>
-              <text x="450" y="588" text-anchor="middle" font-size="7.6" letter-spacing="3.2">KAWAGUCHI-KO · JAPAN</text>
+              <text x="118" y="564" font-size="12.5" letter-spacing="2.4">富嶽</text>
+              <text x="450" y="564" text-anchor="middle" font-size="17" letter-spacing="5.4">MT. FUJI</text>
+              <text x="782" y="564" text-anchor="end" font-size="9.5" letter-spacing="2.2">3,776 M</text>
+              <text x="450" y="574" text-anchor="middle" font-size="7.6" letter-spacing="3.2">KAWAGUCHI-KO · JAPAN</text>
             </g>
           </g>
 
@@ -2882,8 +2890,8 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 const card = document.getElementById('card');
 const goldShine = document.getElementById('goldShine');
 const edgeGlint = document.getElementById('edgeGlint');
-const rails = [...document.querySelectorAll('#edgeGlint .rail')];
-const railsV = [...document.querySelectorAll('#edgeGlint .rail-v')];
+const rails = [...edgeGlint.querySelectorAll('.rail')];
+const railsV = [...edgeGlint.querySelectorAll('.rail-v')];
 const wmShine = document.getElementById('wmShine');
 
 /* =============================================================

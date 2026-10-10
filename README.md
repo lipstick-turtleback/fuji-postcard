@@ -46,9 +46,11 @@ src/
 scripts/
   build.mjs            concatenate the parts into public/index.html
   check.mjs            validate the built page without a browser
+  cdp.mjs              the DevTools client the browser tests share
   test-score.mjs       verify the composition as data
   test-contrast.mjs    keep the palette above WCAG AA
   test-layout.mjs      drive headless Chrome at real window sizes
+  test-plate.mjs       keep the lettering off the gilded frame
   perf.mjs             measure frame times over CDP
   serve.mjs            dependency-free static server
 public/
@@ -150,6 +152,16 @@ sat 101 px below the fold while the card was in it, and the page looked like a
 page that simply needed scrolling. A caption and a colophon may scroll; the
 controls may not. If Chrome is not installed the test says so and passes — a
 missing browser is not a broken page.
+
+`scripts/test-plate.mjs` measures the lettering against the gilded frame, in the
+artwork's own user units, and fails if a rule crosses a letter or comes within a
+unit of one. The plate inscription had been set at y=588, below both frame rules
+at 579 and 586, so both rules and the bright glint that rides the outer one were
+drawn straight through `KAWAGUCHI-KO · JAPAN`. Every screenshot of the card was
+taken at a size where that is four pixels, and the type is deliberately faint, so
+it survived. The frame is what makes the card a plate, so the type moved: its
+baseline now rests 5 units above the inner rule, and the closest letter box — the
+ink shadow, which is set 1.2 units lower — sits 1.5 units clear of it.
 
 Headless Chrome cannot verify the audio itself: its `AudioContext` clock never
 advances, so nothing scheduled is ever rendered. What is verified is that the

@@ -108,7 +108,8 @@ project built tools to stop being fooled:
   any code, ids defined and never used.
 - **`npm run test`** — check, plus the score lifted out of the audio IIFE and
   evaluated as plain data (80 bars, ten phrases, 305 notes, 4.85 min), plus a
-  contrast check on the ink against the paper, plus Biome and Prettier.
+  contrast check on the ink against the paper, plus the lettering measured
+  against the gilded frame in user units, plus Biome and Prettier.
 - **`npm run perf`** — a zero-dependency Chrome DevTools Protocol harness that
   puts the pointer on the card so the lighting model actually runs, then
   samples `requestAnimationFrame` intervals. Screenshots cannot tell you any of
@@ -123,6 +124,12 @@ The habits that keep paying off:
 - **Negative-test every new check** by deliberately breaking the thing it is
   supposed to catch. A check that passes on a broken page is worse than none.
 - **Keep a control render** when diagnosing a visual discrepancy.
+- **Measure geometry in the artwork's own units.** The gilded frame rules and
+  the glint that rides one of them were drawn straight through the plate
+  inscription for the whole life of the inscription. At the size people look at
+  the card that is four pixels of faint type, and no screenshot at any zoom was
+  going to make it a fact. `scripts/test-plate.mjs` compares every `<text>` box
+  with every rule band and reports the clearance in user units.
 - **Read page exceptions over CDP, not just pixels.** A `ReferenceError` during
   startup once left a page that looked completely fine while tilt, flip, export
   and every shortcut were dead.

@@ -1,8 +1,8 @@
 const card = document.getElementById('card');
 const goldShine = document.getElementById('goldShine');
 const edgeGlint = document.getElementById('edgeGlint');
-const rails = [...document.querySelectorAll('#edgeGlint .rail')];
-const railsV = [...document.querySelectorAll('#edgeGlint .rail-v')];
+const rails = [...edgeGlint.querySelectorAll('.rail')];
+const railsV = [...edgeGlint.querySelectorAll('.rail-v')];
 const wmShine = document.getElementById('wmShine');
 
 /* =============================================================
