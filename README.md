@@ -421,7 +421,12 @@ Headless Chrome will not let anyone _hear_ the soundtrack, but with
 `--autoplay-policy=no-user-gesture-required` its `AudioContext` clock runs, so
 the graph can be measured instead: how many nodes it creates, when each was
 told to start, and whether the melody keeps its place. That is how both
-soundtrack bugs were reproduced, and both are now asserted.
+soundtrack bugs were reproduced, and both are now asserted. The volume slider is
+measured at the same level: the master gain — found as the node that feeds the
+compressor, not the one at the speakers, because the one at the speakers is the
+`?silent` gate and is deliberately closed — reads 0.303 at 55, 0.000 at 0 and
+0.550 at 100. A slider whose fill tracks its value while the gain never changes is
+the easiest lie on a page to tell.
 
 The page answers to `?silent`: the piece is built, the clock runs, the meter
 moves, and the last gain before the speakers is closed, so nothing reaches the

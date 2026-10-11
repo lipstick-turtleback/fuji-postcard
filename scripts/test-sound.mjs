@@ -70,6 +70,15 @@ await sound.send('Page.addScriptToEvaluateOnNewDocument', {
         }
         return er(v, t);
       };
+      // The master is the gain that feeds the compressor. Not the one at the
+      // speakers: downstream of the compressor sits the gate that ?silent
+      // closes, and that node is deliberately at zero for every test run.
+      const c = g.connect.bind(g);
+      g.connect = (dest, ...rest) => {
+        if (dest && dest.constructor && dest.constructor.name === 'DynamicsCompressorNode')
+          window.__master = g;
+        return c(dest, ...rest);
+      };
       return g;
     };`,
 });
@@ -138,6 +147,29 @@ ok(
   behind === 0,
   `${behind} event(s) scheduled in the past`,
 );
+/* The slider has to move the sound, not only its own paint. The volume control
+   is the one place where the page promises a quantity, and a promise of a
+   quantity is the easiest thing on a page to fake: the fill can track the value
+   while the gain never changes. */
+const gain = () => sound.evaluate(`window.__master ? window.__master.gain.value : null`);
+const setVol = async (v) => {
+  await sound.evaluate(
+    `(() => { const el = document.getElementById('vol'); el.value = ${v}; el.dispatchEvent(new Event('input', { bubbles: true })); return 1 })()`,
+  );
+  await sleep(500);
+};
+const at55 = await gain();
+await setVol(0);
+const at0 = await gain();
+await setVol(100);
+const at100 = await gain();
+await setVol(55);
+ok(
+  'the slider moves the sound, not only its own paint',
+  at55 !== null && at0 !== null && at100 !== null && at0 < 0.02 && at100 > 0.4 && at55 > at0,
+  `master gain ${at55.toFixed(3)} at 55, ${at0.toFixed(3)} at 0, ${at100.toFixed(3)} at 100`,
+);
+
 ok(
   'no page exceptions in the soundtrack pass',
   sound.exceptions.length === 0,
