@@ -395,6 +395,22 @@ html[data-enhance="on"] .bird.b3 {
     transform: translate(0.4px, -0.5px);
   }
 }
+/* And the petal going somewhere. The distance is the petal's own, written into
+   --dx and --dy by the data, and the period is longer than anybody will watch:
+   a hand's width over a minute or more, easing back and forth, so the return is
+   not a return but the next gust. Nothing here repeats at an even interval —
+   see Floaters.data.mjs for what these four periods were chosen against. */
+.floater-drift {
+  animation: drift-on-water 101s ease-in-out infinite alternate;
+}
+@keyframes drift-on-water {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(var(--dx, 9px), var(--dy, 1px));
+  }
+}
 /* Two ducks, two periods. They sit eight units apart, so a shared period
    would read as one bird reflected from the other. */
 .duck {

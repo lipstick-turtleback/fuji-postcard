@@ -194,6 +194,12 @@ The habits that keep paying off:
   the cast is the part placed from data. The foxing, the grain and the
   cancellation rings lie over the lettering on purpose; that is what sixty years
   and a post office look like.
+- **A rhythm picked from memory is a rhythm picked against half the page.** The
+  page moves on forty-six periods across two tiers. Choosing a new one by
+  remembering the neighbours — the crests, the wake, the fish — produced four
+  collisions in a row: two with birds two hundred units up in open sky, two with
+  the duck's 11.9 s at a multiple nobody would say out loud. The only honest way
+  to pick a period is to write the whole list down and subtract.
 - **A mark that changes nothing is a mark that is not there.** The dead-rule
   habit has a twin in the data: a placement can be drawn, clipped, painted over
   and seen by nobody. The middle fish was ringing on the shore — under the near

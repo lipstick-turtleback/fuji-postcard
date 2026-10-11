@@ -365,7 +365,12 @@ page before the question:
   from the file and it is 18.8%. The laminate is switched off for the
   comparison, and the file is put into the same rest state the page is in —
   the plate carries its animation rules and runs them, and comparing a still
-  page to a turning file is 17% ray field and nothing else.
+  page to a turning file is 17% ray field and nothing else. The photograph
+  cannot see a motion that is missing, because both pictures are still, so the
+  twenty animation names the page's stylesheet declares for marks on the face
+  are also looked for in the file's own stylesheet. The export decides what
+  travels by matching rule text against a hand-kept list of class names, which
+  is exactly the kind of list that falls behind.
 - `scripts/test-cast.mjs` reads the data the build places and asks one question
   with a yes/no answer: is any mark the same mark twice? Two placements of one
   shape within 40 units have to differ visibly — by rotation, by scale, by skew

@@ -133,6 +133,31 @@ const diffs = {};
    with it on would compare a picture against a picture of a picture. */
 await evaluate(`document.querySelector('.foil').style.display = 'none'`);
 await new Promise((r) => setTimeout(r, 200));
+
+/* Rule 6 says the exported plate is the full artwork. The export decides which
+   stylesheet rules travel by matching their text against a list of class names
+   kept by hand, so a motion the page has and the file does not is invisible to
+   every pixel comparison — both pictures are still, and agree. The names are
+   taken from the running page on both tiers and looked for in the bytes. */
+const motion = await evaluate(`(() => {
+  const names = new Set();
+  const walk = (rules) => {
+    for (const r of rules) {
+      if (r.cssRules && r.constructor.name !== 'CSSStyleRule') { walk(r.cssRules); continue; }
+      if (!r.selectorText) continue;
+      const nm = r.style && r.style.animationName;
+      if (!nm || nm === 'none') continue;
+      for (const sel of r.selectorText.split(',')) {
+        try {
+          if (document.querySelector('.face svg ' + sel.trim())) { names.add(nm); break; }
+        } catch { /* a selector that cannot be re-rooted */ }
+      }
+    }
+  };
+  for (const sheet of document.styleSheets) { try { walk(sheet.cssRules); } catch {} }
+  return [...names].sort();
+})()`);
+
 for (const face of ['front', 'back']) {
   // the export is the face you are looking at, so the face has to be turned
   // over before the second file is asked for
@@ -147,6 +172,12 @@ for (const face of ['front', 'back']) {
   }
   exports[face] = got.text;
   const svg = got.text;
+
+  const missing = motion.filter((n) => !svg.includes(n));
+  if (missing.length)
+    problems.push(
+      `${face}: the plate loses ${missing.length} motion(s) the page has — ${missing.join(', ')}`,
+    );
 
   const rect = JSON.parse(
     await evaluate(
@@ -267,7 +298,8 @@ if (problems.length) {
 }
 console.log(
   `test-export: both faces exported — ${exports.front.length} + ${exports.back.length} bytes, ` +
-    `${classRules.front.rules.length}/${classRules.back.rules.length} class rules and matching shape counts intact, ` +
+    `${classRules.front.rules.length}/${classRules.back.rules.length} class rules, ` +
+    `${motion.length} motions on the page and all of them in the file, ` +
     `both open clean, and the plates are the pictures: front ${diffs.front?.pctDiffering}% of pixels ` +
     `differ by any amount and ${diffs.front?.pctOver}% by more than 24/255 (worst ${diffs.front?.worst}), ` +
     `back ${diffs.back?.pctDiffering}% / ${diffs.back?.pctOver}% (worst ${diffs.back?.worst})`,

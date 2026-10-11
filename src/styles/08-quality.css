@@ -26,7 +26,8 @@ html[data-enhance="off"] .foil {
 /* The picture's own motion. Everything in the SVG is stopped when Enhance is
    off except these: the mist, the surface and what moves with it - the wake,
    the glitter band on it, the reflections, the boat and the man poling it, the two
-   ducks, the heron, the petals lying on the lake, and the birds in the far
+   ducks, the heron, the petals lying on the lake — both their bob and their
+   drift across it — and the birds in the far
    sky, three petals falling off the branch in still air, and three places
    where something comes up under the surface. Each of those is something the
    lake does, not something the card
@@ -38,7 +39,7 @@ html[data-enhance="off"]
   svg
   *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.boat):not(
     .boatman
-  ):not(.duck):not(.wader):not(.floater):not(.bird):not(.slow):not(.fish) {
+  ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.slow):not(.fish) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
