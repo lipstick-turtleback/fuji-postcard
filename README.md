@@ -90,19 +90,22 @@ scripts/
   look.mjs             photograph one mark, big, for the questions pixels answer
   serve.mjs            dependency-free static server
 public/
-  index.html           the built page (committed, so it can be opened directly)
-  index.min.html       the same page with its comments taken out (the shipped one)
+  index.html           the built page, comments taken out — the one a host serves
+  index-full.html      the same page with the reasoning written beside every mark
 ```
 
-`src/` is the truth. `public/index.html` is generated, and it is committed on
-purpose: the repo stays openable with a double-click, and `npm run check`
-fails if it has drifted from `src/`. `public/index.min.html` comes out of the same
-string in the same run — the same page with 152 markup comments, 55 CSS comment
-blocks and 17 KB of JS comments taken out, the indentation trimmed, and the
-stylesheet and the two bundles put through esbuild's minifier: 117 KB rather than 233. Both are committed, both fail `npm run check` if they drift, and
-`test-build.mjs` proves the smaller one is the same document (1,092 nodes walked
-and compared), the same stylesheet (284 rules, selectors, keyframes and all) and
-the same picture (0 of 1,657,150 pixels differ).
+`src/` is the truth. Both files under `public/` are generated, in one run, from one
+string, and both are committed: the repo stays openable with a double-click, and
+`npm run check` fails if either has drifted from `src/`. `index-full.html` is the
+artwork with its argument — 152 markup comments, 55 CSS comment blocks and 17 KB
+of JS comments. `index.html` is the same page with all of that taken out, the
+indentation trimmed, and the stylesheet and the two bundles put through esbuild's
+minifier: 119 KB rather than 239. The names are the point — a static host answers
+`/` with `index.html`, so the file every visitor downloads is the small one and no
+rewrite rule is needed to make that true. `test-build.mjs` proves the smaller one
+is the same document (1,096 nodes walked and compared), the same stylesheet (296
+rules, selectors, keyframes and all) and the same picture (0 of 1,657,150 pixels
+differ).
 
 ### The front is twelve fragments, in paint order
 
@@ -240,7 +243,7 @@ than 30°: the crater's lip survives that at 24.5°, the old chords did not at
 ## Commands
 
 ```bash
-npm run build      # src/ → public/index.html and public/index.min.html
+npm run build      # src/ → public/index.html and public/index-full.html
 npm run dev        # build, then serve on http://localhost:5173
 npm run check      # fail if the built file is stale, then validate it
 npm run lint       # biome over the JS (scripts/ and src/script/)
@@ -617,7 +620,14 @@ npx vercel        # preview
 npx vercel --prod # production
 ```
 
-No server, no environment variables, no rewrite rules.
+No server, no environment variables, no rewrite rules — and that last one is why
+the build writes two files. A static host answers the root of `public/` with
+`index.html`, so the file at that name is the one every visitor downloads, and
+the build puts the page with its comments taken out there: 119 KB rather than the
+239 KB of the annotated `index-full.html`. A rewrite sending `/` somewhere else
+would be one more thing that can quietly stop being true, so `test-build.mjs`
+asserts the opposite instead — that `outputDirectory` is `public`, that nothing
+rewrites `/`, and that the file named `index.html` is the smaller of the two.
 
 ## A note on the artwork
 

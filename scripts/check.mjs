@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Verify public/index.html without a browser and without dependencies.
+/* Verify a built page without a browser and without dependencies.
  *
  * The page is one file of inline SVG, CSS and JS, and the browser is very
  * forgiving about the mistakes that actually break it — an unterminated
@@ -7,15 +7,25 @@
  * silently swallow every filter defined after it, and the art just stops
  * rendering. These checks report the exact line instead.
  *
- *   node scripts/check.mjs
+ *   node scripts/check.mjs                     the annotated page
+ *   node scripts/check.mjs public/index.html   the shipped one
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pathProblems } from './svg-check.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const file = join(root, 'public', 'index.html');
+/* Which page, and why the default is the annotated one. Half of what this file
+   looks for lives inside comments — an HTML comment closed with the two
+   characters that end a C comment silently swallows every filter defined after
+   it — and the only file where that can be seen is the one that still has its
+   comments. `npm run check` therefore runs this twice: once on
+   public/index-full.html, once on public/index.html, which has no comments left
+   to go wrong and the same tags, paths and <use> references to get right. */
+const file = process.argv[2]
+  ? resolve(root, process.argv[2])
+  : join(root, 'public', 'index-full.html');
 const html = readFileSync(file, 'utf8');
 const readmeFile = join(root, 'README.md');
 const readme = readFileSync(readmeFile, 'utf8');
@@ -140,8 +150,13 @@ const unused = [...ids].filter(([name]) => !named.has(name));
 // "S — Save the plate" being advertised for the whole life of the README
 // while only F and M were ever wired up.
 const scripts = [...html.matchAll(/<script\b[\s\S]*?<\/script>/gi)].map((m) => m[0]).join('\n');
+// `.key`, not `e.key`: this file is run on the shipped page as well as the
+// annotated one, and the shipped page has been through a minifier that renames
+// every local. The handler used to be found by its variable's letter, which made
+// the check pass on one file and fail on the other for a reason that had nothing
+// to do with whether the shortcut works.
 const handled = new Set(
-  [...scripts.matchAll(/e\.key\s*===\s*['"](.+?)['"]/g)].map((m) => m[1].toUpperCase()),
+  [...scripts.matchAll(/\.key\s*===\s*['"](.+?)['"]/g)].map((m) => m[1].toUpperCase()),
 );
 for (const m of markup.matchAll(/<kbd[^>]*>\s*([A-Za-z])\s*<\/kbd>/g)) {
   const key = m[1].toUpperCase();

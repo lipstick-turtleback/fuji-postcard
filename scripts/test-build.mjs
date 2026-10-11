@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /* The shipped page has to be the same picture.
 
-   `npm run build` writes two files from one string: `public/index.html`, which
-   carries the artwork's reasoning in 152 markup comments, 55 CSS blocks and
-   17 KB of JS comments, and `public/index.min.html`, which carries none of it.
-   Half the bytes go. That is a build step whose whole job is to change the file
-   without changing the page, and the ways it can fail are quiet: a tidy that
-   joins two words inside a `<text>` element, a minifier that decides a rule it
-   does not understand is dead, a comment that ends where a `-->` was part of an
-   expression.
+   `npm run build` writes two files from one string: `public/index-full.html`,
+   which carries the artwork's reasoning in 152 markup comments, 55 CSS blocks
+   and 17 KB of JS comments, and `public/index.html`, which carries none of it
+   and is the file a static host serves at the root. Half the bytes go. That is a
+   build step whose whole job is to change the file without changing the page,
+   and the ways it can fail are quiet: a tidy that joins two words inside a
+   `<text>` element, a minifier that decides a rule it does not understand is
+   dead, a comment that ends where a `-->` was part of an expression.
 
    So the shipped page is compared to the annotated one at three depths.
 
@@ -38,8 +38,8 @@ import { openPage, silentPage } from './cdp.mjs';
 import { checks, skipped } from './checks.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const annotatedPath = join(root, 'public', 'index.html');
-const shippedPath = join(root, 'public', 'index.min.html');
+const annotatedPath = join(root, 'public', 'index-full.html');
+const shippedPath = join(root, 'public', 'index.html');
 const { ok, finish } = checks('test-build');
 
 const annotated = readFileSync(annotatedPath, 'utf8');
@@ -47,7 +47,7 @@ let shipped;
 try {
   shipped = readFileSync(shippedPath, 'utf8');
 } catch {
-  ok('the shipped page exists', false, 'public/index.min.html was not written — run npm run build');
+  ok('the shipped page exists', false, 'public/index.html was not written — run npm run build');
   finish();
   process.exit(1);
 }
@@ -74,6 +74,21 @@ ok(
   'and it is smaller than the annotated page by more than a quarter',
   bytes(shipped) < 0.75 * bytes(annotated),
   `${bytes(shipped).toLocaleString()} of ${bytes(annotated).toLocaleString()} bytes`,
+);
+
+/* And the naming has to be what does the serving. A static host answers the root
+   of `outputDirectory` with `index.html`, so the smaller page is worth having
+   under that name and not another — and if a rewrite for `/` is ever added to
+   point somewhere else, the rule and the two filenames can disagree without
+   anything failing. This is the same claim seen from the other side: the check
+   above proves the file called index.html is the smaller one, this one proves
+   nothing overrides it. */
+const vercel = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8'));
+const rewritten = (vercel.rewrites ?? []).find((r) => r.source === '/');
+ok(
+  'and the deployment reaches it by name, with nothing rewriting the root',
+  vercel.outputDirectory === 'public' && rewritten === undefined,
+  `outputDirectory ${vercel.outputDirectory} · ${rewritten ? `/ → ${rewritten.destination}` : 'no rewrite for /'}`,
 );
 
 /* Two browsers, because one flag is the difference between the two questions.

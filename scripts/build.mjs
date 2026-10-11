@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { rollup } from 'rollup';
-/* Build public/index.html from the parts under src/.
+/* Build the postcard page from the parts under src/.
  *
  * The page is one self-contained file on purpose: it works offline, it has no
  * runtime dependencies, and the "save the plate" control serialises the live
@@ -11,9 +11,11 @@ import { rollup } from 'rollup';
  * artefact. No bundler, no framework — the parts are plain CSS, SVG and JS,
  * each of which a linter can read on its own.
  *
- * Two artefacts come out of one string: the annotated page, which is what the
- * suite reads and what the artwork's reasoning lives in, and the shipped one
- * with the reasoning taken out. See the minify step at the bottom.
+ * Two artefacts come out of one string. `public/index-full.html` is the
+ * annotated page, the artwork with its reasoning written beside every mark;
+ * `public/index.html` is the same page with the reasoning taken out, and it is
+ * the one a name on a browser bar reaches for. See the minify step at the
+ * bottom.
  *
  *   node scripts/build.mjs          write both files
  *   node scripts/build.mjs --check  fail if either committed file is stale
@@ -24,7 +26,8 @@ import './register-svelte.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const src = join(root, 'src');
-const out = join(root, 'public', 'index.html');
+const fullOut = join(root, 'public', 'index-full.html');
+const servedOut = join(root, 'public', 'index.html');
 
 const read = (p) => `${readFileSync(join(src, p), 'utf8').replace(/\s+$/, '')}\n`;
 
@@ -199,11 +202,17 @@ if (left) {
   process.exit(1);
 }
 
-/* The shipped artefact. `public/index.html` is the artwork with its reasoning
-   written beside every mark — 152 SVG comments, 55 CSS blocks, 17 KB of JS
-   comments, 35% of the file. `public/index.min.html` is the same page with the
+/* The shipped artefact. `public/index-full.html` is the artwork with its
+   reasoning written beside every mark — 152 SVG comments, 55 CSS blocks, 17 KB
+   of JS comments, 35% of the file. `public/index.html` is the same page with the
    reasoning taken out: comments gone, indentation gone, and the stylesheet and
    the two bundles put through esbuild's minifier.
+
+   The names are the argument for the split. A static host serves the directory
+   root from `index.html`, so the file at that name is the one every visitor
+   downloads, and it should be the smaller one. Keeping the annotated page under
+   its own name instead of rewriting `/` to it means the deployment needs no
+   rule, and a rule nobody checks is a rule that quietly stops being true.
 
    Both are built from the same string, in the same run, so the annotated page
    cannot drift from the shipped one — and `test-build.mjs` compares the two
@@ -222,8 +231,6 @@ const tidy = (markup) =>
     .map((line) => line.trim())
     .filter((line) => line !== '')
     .join('\n');
-
-const minOut = join(root, 'public', 'index.min.html');
 
 const minify = async (page) => {
   const esbuild = await import('esbuild');
@@ -246,35 +253,35 @@ const minify = async (page) => {
 };
 
 if (process.argv.includes('--check')) {
-  if (!existsSync(out)) {
+  if (!existsSync(fullOut)) {
+    console.error('check: public/index-full.html does not exist — run npm run build');
+    process.exit(1);
+  }
+  if (readFileSync(fullOut, 'utf8') === html) {
+    console.log('check: public/index-full.html is up to date');
+  } else {
+    console.error('check: public/index-full.html is stale — run npm run build');
+    process.exit(1);
+  }
+  const min = await minify(html);
+  if (!existsSync(servedOut)) {
     console.error('check: public/index.html does not exist — run npm run build');
     process.exit(1);
   }
-  if (readFileSync(out, 'utf8') === html) {
-    console.log('check: public/index.html is up to date');
-  } else {
+  if (readFileSync(servedOut, 'utf8') !== min) {
     console.error('check: public/index.html is stale — run npm run build');
     process.exit(1);
   }
-  const min = await minify(html);
-  if (!existsSync(minOut)) {
-    console.error('check: public/index.min.html does not exist — run npm run build');
-    process.exit(1);
-  }
-  if (readFileSync(minOut, 'utf8') !== min) {
-    console.error('check: public/index.min.html is stale — run npm run build');
-    process.exit(1);
-  }
-  console.log('check: public/index.min.html is up to date');
+  console.log('check: public/index.html is up to date');
 } else {
-  writeFileSync(out, html);
+  writeFileSync(fullOut, html);
   const min = await minify(html);
-  writeFileSync(minOut, min);
+  writeFileSync(servedOut, min);
   const bytes = Buffer.byteLength(html);
   const minBytes = Buffer.byteLength(min);
   console.log(
-    `build: public/index.html — ${bytes.toLocaleString()} bytes, ` +
-      `public/index.min.html — ${minBytes.toLocaleString()} bytes ` +
-      `(${((100 * minBytes) / bytes).toFixed(0)}% of it, ${((bytes - minBytes) / 1024).toFixed(0)} KB of comments and indentation taken out)`,
+    `build: public/index.html — ${minBytes.toLocaleString()} bytes (served), ` +
+      `public/index-full.html — ${bytes.toLocaleString()} bytes ` +
+      `(the shipped page is ${((100 * minBytes) / bytes).toFixed(0)}% of it, ${((bytes - minBytes) / 1024).toFixed(0)} KB of comments and indentation taken out)`,
   );
 }

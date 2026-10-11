@@ -91,9 +91,11 @@ down the left edge.
 
 ## How it is put together
 
-`public/index.html` is a generated artefact and is committed on purpose, so the
-repo can be opened with no build step. It is concatenated from parts by
-`scripts/build.mjs`:
+`public/index.html` and `public/index-full.html` are generated artefacts and are
+committed on purpose, so the repo can be opened with no build step: the first is
+the page with its comments taken out, which is the one a host serves at `/`, and
+the second is the same page with the artwork's reasoning written beside every
+mark. Both are concatenated from parts by `scripts/build.mjs`:
 
 | Part                       | Role                                                         |
 | -------------------------- | ------------------------------------------------------------ |
