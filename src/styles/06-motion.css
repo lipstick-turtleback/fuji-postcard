@@ -226,6 +226,81 @@ html[data-enhance="on"] .petal {
   }
 }
 
+/* Everything the water holds, and everything that touches it.
+
+   The lake already moved: the glitter band, the wake, the ripples off the
+   paddle, the boat, the ducks, the petals lying on the surface. What did not
+   move was the rest of the water — the gate mirrored under itself, the two dark
+   smears the ducks leave, the mountain's own reflection, and every place where
+   a post, a bird's legs or a hull meets the surface. Those were drawn as marks
+   of water and then painted as if the water were glass, which is the same
+   mistake as a bird that is animated and goes nowhere: the class was there, the
+   animation was not.
+
+   A reflection on water does not sit still and does not stretch evenly: the
+   surface slides it sideways a little and pulls it longer and shorter about the
+   waterline, so the reflection is one keyframe doing both, with the amounts and
+   the period on the element. The transform goes on a group wrapped around the
+   mirrored mark, never on the mark itself: a CSS transform replaces a transform
+   attribute, and the mirror *is* an attribute — `scale(1 -0.5)` about the
+   waterline. The origin is the top of the mark's own box, which is where the
+   waterline is, so the reflection is hinged where it touches the water and the
+   free end is what moves.
+
+   Where something stands in the water the surface is not flat against it: the
+   rings at the foot of a post, the arcs at a heron's legs, the pale strokes the
+   ducks keep, all of them brighten and settle. They breathe between 0.62 and 1
+   of themselves rather than between 0.22 and 0.46 like the boat's ripples,
+   because these marks were drawn at their final strength and the shimmer is not
+   allowed to dim a picture that was already right.
+
+   The bands laid over the gate's reflection are the surface itself, and they
+   slide: the reflection moves under them and they move across it, which is what
+   makes the pair read as water rather than as a red gate with a red smear below
+   it.
+
+   Fifteen periods, none of them free: the water is the most crowded part of the
+   picture and the rhythm probe compares anything within 200 css px, which at
+   this viewport is most of the card. */
+.reflection {
+  animation: reflection var(--rdur, 31.5s) ease-in-out infinite alternate;
+  animation-delay: var(--rdelay, 0s);
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+}
+@keyframes reflection {
+  from {
+    transform: translateX(calc(var(--wob, 0.4px) * -1)) scaleY(calc(1 - var(--stretch, 0.008)));
+  }
+  to {
+    transform: translateX(var(--wob, 0.4px)) scaleY(calc(1 + var(--stretch, 0.008)));
+  }
+}
+.ring {
+  animation: ring var(--rdur, 23s) ease-in-out infinite alternate;
+  animation-delay: var(--rdelay, 0s);
+}
+@keyframes ring {
+  from {
+    opacity: 0.62;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.band {
+  animation: band var(--rdur, 27.6s) ease-in-out infinite alternate;
+  animation-delay: var(--rdelay, 0s);
+}
+@keyframes band {
+  from {
+    transform: translateX(calc(var(--drift, 1.2px) * -1));
+  }
+  to {
+    transform: translateX(var(--drift, 1.2px));
+  }
+}
+
 /* grass and reeds: a breath of wind, not a gale */
 .sway-a,
 .sway-b {

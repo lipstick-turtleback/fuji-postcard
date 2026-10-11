@@ -52,7 +52,16 @@ html[data-enhance="off"] .foil {
    and the birds over the lake. The laminate takes that to half a degree and
    three quarters of a unit. Exempting the branch but not its flowers would make
    the flowers come loose from a moving branch, and exempting the flowers but not
-   the branch would swing them on a branch that is not moving. */
+   the branch would swing them on a branch that is not moving.
+
+   `.reflection`, `.ring` and `.band` are the water itself: the gate and the ducks
+   mirrored, the mountain's own mirror, the rings where the posts stand in the
+   lake and where a heron is standing, and the two bands the surface lays across
+   the gate's reflection. They are exempt for the reason the mist and the glitter
+   band were exempted first — a lake does not stop moving because nobody switched
+   anything on — and they were a defect for the same reason: the water had been
+   drawn with marks that mean movement, rings and mirrors, and then held still, so
+   the shore read as a painting of a lake rather than as one. */
 html[data-enhance="off"]
   .face
   svg
@@ -60,7 +69,7 @@ html[data-enhance="off"]
     .boatman
   ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
     .petal-sway
-  ):not(.fish):not(.branch):not(.bloom) {
+  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field

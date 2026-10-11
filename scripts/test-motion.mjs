@@ -80,6 +80,9 @@ const WANT = [
   'fish',
   'branch',
   'bloom',
+  'reflection',
+  'ring',
+  'band',
 ];
 
 /* Where every one of them is with motion switched off. The same question gets
@@ -238,6 +241,35 @@ ok(
   'and each bird drifts its own distance, far enough to be missed and found',
   birdDrift.n === 3 && birdDrift.own === 3 && birdDrift.reach.every((r) => r >= 4),
   `${birdDrift.own} different drifts · ${birdDrift.reach.map((r) => r.toFixed(1)).join(' ')} units between the extremes`,
+);
+
+/* The water holds four mirrors — the mountain, the gate, and the two smears the
+   ducks leave — and a mirror that only changes its opacity is a mirror of a
+   frozen lake. Each is asked how far its own far edge actually travels: the
+   sideways slide plus the stretch about the waterline, which is what the
+   keyframe promises between its two extremes. The distance is measured rather
+   than the percentage because the mountain's mirror is 117 units deep and the
+   gate's is 14, so the same percentage of stretch is a very different amount of
+   picture, and it is the amount that has to be enough. */
+const mirrors = JSON.parse(
+  await living.evaluate(`(() => {
+    const els = [...document.querySelectorAll('.card svg .reflection')];
+    const own = new Set();
+    const reach = [];
+    for (const e of els) {
+      const s = getComputedStyle(e);
+      const wob = parseFloat(s.getPropertyValue('--wob'));
+      const stretch = parseFloat(s.getPropertyValue('--stretch'));
+      own.add([s.animationDuration, s.animationDelay, wob, stretch].join('|'));
+      reach.push(2 * wob + 2 * stretch * e.getBBox().height);
+    }
+    return JSON.stringify({ n: els.length, own: own.size, reach });
+  })()`),
+);
+ok(
+  'and the lake moves its reflections, not just their brightness',
+  mirrors.n === 4 && mirrors.own === 4 && mirrors.reach.every((r) => r >= 0.8),
+  `${mirrors.n} mirrors · ${mirrors.own} different motions · ${mirrors.reach.map((r) => r.toFixed(2)).join(' ')} units at the far edge`,
 );
 
 /* The branch and its flowers move in still air too, at a fifth of the amplitude

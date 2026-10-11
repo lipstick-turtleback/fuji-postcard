@@ -87,15 +87,25 @@
                  the clip is applied inside the mirrored space, so the snow
                  cannot spill outside the reflected body of the mountain -->
             <g class="refl" mask="url(#reflMask)">
-              <g transform="matrix(1 0 0 -0.46 0 590)">
-                <g clip-path="url(#clipFuji)">
-                  <use href="#fujiPath" fill="#333b60"/>
-                  <path d="M336 126 H564 V206
-                           C560 220 552 236 542 238 C532 240 528 222 518 222
-                           C508 222 504 248 492 250 C480 252 476 230 466 230
-                           C456 230 452 254 440 256 C428 258 424 234 414 234
-                           C404 234 400 250 388 248 C376 246 348 226 336 218 Z" fill="#b4c2d6"/>
-                  <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
+              <!-- the mirror itself, hinged at the waterline: the mountain's
+                   reflection is slid sideways half a unit and pulled between
+                   0.8% shorter and 0.8% longer over 47 seconds, which is the
+                   slowest thing on the card and the only reason the mirror is a
+                   mirror. the group is between the mask and the mirror matrix:
+                   the mask's bands hold still, the reflection moves under them,
+                   and the matrix that turns the mountain over stays untouched,
+                   because a CSS transform on that element would replace it -->
+              <g class="reflection" style="--wob: .4px; --stretch: .008; --rdur: 47.4s; --rdelay: -19s">
+                <g transform="matrix(1 0 0 -0.46 0 590)">
+                  <g clip-path="url(#clipFuji)">
+                    <use href="#fujiPath" fill="#333b60"/>
+                    <path d="M336 126 H564 V206
+                             C560 220 552 236 542 238 C532 240 528 222 518 222
+                             C508 222 504 248 492 250 C480 252 476 230 466 230
+                             C456 230 452 254 440 256 C428 258 424 234 414 234
+                             C404 234 400 250 388 248 C376 246 348 226 336 218 Z" fill="#b4c2d6"/>
+                    <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
+                  </g>
                 </g>
               </g>
             </g>

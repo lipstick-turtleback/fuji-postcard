@@ -930,6 +930,81 @@ html[data-enhance="on"] .petal {
   }
 }
 
+/* Everything the water holds, and everything that touches it.
+
+   The lake already moved: the glitter band, the wake, the ripples off the
+   paddle, the boat, the ducks, the petals lying on the surface. What did not
+   move was the rest of the water — the gate mirrored under itself, the two dark
+   smears the ducks leave, the mountain's own reflection, and every place where
+   a post, a bird's legs or a hull meets the surface. Those were drawn as marks
+   of water and then painted as if the water were glass, which is the same
+   mistake as a bird that is animated and goes nowhere: the class was there, the
+   animation was not.
+
+   A reflection on water does not sit still and does not stretch evenly: the
+   surface slides it sideways a little and pulls it longer and shorter about the
+   waterline, so the reflection is one keyframe doing both, with the amounts and
+   the period on the element. The transform goes on a group wrapped around the
+   mirrored mark, never on the mark itself: a CSS transform replaces a transform
+   attribute, and the mirror *is* an attribute — `scale(1 -0.5)` about the
+   waterline. The origin is the top of the mark's own box, which is where the
+   waterline is, so the reflection is hinged where it touches the water and the
+   free end is what moves.
+
+   Where something stands in the water the surface is not flat against it: the
+   rings at the foot of a post, the arcs at a heron's legs, the pale strokes the
+   ducks keep, all of them brighten and settle. They breathe between 0.62 and 1
+   of themselves rather than between 0.22 and 0.46 like the boat's ripples,
+   because these marks were drawn at their final strength and the shimmer is not
+   allowed to dim a picture that was already right.
+
+   The bands laid over the gate's reflection are the surface itself, and they
+   slide: the reflection moves under them and they move across it, which is what
+   makes the pair read as water rather than as a red gate with a red smear below
+   it.
+
+   Fifteen periods, none of them free: the water is the most crowded part of the
+   picture and the rhythm probe compares anything within 200 css px, which at
+   this viewport is most of the card. */
+.reflection {
+  animation: reflection var(--rdur, 31.5s) ease-in-out infinite alternate;
+  animation-delay: var(--rdelay, 0s);
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+}
+@keyframes reflection {
+  from {
+    transform: translateX(calc(var(--wob, 0.4px) * -1)) scaleY(calc(1 - var(--stretch, 0.008)));
+  }
+  to {
+    transform: translateX(var(--wob, 0.4px)) scaleY(calc(1 + var(--stretch, 0.008)));
+  }
+}
+.ring {
+  animation: ring var(--rdur, 23s) ease-in-out infinite alternate;
+  animation-delay: var(--rdelay, 0s);
+}
+@keyframes ring {
+  from {
+    opacity: 0.62;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.band {
+  animation: band var(--rdur, 27.6s) ease-in-out infinite alternate;
+  animation-delay: var(--rdelay, 0s);
+}
+@keyframes band {
+  from {
+    transform: translateX(calc(var(--drift, 1.2px) * -1));
+  }
+  to {
+    transform: translateX(var(--drift, 1.2px));
+  }
+}
+
 /* grass and reeds: a breath of wind, not a gale */
 .sway-a,
 .sway-b {
@@ -1484,7 +1559,16 @@ html[data-enhance="off"] .foil {
    and the birds over the lake. The laminate takes that to half a degree and
    three quarters of a unit. Exempting the branch but not its flowers would make
    the flowers come loose from a moving branch, and exempting the flowers but not
-   the branch would swing them on a branch that is not moving. */
+   the branch would swing them on a branch that is not moving.
+
+   `.reflection`, `.ring` and `.band` are the water itself: the gate and the ducks
+   mirrored, the mountain's own mirror, the rings where the posts stand in the
+   lake and where a heron is standing, and the two bands the surface lays across
+   the gate's reflection. They are exempt for the reason the mist and the glitter
+   band were exempted first — a lake does not stop moving because nobody switched
+   anything on — and they were a defect for the same reason: the water had been
+   drawn with marks that mean movement, rings and mirrors, and then held still, so
+   the shore read as a painting of a lake rather than as one. */
 html[data-enhance="off"]
   .face
   svg
@@ -1492,7 +1576,7 @@ html[data-enhance="off"]
     .boatman
   ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
     .petal-sway
-  ):not(.fish):not(.branch):not(.bloom) {
+  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
@@ -2650,15 +2734,25 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                  the clip is applied inside the mirrored space, so the snow
                  cannot spill outside the reflected body of the mountain -->
             <g class="refl" mask="url(#reflMask)">
-              <g transform="matrix(1 0 0 -0.46 0 590)">
-                <g clip-path="url(#clipFuji)">
-                  <use href="#fujiPath" fill="#333b60"/>
-                  <path d="M336 126 H564 V206
-                           C560 220 552 236 542 238 C532 240 528 222 518 222
-                           C508 222 504 248 492 250 C480 252 476 230 466 230
-                           C456 230 452 254 440 256 C428 258 424 234 414 234
-                           C404 234 400 250 388 248 C376 246 348 226 336 218 Z" fill="#b4c2d6"/>
-                  <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
+              <!-- the mirror itself, hinged at the waterline: the mountain's
+                   reflection is slid sideways half a unit and pulled between
+                   0.8% shorter and 0.8% longer over 47 seconds, which is the
+                   slowest thing on the card and the only reason the mirror is a
+                   mirror. the group is between the mask and the mirror matrix:
+                   the mask's bands hold still, the reflection moves under them,
+                   and the matrix that turns the mountain over stays untouched,
+                   because a CSS transform on that element would replace it -->
+              <g class="reflection" style="--wob: .4px; --stretch: .008; --rdur: 47.4s; --rdelay: -19s">
+                <g transform="matrix(1 0 0 -0.46 0 590)">
+                  <g clip-path="url(#clipFuji)">
+                    <use href="#fujiPath" fill="#333b60"/>
+                    <path d="M336 126 H564 V206
+                             C560 220 552 236 542 238 C532 240 528 222 518 222
+                             C508 222 504 248 492 250 C480 252 476 230 466 230
+                             C456 230 452 254 440 256 C428 258 424 234 414 234
+                             C404 234 400 250 388 248 C376 246 348 226 336 218 Z" fill="#b4c2d6"/>
+                    <rect x="120" y="120" width="420" height="300" fill="url(#terminator)"/>
+                  </g>
                 </g>
               </g>
             </g>
@@ -2758,20 +2852,30 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                  merely shadowed - once the fade starts at full strength. -->
             <g mask="url(#toriiReflMask)" filter="url(#tiny)" opacity=".8"
                style="mix-blend-mode:multiply">
-              <use href="#toriiBody" transform="translate(0 786) scale(1 -0.5)"/>
+              <!-- the wobble is on a group wrapped around the mirror, not on the
+                   mirror: the reflection is positioned by a transform attribute,
+                   and a CSS transform would replace it. the mask stays where it
+                   is, so the water's bands hold still while the gate moves under
+                   them, which is the order of things -->
+              <g class="reflection" style="--wob: .5px; --stretch: .02; --rdur: 31.6s; --rdelay: -13s">
+                <use href="#toriiBody" transform="translate(0 786) scale(1 -0.5)"/>
+              </g>
             </g>
-            <g stroke="#98a1bb" stroke-linecap="round" fill="none" opacity=".3">
-              <path d="M170 533 h120 M176 543 h108" stroke-width="2.4"/>
+            <g stroke="#98a1bb" stroke-linecap="round" fill="none" opacity=".3" stroke-width="2.4">
+              <!-- two paths, not one: the bands are the surface, and the surface
+                   does not move as one piece -->
+              <path class="band" style="--drift: 1.4px; --rdur: 27.6s; --rdelay: -9s" d="M170 533 h120"/>
+              <path class="band" style="--drift: 1.1px; --rdur: 32.8s; --rdelay: -21s" d="M176 543 h108"/>
             </g>
             <path d="M168 528 C198 534 262 534 292 528" stroke="#f2e6d4" stroke-opacity=".34"
                   stroke-width="1.6" fill="none"/>
             <!-- where each post meets the water: one tight ring each, because
                  the lake is being disturbed by something standing in it -->
             <g stroke="#e6dcc8" fill="none" stroke-linecap="round">
-              <path d="M170 524 C174 526.4 186 526.4 190 524" stroke-opacity=".3" stroke-width="1.1"/>
-              <path d="M270 524 C274 526.4 286 526.4 290 524" stroke-opacity=".3" stroke-width="1.1"/>
-              <path d="M174 528.5 C178 530 184 530 188 528.5" stroke-opacity=".16" stroke-width=".9"/>
-              <path d="M274 528.5 C278 530 284 530 288 528.5" stroke-opacity=".16" stroke-width=".9"/>
+              <path class="ring" style="--rdur: 19.3s; --rdelay: -4s" d="M170 524 C174 526.4 186 526.4 190 524" stroke-opacity=".3" stroke-width="1.1"/>
+              <path class="ring" style="--rdur: 27.7s; --rdelay: -17s" d="M270 524 C274 526.4 286 526.4 290 524" stroke-opacity=".3" stroke-width="1.1"/>
+              <path class="ring" style="--rdur: 23.4s; --rdelay: -11s" d="M174 528.5 C178 530 184 530 188 528.5" stroke-opacity=".16" stroke-width=".9"/>
+              <path class="ring" style="--rdur: 29.2s; --rdelay: -7s" d="M274 528.5 C278 530 284 530 288 528.5" stroke-opacity=".16" stroke-width=".9"/>
             </g>
           </g>
 
@@ -2926,12 +3030,18 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                where the water is widest. -->
 <g fill="#141a2c" stroke="#141a2c"><g class="duck" style="animation-duration:8.3s; animation-delay:-2.5s"><use href="#duck" transform="translate(392 519)"></use></g><g class="duck" style="animation-duration:11.9s; animation-delay:-7s"><use href="#duck" transform="translate(418 525) scale(0.84)"></use></g></g>
           <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
-            <path d="M382 522 h22 M410 528 h18"/>
+            <path class="ring" style="--rdur: 15.2s; --rdelay: -6s" d="M382 522 h22"/>
+            <path class="ring" style="--rdur: 18.4s; --rdelay: -14s" d="M410 528 h18"/>
           </g>
-          <!-- and what the water keeps of them -->
+          <!-- and what the water keeps of them. the smears are not the ducks and
+               do not follow them: a reflection on still-ish water breaks up and
+               settles on a longer clock than the bird it comes from, so these
+               have their own periods, slower than the ducks' 8.3 and 11.9. -->
           <g fill="#141a2c" opacity=".16">
-            <ellipse cx="392" cy="524" rx="7.5" ry="1.7"/>
-            <ellipse cx="418" cy="530" rx="6.2" ry="1.4"/>
+            <ellipse class="reflection" style="--wob: .35px; --stretch: .05; --rdur: 32s; --rdelay: -12s"
+                     cx="392" cy="524" rx="7.5" ry="1.7"/>
+            <ellipse class="reflection" style="--wob: .3px; --stretch: .045; --rdur: 34.6s; --rdelay: -25s"
+                     cx="418" cy="530" rx="6.2" ry="1.4"/>
           </g>
 
 <g fill="#101627" stroke="#101627"><g class="wader" style="animation-duration:37s; animation-delay:-13s"><use href="#heron" transform="translate(772 546) scale(-1 1)"></use></g></g>
@@ -2944,10 +3054,10 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           <path data-on="heron"
                 d="M765 527 C769 524 776 525 780 529 C775 532 769 531 765 527 Z"
                 fill="#1b2338" opacity=".9"/>
-          <path d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
+          <path class="ring" style="--rdur: 19.8s; --rdelay: -3s" d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
           <g stroke="#e6dcc8" stroke-opacity=".16" stroke-width="1" fill="none" stroke-linecap="round">
-            <path d="M763 548 C767 549.6 775 549.6 779 548"/>
-            <path d="M766 552 C769 553.2 774 553.2 777 552"/>
+            <path class="ring" style="--rdur: 29s; --rdelay: -16s" d="M763 548 C767 549.6 775 549.6 779 548"/>
+            <path class="ring" style="--rdur: 35.2s; --rdelay: -8s" d="M766 552 C769 553.2 774 553.2 777 552"/>
           </g>
 
           <!-- The whole stand lifts 10 units so it roots at the waterline and
@@ -4096,7 +4206,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
         }
         const t = r.cssText;
         if (
-          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-|\.branch|\.bloom/.test(
+          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-|\.branch|\.bloom|\.ring|\.band/.test(
             t,
           )
         )

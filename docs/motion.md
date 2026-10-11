@@ -56,22 +56,26 @@ cycle that reverses is a breath.
 Each entry states the cause first. Rule 1: if there is no cause, the motion is
 deleted, not tuned.
 
-| thing                         | cause                                     | motion                                                                                                                  | period                                                | default?                          |
-| ----------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------- |
-| petals on the water           | the water under them, and the air over it | bob 1.6–2.6 u of rise over 1.8–3.4° of tilt, with a 0.6–1.2 u slide; and, separately, a drift of 7–12 u across the lake | bob 11, 13.5, 17.5, 23.5 s; drift 73, 101, 109, 139 s | **yes**                           |
-| the boat's hull               | water                                     | ±0.5 u rise and fall, 0.3° roll                                                                                         | 9.5, 13 s                                             | **yes**                           |
-| the boatman                   | he is rowing                              | torso rotates 1.1° about the hips, arms follow                                                                          | 7.5 s                                                 | **yes**                           |
-| the ducks                     | water                                     | ±0.4 u bob, no two in phase                                                                                             | 8.3, 11.9 s                                           | **yes**                           |
-| the heron                     | it is alive                               | weight shift ±0.3 u                                                                                                     | 37 s                                                  | **yes**                           |
-| three places the fish came up | something under the water                 | a ring spreads from tight to gone, two or three times per period at uneven spacing                                      | 97, 127, 179 s                                        | **yes**                           |
-| the birds                     | they are flying                           | drift along their own heading, 6.6, 5.8 and 7.6 u between the extremes of the swing                                     | 67, 89, 113 s                                         | **yes**                           |
-| the birds, crossing           | they are flying, and the wind is up       | the same drift, 34 u over the cycle                                                                                     | 31.9, 43.7, 39 s                                      | no — Enhance                      |
-| the far tree line's mirror    | water                                     | already `reflBreathe`                                                                                                   | 39 s                                                  | yes (already)                     |
-| reeds and grass               | wind                                      | sway, 1.2°, one stand as one object                                                                                     | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s                  | no — Enhance                      |
-| the cherry branch             | wind off the lake                         | rocks about its root; the far end travels 1.6 u in still air and 3.5 u in a gust, the root nothing                      | 57.5 s; 13.3 s with Enhance                           | **yes**                           |
-| the flowers on it             | the same wind, and the branch flexing     | each swings a shallow arc, 0.16–0.35 u in still air and 0.32–0.7 u in a gust, growing with distance from the root       | 41.6–86.5 s; 10.2–36.2 s with Enhance                 | **yes**                           |
-| falling petals                | wind off the branch                       | a fall of 85–285 u with the wind's set of −78 to +41 u, and a slide of ±6–16 u about that line                          | all ten, 22.8–58.9 s                                  | **yes**; 11.2–21.1 s with Enhance |
-| the card's laminate           | the lamp                                  | foil, glint, grain                                                                                                      | —                                                     | no — Enhance                      |
+| thing                                  | cause                                      | motion                                                                                                                  | period                                                | default?                          |
+| -------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------- |
+| petals on the water                    | the water under them, and the air over it  | bob 1.6–2.6 u of rise over 1.8–3.4° of tilt, with a 0.6–1.2 u slide; and, separately, a drift of 7–12 u across the lake | bob 11, 13.5, 17.5, 23.5 s; drift 73, 101, 109, 139 s | **yes**                           |
+| the boat's hull                        | water                                      | ±0.5 u rise and fall, 0.3° roll                                                                                         | 9.5, 13 s                                             | **yes**                           |
+| the boatman                            | he is rowing                               | torso rotates 1.1° about the hips, arms follow                                                                          | 7.5 s                                                 | **yes**                           |
+| the ducks                              | water                                      | ±0.4 u bob, no two in phase                                                                                             | 8.3, 11.9 s                                           | **yes**                           |
+| the heron                              | it is alive                                | weight shift ±0.3 u                                                                                                     | 37 s                                                  | **yes**                           |
+| three places the fish came up          | something under the water                  | a ring spreads from tight to gone, two or three times per period at uneven spacing                                      | 97, 127, 179 s                                        | **yes**                           |
+| the birds                              | they are flying                            | drift along their own heading, 6.6, 5.8 and 7.6 u between the extremes of the swing                                     | 67, 89, 113 s                                         | **yes**                           |
+| the birds, crossing                    | they are flying, and the wind is up        | the same drift, 34 u over the cycle                                                                                     | 31.9, 43.7, 39 s                                      | no — Enhance                      |
+| the far mountain's mirror              | water                                      | brightens and settles, and is slid sideways while it stretches about the waterline: 3.0 u at its far edge               | 39 s of brightness, 47.4 s of shape                   | **yes**                           |
+| the gate's reflection                  | water                                      | slid and stretched about the waterline, 3.2 u at the far edge, under the bands the surface lays across it               | 31.6 s                                                | **yes**                           |
+| what the ducks leave in it             | water, and two birds floating on the water | slid and stretched about the top of each smear: 1.04 and 0.85 u at the far edge                                         | 32, 34.6 s                                            | **yes**                           |
+| where things stand in the water        | the surface is not flat against them       | nine rings and strokes brighten and settle, each between 0.62 and 1 of itself                                           | 15.2, 18.4, 19.3, 19.8, 23.4, 27.7, 29, 29.2, 35.2 s  | **yes**                           |
+| the bands across the gate's reflection | the surface itself                         | slide along the water, 2.8 and 2.2 u between the extremes                                                               | 27.6, 32.8 s                                          | **yes**                           |
+| reeds and grass                        | wind                                       | sway, 1.2°, one stand as one object                                                                                     | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s                  | no — Enhance                      |
+| the cherry branch                      | wind off the lake                          | rocks about its root; the far end travels 1.6 u in still air and 3.5 u in a gust, the root nothing                      | 57.5 s; 13.3 s with Enhance                           | **yes**                           |
+| the flowers on it                      | the same wind, and the branch flexing      | each swings a shallow arc, 0.16–0.35 u in still air and 0.32–0.7 u in a gust, growing with distance from the root       | 41.6–86.5 s; 10.2–36.2 s with Enhance                 | **yes**                           |
+| falling petals                         | wind off the branch                        | a fall of 85–285 u with the wind's set of −78 to +41 u, and a slide of ±6–16 u about that line                          | all ten, 22.8–58.9 s                                  | **yes**; 11.2–21.1 s with Enhance |
+| the card's laminate                    | the lamp                                   | foil, glint, grain                                                                                                      | —                                                     | no — Enhance                      |
 
 The reeds stay in Enhance. Forty-five of them swaying is the single most
 expensive thing on the page, and their motion is the one that reads as "the
@@ -243,6 +247,61 @@ check reads them off the elements: three distinct (period, phase, distance)
 triples, and every distance at least 4 units from the start of the swing to its
 end. Measured on the page, the three birds travel 6.6, 5.8 and 7.6 units.
 
+## The lake was glass everywhere except where it wasn't
+
+The water had motion in the places the boat was. The glitter band slid, the wake
+breathed, three ripples set off from the paddle at 17, 21 and 24 seconds, the hull
+bobbed, the ducks bobbed, ten petals lay drifting and bobbing. Everywhere else it
+was a painting of a lake: the gate stood mirrored under itself without moving, the
+mountain's mirror only changed its brightness, the two smears the ducks left were
+painted on, and the rings drawn where the posts stand in the water and where a
+heron is standing — marks whose entire reason for existing is that the surface is
+not flat against a thing in it — were held still.
+
+That is the same shape as the birds' defect one tier over: the marks were drawn,
+counted, and never asked whether they actually move.
+
+**The cause, per mark.** A reflection is the surface's doing, so the surface
+decides what it looks like: it slides the image sideways a little and pulls it
+longer and shorter about the waterline. Where something stands in the water the
+surface is not flat against it, and the rings and strokes there brighten and
+settle. The two pale bands laid across the gate's reflection are the surface
+itself, so they slide, and the reflection moves under them — which is the pair
+reading as water rather than as a red gate with a red smear below it.
+
+**The mechanism, per mark.** The transform goes on a group wrapped around the
+mirrored mark, never on the mirrored mark itself: a CSS transform _replaces_ a
+transform attribute, and the mirror is an attribute — `scale(1 -0.5)` about the
+waterline for the gate, `matrix(1 0 0 -0.46 0 590)` for the mountain. The mask
+stays on the outer group, so the water's bands hold still while the reflection
+moves under them, which is the order of things. The origin is `50% 0%` of the
+mark's own box, and for every one of these marks the top of its box is the
+waterline, so the reflection is hinged where it touches the water and the free end
+is what travels.
+
+The rings breathe between 0.62 and 1 of themselves, not between 0.22 and 0.46 like
+the boat's ripples. Those four paths were drawn at the strength they are meant to
+have; a shimmer that dims a picture that was already right is a defect wearing the
+costume of an improvement.
+
+**The periods, and what the first pick got wrong.** Fifteen new periods, and the
+probe rejected the first set three times: 33.5 s was exactly half the nearest
+bird's 67, 22.6 s a fifth of another bird's 113, 26.5 s half a petal's 53. The
+search had been run against a list of the calm tier's durations assembled by hand
+from the marks the probe _exempts_ — and the probe exempts a mark when it is a
+traveller at the moment it looks, which a petal is only sometimes. The honest
+constraint set is not a curated list: it is every duration on the page, in both
+tiers, measured — 96 of them, because the water marks have no gust variants and so
+are compared against the gust tier's crowded low end as well (19.5 s collided with
+the boat's 6.5, 26.5 with the branch's 13.3, 31.5 with a blossom's 15.7). Re-picked
+against the measured union, all fifteen are clean in both tiers, and the probe says
+so at both settings.
+
+**The check.** Four mirrors, four different (period, phase, amplitude) triples, and
+the excursion measured at each mirror's own far edge — 3.0, 3.2, 1.04 and 0.85
+units — rather than as a percentage of stretch, because the mountain's mirror is 138
+units deep and the gate's is 55, and it is the distance that has to be enough.
+
 ## Mechanism
 
 **Phase and period are data, not markup.** The placement components already
@@ -288,8 +347,15 @@ Enhance off, 1440 × 1150, measured by `npm run perf`:
 | with the slow petals as well (22) | 18.3 ms | 16.7 ms | 33.4 ms | 33 ms  | 24/240      |
 | with the fish as well (25)        | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms  | 25/240      |
 | the petals drifting as well (29)  | 16.6 ms | 16.7 ms | 16.7 ms | 17 ms  | 0/240       |
-| the page today, Enhance off (65)  | 16.8 ms | 16.7 ms | 16.8 ms | 67 ms  | 1/240       |
-| the page today, Enhance on (76)   | 40.8 ms | 33.4 ms | 50.1 ms | 100 ms | 239/240     |
+| the page before the water (65)    | 16.8 ms | 16.7 ms | 16.8 ms | 67 ms  | 1/240       |
+| the page today, Enhance off (80)  | 16.7 ms | 16.7 ms | 16.8 ms | 33 ms  | 1/240       |
+| the page today, Enhance on (91)   | 40.7 ms | 33.4 ms | 50.1 ms | 117 ms | 239/240     |
+
+Fifteen marks went into the quiet tier with the water and nothing moved: the
+tier's cost is the card's own filters, not the number of animations, and the
+water's are opacity on a stroke and a transform on a group. The 67 ms worst frame
+in the row above it was noise, and the 117 ms in the Enhance row is noise too —
+the same 239 late frames in both.
 
 The last two rows are one run of `npm run perf`, which now measures both tiers
 back to back; the rows above them are the history of the comparison, each
