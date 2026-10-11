@@ -353,19 +353,35 @@
                all about 26 units wide alternating between y=222 and y=250 -
                the same wave, seven times, which is a fence and not a melting
                edge. The lobes here run 10 to 26 units wide and reach down to
-               anywhere between 214 and 258. -->
+               anywhere between 214 and 258.
+               That was still a doily. Measured off the path the lobes were
+               28, 44, 40, 42 and 50 wide and 18, 22, 22, 22 and 20 deep: the
+               widths varied, the depths did not, and every one of them was
+               rounded at the bottom. A snowline does not round off. It hangs
+               into a gully — and the gullies are already drawn under it, at
+               x 429, 438, 472, 484, 511, 530 and 551 — and climbs back over a
+               ridge. So the dips now sit on the gullies, the depths run 10 to
+               52 units, and the deep ones come to a point where the snow
+               funnels through while the shallow ones stay rounded. The
+               spacing between gullies is regular because the mountain's
+               gullies are; what breaks the rhythm is that some of them hold
+               snow to the shoulder and some barely at all. -->
           <path id="snowCapPath" d="M336 126 H564 V206
-                   C562 216 558 228 554 232
-                   C548 236 542 218 536 214
-                   C528 210 524 238 518 244
-                   C510 250 500 226 492 222
-                   C484 218 478 246 470 252
-                   C462 258 458 234 452 230
-                   C444 226 440 254 428 258
-                   C418 261 416 240 410 236
-                   C402 231 396 250 384 248
-                   C372 246 372 232 360 228
-                   C350 225 344 222 336 218 Z"/>
+                   C563 216 558 226 552 226
+                   C546 226 546 214 542 214
+                   C537 214 534 232 531 243
+                   C528 230 524 216 519 216
+                   C515 216 513 244 510 261
+                   C507 240 502 218 497 218
+                   C490 218 486 235 480 235
+                   C474 235 468 215 462 215
+                   C454 215 446 250 438 268
+                   C432 248 426 220 420 220
+                   C414 220 410 238 404 238
+                   C398 238 394 217 388 217
+                   C382 217 378 231 372 231
+                   C366 231 361 219 356 219
+                   C349 219 343 218 336 218 Z"/>
           <clipPath id="clipFuji"><use href="#fujiPath"/></clipPath>
           <clipPath id="clipLake"><rect x="0" y="404" width="900" height="146"/></clipPath>
           <clipPath id="clipCard"><rect x="0" y="0" width="900" height="600" rx="6"/></clipPath>

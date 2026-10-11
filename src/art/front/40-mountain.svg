@@ -62,13 +62,25 @@
                  the gullies and climbs back over every ridge it crosses -->
             <use href="#snowCapPath" fill="url(#snow)"/>
             <use href="#snowCapPath" fill="url(#snowShade)"/>
-            <!-- the melt edge casts a hairline onto the rock below it -->
-            <path d="M564 208 C562 218 558 230 554 234 C548 238 542 220 536 216
-                     C528 212 524 240 518 246 C510 252 500 228 492 224
-                     C484 220 478 248 470 254 C462 260 458 236 452 232
-                     C444 228 440 256 428 260 C418 263 416 242 410 238
-                     C402 233 396 252 384 250 C372 248 372 234 360 230
-                     C350 227 344 224 336 220"
+            <!-- the melt edge casts a hairline onto the rock below it. It is
+                 the snowline's own curve, five units lower, and it has to be
+                 redrawn whenever the snowline is: the two are one edge, and
+                 when they drift apart the mountain grows a second hem. -->
+            <path d="M564 211 C563 221 558 231 552 231
+                     C546 231 546 219 542 219
+                     C537 219 534 237 531 248
+                     C528 235 524 221 519 221
+                     C515 221 513 249 510 266
+                     C507 245 502 223 497 223
+                     C490 223 486 240 480 240
+                     C474 240 468 220 462 220
+                     C454 220 446 255 438 273
+                     C432 253 426 225 420 225
+                     C414 225 410 243 404 243
+                     C398 243 394 222 388 222
+                     C382 222 378 236 372 236
+                     C366 236 361 224 356 224
+                     C349 224 343 223 336 223"
                   fill="none" stroke="#7f8fab" stroke-opacity=".45" stroke-width="2.4"
                   filter="url(#edgeWear)"/>
             <!-- snow left standing in the two gullies that face the sun.
