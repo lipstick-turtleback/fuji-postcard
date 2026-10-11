@@ -9,7 +9,7 @@
  *
  *   node scripts/check.mjs
  */
-import { readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pathProblems } from './svg-check.mjs';
@@ -17,6 +17,8 @@ import { pathProblems } from './svg-check.mjs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const file = join(root, 'public', 'index.html');
 const html = readFileSync(file, 'utf8');
+const readmeFile = join(root, 'README.md');
+const readme = readFileSync(readmeFile, 'utf8');
 
 const problems = [];
 const at = (index) => `${file}:${html.slice(0, index).split('\n').length}`;
@@ -136,10 +138,12 @@ for (const m of markup.matchAll(/<kbd[^>]*>\s*([A-Za-z])\s*<\/kbd>/g)) {
   if (!handled.has(key))
     fail(m.index, `the button advertises the "${key}" key but nothing handles it`);
 }
-const readme = readFileSync(join(root, 'README.md'), 'utf8');
 for (const m of readme.matchAll(/\*\*`([A-Za-z])`\*\*/g)) {
   const key = m[1].toUpperCase();
-  if (!handled.has(key)) fail(0, `README documents the "${key}" shortcut but nothing handles it`);
+  if (!handled.has(key))
+    problems.push(
+      `${readmeFile}:${readme.slice(0, m.index).split('\n').length}: documents the "${key}" shortcut but nothing handles it`,
+    );
 }
 
 /* ---- the export must carry every animation the page has ---------------- */
@@ -187,6 +191,32 @@ for (const d of html.matchAll(/(?:src|href)="(?!#)([^"]*)"/g)) {
 for (const d of html.matchAll(/url\((['"]?)(https?:)?\/\/[^)]*\)/g))
   fail(d.index, 'external url() in CSS');
 if (/@import/.test(html)) fail(0, '@import found');
+
+/* ---- a test nobody runs is a test that does not exist ------------------- */
+// A browser test written, run by hand once, and left out of the chain reports
+// nothing to anybody ever again — it is a check in the same way a stylesheet
+// rule with no element to select is a check. The mirror case is a chain that
+// names a file that has been renamed or deleted, which fails every later run
+// for a reason that has nothing to do with the page.
+const scriptsOnDisk = readdirSync(join(root, 'scripts'))
+  .filter((f) => /^test-.+\.mjs$/.test(f))
+  .sort();
+const pkgFile = join(root, 'package.json');
+const chain = JSON.parse(readFileSync(pkgFile, 'utf8')).scripts.test;
+for (const f of scriptsOnDisk)
+  if (!new RegExp(`scripts/${f.replace(/\./g, '\\.')}(?=\\s|$)`).test(chain))
+    problems.push(`${pkgFile}: scripts/${f} is not in the npm test chain`);
+for (const m of chain.matchAll(/node (scripts\/[\w-]+\.mjs)/g))
+  if (!existsSync(join(root, m[1])))
+    problems.push(`${pkgFile}: ${m[1]} is in the npm test chain and not on disk`);
+
+/* ---- the README's map of scripts/ has to be the directory --------------- */
+// The listing is how anyone finds their way in, and a file that is not in it is
+// a file nobody will run on purpose.
+for (const f of readdirSync(join(root, 'scripts'))
+  .filter((f) => f.endsWith('.mjs'))
+  .sort())
+  if (!readme.includes(f)) problems.push(`${readmeFile}: scripts/${f} is not in the listing`);
 
 if (problems.length) {
   console.error(`check: ${problems.length} problem(s)\n${problems.join('\n')}`);

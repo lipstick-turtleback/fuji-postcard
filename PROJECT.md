@@ -117,7 +117,10 @@ project built tools to stop being fooled:
   would break the export, animation classes the export would silently drop,
   keyboard shortcuts advertised by a `<kbd>` or the README but not handled by
   any code, ids defined and never used, and path data whose commands run out of
-  arguments.
+  arguments. Then the repo: every `test-*.mjs` in `scripts/` has to be in the
+  `npm test` chain and every script the chain names has to be on disk, because
+  a test nobody runs verifies nothing, and every file in `scripts/` has to be in
+  the README's listing.
 - **`npm run test`** — check, plus the score imported as the module it is
   (80 bars, ten phrases, 305 notes, 4.85 min), plus a contrast check on the ink
   against the paper, plus the lettering measured against the gilded frame in
@@ -317,6 +320,25 @@ The habits that keep paying off:
   bimodal — a frame lands on a vsync boundary or misses it — so the mean and
   "share of late frames" are both wrong statistics. The median is the one that
   fires on a genuinely bad page and not on a comfortable 45 fps one.
+- **The fallback tier is the tier nobody visits.** Web Audio and `localStorage`
+  are the only two things this page needs that a browser might not have, and
+  each has a fallback written beside it — a hidden sound block, a `try`/`catch`
+  around a read and around a write. None of that code runs on the machine it was
+  written on, which is precisely why it is the most likely to be wrong: private
+  mode, cookies blocked, a browser with no `AudioContext`. So the feature is
+  taken away before the page's own script runs and the page is asked whether it
+  still does what it says. The first version of the storage check asked whether
+  the picture was still drawn — and it was, on a page whose script had died at
+  line 54, because the picture is in the markup and the `.js` class is set on
+  line 5. What proves the script reached the end is something only the script
+  can do: the card turning over.
+- **A check nobody runs is not a check.** A browser test sat in `scripts/` for a
+  whole session — written, run by hand, passing — and absent from the `npm test`
+  chain, so it reported nothing to anyone and the fallback it was written for
+  went back to being unverified. The failure has the same shape as a dead CSS
+  rule: nothing about the page is wrong, so nothing looks wrong. `check.mjs` now
+  reads the directory and the chain and requires them to agree in both
+  directions, and the README's map of `scripts/` has to be the directory too.
 
 ## The standing goal
 

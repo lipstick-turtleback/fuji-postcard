@@ -62,9 +62,11 @@ src/
       voices.mjs       the pluck, the drone, the lake
 scripts/
   build.mjs            bundle the JS, render the generated parts, fill the slots
+  register-svelte.mjs  teach Node to read a .svelte file, for the build only
   check.mjs            validate the built page without a browser
   cdp.mjs              the DevTools client the browser tests share
   checks.mjs           the collect-and-report shape the browser tests share
+  svg-check.mjs        the path-data and dangling-<use> rules two checks share
   test-score.mjs       verify the composition as data
   test-contrast.mjs    keep the palette above WCAG AA
   test-layout.mjs      drive headless Chrome at real window sizes
@@ -77,6 +79,7 @@ scripts/
   test-interactions.mjs drive the buttons and shortcuts and read what happened
   test-motion.mjs      hold the page to its reduced-motion promise
   test-nojs.mjs        load the page with script switched off and see what is left
+  test-degrade.mjs     take a feature away before the page runs and load it anyway
   test-keys.mjs        the page driven with Tab, Enter, Space and the arrows
   test-print.mjs       what comes out of a printer, and how big the sheet is
   test-css.mjs         no rule selects nothing, no animation names nothing
@@ -183,7 +186,7 @@ npm run dev        # build, then serve on http://localhost:5173
 npm run check      # fail if the built file is stale, then validate it
 npm run lint       # biome over the JS (scripts/ and src/script/)
 npm run fmt        # prettier over CSS, JSON and Markdown
-npm test           # build + check + score + contrast + layout + plate + interactions + lint + format
+npm test           # build + check + every test in scripts/ + biome + prettier
 npm run perf       # real frame times in headless Chrome over CDP, no dependencies
 ```
 
@@ -203,6 +206,17 @@ stops the parser at that command and the shape closes itself with a straight
 line. Both stamps on this card carry the same little mountain, and both carried
 the same broken curve — a pale shard across its right shoulder, and one line in
 the console that nobody was reading.
+
+The same run then looks at the repo, because two of the ways this project fails
+are not in the page at all. Every `test-*.mjs` in `scripts/` has to appear in
+the `npm test` chain, and every script the chain names has to be on disk. A
+browser test that is written and never run is a check in exactly the way a
+stylesheet rule with no element to select is a check: it reports nothing, the
+page looks fine, and the thing it was written for goes back to being unverified
+— one of these tests sat in `scripts/` for a whole session, passing when it was
+run by hand and saying nothing to anybody afterwards. And every file in
+`scripts/` has to appear in the listing above, which is how anyone finds out it
+is there.
 
 ### Performance, measured
 
@@ -251,8 +265,11 @@ perfectly usable 45 fps page. Switch it on a second time and the page stops
 second-guessing you — two clicks is a decision, not an accident. The decision
 lands about 1.5 s after navigation, and `<html data-probe>` records what the page
 measured, so "why is this off on my machine" has an answer. Whatever you choose
-is remembered. The exported `.svg` is unaffected — a saved plate is always the
-full artwork.
+is remembered — except where the browser will not allow it: private mode,
+cookies blocked and a sandboxed frame all make `localStorage` throw the moment
+it is touched, and there the choice holds for the visit and is simply not
+carried to the next one. The exported `.svg` is unaffected — a saved plate is
+always the full artwork.
 
 `npm run test` also runs `scripts/test-score.mjs`, which lifts the score out
 of the soundtrack IIFE and evaluates it as plain data — no DOM, no Web Audio.
@@ -336,7 +353,7 @@ none was examined. It printed a pass. The count of rules examined is in the
 output line now (34 on the front, 0 on the back, which carries no classes),
 and giving a mark a class the export filter drops fails the test.
 
-Four browser tests ask the questions that need a browser, each with its own
+The browser tests ask the questions that need a browser, each with its own
 Chrome and its own page, because the answers depend on what has happened to the
 page before the question:
 
@@ -413,6 +430,22 @@ page before the question:
   like they do — no underline, no pointer, no key hints, and a line that says
   what is the case. The same measurements are then taken with script running and
   every one must differ, or the test is measuring the layout rather than the tier.
+- `scripts/test-degrade.mjs` takes a feature away before the page's own script
+  runs and loads the page anyway. Two of the page's dependencies are not in every
+  browser — Web Audio, and `localStorage`, which throws on touch in private mode
+  and with cookies blocked — and both have a fallback written beside them. A
+  fallback is the tier most likely to be wrong and the only tier nobody visits,
+  so it is visited deliberately: with no `AudioContext`, `#sound` must have no
+  client rects at all rather than a Play button that does nothing, and the flip,
+  Enhance and the save must still work and throw nothing; with storage that
+  throws, the card must still turn over — the picture is in the markup, so
+  measuring it again would measure the layout rather than the tier, and the
+  guarded read sits 54 lines into a file whose first line already set the `.js`
+  class, so only something the script does at the end proves it got that far.
+  Deleting the `display: none` branch, or either `try`/`catch`, makes it fire.
+  The third fallback, a resize listener standing in for `ResizeObserver`, is not
+  checked: the measurement feeds one ratio, the card's aspect ratio is fixed at
+  3:2, and no window size changes anything a check could see.
 - `scripts/test-print.mjs` asks the page in print media what is actually on the
   paper, and asks Chrome for the paper itself. The wall, the studio's name, the
   title, the plinth label and every control have to be gone; the card has to lie
