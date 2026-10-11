@@ -42,7 +42,8 @@ success.
 Rule 2 applies to time as much as to space: **no two animated things in a
 group may share a period, and no period may be a multiple of another in the
 same group.** The existing set already obeys this — 46/62/38 s for clouds,
-78/103 s for mist, 13–25 s for the ten petals, 17/23/29 s for ripples, 47/61/39
+78/103 s for mist, 22.8–58.9 s for the ten petals falling and 11.2–21.1 s for
+the same ten in a gust, 17/23/29 s for ripples, 47/61/39
 s for the water — and the new set must too. Periods are primes or near-primes
 chosen so that no pair in a group has a common factor; the property test in
 phase 4 makes that a fact rather than an intention.
@@ -55,20 +56,20 @@ cycle that reverses is a breath.
 Each entry states the cause first. Rule 1: if there is no cause, the motion is
 deleted, not tuned.
 
-| thing                         | cause                                     | motion                                                                             | period                                                | default?                                |
-| ----------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------- |
-| petals on the water           | the water under them, and the air over it | bob ±0.5 u with a 0.4 u slide; and, separately, a drift of 7–12 u across the lake  | bob 11, 13.5, 17.5, 23.5 s; drift 73, 101, 109, 139 s | **yes**                                 |
-| the boat's hull               | water                                     | ±0.5 u rise and fall, 0.3° roll                                                    | 9.5, 13 s                                             | **yes**                                 |
-| the boatman                   | he is rowing                              | torso rotates 1.1° about the hips, arms follow                                     | 7.5 s                                                 | **yes**                                 |
-| the ducks                     | water                                     | ±0.4 u bob, no two in phase                                                        | 8.3, 11.9 s                                           | **yes**                                 |
-| the heron                     | it is alive                               | weight shift ±0.3 u                                                                | 37 s                                                  | **yes**                                 |
-| three places the fish came up | something under the water                 | a ring spreads from tight to gone, two or three times per period at uneven spacing | 97, 127, 179 s                                        | **yes**                                 |
-| the birds                     | they are flying                           | drift along their heading, 2 u over the cycle                                      | 67, 89, 113 s                                         | **yes**                                 |
-| the birds, crossing           | they are flying, and the wind is up       | the same drift, 34 u over the cycle                                                | 31.9, 43.7, 39 s                                      | no — Enhance                            |
-| the far tree line's mirror    | water                                     | already `reflBreathe`                                                              | 39 s                                                  | yes (already)                           |
-| reeds and grass               | wind                                      | sway, 1.2°, one stand as one object                                                | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s                  | no — Enhance                            |
-| falling petals                | wind off the branch                       | the fall itself                                                                    | 3 of 10 at 71, 83, 97 s                               | **yes**; all 10 at 13–25 s with Enhance |
-| the card's laminate           | the lamp                                  | foil, glint, grain                                                                 | —                                                     | no — Enhance                            |
+| thing                         | cause                                     | motion                                                                                                                  | period                                                | default?                          |
+| ----------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------- |
+| petals on the water           | the water under them, and the air over it | bob 1.6–2.6 u of rise over 1.8–3.4° of tilt, with a 0.6–1.2 u slide; and, separately, a drift of 7–12 u across the lake | bob 11, 13.5, 17.5, 23.5 s; drift 73, 101, 109, 139 s | **yes**                           |
+| the boat's hull               | water                                     | ±0.5 u rise and fall, 0.3° roll                                                                                         | 9.5, 13 s                                             | **yes**                           |
+| the boatman                   | he is rowing                              | torso rotates 1.1° about the hips, arms follow                                                                          | 7.5 s                                                 | **yes**                           |
+| the ducks                     | water                                     | ±0.4 u bob, no two in phase                                                                                             | 8.3, 11.9 s                                           | **yes**                           |
+| the heron                     | it is alive                               | weight shift ±0.3 u                                                                                                     | 37 s                                                  | **yes**                           |
+| three places the fish came up | something under the water                 | a ring spreads from tight to gone, two or three times per period at uneven spacing                                      | 97, 127, 179 s                                        | **yes**                           |
+| the birds                     | they are flying                           | drift along their heading, 2 u over the cycle                                                                           | 67, 89, 113 s                                         | **yes**                           |
+| the birds, crossing           | they are flying, and the wind is up       | the same drift, 34 u over the cycle                                                                                     | 31.9, 43.7, 39 s                                      | no — Enhance                      |
+| the far tree line's mirror    | water                                     | already `reflBreathe`                                                                                                   | 39 s                                                  | yes (already)                     |
+| reeds and grass               | wind                                      | sway, 1.2°, one stand as one object                                                                                     | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s                  | no — Enhance                      |
+| falling petals                | wind off the branch                       | a fall of 85–285 u with the wind's set of −78 to +41 u, and a slide of ±6–16 u about that line                          | all ten, 22.8–58.9 s                                  | **yes**; 11.2–21.1 s with Enhance |
+| the card's laminate           | the lamp                                  | foil, glint, grain                                                                                                      | —                                                     | no — Enhance                      |
 
 The reeds stay in Enhance. Forty-five of them swaying is the single most
 expensive thing on the page, and their motion is the one that reads as "the
@@ -84,13 +85,23 @@ and a half to two and a half minutes, two of them leftward because the air is no
 all going one way — easing back and forth so the return reads as the next gust
 rather than a rewind.
 
+The bob needed the same question asked of it. It was 0.4 by 0.5 of a unit, and
+it was that for all four petals: half a pixel at the size this card is drawn,
+and the same half a pixel on every one of them, so four petals written as
+floating were rendered as bolted down and identical. Each now rides its own
+swell — 1.6 to 2.6 units of rise, 0.6 to 1.2 units of slide, over 1.8° to 3.4°
+of tilt, each on the petal's own period and its own phase. Measured over six
+seconds on the page the four move 2.3, 0.7, 1.8 and 1.0 px. That is slow enough
+that nobody watches it happen, which is the point of a float; the eye catches it
+the way it catches anything that is alive and quiet.
+
 Two groups, not one. The bob belongs to the petal and its shadow; the drift
 belongs to the petal, its shadow and the water they are both on. They cannot
 share an element: two animations on one element fight over the same `transform`
 property and the later one wins outright.
 
 The four drift periods were not picked, they were left over. Everything the page
-already moves on — both tiers, forty-six animated marks — was written out, and a
+already moves on — both tiers, sixty animated marks — was written out, and a
 number was thrown away if it equalled one of those or was an integer multiple of
 one of them to within a percent. Four obvious picks are recorded in
 `Floaters.data.mjs` as the reason they are not there: 67 and 89 are the far
@@ -107,17 +118,52 @@ its blossoms, and is dropping them still, is the picture. What is an effect is
 the _shower_ — ten petals crossing the card in 13 to 25 seconds, which is a
 gust.
 
-So the same ten petals carry two periods. Three of them, spaced along the
-branch, fall in still air at 71, 83 and 97 seconds: primes, none a multiple of
-another, staggered by negative delays so that none of them is at the top of its
-fall when you arrive. With the laminate on, all ten fall at 13 to 25 seconds.
-The test measures the same three elements in both modes — `71s 83s 97s` off,
-`19s 23s 14s` on.
+The fix at the time was to exempt three of the ten from the calm tier's kill
+rule, at 71, 83 and 97 seconds, and let the other seven stand still until the
+laminate went on. That is what "three petals falling in still air" meant, and it
+is a strange thing to have built: with Enhance off — the way everybody sees the
+card — seven of ten petals were painted hanging in mid-air, motionless, forever.
+Measured on the page: `animation-name: none` on seven of them, and 0 px of
+travel in three seconds. Three petals coming down and seven stuck in the sky is
+not a branch letting go, it is a branch with a decoration on it. Falling is what
+a petal that has left a branch does; the laminate changes the speed and never
+the fact.
+
+So all ten fall on both tiers, at 22.8 to 58.9 seconds in still air and 11.2 to
+21.1 in a gust, staggered by negative delays so that none of them is at the top
+of its fall when you arrive. The test measures the same ten elements in both
+modes — `26.8 43 22.8 37.1 40.9 31.2 47.3 53 57.2 58.9` off,
+`12.9 14.9 11.2 17.1 19.2 11.6 14.2 16.1 18.1 21.1` on — and asks, three seconds
+apart, that every petal has moved, that no two of the ten headings are the same
+heading, and that the ten paths on the page are ten paths — fall, set and slide
+read back off the elements themselves, because ten different headings can come
+out of one shared path with ten different phases. What has to be ten-to-one is
+the triple and not each number in it: two petals standing at the same height
+above a flat lake fall the same distance, and that is what a lake is, not a
+petal drawn badly.
+
+The second question is the one that mattered. All ten petals used to share one
+keyframe, `translate(-150px, 430px) rotate(340deg)`, so the shower was one path
+multiplied ten times: the same distance, the same angle, the same lean. Each
+petal now states its own fall, its own set — where the wind takes it over that
+distance, and three of them go right, because the air is not one direction — and
+its own slide about that line, on a slide period of its own. The path is the sum
+of a fall and a slide whose periods share no factor, so the ten curves are ten
+curves.
+
+Those periods are not free. A petal that falls 85 units in 57 seconds moves two
+pixels in the three seconds the rhythm probe watches, so it is not a traveller
+and it is compared against everything within 200 css px — the wake, the glitter
+crests, the petals lying on the water, the hull, the man poling it, the mist, the
+far birds. The first set put 57 next to the wake's 19, three times exactly, and
+43.8 next to a floating petal's 11, four times within a percent; both were
+flagged. The thirty numbers in the data — ten falls, ten slides, ten falls for
+the gust — were each walked against that whole list and against each other.
 
 Each petal carries both numbers from its placement data:
 
 ```
---dur: 71s; --delay: -23s; --dur-on: 19s; --delay-on: -6s
+--dur: 26.8s; --delay: -9s; --dur-on: 12.9s; --delay-on: -1s; --fall: 250px; --setx: -52px
 ```
 
 and one rule in the stylesheet chooses the tier. The data states both; the
@@ -170,8 +216,8 @@ Enhance off, 1440 × 1150, measured by `npm run perf`:
 | with the slow petals as well (22) | 18.3 ms | 16.7 ms | 33.4 ms | 33 ms | 24/240      |
 | with the fish as well (25)        | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
 | the petals drifting as well (29)  | 16.6 ms | 16.7 ms | 16.7 ms | 17 ms | 0/240       |
-| the page today, Enhance off       | 16.7 ms | 16.7 ms | 16.8 ms | 50 ms | 1/240       |
-| the page today, Enhance on        | 39.7 ms | 33.4 ms | 50.1 ms | 83 ms | 238/240     |
+| the page today, Enhance off (49)  | 16.7 ms | 16.7 ms | 16.8 ms | 33 ms | 1/240       |
+| the page today, Enhance on (60)   | 40.0 ms | 33.4 ms | 50.1 ms | 83 ms | 239/240     |
 
 The last two rows are one run of `npm run perf`, which now measures both tiers
 back to back; the rows above them are the history of the comparison, each

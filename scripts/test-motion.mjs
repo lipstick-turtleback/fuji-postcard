@@ -75,7 +75,8 @@ const WANT = [
   'wader',
   'floater',
   'bird',
-  'slow',
+  'petal',
+  'petal-sway',
   'fish',
 ];
 
@@ -88,9 +89,10 @@ const WANT = [
    between the two pages. A mark that has been yanked to the origin moves by
    hundreds.
 
-   Three classes are exempt because travelling is what they are for: the birds
-   drift along their heading, and the petals fall. */
-const EXEMPT = new Set(['bird', 'slow']);
+   Classes are exempt when travelling is what they are for: the birds drift
+   along their heading, and a petal falls — and the group that slides and turns
+   inside a falling petal goes exactly where the fall takes it. */
+const EXEMPT = new Set(['bird', 'petal', 'petal-sway']);
 const settled = JSON.parse(
   await still.evaluate(`
   (() => {
@@ -268,6 +270,122 @@ ok(
   drifted.slice(0, 3).join(' | '),
 );
 
+/* The complaint that put this here: some petals fall and some do not, and the
+   two halves of that sentence need two different questions. The check above
+   asks whether a petal has an animation at all. This one asks the harder half
+   — that the ten are not all doing the same motion. Each petal is sampled at
+   its centre three seconds apart, and the ten headings that come out have to
+   be ten different headings, none of them zero. One keyframe shared by ten
+   petals, which is what the sheet used to be — `translate(-150px, 430px)
+   rotate(340deg)` for every petal on the card — gives ten petals the same
+   heading at the same phase, and that is one clump multiplied, not a shower. */
+const shower = JSON.parse(
+  await living.evaluate(
+    `(async () => {
+      const els = [...document.querySelectorAll('.card svg .petal')];
+      const at = () =>
+        els.map((e) => {
+          const r = e.getBoundingClientRect();
+          return [r.x + r.width / 2, r.y + r.height / 2];
+        });
+      const a = at();
+      await new Promise((r) => setTimeout(r, 3000));
+      const b = at();
+      const v = a.map((p, i) => [
+        Math.round((b[i][0] - p[0]) * 10) / 10,
+        Math.round((b[i][1] - p[1]) * 10) / 10,
+      ]);
+      /* And the trajectories themselves. Ten different headings over three
+         seconds can come out of one shared path with ten different phases, so
+         the headings alone do not prove the petals are each their own. The
+         numbers that draw the path are on the elements, so they get read here:
+         how far each petal falls, where the wind sets it, how wide its slide
+         is. What has to be ten-to-one is the triple, not each number — two
+         petals standing at the same height above a flat lake fall the same
+         distance, and that is not a second petal drawn badly, that is what a
+         lake is. */
+      const own = els.map((e) => {
+        const s = getComputedStyle(e);
+        const w = getComputedStyle(e.querySelector('.petal-sway'));
+        return [
+          s.getPropertyValue('--fall').trim(),
+          s.getPropertyValue('--setx').trim(),
+          w.getPropertyValue('--sway').trim(),
+        ].join('/');
+      });
+      return JSON.stringify({
+        n: els.length,
+        still: v.filter(([dx, dy]) => Math.hypot(dx, dy) < 1).length,
+        headings: new Set(v.map((d) => d.join(','))).size,
+        paths: new Set(own).size,
+        v,
+      });
+    })()`,
+    { awaitPromise: true },
+  ),
+);
+ok(
+  'every petal is falling, and no two of them fall the same way',
+  shower.n === 10 &&
+    shower.still === 0 &&
+    shower.headings === shower.n &&
+    shower.paths === shower.n,
+  `${shower.n} petals · ${shower.still} not moving · ${shower.headings} different headings · ${shower.paths} different paths · ${shower.v
+    .map((d) => d.join('+'))
+    .join(' ')}`,
+);
+
+/* The same question, asked of the four petals that have already reached the
+   water. They are in the allow-list and they have four different periods, and
+   none of that is enough: the bob was 0.4 by 0.5 of a unit, which is half a
+   pixel at the size this card is drawn, and it was the same half a pixel for
+   all four. A mark can pass every check that asks whether it is animated and
+   still be animated by an amount nobody can see.
+
+   So this measures the bob itself, out of the element's own computed transform
+   — not its bounding box, which would carry the long slow drift across the lake
+   as well — and it measures an excursion, not a displacement between two
+   moments. A displacement depends on when you look: the slowest petal takes
+   nearly twelve seconds to reach the top of its swell, and sampled from the
+   wrong pair of seconds it has moved nothing at all, which is true and useless.
+   Over a window longer than that half-period, the whole rise and fall is
+   visible whatever the phase, and the number is the petal's own: 1.7 to 2.9
+   units now, 0.64 before. */
+const swell = JSON.parse(
+  await living.evaluate(
+    `(async () => {
+      const els = [...document.querySelectorAll('.card svg .floater')];
+      const at = () =>
+        els.map((e) => {
+          const m = new DOMMatrix(getComputedStyle(e).transform);
+          return [m.e, m.f];
+        });
+      const lo = at();
+      const hi = lo.map((p) => [p[0], p[1]]);
+      for (let k = 0; k < 6; k++) {
+        await new Promise((r) => setTimeout(r, 4000));
+        const now = at();
+        for (let i = 0; i < els.length; i++) {
+          lo[i][0] = Math.min(lo[i][0], now[i][0]);
+          lo[i][1] = Math.min(lo[i][1], now[i][1]);
+          hi[i][0] = Math.max(hi[i][0], now[i][0]);
+          hi[i][1] = Math.max(hi[i][1], now[i][1]);
+        }
+      }
+      const v = lo.map((p, i) =>
+        Math.round(Math.hypot(hi[i][0] - p[0], hi[i][1] - p[1]) * 100) / 100,
+      );
+      return JSON.stringify({ n: els.length, v, small: v.filter((d) => d < 1).length });
+    })()`,
+    { awaitPromise: true },
+  ),
+);
+ok(
+  'the petals on the water are floating, not bolted down',
+  swell.n === 4 && swell.small === 0,
+  `${swell.n} petals · ${swell.small} with a swell under 1 u in 24 seconds · ${swell.v.join(' ')} u`,
+);
+
 /* Rule 2 over time. Nothing in the scene may repeat at even intervals, and the
    smallest way to break that is two marks a hand's width apart keeping step.
    Two things this found, both of which had been true for a long time: the wake
@@ -349,24 +467,29 @@ ok(
   living.exceptions.length === 0,
   living.exceptions.join(' | '),
 );
-/* The two tiers, measured on the same element: a petal carries both periods
+/* The two tiers, measured on the same elements: a petal carries both periods
    as custom properties and the stylesheet chooses. If the wiring is wrong the
-   petal falls at one speed in both modes, which is the failure this catches. */
-const slowFirst = JSON.parse(
-  await living.evaluate(
-    `JSON.stringify([...document.querySelectorAll('.card svg .petal.slow')].map((e) => getComputedStyle(e).animationDuration))`,
-  ),
-);
+   petal falls at one speed in both modes, which is the failure this catches.
+   It used to ask this of the three `slow` petals only, and three of ten was
+   the defect, not the sample. */
+const fallDurations = `.card svg .petal`;
+const readFalls = async () =>
+  JSON.parse(
+    await living.evaluate(
+      `JSON.stringify([...document.querySelectorAll('${fallDurations}')].map((e) => parseFloat(getComputedStyle(e).animationDuration)))`,
+    ),
+  );
+const fallsFirst = await readFalls();
 ok('the laminate can be switched on', await setEnhance(true));
-const slowSecond = JSON.parse(
-  await living.evaluate(
-    `JSON.stringify([...document.querySelectorAll('.card svg .petal.slow')].map((e) => getComputedStyle(e).animationDuration))`,
-  ),
-);
+const fallsSecond = await readFalls();
 ok(
-  'and the same petals fall faster with it on',
-  slowFirst.join() !== slowSecond.join() && slowFirst.length === 3,
-  `${slowFirst.join(' ')} off → ${slowSecond.join(' ')} on`,
+  'and every petal falls faster with it on',
+  fallsFirst.length === 10 &&
+    fallsSecond.length === 10 &&
+    fallsFirst.every((d, i) => fallsSecond[i] < d) &&
+    new Set(fallsFirst).size === 10 &&
+    new Set(fallsSecond).size === 10,
+  `${fallsFirst.join(' ')} off → ${fallsSecond.join(' ')} on`,
 );
 ok(
   'and then the birds cross',

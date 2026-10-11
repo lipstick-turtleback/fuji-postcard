@@ -55,9 +55,24 @@
 /* The period is not in the stylesheet. Each petal carries two of them as
    custom properties — the one it falls on when the laminate is off, and the
    one it falls on when it is on — and the tier is chosen here, in one rule,
-   rather than ten times over in ten class rules. */
+   rather than ten times over in ten class rules.
+
+   A falling petal is the picture's own motion, not the card's. The branch is
+   letting go whether or not anybody has switched the laminate on, so both
+   groups below are exempt from the calm tier's kill rule; the cause of the
+   exemption is this paragraph. What the laminate changes is the speed: 23-59 s
+   in still air, 11-21 s in a gust.
+
+   Two groups, two keyframes. `petalFall` is the descent and the wind's set over
+   it, both the petal's own length; `petalSway` is the slide about that line and
+   the flutter of the petal turning in it. Neither is a shared distance any
+   more — the old sheet moved all ten petals by the same
+   `translate(-150px, 430px) rotate(340deg)`, which is one path multiplied ten
+   times. The opacity is a fade at both ends because the fall loops, and a
+   petal that reappeared at the top of its line without warning was a petal
+   blinking. */
 .petal {
-  animation: petalFall var(--dur, 17s) linear infinite;
+  animation: petalFall var(--dur, 31s) linear infinite;
   animation-delay: var(--delay, 0s);
   transform-box: fill-box;
   transform-origin: center;
@@ -68,18 +83,32 @@ html[data-enhance="on"] .petal {
 }
 @keyframes petalFall {
   0% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(0, 0);
     opacity: 0;
   }
-  14% {
+  12% {
     opacity: 0.9;
   }
-  86% {
+  84% {
     opacity: 0.7;
   }
   100% {
-    transform: translate(-150px, 430px) rotate(340deg);
+    transform: translate(var(--setx, -40px), var(--fall, 240px));
     opacity: 0;
+  }
+}
+.petal-sway {
+  animation: petalSway var(--sway-dur, 26s) ease-in-out infinite alternate;
+  animation-delay: var(--sway-delay, 0s);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes petalSway {
+  from {
+    transform: translateX(calc(var(--sway, 10px) * -1)) rotate(-13deg);
+  }
+  to {
+    transform: translateX(var(--sway, 10px)) rotate(15deg);
   }
 }
 
@@ -381,7 +410,15 @@ html[data-enhance="on"] .bird.b3 {
    this, the surface rippled and the petal did not, which is the kind of
    contradiction the eye reads as a still image with something animated on
    top. Each one bobs on its own period, none of them sharing a factor with
-   the ripples three units away. */
+   the ripples three units away.
+
+   The bob used to be 0.4 by 0.5 of a unit — under half a pixel at the size the
+   card is drawn at, which is to say a number in a stylesheet and nothing the
+   eye could find. A petal on water rides a swell: it comes up, it goes over,
+   it lies down the other way. The rise, the set and the tilt are the petal's
+   own now, written by the data, and the whole excursion is a degree and a half
+   over eleven seconds at the fastest — slow enough that nobody watches it
+   happen, which is the point of a float. */
 .floater {
   animation: float 11s ease-in-out infinite alternate;
   transform-box: fill-box;
@@ -389,10 +426,10 @@ html[data-enhance="on"] .bird.b3 {
 }
 @keyframes float {
   from {
-    transform: translate(0, 0);
+    transform: translate(0, 0) rotate(calc(var(--tilt, 1deg) * -1));
   }
   to {
-    transform: translate(0.4px, -0.5px);
+    transform: translate(var(--set, 0.6px), calc(var(--rise, 1.1px) * -1)) rotate(var(--tilt, 1deg));
   }
 }
 /* And the petal going somewhere. The distance is the petal's own, written into

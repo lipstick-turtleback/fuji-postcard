@@ -15,7 +15,10 @@
 <g fill="#f4c3d0" opacity=".75">
   {#each petals as p}
     <g class="floater-drift" style={`animation-duration:${p.driftDur}s; animation-delay:${p.driftDelay}s; --dx:${p.drift}px; --dy:${p.driftDy}px`}>
-      <g class="floater" style={`animation-duration:${p.dur}s; animation-delay:${p.delay}s`}>
+      <g
+        class="floater"
+        style={`animation-duration:${p.dur}s; animation-delay:${p.delay}s; --rise:${p.rise}px; --set:${p.set}px; --tilt:${p.tilt}deg`}
+      >
         <ellipse cx={p.x} cy={p.y} rx={p.rx} ry={p.ry}/>
         <path d={`M${p.x - p.w / 2} ${p.y + 3} h${p.w}`} stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"/>
       </g>

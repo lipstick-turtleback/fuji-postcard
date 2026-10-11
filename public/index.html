@@ -759,9 +759,24 @@ kbd {
 /* The period is not in the stylesheet. Each petal carries two of them as
    custom properties — the one it falls on when the laminate is off, and the
    one it falls on when it is on — and the tier is chosen here, in one rule,
-   rather than ten times over in ten class rules. */
+   rather than ten times over in ten class rules.
+
+   A falling petal is the picture's own motion, not the card's. The branch is
+   letting go whether or not anybody has switched the laminate on, so both
+   groups below are exempt from the calm tier's kill rule; the cause of the
+   exemption is this paragraph. What the laminate changes is the speed: 23-59 s
+   in still air, 11-21 s in a gust.
+
+   Two groups, two keyframes. `petalFall` is the descent and the wind's set over
+   it, both the petal's own length; `petalSway` is the slide about that line and
+   the flutter of the petal turning in it. Neither is a shared distance any
+   more — the old sheet moved all ten petals by the same
+   `translate(-150px, 430px) rotate(340deg)`, which is one path multiplied ten
+   times. The opacity is a fade at both ends because the fall loops, and a
+   petal that reappeared at the top of its line without warning was a petal
+   blinking. */
 .petal {
-  animation: petalFall var(--dur, 17s) linear infinite;
+  animation: petalFall var(--dur, 31s) linear infinite;
   animation-delay: var(--delay, 0s);
   transform-box: fill-box;
   transform-origin: center;
@@ -772,18 +787,32 @@ html[data-enhance="on"] .petal {
 }
 @keyframes petalFall {
   0% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(0, 0);
     opacity: 0;
   }
-  14% {
+  12% {
     opacity: 0.9;
   }
-  86% {
+  84% {
     opacity: 0.7;
   }
   100% {
-    transform: translate(-150px, 430px) rotate(340deg);
+    transform: translate(var(--setx, -40px), var(--fall, 240px));
     opacity: 0;
+  }
+}
+.petal-sway {
+  animation: petalSway var(--sway-dur, 26s) ease-in-out infinite alternate;
+  animation-delay: var(--sway-delay, 0s);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes petalSway {
+  from {
+    transform: translateX(calc(var(--sway, 10px) * -1)) rotate(-13deg);
+  }
+  to {
+    transform: translateX(var(--sway, 10px)) rotate(15deg);
   }
 }
 
@@ -1085,7 +1114,15 @@ html[data-enhance="on"] .bird.b3 {
    this, the surface rippled and the petal did not, which is the kind of
    contradiction the eye reads as a still image with something animated on
    top. Each one bobs on its own period, none of them sharing a factor with
-   the ripples three units away. */
+   the ripples three units away.
+
+   The bob used to be 0.4 by 0.5 of a unit — under half a pixel at the size the
+   card is drawn at, which is to say a number in a stylesheet and nothing the
+   eye could find. A petal on water rides a swell: it comes up, it goes over,
+   it lies down the other way. The rise, the set and the tilt are the petal's
+   own now, written by the data, and the whole excursion is a degree and a half
+   over eleven seconds at the fastest — slow enough that nobody watches it
+   happen, which is the point of a float. */
 .floater {
   animation: float 11s ease-in-out infinite alternate;
   transform-box: fill-box;
@@ -1093,10 +1130,10 @@ html[data-enhance="on"] .bird.b3 {
 }
 @keyframes float {
   from {
-    transform: translate(0, 0);
+    transform: translate(0, 0) rotate(calc(var(--tilt, 1deg) * -1));
   }
   to {
-    transform: translate(0.4px, -0.5px);
+    transform: translate(var(--set, 0.6px), calc(var(--rise, 1.1px) * -1)) rotate(var(--tilt, 1deg));
   }
 }
 /* And the petal going somewhere. The distance is the petal's own, written into
@@ -1342,18 +1379,30 @@ html[data-enhance="off"] .foil {
    the glitter band on it, the reflections, the boat and the man poling it, the two
    ducks, the heron, the petals lying on the lake — both their bob and their
    drift across it — and the birds in the far
-   sky, three petals falling off the branch in still air, and three places
+   sky, the petals coming off the branch, and three places
    where something comes up under the surface. Each of those is something the
    lake does, not something the card
    does; the amplitudes are under a unit and the periods share no factors.
    Adding a name here is a claim about the picture, and it should come with
-   the cause written beside it in 06-motion.css. */
+   the cause written beside it in 06-motion.css.
+
+   `.petal` and `.petal-sway` are here where `.slow` used to be, and that is a
+   correction rather than a change of mind. The exemption named three of the ten
+   petals, so the other seven were killed: with Enhance off the branch shed
+   three petals and held seven still in mid-air, which is not a branch letting
+   go but a branch with a decoration on it. Falling is what a petal that has
+   left a branch does, at whatever speed the air allows; the laminate changes
+   the speed and never the fact. Both groups are exempt because both belong to
+   one fall — the outer group descends, the inner one slides and turns — and
+   killing either would leave the petal doing half a motion. */
 html[data-enhance="off"]
   .face
   svg
   *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.boat):not(
     .boatman
-  ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.slow):not(.fish) {
+  ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
+    .petal-sway
+  ):not(.fish) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
@@ -2807,7 +2856,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 <g fill="#161d31" stroke="#161d31" stroke-linecap="round"><use href="#reed" transform="translate(20 566) rotate(-2) scale(1.02)"></use><use href="#reedB" transform="translate(46 563) rotate(-7) scale(0.88 0.94)"></use><use href="#reedC" transform="translate(98 561) rotate(4) scale(0.82 0.9)"></use><use href="#sedge" transform="translate(70 565) skewX(-4) scale(0.9 0.98)"></use><use href="#tuft" transform="translate(34 569) rotate(3) scale(0.9)"></use><use href="#tuftSeed" transform="translate(72 566) rotate(-4) scale(1.02 0.9)"></use><use href="#tuftC" transform="translate(116 562) rotate(6) scale(0.78)"></use></g><g fill="#0f1322" stroke="#0f1322" stroke-linecap="round" class="sway-a" style="animation-duration:13.7s; animation-delay:0s"><use href="#reedB" transform="translate(30 573) rotate(5) scale(1.15 0.96)"></use><use href="#reed" transform="translate(60 575) rotate(-4) scale(0.95 1.04)"></use><use href="#sedge" transform="translate(86 569) rotate(3) scale(0.86)"></use><use href="#reedC" transform="translate(110 567) rotate(-7) scale(0.9 1.02)"></use><use href="#tuft" transform="translate(30 577) rotate(4) scale(1.05 0.92)"></use><use href="#grassPair" transform="translate(26 580) rotate(-6) scale(0.8 0.95)"></use><use href="#tuftC" transform="translate(40 574) rotate(9) scale(1.12 0.88)"></use><use href="#tuft" transform="translate(54 579) rotate(-3) skewX(4) scale(0.72)"></use><use href="#tuftSeed" transform="translate(68 572) rotate(5) scale(0.92 0.86)"></use><use href="#sedge" transform="translate(84 571) rotate(-8) scale(0.76 1.05)"></use><use href="#tuftB" transform="translate(96 569) rotate(2) scale(0.88)"></use><use href="#grassPair" transform="translate(124 564) rotate(-5) scale(0.66 0.9)"></use><use href="#tuftC" transform="translate(140 561) rotate(7) scale(0.58 1.06)"></use></g><g fill="#0f1322" stroke="#0f1322" stroke-linecap="round" class="sway-b" style="animation-duration:19.7s; animation-delay:-5s"><use href="#reed" transform="translate(838 557) rotate(-3) scale(0.95 1.02)"></use><use href="#reedB" transform="translate(858 561) rotate(6) scale(0.76 0.9)"></use><use href="#tuftSeed" transform="translate(802 560) rotate(-6) scale(0.9 1.04)"></use><use href="#tuftB" transform="translate(818 563) rotate(4) scale(0.7)"></use><use href="#sedge" transform="translate(830 565) rotate(-2) skewX(-5) scale(0.85)"></use><use href="#tuft" transform="translate(848 567) rotate(8) scale(0.6 1.08)"></use></g><g fill="#0f1322" stroke="#0f1322" stroke-linecap="round" class="sway-b" style="animation-duration:15.1s; animation-delay:-2.5s"><use href="#reed" transform="translate(866 555) rotate(6) skewX(-3) scale(0.74 1.04)"></use><use href="#grassPair" transform="translate(852 564) rotate(3) scale(0.74 1.05)"></use><use href="#tuftC" transform="translate(874 558) rotate(-7) scale(0.98)"></use><use href="#reedC" transform="translate(862 561) rotate(-10) scale(0.7 0.92)"></use></g><g fill="#0f1322" stroke="#0f1322" stroke-linecap="round" class="sway-a" style="animation-duration:16.3s; animation-delay:-7.5s"><use href="#tuftB" transform="translate(168 557) rotate(4) scale(0.68 0.94)"></use><use href="#sedge" transform="translate(244 554) rotate(-6) scale(0.52)"></use><use href="#reedB" transform="translate(292 551) rotate(-9) scale(0.58 1.04)"></use><use href="#tuftSeed" transform="translate(306 557) rotate(3) scale(0.42 1.1)"></use></g><g fill="#0f1322" stroke="#0f1322" stroke-linecap="round" class="sway-b" style="animation-duration:29.3s; animation-delay:-3.5s"><use href="#grassPair" transform="translate(388 553) rotate(-4) scale(0.6)"></use><use href="#reed" transform="translate(432 550) rotate(6) scale(0.5 0.95)"></use><use href="#tuftC" transform="translate(474 553) rotate(-3) skewX(5) scale(0.46)"></use><use href="#tuft" transform="translate(556 555) rotate(-5) scale(0.56 1.06)"></use></g><g fill="#0f1322" stroke="#0f1322" stroke-linecap="round" class="sway-a" style="animation-duration:22.7s; animation-delay:-11s"><use href="#waterGrass" transform="translate(206 560) rotate(2) scale(0.62)"></use><use href="#sedge" transform="translate(508 549) rotate(7) scale(0.4 0.9)"></use><use href="#waterGrass" transform="translate(642 554) rotate(-4) scale(0.54 1.1)"></use><use href="#tuftB" transform="translate(654 558) rotate(5) scale(0.38)"></use><use href="#reedB" transform="translate(668 550) rotate(-6) skewX(-4) scale(0.5)"></use><use href="#tuftSeed" transform="translate(726 553) rotate(8) scale(0.44 1.05)"></use><use href="#tuft" transform="translate(762 558) rotate(-4) scale(0.62 0.92)"></use></g>
           </g>
           <!-- petals that have already reached the water -->
-<g fill="#f4c3d0" opacity=".75"><g class="floater-drift" style="animation-duration:73s; animation-delay:-23s; --dx:9px; --dy:1.5px"><g class="floater" style="animation-duration:11s; animation-delay:-2s"><ellipse cx="238" cy="524" rx="5" ry="1.7"></ellipse><path d="M231.5 527 h13" stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"></path></g></g><g class="floater-drift" style="animation-duration:101s; animation-delay:-51s; --dx:-7px; --dy:-1px"><g class="floater" style="animation-duration:13.5s; animation-delay:-9s"><ellipse cx="412" cy="536" rx="4.4" ry="1.5"></ellipse><path d="M406 539 h12" stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"></path></g></g><g class="floater-drift" style="animation-duration:109s; animation-delay:-8s; --dx:12px; --dy:2px"><g class="floater" style="animation-duration:17.5s; animation-delay:-4s"><ellipse cx="540" cy="520" rx="3.8" ry="1.3"></ellipse><path d="M534.5 523 h11" stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"></path></g></g><g class="floater-drift" style="animation-duration:139s; animation-delay:-66s; --dx:-10px; --dy:-1.5px"><g class="floater" style="animation-duration:23.5s; animation-delay:-15s"><ellipse cx="668" cy="534" rx="4.6" ry="1.6"></ellipse><path d="M661.5 537 h13" stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"></path></g></g></g>
+<g fill="#f4c3d0" opacity=".75"><g class="floater-drift" style="animation-duration:73s; animation-delay:-23s; --dx:9px; --dy:1.5px"><g class="floater" style="animation-duration:11s; animation-delay:-2s; --rise:2.2px; --set:0.9px; --tilt:3deg"><ellipse cx="238" cy="524" rx="5" ry="1.7"></ellipse><path d="M231.5 527 h13" stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"></path></g></g><g class="floater-drift" style="animation-duration:101s; animation-delay:-51s; --dx:-7px; --dy:-1px"><g class="floater" style="animation-duration:13.5s; animation-delay:-9s; --rise:1.7px; --set:-0.7px; --tilt:2.2deg"><ellipse cx="412" cy="536" rx="4.4" ry="1.5"></ellipse><path d="M406 539 h12" stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"></path></g></g><g class="floater-drift" style="animation-duration:109s; animation-delay:-8s; --dx:12px; --dy:2px"><g class="floater" style="animation-duration:17.5s; animation-delay:-4s; --rise:2.6px; --set:1.2px; --tilt:3.4deg"><ellipse cx="540" cy="520" rx="3.8" ry="1.3"></ellipse><path d="M534.5 523 h11" stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"></path></g></g><g class="floater-drift" style="animation-duration:139s; animation-delay:-66s; --dx:-10px; --dy:-1.5px"><g class="floater" style="animation-duration:23.5s; animation-delay:-15s; --rise:1.6px; --set:-0.8px; --tilt:1.8deg"><ellipse cx="668" cy="534" rx="4.6" ry="1.6"></ellipse><path d="M661.5 537 h13" stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"></path></g></g></g>
           </g>
   <!--
   The branch at the top left and the petals coming off it.
@@ -2868,7 +2917,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 
           <!-- falling petals: ten of them, three of them in still air.
                The periods are in src/art/gen/Petals.data.mjs. -->
-<g fill="#f4c3d0"><g class="petal p1" style="--dur: 17s; --delay: 0s; --dur-on: 15s; --delay-on: -1s"><use href="#petalShape" transform="translate(150 150) rotate(-24) scale(0.92 0.78)"></use></g><g class="petal p2 slow" style="--dur: 71s; --delay: -23s; --dur-on: 19s; --delay-on: -6s"><use href="#petalShape" transform="translate(210 120) rotate(58) scale(0.85 0.6)"></use></g><g class="petal p3" style="--dur: 17s; --delay: 0s; --dur-on: 13s; --delay-on: -9s"><use href="#petalShape" transform="translate(96 190) rotate(-71) scale(0.9)"></use></g><g class="petal p4" style="--dur: 17s; --delay: 0s; --dur-on: 21s; --delay-on: -3s"><use href="#petalShape" transform="translate(260 170) rotate(13) scale(0.75 0.5)"></use></g><g class="petal p5" style="--dur: 17s; --delay: 0s; --dur-on: 17s; --delay-on: -12s"><use href="#petalShape" transform="translate(180 240) rotate(-41) scale(1 0.85)"></use></g><g class="petal p6 slow" style="--dur: 83s; --delay: -51s; --dur-on: 23s; --delay-on: -8s"><use href="#petalShape" transform="translate(320 130) rotate(76) scale(0.8 0.62)"></use></g><g class="petal p7 slow" style="--dur: 97s; --delay: -70s; --dur-on: 14s; --delay-on: -15s"><use href="#petalShape" transform="translate(60 260) rotate(-8) scale(0.7)"></use></g><g class="petal p8" style="--dur: 17s; --delay: 0s; --dur-on: 20s; --delay-on: -5s"><use href="#petalShape" transform="translate(240 280) rotate(34) scale(0.9 0.55)"></use></g><g class="petal p9" style="--dur: 17s; --delay: 0s; --dur-on: 16s; --delay-on: -11s"><use href="#petalShape" transform="translate(130 320) rotate(-56) scale(0.75 0.8)"></use></g><g class="petal p10" style="--dur: 17s; --delay: 0s; --dur-on: 25s; --delay-on: -2s"><use href="#petalShape" transform="translate(300 240) rotate(21) scale(0.85 0.68)"></use></g></g>
+<g fill="#f4c3d0"><g class="petal p1" style="--dur: 26.8s; --delay: -9s; --dur-on: 12.9s; --delay-on: -1s; --fall: 250px; --setx: -52px"><g class="petal-sway" style="--sway: 12px; --sway-dur: 21.7s; --sway-delay: -4s"><use href="#petalShape" transform="translate(150 150) rotate(-24) scale(0.92 0.78)"></use></g></g><g class="petal p2" style="--dur: 43s; --delay: -22s; --dur-on: 14.9s; --delay-on: -6s; --fall: 285px; --setx: -78px"><g class="petal-sway" style="--sway: 15px; --sway-dur: 24.1s; --sway-delay: -13s"><use href="#petalShape" transform="translate(210 120) rotate(58) scale(0.85 0.6)"></use></g></g><g class="petal p3" style="--dur: 22.8s; --delay: -14s; --dur-on: 11.2s; --delay-on: -9s; --fall: 215px; --setx: -34px"><g class="petal-sway" style="--sway: 9px; --sway-dur: 26.3s; --sway-delay: -7s"><use href="#petalShape" transform="translate(96 190) rotate(-71) scale(0.9)"></use></g></g><g class="petal p4" style="--dur: 37.1s; --delay: -5s; --dur-on: 17.1s; --delay-on: -3s; --fall: 235px; --setx: 26px"><g class="petal-sway" style="--sway: 13px; --sway-dur: 28.1s; --sway-delay: -19s"><use href="#petalShape" transform="translate(260 170) rotate(13) scale(0.75 0.5)"></use></g></g><g class="petal p5" style="--dur: 40.9s; --delay: -31s; --dur-on: 19.2s; --delay-on: -12s; --fall: 165px; --setx: -61px"><g class="petal-sway" style="--sway: 7px; --sway-dur: 30.7s; --sway-delay: -11s"><use href="#petalShape" transform="translate(180 240) rotate(-41) scale(1 0.85)"></use></g></g><g class="petal p6" style="--dur: 31.2s; --delay: -27s; --dur-on: 11.6s; --delay-on: -8s; --fall: 275px; --setx: 41px"><g class="petal-sway" style="--sway: 16px; --sway-dur: 33.3s; --sway-delay: -2s"><use href="#petalShape" transform="translate(320 130) rotate(76) scale(0.8 0.62)"></use></g></g><g class="petal p7" style="--dur: 47.3s; --delay: -38s; --dur-on: 14.2s; --delay-on: -15s; --fall: 145px; --setx: -18px"><g class="petal-sway" style="--sway: 8px; --sway-dur: 35.3s; --sway-delay: -23s"><use href="#petalShape" transform="translate(60 260) rotate(-8) scale(0.7)"></use></g></g><g class="petal p8" style="--dur: 53s; --delay: -11s; --dur-on: 16.1s; --delay-on: -5s; --fall: 125px; --setx: 33px"><g class="petal-sway" style="--sway: 11px; --sway-dur: 37.8s; --sway-delay: -16s"><use href="#petalShape" transform="translate(240 280) rotate(34) scale(0.9 0.55)"></use></g></g><g class="petal p9" style="--dur: 57.2s; --delay: -44s; --dur-on: 18.1s; --delay-on: -11s; --fall: 85px; --setx: -27px"><g class="petal-sway" style="--sway: 6px; --sway-dur: 41.3s; --sway-delay: -29s"><use href="#petalShape" transform="translate(130 320) rotate(-56) scale(0.75 0.8)"></use></g></g><g class="petal p10" style="--dur: 58.9s; --delay: -20s; --dur-on: 21.1s; --delay-on: -2s; --fall: 165px; --setx: 19px"><g class="petal-sway" style="--sway: 14px; --sway-dur: 43.8s; --sway-delay: -8s"><use href="#petalShape" transform="translate(300 240) rotate(21) scale(0.85 0.68)"></use></g></g></g>
   <!--
   Things stuck or stamped onto the card rather than drawn on it:
   the title strip, the stamp, the cancellation, the plate inscription.

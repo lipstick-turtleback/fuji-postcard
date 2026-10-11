@@ -28,18 +28,30 @@ html[data-enhance="off"] .foil {
    the glitter band on it, the reflections, the boat and the man poling it, the two
    ducks, the heron, the petals lying on the lake — both their bob and their
    drift across it — and the birds in the far
-   sky, three petals falling off the branch in still air, and three places
+   sky, the petals coming off the branch, and three places
    where something comes up under the surface. Each of those is something the
    lake does, not something the card
    does; the amplitudes are under a unit and the periods share no factors.
    Adding a name here is a claim about the picture, and it should come with
-   the cause written beside it in 06-motion.css. */
+   the cause written beside it in 06-motion.css.
+
+   `.petal` and `.petal-sway` are here where `.slow` used to be, and that is a
+   correction rather than a change of mind. The exemption named three of the ten
+   petals, so the other seven were killed: with Enhance off the branch shed
+   three petals and held seven still in mid-air, which is not a branch letting
+   go but a branch with a decoration on it. Falling is what a petal that has
+   left a branch does, at whatever speed the air allows; the laminate changes
+   the speed and never the fact. Both groups are exempt because both belong to
+   one fall — the outer group descends, the inner one slides and turns — and
+   killing either would leave the petal doing half a motion. */
 html[data-enhance="off"]
   .face
   svg
   *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.boat):not(
     .boatman
-  ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.slow):not(.fish) {
+  ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
+    .petal-sway
+  ):not(.fish) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
