@@ -854,6 +854,33 @@ html[data-enhance="on"] .petal {
   --rdur: 24s;
   --rdelay: -4s;
 }
+/* The six rows of the glitter band, each on its own clock.
+
+   stroke-opacity, not opacity. Each row carries an opacity attribute — .55 at the
+   far shore down to .17 at the near — and that ladder is the perspective: the
+   crests fade as the water comes toward the viewer. A stylesheet opacity replaces
+   an attribute, so animating opacity would flatten six rows to one brightness.
+   stroke-opacity multiplies with the attribute instead, and the range is the one
+   the band already had: between 0.22 and 0.46 of itself.
+
+   Six periods, 15.5 to 34.5 s, slower as the rows come nearer, which is the same
+   reason the strokes thicken and the rows spread. The rows are 10 to 40 units
+   apart, so each of them is the other's nearest neighbour and the rhythm probe
+   compares all fifteen pairs; none shares a period with another, and none is a
+   multiple of the hull's 13, the wake's 19 and 25, the boat's three crests at 17,
+   21 and 24, or the petals lying on the water at 17.5 and 23.5. */
+.crest {
+  animation: crest var(--rdur, 21s) ease-in-out infinite alternate;
+  animation-delay: var(--rdelay, 0s);
+}
+@keyframes crest {
+  from {
+    stroke-opacity: 0.22;
+  }
+  to {
+    stroke-opacity: 0.46;
+  }
+}
 /* The wake off the hull: slower than the ripples and it drifts, because the
    boat is moving through the water rather than sitting in still water. */
 .wake {
@@ -1559,7 +1586,10 @@ html[data-enhance="off"] .foil {
    band were exempted first — a lake does not stop moving because nobody switched
    anything on — and they were a defect for the same reason: the water had been
    drawn with marks that mean movement, rings and mirrors, and then held still, so
-   the shore read as a painting of a lake rather than as one. */
+   the shore read as a painting of a lake rather than as one. `.crest` is the six
+   rows of the glitter band: exempt as one group before, exempt as six rows now,
+   because the band is the sun on the water and the sun does not wait for a
+   switch. */
 html[data-enhance="off"]
   .face
   svg
@@ -1567,7 +1597,7 @@ html[data-enhance="off"]
     .boatman
   ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
     .petal-sway
-  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band) {
+  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band):not(.crest) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
@@ -2757,10 +2787,13 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                    short answer beside it, and the pair steps outward as the
                    path opens toward the viewer. Anything more than this stops
                    being the sun on water and becomes texture. -->
-              <!-- The band breathes as one thing, at one period, and the period is
-                   written here rather than counted from the markup: the class is on
-                   the group, so the six rows below share it. -->
-              <g class="ripple" style="--rdur: 23s; --rdelay: -6s" stroke="#ffeed2" stroke-linecap="round" fill="none">
+              <!-- Each row breathes on its own clock, and the clocks go slower as
+                   the water comes nearer, the same way the strokes thicken and the
+                   rows spread. The band used to be one group at one period; the
+                   stylesheet used to carry four rules that pretended otherwise and
+                   selected nothing. The periods are written here, where a rule that
+                   cannot match cannot hide the fact. -->
+              <g stroke="#ffeed2" stroke-linecap="round" fill="none">
                 <!-- The bands widen, thicken, fade and spread as the water
                      comes toward the viewer, which is perspective and correct.
                      But the old ladder advanced by a near-constant step in
@@ -2768,12 +2801,18 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                      +0.3, opacity -.06 - and four progressions in lockstep is
                      a gradient, not a lake. The rows now hold a different
                      number of breaks, and the steps vary. -->
-                <path d="M598 412 h44 M652 412 h14 M676 412 h7" stroke-width="2.4" opacity=".55"/>
-                <path d="M578 431 h62 M650 431 h22" stroke-width="2.7" opacity=".44"/>
-                <path d="M560 453 h71 M644 453 h34 M690 453 h11" stroke-width="2.9" opacity=".37"/>
-                <path d="M534 477 h96 M640 477 h40" stroke-width="3.3" opacity=".29"/>
-                <path d="M512 507 h104 M632 507 h58 M704 507 h16" stroke-width="3.4" opacity=".23"/>
-                <path d="M486 535 h128 M626 535 h62" stroke-width="3.9" opacity=".17"/>
+                <path class="crest" style="--rdur: 15.5s; --rdelay: -3s"
+                      d="M598 412 h44 M652 412 h14 M676 412 h7" stroke-width="2.4" opacity=".55"/>
+                <path class="crest" style="--rdur: 18.5s; --rdelay: -11s"
+                      d="M578 431 h62 M650 431 h22" stroke-width="2.7" opacity=".44"/>
+                <path class="crest" style="--rdur: 22.6s; --rdelay: -6s"
+                      d="M560 453 h71 M644 453 h34 M690 453 h11" stroke-width="2.9" opacity=".37"/>
+                <path class="crest" style="--rdur: 26.5s; --rdelay: -16s"
+                      d="M534 477 h96 M640 477 h40" stroke-width="3.3" opacity=".29"/>
+                <path class="crest" style="--rdur: 30.7s; --rdelay: -9s"
+                      d="M512 507 h104 M632 507 h58 M704 507 h16" stroke-width="3.4" opacity=".23"/>
+                <path class="crest" style="--rdur: 34.5s; --rdelay: -21s"
+                      d="M486 535 h128 M626 535 h62" stroke-width="3.9" opacity=".17"/>
               </g>
             </g>
 
@@ -4200,7 +4239,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
         }
         const t = r.cssText;
         if (
-          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-|\.branch|\.bloom|\.ring|\.band/.test(
+          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-|\.branch|\.bloom|\.ring|\.band|\.crest/.test(
             t,
           )
         )

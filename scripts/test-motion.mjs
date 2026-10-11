@@ -83,6 +83,7 @@ const WANT = [
   'reflection',
   'ring',
   'band',
+  'crest',
 ];
 
 /* Where every one of them is with motion switched off. The same question gets
@@ -270,6 +271,71 @@ ok(
   'and the lake moves its reflections, not just their brightness',
   mirrors.n === 4 && mirrors.own === 4 && mirrors.reach.every((r) => r >= 0.8),
   `${mirrors.n} mirrors · ${mirrors.own} different motions · ${mirrors.reach.map((r) => r.toFixed(2)).join(' ')} units at the far edge`,
+);
+
+/* The glitter band is six rows of crests. It breathed as one group at one period,
+   and the stylesheet carried four rules that said otherwise — six primes, one per
+   row — while selecting nothing at all, because the class sat on the group and the
+   rows were its children. Each row has its own clock now, and the question the
+   picture depends on is not whether the numbers differ but whether the band is
+   ever breathing in more than one place at a time.
+
+   So this is measured on the live page, and the times are set rather than
+   sampled: the six animations are wound to t = 0 and to t = 7 s and the six
+   stroke-opacities are read at each. Winding them makes the check the same test
+   every run — sampling whenever the page happened to finish loading found the
+   ratio drifting between 0.6 and 0.9 across a minute, which is a fact about the
+   beating of six periods and not a fact about whether they are six. At both
+   moments the dimmest row must be no more than four fifths as bright as the
+   brightest, which one clock would fail at exactly 1; and every row must have
+   moved between the two moments, which is what proves the keyframe is running on
+   that row at all. */
+const crests = JSON.parse(
+  await living.evaluate(`(() => {
+    const els = [...document.querySelectorAll('.card svg .crest')];
+    const own = new Set();
+    const names = new Set();
+    for (const e of els) {
+      const s = getComputedStyle(e);
+      own.add([s.animationDuration, s.animationDelay].join('|'));
+      names.add(s.animationName);
+    }
+    return JSON.stringify({ n: els.length, own: own.size, names: [...names] });
+  })()`),
+);
+const crestTimes = JSON.parse(
+  await living.evaluate(
+    `(async () => {
+    const els = [...document.querySelectorAll('.card svg .crest')];
+    const raf = () => new Promise((r) => requestAnimationFrame(r));
+    const at = async (t) => {
+      for (const a of document.getAnimations()) a.currentTime = t * 1000;
+      await raf();
+      return els.map((e) => parseFloat(getComputedStyle(e).strokeOpacity));
+    };
+    const a = await at(0);
+    const b = await at(7);
+    const spread = (v) => Math.min(...v) / Math.max(...v);
+    const moved = a.map((v, i) => Math.abs(b[i] - v));
+    return JSON.stringify({
+      spreadA: spread(a),
+      spreadB: spread(b),
+      moved: moved.map((m) => Number(m.toFixed(3))),
+    });
+  })()`,
+    { awaitPromise: true },
+  ),
+);
+ok(
+  'and the glitter band breathes six times, not once',
+  crests.n === 6 &&
+    crests.own === 6 &&
+    crests.names.length === 1 &&
+    crests.names[0] === 'crest' &&
+    crestTimes.spreadA <= 0.8 &&
+    crestTimes.spreadB <= 0.8 &&
+    Math.min(...crestTimes.moved) >= 0.02,
+  `${crests.n} rows · ${crests.own} different clocks · dimmest row ${(100 * Math.min(crestTimes.spreadA, crestTimes.spreadB)).toFixed(0)}% of brightest · every row moves ${Math.min(...crestTimes.moved).toFixed(2)} or more`,
 );
 
 /* The branch and its flowers move in still air too, at a fifth of the amplitude

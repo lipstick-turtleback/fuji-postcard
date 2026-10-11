@@ -71,6 +71,7 @@ deleted, not tuned.
 | what the ducks leave in it             | water, and two birds floating on the water | slid and stretched about the top of each smear: 1.04 and 0.85 u at the far edge                                         | 32, 34.6 s                                            | **yes**                           |
 | where things stand in the water        | the surface is not flat against them       | nine rings and strokes brighten and settle, each between 0.62 and 1 of itself                                           | 15.2, 18.4, 18.6, 19.3, 23.4, 28.4, 29, 29.2, 35.2 s  | **yes**                           |
 | the bands across the gate's reflection | the surface itself                         | slide along the water, 2.8 and 2.2 u between the extremes                                                               | 27.6, 32.8 s                                          | **yes**                           |
+| the sun's path on the water            | light on water that is not standing still  | six rows of crests, each between 0.22 and 0.46 of itself, slower as the water comes nearer                              | 15.5, 18.5, 22.6, 26.5, 30.7, 34.5 s                  | **yes**                           |
 | reeds and grass                        | wind                                       | sway, 1.2°, one stand as one object                                                                                     | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s                  | no — Enhance                      |
 | the cherry branch                      | wind off the lake                          | rocks about its root; the far end travels 1.6 u in still air and 3.5 u in a gust, the root nothing                      | 57.5 s; 13.3 s with Enhance                           | **yes**                           |
 | the flowers on it                      | the same wind, and the branch flexing      | each swings a shallow arc, 0.16–0.35 u in still air and 0.32–0.7 u in a gust, growing with distance from the root       | 41.6–86.5 s; 10.2–36.2 s with Enhance                 | **yes**                           |
@@ -305,6 +306,35 @@ the excursion measured at each mirror's own far edge — 3.0, 3.2, 1.04 and 0.85
 units — rather than as a percentage of stretch, because the mountain's mirror is 138
 units deep and the gate's is 55, and it is the distance that has to be enough.
 
+**And then the glitter band, which was one clock.** The band is six rows of pale
+crests, narrow and bright at the far shore, wide and faint at the near, and it
+breathed as one group at 23 s — the whole path of sunlight dimming and brightening
+together, twice a minute, like a sign. The stylesheet did not read that way. It
+carried seven rules that counted the crests from the first, one period each, under a
+comment explaining why six primes had replaced a parity rule that used to make three
+pairs of twins. Four of those rules selected nothing, and had done so for as long as
+the rows had been folded into one group: the class sat on the group, and the group
+was the second child of the water. The comment described a picture the page was not
+drawing.
+
+The rows breathe separately now — 15.5 s at the far shore to 34.5 s at the near,
+which is the same reason the strokes thicken and the rows spread as the water comes
+toward the viewer: nearer crests are bigger and slower. Each animates
+`stroke-opacity` rather than `opacity`, because every row already carries an
+`opacity` attribute, .55 down to .17, and that ladder _is_ the perspective — a
+stylesheet `opacity` replaces an attribute, and six rows would have flattened to one
+brightness. The range is the band's own old range, 0.22 to 0.46 of itself, so the
+band is no brighter and no dimmer than it was; the only thing that changed is that
+the six are not one.
+
+The check winds the six animations to t = 0 and t = 7 s and reads each row's live
+stroke-opacity at both. The dimmest row must be no more than four fifths as bright
+as the brightest at either moment — one clock gives exactly 1 — and every row must
+have moved by at least 0.02 between the two, which is what proves the keyframe is
+running on that row at all. The times are set rather than sampled because sampling
+was flaky: the ratio wanders between 0.6 and 0.9 over a minute, which is a fact about
+the beating of six periods and not a fact about whether they are six.
+
 ## Mechanism
 
 **Phase and period are data, not markup.** The placement components already
@@ -343,22 +373,25 @@ the page today, so nothing has one.
 
 Enhance off, 1440 × 1150, measured by `npm run perf`:
 
-|                                   | mean    | median  | p95     | worst  | late frames |
-| --------------------------------- | ------- | ------- | ------- | ------ | ----------- |
-| before the gentle set             | 18.2 ms | 16.7 ms | 33.3 ms | 50 ms  | 22/240      |
-| with it (19 more animated marks)  | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms  | 25/240      |
-| with the slow petals as well (22) | 18.3 ms | 16.7 ms | 33.4 ms | 33 ms  | 24/240      |
-| with the fish as well (25)        | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms  | 25/240      |
-| the petals drifting as well (29)  | 16.6 ms | 16.7 ms | 16.7 ms | 17 ms  | 0/240       |
-| the page before the water (65)    | 16.8 ms | 16.7 ms | 16.8 ms | 67 ms  | 1/240       |
-| the page today, Enhance off (80)  | 16.7 ms | 16.7 ms | 16.8 ms | 33 ms  | 1/240       |
-| the page today, Enhance on (91)   | 40.7 ms | 33.4 ms | 50.1 ms | 117 ms | 239/240     |
+|                                   | mean    | median  | p95     | worst | late frames |
+| --------------------------------- | ------- | ------- | ------- | ----- | ----------- |
+| before the gentle set             | 18.2 ms | 16.7 ms | 33.3 ms | 50 ms | 22/240      |
+| with it (19 more animated marks)  | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
+| with the slow petals as well (22) | 18.3 ms | 16.7 ms | 33.4 ms | 33 ms | 24/240      |
+| with the fish as well (25)        | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
+| the petals drifting as well (29)  | 16.6 ms | 16.7 ms | 16.7 ms | 17 ms | 0/240       |
+| the page before the water (65)    | 16.8 ms | 16.7 ms | 16.8 ms | 67 ms | 1/240       |
+| the page with the water (80)      | 16.7 ms | 16.7 ms | 16.8 ms | 33 ms | 1/240       |
+| the page today, Enhance off (85)  | 16.6 ms | 16.7 ms | 16.8 ms | 17 ms | 0/240       |
+| the page today, Enhance on (96)   | 40.6 ms | 33.4 ms | 50.1 ms | 83 ms | 237/240     |
 
 Fifteen marks went into the quiet tier with the water and nothing moved: the
 tier's cost is the card's own filters, not the number of animations, and the
-water's are opacity on a stroke and a transform on a group. The 67 ms worst frame
-in the row above it was noise, and the 117 ms in the Enhance row is noise too —
-the same 239 late frames in both.
+water's are opacity on a stroke and a transform on a group. Six more went in when
+the glitter band stopped breathing as one group and started breathing as six rows,
+and the quiet tier came out of it at the same 16.7 ms median with no late frame in
+the sample at all. The 67 ms worst frame two rows up was noise, and the 83 ms in
+the Enhance row is noise too — the same 237 late frames in both.
 
 The last two rows are one run of `npm run perf`, which now measures both tiers
 back to back; the rows above them are the history of the comparison, each

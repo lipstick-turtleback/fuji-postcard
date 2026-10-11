@@ -150,6 +150,33 @@ html[data-enhance="on"] .petal {
   --rdur: 24s;
   --rdelay: -4s;
 }
+/* The six rows of the glitter band, each on its own clock.
+
+   stroke-opacity, not opacity. Each row carries an opacity attribute — .55 at the
+   far shore down to .17 at the near — and that ladder is the perspective: the
+   crests fade as the water comes toward the viewer. A stylesheet opacity replaces
+   an attribute, so animating opacity would flatten six rows to one brightness.
+   stroke-opacity multiplies with the attribute instead, and the range is the one
+   the band already had: between 0.22 and 0.46 of itself.
+
+   Six periods, 15.5 to 34.5 s, slower as the rows come nearer, which is the same
+   reason the strokes thicken and the rows spread. The rows are 10 to 40 units
+   apart, so each of them is the other's nearest neighbour and the rhythm probe
+   compares all fifteen pairs; none shares a period with another, and none is a
+   multiple of the hull's 13, the wake's 19 and 25, the boat's three crests at 17,
+   21 and 24, or the petals lying on the water at 17.5 and 23.5. */
+.crest {
+  animation: crest var(--rdur, 21s) ease-in-out infinite alternate;
+  animation-delay: var(--rdelay, 0s);
+}
+@keyframes crest {
+  from {
+    stroke-opacity: 0.22;
+  }
+  to {
+    stroke-opacity: 0.46;
+  }
+}
 /* The wake off the hull: slower than the ripples and it drifts, because the
    boat is moving through the water rather than sitting in still water. */
 .wake {

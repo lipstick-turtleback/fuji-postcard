@@ -119,10 +119,13 @@
                    short answer beside it, and the pair steps outward as the
                    path opens toward the viewer. Anything more than this stops
                    being the sun on water and becomes texture. -->
-              <!-- The band breathes as one thing, at one period, and the period is
-                   written here rather than counted from the markup: the class is on
-                   the group, so the six rows below share it. -->
-              <g class="ripple" style="--rdur: 23s; --rdelay: -6s" stroke="#ffeed2" stroke-linecap="round" fill="none">
+              <!-- Each row breathes on its own clock, and the clocks go slower as
+                   the water comes nearer, the same way the strokes thicken and the
+                   rows spread. The band used to be one group at one period; the
+                   stylesheet used to carry four rules that pretended otherwise and
+                   selected nothing. The periods are written here, where a rule that
+                   cannot match cannot hide the fact. -->
+              <g stroke="#ffeed2" stroke-linecap="round" fill="none">
                 <!-- The bands widen, thicken, fade and spread as the water
                      comes toward the viewer, which is perspective and correct.
                      But the old ladder advanced by a near-constant step in
@@ -130,12 +133,18 @@
                      +0.3, opacity -.06 - and four progressions in lockstep is
                      a gradient, not a lake. The rows now hold a different
                      number of breaks, and the steps vary. -->
-                <path d="M598 412 h44 M652 412 h14 M676 412 h7" stroke-width="2.4" opacity=".55"/>
-                <path d="M578 431 h62 M650 431 h22" stroke-width="2.7" opacity=".44"/>
-                <path d="M560 453 h71 M644 453 h34 M690 453 h11" stroke-width="2.9" opacity=".37"/>
-                <path d="M534 477 h96 M640 477 h40" stroke-width="3.3" opacity=".29"/>
-                <path d="M512 507 h104 M632 507 h58 M704 507 h16" stroke-width="3.4" opacity=".23"/>
-                <path d="M486 535 h128 M626 535 h62" stroke-width="3.9" opacity=".17"/>
+                <path class="crest" style="--rdur: 15.5s; --rdelay: -3s"
+                      d="M598 412 h44 M652 412 h14 M676 412 h7" stroke-width="2.4" opacity=".55"/>
+                <path class="crest" style="--rdur: 18.5s; --rdelay: -11s"
+                      d="M578 431 h62 M650 431 h22" stroke-width="2.7" opacity=".44"/>
+                <path class="crest" style="--rdur: 22.6s; --rdelay: -6s"
+                      d="M560 453 h71 M644 453 h34 M690 453 h11" stroke-width="2.9" opacity=".37"/>
+                <path class="crest" style="--rdur: 26.5s; --rdelay: -16s"
+                      d="M534 477 h96 M640 477 h40" stroke-width="3.3" opacity=".29"/>
+                <path class="crest" style="--rdur: 30.7s; --rdelay: -9s"
+                      d="M512 507 h104 M632 507 h58 M704 507 h16" stroke-width="3.4" opacity=".23"/>
+                <path class="crest" style="--rdur: 34.5s; --rdelay: -21s"
+                      d="M486 535 h128 M626 535 h62" stroke-width="3.9" opacity=".17"/>
               </g>
             </g>
 

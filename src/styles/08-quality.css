@@ -61,7 +61,10 @@ html[data-enhance="off"] .foil {
    band were exempted first — a lake does not stop moving because nobody switched
    anything on — and they were a defect for the same reason: the water had been
    drawn with marks that mean movement, rings and mirrors, and then held still, so
-   the shore read as a painting of a lake rather than as one. */
+   the shore read as a painting of a lake rather than as one. `.crest` is the six
+   rows of the glitter band: exempt as one group before, exempt as six rows now,
+   because the band is the sun on the water and the sun does not wait for a
+   switch. */
 html[data-enhance="off"]
   .face
   svg
@@ -69,7 +72,7 @@ html[data-enhance="off"]
     .boatman
   ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
     .petal-sway
-  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band) {
+  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band):not(.crest) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
