@@ -210,6 +210,22 @@ ok(
   ),
 );
 
+/* The branch and its flowers are the other half of the same rule. They move
+   because the wind is up, and in the calm tier the wind is not up: a branch
+   swaying in still air is the same lie as a petal hanging in mid-air. The kill
+   rule takes care of it, and this is here for the day someone decides the branch
+   should move in still air as well and exempts it the way .slow was exempted.
+   The picture will say so out loud. */
+const branchStill = await living.evaluate(
+  `[...document.querySelectorAll('.card svg .branch, .card svg .bloom')]
+     .filter((e) => getComputedStyle(e).animationName !== 'none').length`,
+);
+ok(
+  'the branch and its flowers hold still in still air',
+  branchStill === 0,
+  `${branchStill} of 16 moving`,
+);
+
 /* A CSS transform does not compose with a transform attribute — it replaces it
    outright. So a mark that is positioned by the attribute and animated by the
    stylesheet is positioned at the origin of the picture and animated there.
@@ -499,6 +515,41 @@ ok(
   await living.evaluate(
     `getComputedStyle(document.querySelector('.card svg .bird')).animationName`,
   ),
+);
+/* And the branch has to actually move when the wind is up, every flower its own
+   way. The swing itself is a third of a unit at the near end, which is a quarter
+   of a pixel at the size this card is drawn, so it is not measured by
+   displacement the way the falling petals are; what is measured is that all
+   fifteen flowers are animating, that no two of them carry the same amplitude,
+   tilt, period and phase, and that the branch they hang from is animating too.
+   The rhythm probe that follows then keeps them out of step with the fish, the
+   drifting petals, the birds, the clouds and the mist — which is exactly what it
+   did when the first set of periods put 19.4 s under the fish's 97 s, five times
+   exactly. */
+const branchOn = JSON.parse(
+  await living.evaluate(
+    `(() => {
+      const els = [...document.querySelectorAll('.card svg .bloom')];
+      const own = els.map((e) =>
+        ['--sway', '--tilt', '--sway-dur', '--sway-delay']
+          .map((p) => getComputedStyle(e).getPropertyValue(p).trim())
+          .join('|'),
+      );
+      return JSON.stringify({
+        n: els.length,
+        moving: els.filter((e) => getComputedStyle(e).animationName !== 'none').length,
+        own: new Set(own).size,
+        branch: getComputedStyle(document.querySelector('.card svg .branch')).animationName !== 'none',
+      });
+    })()`,
+  ),
+);
+ok(
+  'the branch rocks and every flower on it swings its own way',
+  branchOn.n === 15 && branchOn.moving === 15 && branchOn.own === 15 && branchOn.branch,
+  `${branchOn.moving}/${branchOn.n} flowers swinging · ${branchOn.own} different swings · branch ${
+    branchOn.branch ? 'rocking' : 'still'
+  }`,
 );
 /* The same comparison with the laminate on, where the second tier's periods
    are the ones in play: the birds glide, the hull rocks harder, the reeds

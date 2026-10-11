@@ -951,6 +951,54 @@ html[data-enhance="on"] .petal {
   }
 }
 
+/* The branch the petals come off, and the fifteen flowers on it. The cause is
+   the same gust that bends the reeds and sets the birds crossing: a branch over
+   a lake is held up by wind somewhere under it. Until this, the reeds bent, the
+   birds crossed, the petals came off in seconds instead of half a minute — and
+   the branch they were coming off was the one part of the scene bolted to the
+   sky.
+
+   It rocks about its root, where it enters the card at (-10, 26), and not about
+   its middle: the far end of a 254-unit branch at 0.4° travels 1.8 units and
+   the root travels nothing.
+
+   And no two flowers move together. A branch is not a bar — the swing runs out
+   along it, so everything further from the root arrives later and wider. The
+   amplitudes, the tilts and the periods are on the elements in 70-cherry.svg
+   and they grow with distance: 0.32 units and 10.2 s at the first blossom, 0.7
+   units and 36.2 s at the tip. A flower's own path is a shallow arc, because
+   that is the shape the end of a flexing branch draws. */
+.branch {
+  animation: branch-rock var(--rock-dur, 13.4s) ease-in-out infinite alternate;
+  animation-delay: var(--rock-delay, 0s);
+  transform-box: fill-box;
+  transform-origin: 0% 9%;
+}
+@keyframes branch-rock {
+  from {
+    transform: rotate(calc(var(--rock, 0.4deg) * -1));
+  }
+  to {
+    transform: rotate(var(--rock, 0.4deg));
+  }
+}
+.bloom {
+  animation: bloom-jiggle var(--sway-dur, 16s) ease-in-out infinite alternate;
+  animation-delay: var(--sway-delay, 0s);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes bloom-jiggle {
+  from {
+    transform: translate(calc(var(--sway, 0.5px) * -1), calc(var(--sway, 0.5px) * 0.45))
+      rotate(calc(var(--tilt, 1.5deg) * -1));
+  }
+  to {
+    transform: translate(var(--sway, 0.5px), calc(var(--sway, 0.5px) * -0.45))
+      rotate(var(--tilt, 1.5deg));
+  }
+}
+
 /* The boat lies on the water, so it bobs whether or not anybody switched the
    laminate on. What Enhance changes is how lively the water is, not whether
    the lake is alive: off, the hull moves better than half a unit over
@@ -2862,8 +2910,41 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
   The branch at the top left and the petals coming off it.
   -->
 
-          <!-- cherry branch, top-left -->
-          <g>
+          <!-- cherry branch, top-left.
+
+               The branch moves in the gust tier and not in the still air, and
+               so do its flowers. A branch overhanging a lake is held up by wind
+               somewhere under it, and when the wind comes up the reeds on the
+               shore bend, the birds go across the sky and the petals come off
+               this branch in seconds instead of half a minute — but the branch
+               itself, the thing the petals are coming off, used to be the one
+               part of the scene bolted to the sky. The cause of the motion is
+               the same cause as the shower's.
+
+               It rocks about its root, not its middle: the branch enters the
+               card at (-10, 26) and is held there, and the far end of a 254-unit
+               branch at 0.4° travels 1.8 units while the root travels nothing.
+
+               And no two flowers move together. A branch is not a rigid bar —
+               it flexes, so the swing runs out along it and everything further
+               from the root arrives later and wider. Each flower therefore
+               carries its own period, its own phase and its own amplitude, the
+               amplitude growing with its distance from the root (0.32 units at
+               the first blossom, 0.7 at the tip) and the period running 10.2 s
+               near the root to 36.2 s at the end.
+
+               The fifteen periods were not free, and the rhythm probe said so
+               the first time this ran. A flower that swings two thirds of a unit
+               is not a traveller, so it is compared against everything within
+               200 css px, and the branch hangs over most of the lake: the fish
+               rings at 97, 127 and 179, the petals drifting on the water at 73,
+               101, 109 and 139, the birds at 31.9, 43.7 and 39, the clouds at
+               46, 62 and 38, the mist at 78 and 103. The first set put 19.4
+               under the fish's 97 — five times, exactly — and 17.9 under 179,
+               ten times. Every one of the fifteen was then walked against that
+               whole list and against the other fourteen: none equals another,
+               none is within a percent of a whole multiple of another. -->
+          <g class="branch" style="--rock: .4deg; --rock-dur: 13.3s; --rock-delay: -5s">
             <!-- The branch is a filled shape, not a stroke. A stroke has one
                  width from end to end, and a branch that never thins reads as
                  a piece of tubing laid across the sky. This one is ten units
@@ -2883,21 +2964,28 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <path d="M100 62 C96 44 92 34 84 24" fill="none" stroke="#3a2a2c" stroke-width="3.4" stroke-linecap="round"/>
             <!-- no two flowers the same size, angle or kind: a spray with
                  some flowers turned away and some still shut is a spray,
-                 a row of identical discs is a pattern -->
+                 a row of identical discs is a pattern. Each one is also its
+                 own motion now: the four numbers beside each are how far it
+                 swings, how far it tips, how long a swing takes and where in
+                 the swing it starts, and they grow with distance from the
+                 root. (They are written as custom properties, which is why
+                 they cannot be named here: two hyphens are illegal inside a
+                 comment, and this file has to parse as XML once it is in the
+                 page.) -->
             <g>
-              <use href="#blossom" transform="translate(28 34) rotate(6) scale(1.15)"/>
-              <use href="#blossom" transform="translate(74 22) rotate(-14) scale(1)"/>
-              <use href="#blossom" transform="translate(132 22) rotate(21) scale(1.08)"/>
-              <use href="#blossom" transform="translate(104 66) rotate(-7) scale(.92)"/>
-              <use href="#blossom" transform="translate(158 62) rotate(33) scale(1.02)"/>
-              <use href="#blossom" transform="translate(168 118) rotate(-19) scale(1.1)"/>
-              <use href="#blossom" transform="translate(206 148) rotate(11) scale(.95)"/>
+              <g class="bloom" style="--sway: .32px; --tilt: 1.2deg; --sway-dur: 10.2s; --sway-delay: -3s"><use href="#blossom" transform="translate(28 34) rotate(6) scale(1.15)"/></g>
+              <g class="bloom" style="--sway: .4px; --tilt: 1.4deg; --sway-dur: 12.6s; --sway-delay: -6s"><use href="#blossom" transform="translate(74 22) rotate(-14) scale(1)"/></g>
+              <g class="bloom" style="--sway: .5px; --tilt: 1.75deg; --sway-dur: 18.2s; --sway-delay: -17s"><use href="#blossom" transform="translate(132 22) rotate(21) scale(1.08)"/></g>
+              <g class="bloom" style="--sway: .47px; --tilt: 1.65deg; --sway-dur: 16.9s; --sway-delay: -2s"><use href="#blossom" transform="translate(104 66) rotate(-7) scale(.92)"/></g>
+              <g class="bloom" style="--sway: .55px; --tilt: 1.9deg; --sway-dur: 21.7s; --sway-delay: -12s"><use href="#blossom" transform="translate(158 62) rotate(33) scale(1.02)"/></g>
+              <g class="bloom" style="--sway: .59px; --tilt: 2deg; --sway-dur: 24.5s; --sway-delay: -8s"><use href="#blossom" transform="translate(168 118) rotate(-19) scale(1.1)"/></g>
+              <g class="bloom" style="--sway: .66px; --tilt: 2.2deg; --sway-dur: 30.8s; --sway-delay: -19s"><use href="#blossom" transform="translate(206 148) rotate(11) scale(.95)"/></g>
             </g>
             <g>
-              <use href="#blossomSide" transform="translate(186 74) rotate(-12) scale(1.05)"/>
-              <use href="#blossomSide" transform="translate(222 116) rotate(14) scale(.95)"/>
-              <use href="#blossomSide" transform="translate(244 164) rotate(-4) scale(.85)"/>
-              <use href="#blossomSide" transform="translate(84 24) rotate(24) scale(.8)"/>
+              <g class="bloom" style="--sway: .6px; --tilt: 2.05deg; --sway-dur: 26.2s; --sway-delay: -15s"><use href="#blossomSide" transform="translate(186 74) rotate(-12) scale(1.05)"/></g>
+              <g class="bloom" style="--sway: .67px; --tilt: 2.25deg; --sway-dur: 33.3s; --sway-delay: -7s"><use href="#blossomSide" transform="translate(222 116) rotate(14) scale(.95)"/></g>
+              <g class="bloom" style="--sway: .7px; --tilt: 2.3deg; --sway-dur: 36.2s; --sway-delay: -10s"><use href="#blossomSide" transform="translate(244 164) rotate(-4) scale(.85)"/></g>
+              <g class="bloom" style="--sway: .42px; --tilt: 1.5deg; --sway-dur: 14.2s; --sway-delay: -14s"><use href="#blossomSide" transform="translate(84 24) rotate(24) scale(.8)"/></g>
             </g>
             <!-- the spurs are drawn with the branch, so the buds sit at the
                  ends of them rather than floating next to it -->
@@ -2908,15 +2996,15 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
               <path d="M112 60 C108 52 106 48 105 45"/>
             </g>
             <g>
-              <use href="#bud" transform="translate(55 54) rotate(16) scale(1.05)"/>
-              <use href="#bud" transform="translate(147 45) rotate(-9) scale(.95)"/>
-              <use href="#bud" transform="translate(199 111) rotate(23) scale(.85)"/>
-              <use href="#bud" transform="translate(105 43) rotate(-21) scale(.8)"/>
+              <g class="bloom" style="--sway: .38px; --tilt: 1.35deg; --sway-dur: 11.6s; --sway-delay: -11s"><use href="#bud" transform="translate(55 54) rotate(16) scale(1.05)"/></g>
+              <g class="bloom" style="--sway: .53px; --tilt: 1.85deg; --sway-dur: 20.1s; --sway-delay: -5s"><use href="#bud" transform="translate(147 45) rotate(-9) scale(.95)"/></g>
+              <g class="bloom" style="--sway: .63px; --tilt: 2.15deg; --sway-dur: 28.6s; --sway-delay: -4s"><use href="#bud" transform="translate(199 111) rotate(23) scale(.85)"/></g>
+              <g class="bloom" style="--sway: .46px; --tilt: 1.6deg; --sway-dur: 15.7s; --sway-delay: -9s"><use href="#bud" transform="translate(105 43) rotate(-21) scale(.8)"/></g>
             </g>
           </g>
 
-          <!-- falling petals: ten of them, three of them in still air.
-               The periods are in src/art/gen/Petals.data.mjs. -->
+          <!-- falling petals: ten of them, all ten falling. The periods and
+               the trajectories are in src/art/gen/Petals.data.mjs. -->
 <g fill="#f4c3d0"><g class="petal p1" style="--dur: 26.8s; --delay: -9s; --dur-on: 12.9s; --delay-on: -1s; --fall: 250px; --setx: -52px"><g class="petal-sway" style="--sway: 12px; --sway-dur: 21.7s; --sway-delay: -4s"><use href="#petalShape" transform="translate(150 150) rotate(-24) scale(0.92 0.78)"></use></g></g><g class="petal p2" style="--dur: 43s; --delay: -22s; --dur-on: 14.9s; --delay-on: -6s; --fall: 285px; --setx: -78px"><g class="petal-sway" style="--sway: 15px; --sway-dur: 24.1s; --sway-delay: -13s"><use href="#petalShape" transform="translate(210 120) rotate(58) scale(0.85 0.6)"></use></g></g><g class="petal p3" style="--dur: 22.8s; --delay: -14s; --dur-on: 11.2s; --delay-on: -9s; --fall: 215px; --setx: -34px"><g class="petal-sway" style="--sway: 9px; --sway-dur: 26.3s; --sway-delay: -7s"><use href="#petalShape" transform="translate(96 190) rotate(-71) scale(0.9)"></use></g></g><g class="petal p4" style="--dur: 37.1s; --delay: -5s; --dur-on: 17.1s; --delay-on: -3s; --fall: 235px; --setx: 26px"><g class="petal-sway" style="--sway: 13px; --sway-dur: 28.1s; --sway-delay: -19s"><use href="#petalShape" transform="translate(260 170) rotate(13) scale(0.75 0.5)"></use></g></g><g class="petal p5" style="--dur: 40.9s; --delay: -31s; --dur-on: 19.2s; --delay-on: -12s; --fall: 165px; --setx: -61px"><g class="petal-sway" style="--sway: 7px; --sway-dur: 30.7s; --sway-delay: -11s"><use href="#petalShape" transform="translate(180 240) rotate(-41) scale(1 0.85)"></use></g></g><g class="petal p6" style="--dur: 31.2s; --delay: -27s; --dur-on: 11.6s; --delay-on: -8s; --fall: 275px; --setx: 41px"><g class="petal-sway" style="--sway: 16px; --sway-dur: 33.3s; --sway-delay: -2s"><use href="#petalShape" transform="translate(320 130) rotate(76) scale(0.8 0.62)"></use></g></g><g class="petal p7" style="--dur: 47.3s; --delay: -38s; --dur-on: 14.2s; --delay-on: -15s; --fall: 145px; --setx: -18px"><g class="petal-sway" style="--sway: 8px; --sway-dur: 35.3s; --sway-delay: -23s"><use href="#petalShape" transform="translate(60 260) rotate(-8) scale(0.7)"></use></g></g><g class="petal p8" style="--dur: 53s; --delay: -11s; --dur-on: 16.1s; --delay-on: -5s; --fall: 125px; --setx: 33px"><g class="petal-sway" style="--sway: 11px; --sway-dur: 37.8s; --sway-delay: -16s"><use href="#petalShape" transform="translate(240 280) rotate(34) scale(0.9 0.55)"></use></g></g><g class="petal p9" style="--dur: 57.2s; --delay: -44s; --dur-on: 18.1s; --delay-on: -11s; --fall: 85px; --setx: -27px"><g class="petal-sway" style="--sway: 6px; --sway-dur: 41.3s; --sway-delay: -29s"><use href="#petalShape" transform="translate(130 320) rotate(-56) scale(0.75 0.8)"></use></g></g><g class="petal p10" style="--dur: 58.9s; --delay: -20s; --dur-on: 21.1s; --delay-on: -2s; --fall: 165px; --setx: 19px"><g class="petal-sway" style="--sway: 14px; --sway-dur: 43.8s; --sway-delay: -8s"><use href="#petalShape" transform="translate(300 240) rotate(21) scale(0.85 0.68)"></use></g></g></g>
   <!--
   Things stuck or stamped onto the card rather than drawn on it:
@@ -3935,7 +4023,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
         }
         const t = r.cssText;
         if (
-          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-/.test(
+          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-|\.branch|\.bloom/.test(
             t,
           )
         )

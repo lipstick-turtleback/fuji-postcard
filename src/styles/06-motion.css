@@ -247,6 +247,54 @@ html[data-enhance="on"] .petal {
   }
 }
 
+/* The branch the petals come off, and the fifteen flowers on it. The cause is
+   the same gust that bends the reeds and sets the birds crossing: a branch over
+   a lake is held up by wind somewhere under it. Until this, the reeds bent, the
+   birds crossed, the petals came off in seconds instead of half a minute — and
+   the branch they were coming off was the one part of the scene bolted to the
+   sky.
+
+   It rocks about its root, where it enters the card at (-10, 26), and not about
+   its middle: the far end of a 254-unit branch at 0.4° travels 1.8 units and
+   the root travels nothing.
+
+   And no two flowers move together. A branch is not a bar — the swing runs out
+   along it, so everything further from the root arrives later and wider. The
+   amplitudes, the tilts and the periods are on the elements in 70-cherry.svg
+   and they grow with distance: 0.32 units and 10.2 s at the first blossom, 0.7
+   units and 36.2 s at the tip. A flower's own path is a shallow arc, because
+   that is the shape the end of a flexing branch draws. */
+.branch {
+  animation: branch-rock var(--rock-dur, 13.4s) ease-in-out infinite alternate;
+  animation-delay: var(--rock-delay, 0s);
+  transform-box: fill-box;
+  transform-origin: 0% 9%;
+}
+@keyframes branch-rock {
+  from {
+    transform: rotate(calc(var(--rock, 0.4deg) * -1));
+  }
+  to {
+    transform: rotate(var(--rock, 0.4deg));
+  }
+}
+.bloom {
+  animation: bloom-jiggle var(--sway-dur, 16s) ease-in-out infinite alternate;
+  animation-delay: var(--sway-delay, 0s);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes bloom-jiggle {
+  from {
+    transform: translate(calc(var(--sway, 0.5px) * -1), calc(var(--sway, 0.5px) * 0.45))
+      rotate(calc(var(--tilt, 1.5deg) * -1));
+  }
+  to {
+    transform: translate(var(--sway, 0.5px), calc(var(--sway, 0.5px) * -0.45))
+      rotate(var(--tilt, 1.5deg));
+  }
+}
+
 /* The boat lies on the water, so it bobs whether or not anybody switched the
    laminate on. What Enhance changes is how lively the water is, not whether
    the lake is alive: off, the hull moves better than half a unit over
