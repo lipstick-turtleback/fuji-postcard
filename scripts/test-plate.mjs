@@ -24,6 +24,19 @@
    skipped the back without saying so: the back face is mirrored, its matrix
    has a negative a, and boxes mapped through it came out inside-out.
 
+   The same walk now asks a second question, about the other thing a rule
+   carries: its terminals. The gilded inscription rule ends at each side in a
+   small filled lozenge, and a lozenge is the one printed mark small enough
+   that a scene mark touching it stops reading as two things. A reed whose root
+   landed on the left one read, for as long as anyone looked at it, as a grey
+   diamond growing out of the bank with a stalk for a stem — and the diamond
+   was the rule’s cap, and the stalk was a plant, and neither had been drawn
+   wrong. The plant had simply been planted where the print was. So every
+   placed mark is now walked as the points it actually draws, through its own
+   transform and its own placement, and asked whether any of them lies inside a
+   terminal. Boxes will not do this: the reed leans, so the wide part of its box
+   sits 40 units above the ground it touches.
+
      node scripts/test-plate.mjs
 
    Needs Chrome; skips, like the layout test, when it is not installed. */
@@ -204,6 +217,204 @@ const probe = `(() => {
       }
     }
 
+    /* A rule ends in something, and on this plate the gilded inscription rule
+       ends at each side in a small filled lozenge. A lozenge is the one printed
+       mark small enough that a scene mark touching it stops reading as two
+       things: the reed whose root landed on the left one read, for as long as
+       anyone looked at it, as a grey diamond growing out of the bank with the
+       stalk for a stem — and the diamond was the rule's terminal, and the stalk
+       was a plant, and neither of them was drawn wrong.
+
+       So a terminal is found by what it is: a small straight-sided filled mark
+       with no stroke, centred on a rule's band. The path that carries the two
+       lozenges is one path with two subpaths, which is why the subpaths are
+       walked rather than the element box taken. */
+    const subpaths = (d) => {
+      const boxes = [];
+      const toks = d.match(/[A-Za-z]|[-+0-9.eE]+/g) || [];
+      let cmd = '';
+      let pen = [0, 0];
+      let start = [0, 0];
+      let cur = null;
+      let clean = true;
+      const grow = (x, y) => {
+        if (!cur) cur = { x1: x, x2: x, y1: y, y2: y };
+        cur.x1 = Math.min(cur.x1, x);
+        cur.x2 = Math.max(cur.x2, x);
+        cur.y1 = Math.min(cur.y1, y);
+        cur.y2 = Math.max(cur.y2, y);
+      };
+      const num = () => {
+        const v = parseFloat(toks[++i]);
+        return Number.isNaN(v) ? 0 : v;
+      };
+      let i = 0;
+      for (; i < toks.length && clean; i++) {
+        const t = toks[i];
+        if (/^[A-Za-z]$/.test(t)) {
+          cmd = t;
+          if (!/[MmLlHhVvZz]/.test(cmd)) clean = false;
+          else if (cmd === 'Z' || cmd === 'z') {
+            if (cur) boxes.push(cur);
+            cur = null;
+            pen = [start[0], start[1]];
+          }
+          continue;
+        }
+        const n = parseFloat(t);
+        if (Number.isNaN(n)) {
+          clean = false;
+          break;
+        }
+        const rel = cmd === cmd.toLowerCase();
+        if (cmd === 'M' || cmd === 'm') {
+          if (cur) boxes.push(cur);
+          cur = null;
+          pen = [rel ? pen[0] + n : n, rel ? pen[1] + num() : num()];
+          start = [pen[0], pen[1]];
+          grow(pen[0], pen[1]);
+        } else if (cmd === 'L' || cmd === 'l') {
+          pen = [rel ? pen[0] + n : n, rel ? pen[1] + num() : num()];
+          grow(pen[0], pen[1]);
+        } else if (cmd === 'H' || cmd === 'h') {
+          pen = [rel ? pen[0] + n : n, pen[1]];
+          grow(pen[0], pen[1]);
+        } else if (cmd === 'V' || cmd === 'v') {
+          pen = [pen[0], rel ? pen[1] + n : n];
+          grow(pen[0], pen[1]);
+        } else clean = false;
+      }
+      if (!clean) return [];
+      if (cur) boxes.push(cur);
+      return boxes;
+    };
+    const terminals = [];
+    for (const el of svg.querySelectorAll('path')) {
+      const cs = getComputedStyle(el);
+      if (!cs.fill || cs.fill === 'none') continue;
+      if (cs.stroke && cs.stroke !== 'none') continue;
+      const subs = subpaths(el.getAttribute('d') || '');
+      if (!subs.length) continue;
+      const em = el.getScreenCTM();
+      if (!em) continue;
+      const map = (x, y) => ({
+        x: (x * em.a + y * em.c + em.e - m.e) / m.a,
+        y: (x * em.b + y * em.d + em.f - m.f) / m.d,
+      });
+      for (const s of subs) {
+        const c = [map(s.x1, s.y1), map(s.x2, s.y1), map(s.x1, s.y2), map(s.x2, s.y2)];
+        const b = {
+          x1: Math.min(...c.map((v) => v.x)),
+          x2: Math.max(...c.map((v) => v.x)),
+          y1: Math.min(...c.map((v) => v.y)),
+          y2: Math.max(...c.map((v) => v.y)),
+        };
+        const w = b.x2 - b.x1;
+        const h = b.y2 - b.y1;
+        if (w < 2 || h < 2 || w > 14 || h > 14) continue;
+        const cy = (b.y1 + b.y2) / 2;
+        for (const band of bands) {
+          if (Math.abs(cy - (band.y1 + band.y2) / 2) > (band.y2 - band.y1) / 2 + 1.5) continue;
+          // A terminal caps a rule: it sits on the rule's line and at one of its
+          // ends, not somewhere along it. The lozenges here are 4 units outside
+          // the stroke's own extent, which is how a cap is drawn.
+          if (Math.abs(b.x1 - band.x1) > 14 && Math.abs(b.x2 - band.x2) > 14) continue;
+          terminals.push({ b, name: cs.fill.slice(0, 14) });
+          break;
+        }
+      }
+    }
+    /* The placed marks, measured as drawn lines rather than as boxes.
+
+       A box is not a drawing. The reed bent under its own head has a box 27
+       units wide, and the part of it that sits lowest is a stalk 2 units
+       through: holding the box against a printed terminal calls a reed that
+       clears it by six units a collision, and holding the box of the *piece*
+       against it still does, because the stalk leans and its top is what is
+       wide. So the geometry is walked: every drawn child of the referenced mark
+       is sampled along its own length — a point every half unit or so — and each
+       point is carried through the child's transform, the mark's placement and
+       the layer's lift into the plate's own units. A point counts as drawn if
+       it is inside half a stroke-width of where it stands, which is what a
+       stroked line actually covers. */
+    const markPoints = [];
+    // getCTM and getScreenCTM hand back an SVGMatrix, which DOMMatrix will not
+    // parse; the six numbers are the matrix, so take the six numbers.
+    const dm = (x) => new DOMMatrix([x.a, x.b, x.c, x.d, x.e, x.f]);
+    for (const el of svg.querySelectorAll('use')) {
+      const href = el.getAttribute('href') || '';
+      if (!href.startsWith('#')) continue;
+      const ref = document.getElementById(href.slice(1));
+      const useM = el.getScreenCTM();
+      if (!ref || !useM) continue;
+      const refM = ref.getCTM && ref.getCTM();
+      const refInv = refM ? dm(refM).inverse() : new DOMMatrix();
+      for (const k of ref.querySelectorAll('path,ellipse,circle,rect,polygon,line')) {
+        const cs = getComputedStyle(k);
+        const ink = cs.stroke && cs.stroke !== 'none' ? (parseFloat(cs.strokeWidth) || 1) / 2 : 0;
+        const km = k.getCTM && k.getCTM();
+        const rel = km ? refInv.multiply(dm(km)) : new DOMMatrix();
+        const mm = dm(useM).multiply(rel);
+        const what = (k.getAttribute('d') || k.tagName).slice(0, 14);
+        let len = 0;
+        try {
+          len = k.getTotalLength ? k.getTotalLength() : 0;
+        } catch {
+          len = 0;
+        }
+        if (len > 0.01) {
+          const step = Math.max(0.5, len / 48);
+          for (let s = 0; s <= len + 0.001; s += step) {
+            const q = mm.transformPoint(k.getPointAtLength(s));
+            markPoints.push({
+              href,
+              what,
+              ink,
+              x: (q.x - m.e) / m.a,
+              y: (q.y - m.f) / m.d,
+            });
+          }
+        } else {
+          const gb = k.getBBox();
+          const q = mm.transformPoint(new DOMPoint(gb.x + gb.width / 2, gb.y + gb.height / 2));
+          markPoints.push({
+            href,
+            what,
+            ink: Math.max(gb.width, gb.height) / 2,
+            x: (q.x - m.e) / m.a,
+            y: (q.y - m.f) / m.d,
+          });
+        }
+      }
+    }
+    const touches = [];
+    for (const term of terminals) {
+      const hits = new Map();
+      for (const pt of markPoints) {
+        if (pt.x + pt.ink < term.b.x1 || pt.x - pt.ink > term.b.x2) continue;
+        if (pt.y + pt.ink < term.b.y1 || pt.y - pt.ink > term.b.y2) continue;
+        const key = pt.href + ' ' + pt.what;
+        if (!hits.has(key)) hits.set(key, [Math.round(pt.x), Math.round(pt.y)]);
+      }
+      for (const [key, at] of hits)
+        touches.push(
+          key +
+            ' is drawn at [' +
+            at[0] +
+            ',' +
+            at[1] +
+            '] inside the terminal [' +
+            term.b.x1.toFixed(0) +
+            ',' +
+            term.b.x2.toFixed(0) +
+            ']x[' +
+            term.b.y1.toFixed(0) +
+            ',' +
+            term.b.y2.toFixed(0) +
+            ']',
+        );
+    }
+
     // The widest lettering on the face, in user units. It is reported so the
     // two passes cannot look like the same measurement twice: the gap that is
     // closest to a rule is usually a vertical one, and a different font moves
@@ -223,6 +434,8 @@ const probe = `(() => {
       widest: +widest.toFixed(1),
       strays,
       onTop,
+      terminals: terminals.length,
+      touches,
     });
   }
   return JSON.stringify(out);
@@ -283,8 +496,10 @@ for (const f of faces) {
     problems.push(
       `${f.face}: a placed mark is cut off by the edge of the plate — ${f.strays.join('; ')}`,
     );
+  if (f.touches.length)
+    problems.push(`${f.face}: a placed mark touches a printed terminal — ${f.touches.join('; ')}`);
   notes.push(
-    `${f.face}${f.pass}: ${f.rules} rules, widest mark ${f.widest} u, ${f.hits.length ? `${f.hits.length} collision(s)` : `clear, closest ${f.closest.gap} units (${f.closest.what})`}`,
+    `${f.face}${f.pass}: ${f.rules} rules, ${f.terminals} terminals, widest mark ${f.widest} u, ${f.hits.length ? `${f.hits.length} collision(s)` : `clear, closest ${f.closest.gap} units (${f.closest.what})`}`,
   );
 }
 if (exceptions.length)

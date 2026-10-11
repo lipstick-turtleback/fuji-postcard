@@ -71,7 +71,7 @@ scripts/
   test-score.mjs       verify the composition as data
   test-contrast.mjs    keep the palette above WCAG AA
   test-layout.mjs      drive headless Chrome at real window sizes
-  test-plate.mjs       keep the lettering off the frame rules
+  test-plate.mjs       keep the lettering and the placed marks off the rules
   test-ink.mjs         measure the contrast of the type printed on the card
   test-cast.mjs        no mark in the cast is the same mark twice
   test-visible.mjs     hide every placed mark in turn and see whether the page notices
@@ -367,6 +367,18 @@ the type moved: its baseline now rests 5 units above the inner rule, and the
 closest letter box — the ink shadow, which is set 1.2 units lower — sits 1.5
 units clear of it.
 
+The same walk now asks about the other thing a rule carries. The gilded
+inscription rule ends at each side in a small filled lozenge, and a lozenge is
+the one printed mark small enough that a scene mark touching it stops reading as
+two things: a reed whose root landed on the left one read, for as long as anyone
+looked at it, as a grey diamond growing out of the bank with a stalk for a stem.
+Nothing had been drawn wrong — the plant had been planted where the print was. So
+every placed mark is now walked as the points it actually draws, through its own
+transform and its own placement, and asked whether any of them falls inside a
+terminal. Boxes will not do this: the reed leans, so the wide part of its box
+sits 40 units above the ground it touches. The reed now stands 10 units right of
+the lozenge, and the eight terminals on the front are clear.
+
 The same test then found the same bug on the face nobody had measured. Its rule
 list was a pair of selectors naming the front's gilded frame, and the back's
 frame is a plain double rule with different names, so the back produced no rules
@@ -507,7 +519,11 @@ page before the question:
   whether anything is painted on top of a letter — paint order, not just
   overlapping boxes, because a petal behind the title box is the picture and the
   same petal in front of it is a smudge across a glyph. Renaming the cherry
-  fragment so it paints after the print fragment makes it fire.
+  fragment so it paints after the print fragment makes it fire. And it asks
+  whether a placed mark is drawn inside one of the rule terminals — the lozenges
+  the inscription rule ends in — by walking each mark as the points its paths
+  actually draw rather than as a box: putting the reed's root back on the left
+  lozenge reports `#reedC M0 0 C1 -12 1 is drawn at [110,543] inside the terminal`.
 - `scripts/test-nojs.mjs` switches script execution off and loads the page. The
   artwork is in the markup and the motion is opt-in, so the picture is there
   whole; what cannot work is the row of controls, so they are not allowed to look

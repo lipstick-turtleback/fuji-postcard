@@ -9,7 +9,11 @@
  * src/art/gen/Plants.svelte; the marks it places are the files under
  * src/art/front/20-cast/. This is the only place a placement is written,
  * which is the point: 'lift the left stand two units' is an edit here,
- * not a search through forty-five transforms. */
+ * not a search through forty-five transforms. One reed stands a little apart
+ * from the clump it belongs to: its root was landing on the lozenge that caps
+ * the inscription rule, and a plant rooted on a printed mark reads as one
+ * object — a grey diamond with a stalk growing out of the bank — rather than as
+ * a plant and a rule. test-plate.mjs keeps it clear of the print now. */
 export const stands = [
   {
     fill: '#161d31',
@@ -31,7 +35,7 @@ export const stands = [
       { h: 'reedB', x: 30.0, y: 573.0, rot: 5.0, sx: 1.15, sy: 0.96 },
       { h: 'reed', x: 60.0, y: 575.0, rot: -4.0, sx: 0.95, sy: 1.04 },
       { h: 'sedge', x: 86.0, y: 569.0, rot: 3.0, sx: 0.86 },
-      { h: 'reedC', x: 110.0, y: 567.0, rot: -7.0, sx: 0.9, sy: 1.02 },
+      { h: 'reedC', x: 120.0, y: 567.0, rot: -7.0, sx: 0.9, sy: 1.02 },
       { h: 'tuft', x: 30.0, y: 577.0, rot: 4.0, sx: 1.05, sy: 0.92 },
       { h: 'grassPair', x: 26.0, y: 580.0, rot: -6.0, sx: 0.8, sy: 0.95 },
       { h: 'tuftC', x: 40.0, y: 574.0, rot: 9.0, sx: 1.12, sy: 0.88 },
