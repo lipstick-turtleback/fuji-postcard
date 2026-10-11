@@ -226,12 +226,13 @@ the lighting model is actually running, and samples `requestAnimationFrame`
 intervals. Screenshots cannot tell you any of this, and `--virtual-time-budget`
 lies about it because virtual time fast-forwards the clock.
 
-The numbers on this machine, 4-second samples:
+The numbers on this machine, 4-second samples of 240 frames, both tiers in one
+run:
 
-| Rendering                 | mean    | median  | frames over 33 ms |
-| ------------------------- | ------- | ------- | ----------------- |
-| Enhance on                | 38.9 ms | 33.4 ms | 239 / 240         |
-| Enhance off (the default) | 18.1 ms | 16.7 ms | 20 / 240          |
+| Rendering                 | mean    | median  | p95     | worst | frames over 33 ms |
+| ------------------------- | ------- | ------- | ------- | ----- | ----------------- |
+| Enhance on                | 39.7 ms | 33.4 ms | 50.1 ms | 83 ms | 238 / 240         |
+| Enhance off (the default) | 16.7 ms | 16.7 ms | 16.8 ms | 50 ms | 1 / 240           |
 
 The laminate is the whole cost, and the shape of the cost is worth knowing
 before anyone tries to optimise it: `mix-blend-mode` has to read the backdrop,
@@ -241,9 +242,10 @@ changes nothing. Freezing the gradients changes nothing. Holding the card still
 changes nothing. Only the presence or absence of the blend matters. The paper
 grain and the drifting water are nearly free by comparison — about 2 ms each — and the rule was
 confirmed a second time from the other direction: seven hand-drawn foxing
-blooms cost 19.6 ms with `mix-blend-mode: multiply` and 18.1 ms without it,
-which is the entire difference between a comfortable 55 fps and 42 late frames
-out of 240.
+blooms cost 19.6 ms with `mix-blend-mode: multiply` and 18.1 ms without it
+(both measured against the page of that day, whose quiet baseline was 18.1 ms
+before the gentle set), which is the entire difference between a comfortable
+55 fps and 42 late frames out of 240.
 
 The rule has a boundary, and measuring it found the boundary wrong. The back of
 the card carries a full-bleed `multiply` rect of its own, and with the card
@@ -350,7 +352,7 @@ version of the class check looked at nothing, because it asked every rule
 whether it had a `cssRules` list before asking whether it had a selector — and
 a style rule has one now, for nesting, so every rule was descended into and
 none was examined. It printed a pass. The count of rules examined is in the
-output line now (34 on the front, 0 on the back, which carries no classes),
+output line now (42 on the front, 0 on the back, which carries no classes),
 and giving a mark a class the export filter drops fails the test.
 
 The browser tests ask the questions that need a browser, each with its own

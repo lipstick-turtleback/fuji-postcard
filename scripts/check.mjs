@@ -112,6 +112,12 @@ for (const m of html.matchAll(/<svg\b[^>]*>/g)) {
     fail(m.index, '<svg> <title> is not wired to aria-labelledby');
 }
 
+/* ---- how big the picture is -------------------------------------------- */
+// The docs quote this, so the tool that validates the page also says what the
+// number currently is: 791 elements on the front, 124 on the back.
+const faces = [...html.matchAll(/<svg\b[\s\S]*?<\/svg>/g)];
+const elements = faces.map((f) => [...f[0].matchAll(/<[a-zA-Z][\w:-]*/g)].length);
+
 /* ---- an id nothing points to is artwork that quietly stopped existing --- */
 // anything that can name an id: CSS selectors, querySelector/closest
 // strings, and getElementById
@@ -224,4 +230,6 @@ if (problems.length) {
 }
 for (const [name, index] of unused)
   console.log(`check: note — id "${name}" defined at ${at(index)} is never referenced`);
-console.log(`check: ${file} — ${html.split('\n').length} lines, no problems`);
+console.log(
+  `check: ${file} — ${html.split('\n').length} lines, ${elements.join(' + ')} svg elements, no problems`,
+);

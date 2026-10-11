@@ -170,8 +170,8 @@ Enhance off, 1440 × 1150, measured by `npm run perf`:
 | with the slow petals as well (22) | 18.3 ms | 16.7 ms | 33.4 ms | 33 ms | 24/240      |
 | with the fish as well (25)        | 18.4 ms | 16.7 ms | 33.3 ms | 33 ms | 25/240      |
 | the petals drifting as well (29)  | 16.6 ms | 16.7 ms | 16.7 ms | 17 ms | 0/240       |
-| the page today, Enhance off       | 16.7 ms | 16.7 ms | 16.7 ms | 33 ms | 1/240       |
-| the page today, Enhance on        | 39.8 ms | 33.4 ms | 50.1 ms | 83 ms | 238/240     |
+| the page today, Enhance off       | 16.7 ms | 16.7 ms | 16.8 ms | 50 ms | 1/240       |
+| the page today, Enhance on        | 39.7 ms | 33.4 ms | 50.1 ms | 83 ms | 238/240     |
 
 The last two rows are one run of `npm run perf`, which now measures both tiers
 back to back; the rows above them are the history of the comparison, each
@@ -283,6 +283,7 @@ before and after.
 ## What this document does not propose
 
 No animation framework, no GSAP, no runtime Svelte, no parallax layers. The
-scene is 726 static elements and one lighting loop; the motion it needs is
-thirty-odd CSS animations with argued-over periods and a data table that says
-which one is in phase with what.
+scene is 915 static elements across the two faces — 791 on the front, 124 on
+the back — and one lighting loop; the motion it needs is thirty-odd CSS
+animations with argued-over periods and a data table that says which one is in
+phase with what.
