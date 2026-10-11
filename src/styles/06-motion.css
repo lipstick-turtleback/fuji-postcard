@@ -247,51 +247,84 @@ html[data-enhance="on"] .petal {
   }
 }
 
-/* The branch the petals come off, and the fifteen flowers on it. The cause is
-   the same gust that bends the reeds and sets the birds crossing: a branch over
-   a lake is held up by wind somewhere under it. Until this, the reeds bent, the
-   birds crossed, the petals came off in seconds instead of half a minute — and
-   the branch they were coming off was the one part of the scene bolted to the
-   sky.
+/* The branch the petals come off, and the fifteen flowers on it. A branch over
+   a lake is held up by wind somewhere under it, so it moves whenever there is
+   wind — which means it moves in still air too, at the same rate as everything
+   else the air holds: the mist crossing the mountain, the birds going over the
+   lake. What the laminate changes is how hard, from a sway nobody picks out to a
+   swing you can see the end of.
 
    It rocks about its root, where it enters the card at (-10, 26), and not about
-   its middle: the far end of a 254-unit branch at 0.4° travels 1.8 units and
-   the root travels nothing.
+   its middle: the far end of a 254-unit branch at 0.18° travels 0.8 units and
+   the root travels nothing, and at the gust's 0.4° the same end travels 1.8.
 
    And no two flowers move together. A branch is not a bar — the swing runs out
    along it, so everything further from the root arrives later and wider. The
-   amplitudes, the tilts and the periods are on the elements in 70-cherry.svg
-   and they grow with distance: 0.32 units and 10.2 s at the first blossom, 0.7
-   units and 36.2 s at the tip. A flower's own path is a shallow arc, because
-   that is the shape the end of a flexing branch draws. */
+   amplitudes, the tilts and the periods are on the elements in 70-cherry.svg and
+   they grow with distance: 0.16 units and 41.6 s at the first blossom, 0.35
+   units and 86.5 s at the tip in still air; 0.32 units and 10.2 s, and 0.7 units
+   and 36.2 s, in the gust. A flower's own path is a shallow arc, because that is
+   the shape the end of a flexing branch draws.
+
+   Two keyframes each, rather than one whose amplitude a rule could change: the
+   numbers are inline on the elements, and an inline custom property cannot be
+   overridden by a stylesheet, so the tier has to be chosen by name. */
 .branch {
-  animation: branch-rock var(--rock-dur, 13.4s) ease-in-out infinite alternate;
+  animation: branch-rock var(--rock-dur, 57.5s) ease-in-out infinite alternate;
   animation-delay: var(--rock-delay, 0s);
   transform-box: fill-box;
   transform-origin: 0% 9%;
 }
 @keyframes branch-rock {
   from {
-    transform: rotate(calc(var(--rock, 0.4deg) * -1));
+    transform: rotate(calc(var(--rock, 0.18deg) * -1));
   }
   to {
-    transform: rotate(var(--rock, 0.4deg));
+    transform: rotate(var(--rock, 0.18deg));
+  }
+}
+@keyframes branch-rock-on {
+  from {
+    transform: rotate(calc(var(--rock-on, 0.4deg) * -1));
+  }
+  to {
+    transform: rotate(var(--rock-on, 0.4deg));
   }
 }
 .bloom {
-  animation: bloom-jiggle var(--sway-dur, 16s) ease-in-out infinite alternate;
+  animation: bloom-jiggle var(--sway-dur, 44s) ease-in-out infinite alternate;
   animation-delay: var(--sway-delay, 0s);
   transform-box: fill-box;
   transform-origin: center;
 }
+html[data-enhance="on"] .branch {
+  animation-name: branch-rock-on;
+  animation-duration: var(--rock-dur-on, 13.3s);
+  animation-delay: var(--rock-delay-on, -5s);
+}
+html[data-enhance="on"] .bloom {
+  animation-name: bloom-jiggle-on;
+  animation-duration: var(--sway-dur-on, 16s);
+  animation-delay: var(--sway-delay-on, 0s);
+}
 @keyframes bloom-jiggle {
   from {
-    transform: translate(calc(var(--sway, 0.5px) * -1), calc(var(--sway, 0.5px) * 0.45))
-      rotate(calc(var(--tilt, 1.5deg) * -1));
+    transform: translate(calc(var(--sway, 0.25px) * -1), calc(var(--sway, 0.25px) * 0.45))
+      rotate(calc(var(--tilt, 0.8deg) * -1));
   }
   to {
-    transform: translate(var(--sway, 0.5px), calc(var(--sway, 0.5px) * -0.45))
-      rotate(var(--tilt, 1.5deg));
+    transform: translate(var(--sway, 0.25px), calc(var(--sway, 0.25px) * -0.45))
+      rotate(var(--tilt, 0.8deg));
+  }
+}
+@keyframes bloom-jiggle-on {
+  from {
+    transform: translate(calc(var(--sway-on, 0.5px) * -1), calc(var(--sway-on, 0.5px) * 0.45))
+      rotate(calc(var(--tilt-on, 1.5deg) * -1));
+  }
+  to {
+    transform: translate(var(--sway-on, 0.5px), calc(var(--sway-on, 0.5px) * -0.45))
+      rotate(var(--tilt-on, 1.5deg));
   }
 }
 

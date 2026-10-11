@@ -78,6 +78,8 @@ const WANT = [
   'petal',
   'petal-sway',
   'fish',
+  'branch',
+  'bloom',
 ];
 
 /* Where every one of them is with motion switched off. The same question gets
@@ -210,20 +212,23 @@ ok(
   ),
 );
 
-/* The branch and its flowers are the other half of the same rule. They move
-   because the wind is up, and in the calm tier the wind is not up: a branch
-   swaying in still air is the same lie as a petal hanging in mid-air. The kill
-   rule takes care of it, and this is here for the day someone decides the branch
-   should move in still air as well and exempts it the way .slow was exempted.
-   The picture will say so out loud. */
-const branchStill = await living.evaluate(
+/* The branch and its flowers move in still air too, at a fifth of the amplitude
+   and an eighth of the speed: the air that lets a petal go also holds the branch
+   up, and a branch that only moves when somebody switches the laminate on is a
+   branch with a switch on it rather than a branch in the wind.
+
+   This check used to say the opposite — that they held still — and it was
+   written when the branch did hold still, one commit before it began to move in
+   the gust tier. A check that contradicts the picture is not a guard, it is a
+   photograph of an old decision; it changed because the picture did. */
+const branchCalm = await living.evaluate(
   `[...document.querySelectorAll('.card svg .branch, .card svg .bloom')]
      .filter((e) => getComputedStyle(e).animationName !== 'none').length`,
 );
 ok(
-  'the branch and its flowers hold still in still air',
-  branchStill === 0,
-  `${branchStill} of 16 moving`,
+  'the branch and its flowers move in still air too',
+  branchCalm === 16,
+  `${branchCalm} of 16 moving`,
 );
 
 /* A CSS transform does not compose with a transform attribute — it replaces it
@@ -495,9 +500,20 @@ const readFalls = async () =>
       `JSON.stringify([...document.querySelectorAll('${fallDurations}')].map((e) => parseFloat(getComputedStyle(e).animationDuration)))`,
     ),
   );
+/* The same wiring, one level up: the branch and its fifteen flowers each carry
+   both amplitudes and both periods, and the stylesheet picks between them by
+   animation name. Sixteen numbers in each tier. */
+const readBranch = async () =>
+  JSON.parse(
+    await living.evaluate(
+      `JSON.stringify([...document.querySelectorAll('.card svg .branch, .card svg .bloom')].map((e) => parseFloat(getComputedStyle(e).animationDuration)))`,
+    ),
+  );
 const fallsFirst = await readFalls();
+const branchFirst = await readBranch();
 ok('the laminate can be switched on', await setEnhance(true));
 const fallsSecond = await readFalls();
+const branchSecond = await readBranch();
 ok(
   'and every petal falls faster with it on',
   fallsFirst.length === 10 &&
@@ -506,6 +522,15 @@ ok(
     new Set(fallsFirst).size === 10 &&
     new Set(fallsSecond).size === 10,
   `${fallsFirst.join(' ')} off → ${fallsSecond.join(' ')} on`,
+);
+ok(
+  'and the branch sways less with the laminate off',
+  branchFirst.length === 16 &&
+    branchSecond.length === 16 &&
+    branchFirst.every((d, i) => branchSecond[i] < d) &&
+    new Set(branchFirst).size === 16 &&
+    new Set(branchSecond).size === 16,
+  `${branchFirst.join(' ')} off → ${branchSecond.join(' ')} on`,
 );
 ok(
   'and then the birds cross',
@@ -530,11 +555,21 @@ const branchOn = JSON.parse(
   await living.evaluate(
     `(() => {
       const els = [...document.querySelectorAll('.card svg .bloom')];
-      const own = els.map((e) =>
-        ['--sway', '--tilt', '--sway-dur', '--sway-delay']
-          .map((p) => getComputedStyle(e).getPropertyValue(p).trim())
-          .join('|'),
-      );
+      /* The tier picks which amplitude and which period a flower uses, so the
+         period and the phase are read off the computed animation — that is the
+         one the page is actually running — and the two amplitudes are read from
+         the element, because the tier that is not in play is still a number the
+         flower owns. */
+      const own = els.map((e) => {
+        const s = getComputedStyle(e);
+        return [
+          s.animationName,
+          s.animationDuration,
+          s.animationDelay,
+          s.getPropertyValue('--sway').trim(),
+          s.getPropertyValue('--sway-on').trim(),
+        ].join('|');
+      });
       return JSON.stringify({
         n: els.length,
         moving: els.filter((e) => getComputedStyle(e).animationName !== 'none').length,

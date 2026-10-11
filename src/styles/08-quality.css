@@ -43,7 +43,16 @@ html[data-enhance="off"] .foil {
    left a branch does, at whatever speed the air allows; the laminate changes
    the speed and never the fact. Both groups are exempt because both belong to
    one fall — the outer group descends, the inner one slides and turns — and
-   killing either would leave the petal doing half a motion. */
+   killing either would leave the petal doing half a motion.
+
+   `.branch` and `.bloom` are the same argument one level up. The branch is what
+   the petals are coming off, and the air that lets them go also holds the branch
+   up: in still air it sways by a fifth of a degree and its flowers by a fifth of
+   a unit, which is the same order of motion as the mist crossing the mountain
+   and the birds over the lake. The laminate takes that to half a degree and
+   three quarters of a unit. Exempting the branch but not its flowers would make
+   the flowers come loose from a moving branch, and exempting the flowers but not
+   the branch would swing them on a branch that is not moving. */
 html[data-enhance="off"]
   .face
   svg
@@ -51,7 +60,7 @@ html[data-enhance="off"]
     .boatman
   ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
     .petal-sway
-  ):not(.fish) {
+  ):not(.fish):not(.branch):not(.bloom) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
