@@ -338,6 +338,67 @@ ok(
   `${crests.n} rows · ${crests.own} different clocks · dimmest row ${(100 * Math.min(crestTimes.spreadA, crestTimes.spreadB)).toFixed(0)}% of brightest · every row moves ${Math.min(...crestTimes.moved).toFixed(2)} or more`,
 );
 
+/* "Nobody ever sees it move" is a claim about units, and the only evidence for it
+   had been the numbers typed into the stylesheet. This reads them off the page
+   instead: every animated mark in the default tier is wound to t = 0 and to half
+   its own period, and the distance its centre travels between those two moments is
+   measured from the live box.
+
+   Two kinds of mark are set aside, for the same reason: the motion is a passage
+   rather than a sway. A petal coming down off the branch travels 89 to 295 units,
+   a petal lying on the water 7 to 15, a bird 6.7 to 8.1 — none of that is a
+   wobble the scene could be mistaken for, it is the thing going somewhere. And a
+   mark 200 units across is a surface: 20 units of drift across a 660-unit band is
+   3% of itself, which is why the mist is not held to the same number as a duck.
+
+   What is left has to stay nearly still. Six units of centre travel per cycle is
+   the ceiling; the page's worst today is 4.2, a petal bobbing on the water, and
+   the ceiling is where it is so that a mark given an amplitude an order too big
+   for the scene is reported rather than admired. */
+const travel = JSON.parse(
+  await living.evaluate(
+    `(async () => {
+      const svg = document.querySelector('.face.front svg');
+      const k = svg.getBoundingClientRect().width / svg.viewBox.baseVal.width;
+      const raf = () => new Promise((r) => requestAnimationFrame(r));
+      const rows = [];
+      for (const el of document.querySelectorAll('.card svg *')) {
+        const anims = el.getAnimations();
+        if (!anims.length) continue;
+        const dur = parseFloat(getComputedStyle(el).animationDuration);
+        const at = async (t) => {
+          for (const a of anims) a.currentTime = t * 1000;
+          await raf();
+          const r = el.getBoundingClientRect();
+          return [r.x + r.width / 2, r.y + r.height / 2, Math.max(r.width, r.height) / k];
+        };
+        const a = await at(0);
+        const b = await at(dur / 2);
+        rows.push({
+          cls: el.getAttribute('class') || el.tagName,
+          u: Math.hypot(b[0] - a[0], b[1] - a[1]) / k,
+          side: Math.max(a[2], b[2]),
+        });
+      }
+      return JSON.stringify(rows);
+    })()`,
+    { awaitPromise: true },
+  ),
+);
+const PASSAGE = ['petal', 'petal-sway', 'bird', 'floater-drift'];
+const stayPut = travel
+  .filter((r) => !PASSAGE.some((c) => r.cls.split(/\s+/).includes(c)))
+  .filter((r) => r.side <= 200)
+  .sort((a, b) => b.u - a.u);
+ok(
+  'nothing that stays put travels more than six units a cycle',
+  stayPut.length > 0 && stayPut[0].u <= 6,
+  `${stayPut.length} marks that stay put · the most travelled is ${stayPut[0].cls} at ${stayPut[0].u.toFixed(1)} u · then ${stayPut
+    .slice(1, 4)
+    .map((r) => `${r.cls.split(' ')[0]} ${r.u.toFixed(1)}`)
+    .join(', ')}`,
+);
+
 /* The branch and its flowers move in still air too, at a fifth of the amplitude
    and an eighth of the speed: the air that lets a petal go also holds the branch
    up, and a branch that only moves when somebody switches the laminate on is a

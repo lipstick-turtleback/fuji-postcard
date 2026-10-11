@@ -27,7 +27,9 @@ keeping it slow enough that nobody ever sees it move.
 
 ## What "gentle" means, in numbers
 
-Amplitude and period, in the artwork's own units (the card is 900 × 600):
+Amplitude and period, in the artwork's own units (the card is 900 × 600). This is
+the brief the motion was designed to, written before the card had creatures in it;
+what it actually holds to is measured below, and the two are not the same numbers.
 
 | distance from the eye           | travel        | rotation | period   |
 | ------------------------------- | ------------- | -------- | -------- |
@@ -35,9 +37,27 @@ Amplitude and period, in the artwork's own units (the card is 900 × 600):
 | middle (Fuji's mist, the lake)  | 1–2 units     | none     | 40–110 s |
 | near (bank, reeds, boat, ducks) | 0.4–1.2 units | ≤ 1.2°   | 8–30 s   |
 
-Nothing in the default set moves more than 1.2 units or turns more than 1.2°
-per cycle. A viewer who notices that something moved has seen a defect, not a
-success.
+Nothing that stays put may move far enough to be seen. A viewer who notices that
+something moved has seen a defect, not a success.
+
+**Measured, not typed.** That sentence used to be backed by the number above it —
+1.2 units — and the number had been there since before the card had creatures in
+it. `test-motion.mjs` now measures it instead: every animated mark in the default
+tier is wound to t = 0 and to half its own period, and the distance its centre
+travels between the two is read off the live box. Fifty marks stay put. The most
+travelled of them is a petal bobbing on the water, at 2.1 units a cycle; then a
+band across the gate's reflection at 2.0, another floater at 1.7, the mountain's
+mirror at 1.9. The ceiling the check enforces is six units — three times the worst
+mark on the card, and low enough that an amplitude an order too big for the scene
+is reported rather than admired: give one of the bands 14 units of drift instead of
+1.4 and it comes out as `band at 20.1 u`.
+
+Two kinds of mark are measured but not held to that ceiling. A passage is not a
+sway: the ten petals coming down travel 89 to 295 units, the four lying on the
+water slide 7 to 15, the three birds in the far sky 6.7 to 8.1, and none of those
+reads as the scene moving — it reads as that thing going somewhere. And a mark 200
+units across is a surface: 20 units of drift across a 660-unit band of mist is 3%
+of itself, which is why the mist is not judged by a number written for a duck.
 
 Rule 2 applies to time as much as to space: **no two animated things in a
 group may share a period, and no period may be a multiple of another in the
