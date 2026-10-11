@@ -339,6 +339,17 @@ The habits that keep paying off:
   rule: nothing about the page is wrong, so nothing looks wrong. `check.mjs` now
   reads the directory and the chain and requires them to agree in both
   directions, and the README's map of `scripts/` has to be the directory too.
+- **A check that assumes the machine's speed checks the machine.** The frame
+  probe's test waited unthrottled and required the laminate to survive. On a
+  busy laptop the page measured 33.3 ms, dropped the laminate exactly as
+  designed, and the test called that a defect — and because the drop set the
+  page's override flag, the throttled pass that followed never probed at all and
+  read back the previous window's number as its own. The assertion is now the
+  page's rule: the laminate stays if the median it measured is at or under the
+  threshold and goes if it is over. Two things that fell out of it are now
+  stated in the page: the slow pass runs on a freshly loaded page, and
+  `data-probe` is cleared when a new window opens, because a stale median
+  answers "why is this off on my machine" with a period nobody is looking at.
 
 ## The standing goal
 

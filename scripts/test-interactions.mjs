@@ -157,27 +157,65 @@ const readProbe = () =>
     return d.enhance + ' | ' + (d.probe || 'no probe') + ' | ' + document.getElementById('enhanceLabel').textContent;
   })()`);
 
-/* The control first, because the page remembers: once it has dropped the
-   laminate by itself, switching it back on is treated as a person overruling
-   the machine and the probe stops. So the unthrottled wait has to happen
-   before the throttled one, and the laminate has to go off and on between
-   them to open a fresh window. */
+/* Neither pass asserts how fast the machine is. The suite failed here on a
+   loaded laptop with the page behaving perfectly: the unthrottled pass measured
+   a 33.3 ms median, dropped the laminate exactly as designed, and a check that
+   had assumed the frames were coming called that a defect — and then, because
+   that drop set the page's override flag, the throttled pass never probed at
+   all and read back the previous window's number as if it were its own.
+
+   So what is asserted is the page's own rule — the laminate stays if the
+   median it measured is at or under the threshold and goes if it is over — and
+   the second pass runs on a freshly loaded page, because a page that has
+   already dropped the laminate once treats being asked to switch it back on as
+   a person overruling the machine, and stops measuring. */
+const probeOf = (line) => {
+  const m = /(\d+)f median ([\d.]+)ms/.exec(line);
+  return m ? { frames: Number(m[1]), median: Number(m[2]) } : null;
+};
+
 await setEnhance(true);
 await sleep(4000);
 const kept = await readProbe();
+const first = probeOf(kept);
 ok(
-  'the page left Enhance alone while the frames were coming',
-  kept.startsWith('on |') && /median/.test(kept),
+  'the page’s choice follows the frames it measured',
+  first !== null && (kept.startsWith('on |') ? first.median <= 24 : first.median > 24),
   kept,
 );
+
+/* The number on `<html>` belongs to the window that produced it. Switch the
+   laminate off and on and the old median has to go with the window it came
+   from: it is the page's answer to "why is this off on my machine", and a
+   stale one answers for a period nobody is looking at — which is also how a
+   test reads back a probe that never ran. */
 await setEnhance(false);
 await setEnhance(true);
+const stale = await evaluate(`document.documentElement.dataset.probe || 'gone'`);
+ok(
+  'and the recorded measurement leaves when its window does',
+  stale === 'gone',
+  `data-probe 0.5 s into a fresh window: ${stale}`,
+);
+
+/* A fresh page for the slow pass, and the laminate switched on exactly once.
+   The page remembers what it measured and what the person did about it: a page
+   that has already dropped the laminate treats being asked for it again as an
+   override and stops probing, and a profile that remembers `on` starts probing
+   before the throttle is even applied. Clearing storage and reloading gives one
+   clean window, opened after the machine has been made slow. */
+await evaluate(`localStorage.clear()`);
+await send('Page.navigate', { url: PAGE });
+await sleep(2000);
+await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 700, y: 400 });
 await send('Emulation.setCPUThrottlingRate', { rate: 8 });
+await setEnhance(true);
 await sleep(4000);
 const dropped = await readProbe();
+const second = probeOf(dropped);
 ok(
   'and dropped it when the frames stopped coming',
-  dropped.startsWith('off |') && /median/.test(dropped) && /smooth/.test(dropped),
+  second !== null && second.median > 24 && dropped.startsWith('off |') && /smooth/.test(dropped),
   dropped,
 );
 await send('Emulation.setCPUThrottlingRate', { rate: 1 });

@@ -92,6 +92,12 @@ function setEnhance(on, reason) {
     probeLast = 0;
     probeGaps.length = 0;
     probeDone = false;
+    /* and the number it recorded goes with the window it belongs to.
+       `data-probe` is the answer to "why is this off on my machine", and a
+       stale median sitting there while a fresh window is still open answers
+       it with a period nobody is looking at — which is also how a test can
+       read a probe that never ran. */
+    delete document.documentElement.dataset.probe;
   }
   card.style.setProperty('--foil', on ? '1' : '0');
   document.documentElement.dataset.enhance = on ? 'on' : 'off';
