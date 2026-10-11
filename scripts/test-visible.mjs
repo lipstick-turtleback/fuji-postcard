@@ -218,49 +218,65 @@ ok(
       : ', none invisible'
   }`,
 );
-/* A detail drawn on top of a creature has to stay inside it. The heron's
-   folded wing is one almond of a slightly lighter ink over the body, and for
-   the whole life of the bird it hung 4 units below the belly and 4 units past
-   the back — not a wing but a second bird sagging under the first. Nothing
-   that measures the mark measures that: the mark is visible, it is in the
-   right place, and it is the right colour. The question is asked of every
-   path that says whose body it belongs to with `data-on`: walk the outline of
-   the detail, map each point into the creature's own coordinates through the
-   `<use>` that places it, and ask the creature's parts whether each point is
-   inside their fill. */
+/* A detail drawn on a shape has to stay inside it. The heron's folded wing is
+   one almond of a slightly lighter ink over the body, and for the whole life of
+   the bird it hung 4 units below the belly and 4 units past the back — not a
+   wing but a second bird sagging under the first. The little Fuji doodled on
+   the back had the same fault: its snow cap's lower corners sat at ±9 where the
+   slopes at that height are at ±7.9, so the snow stuck out into the sky and the
+   mountain had two edges. Nothing that measures a mark measures that: the mark
+   is visible, it is in the right place, and it is the right colour.
+
+   The question is asked of every path that says whose shape it belongs to with
+   `data-on`. Walk the outline of the detail, carry each point into the shape's
+   own coordinates, and ask the shape whether the point is inside its fill. Two
+   kinds of shape answer. A mark in the cast is drawn once in a group and placed
+   by a `<use>`, so the walk goes from the detail's space to the root, back to
+   the group the use sits in, and back through the use's own transform — the
+   translate, the mirror, the scale. getScreenCTM on the use is not that matrix:
+   it leaves out the transform the use carries, which is the whole placement, and
+   every point came out "outside" until it was composed by hand. A shape drawn
+   in place — the doodle — needs only the two elements' own CTMs. */
 const detail = JSON.parse(
   await page.evaluate(`(() => {
     const bad = [];
     let n = 0;
     for (const el of document.querySelectorAll('[data-on]')) {
       const name = el.getAttribute('data-on');
-      const sym = document.getElementById(name);
-      const uses = document.querySelectorAll('use[href="#' + name + '"]');
-      if (!sym || uses.length !== 1) {
-        bad.push(name + ': ' + uses.length + ' placement(s) on the page');
+      const shape = document.getElementById(name);
+      if (!shape) {
+        bad.push(name + ': nothing on the page has that id');
         continue;
       }
-      const parts = [...sym.querySelectorAll('path')];
-      const use = uses[0];
-      /* The detail is drawn in the plate's own coordinates and the creature is
-         drawn in the symbol's, so the walk has to carry one into the other:
-         the detail's space to the root, the root back to the group the use
-         element sits in, and the use's own transform — the translate, the
-         mirror, the scale — back again. getScreenCTM on the use is not that
-         matrix: it leaves out the transform the use carries, which is the
-         whole placement, and every point came out "outside" until it was
-         composed by hand. */
-      const placed = use.transform.baseVal.consolidate();
-      const intoTheBird = el
-        .getCTM()
-        .multiply(use.parentElement.getCTM().inverse())
-        .multiply(placed ? placed.matrix.inverse() : new DOMMatrix());
+      let parts;
+      let intoTheShape;
+      if (typeof shape.isPointInFill === 'function') {
+        parts = [shape];
+        intoTheShape = el.getCTM().multiply(shape.getCTM().inverse());
+      } else {
+        const uses = document.querySelectorAll('use[href="#' + name + '"]');
+        if (uses.length !== 1) {
+          bad.push(name + ': ' + uses.length + ' placement(s) on the page');
+          continue;
+        }
+        const use = uses[0];
+        parts = [...shape.querySelectorAll('path')];
+        const placed = use.transform.baseVal.consolidate();
+        intoTheShape = el
+          .getCTM()
+          .multiply(use.parentElement.getCTM().inverse())
+          .multiply(placed ? placed.matrix.inverse() : new DOMMatrix());
+      }
+      if (!parts.length) {
+        bad.push(name + ': no geometry to test');
+        continue;
+      }
       const L = el.getTotalLength();
       const step = Math.max(0.5, L / 40);
       let out = 0;
       let seen = 0;
       for (let s = 0; s <= L; s += step) {
-        const p = el.getPointAtLength(s).matrixTransform(intoTheBird);
+        const p = el.getPointAtLength(s).matrixTransform(intoTheShape);
         seen++;
         if (!parts.some((q) => q.isPointInFill(p))) out++;
       }
@@ -271,7 +287,7 @@ const detail = JSON.parse(
   })()`),
 );
 ok(
-  'every detail drawn on a creature stays inside that creature',
+  'every detail drawn on a shape stays inside that shape',
   detail.bad.length === 0,
   `${detail.n} detail(s) walked${detail.bad.length ? `: ${detail.bad.join('; ')}` : ''}`,
 );

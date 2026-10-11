@@ -86,6 +86,10 @@ const refs = [
   ...html.matchAll(/url\(#([^)]+)\)/g),
   ...html.matchAll(/href="#([^"]+)"/g),
   ...html.matchAll(/xlink:href="#([^"]+)"/g),
+  // A detail names the shape it is drawn on with data-on, and that name is an
+  // id like any other. test-visible walks it; a typo there is not a crash, it
+  // is the walk quietly not happening, so the id has to be resolved here.
+  ...html.matchAll(/data-on="([^"]+)"/g),
 ];
 // aria-labelledby and aria-describedby take space-separated id lists, not one
 // id, so they need their own pass. A typo in one of them is invisible: the

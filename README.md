@@ -210,16 +210,20 @@ that the next crop of it lands on the same rectangle. That is what makes a
 before-and-after honest: the snow cap's own box grew ten units taller the day
 its snowline was redrawn, and the two crops could not be compared at all.
 
-Four marks were found wrong this way and fixed: the heron's folded wing, an
+Five marks were found wrong this way and fixed: the heron's folded wing, an
 almond of lighter ink that hung 4 units below the belly and 4 units past the
 back edge, so the silhouette read as two birds, one sagging under the other; the
 boatman, sitting 3.5 units above his own boat with two straight chords for
 sides; the torii, lit on the inner edge of each post because the shading was
-mirrored with the gate while the sun at (620, 206) was not; and the snowline,
-five round scallops of nearly equal depth. The wing is now guarded —
-`test-visible.mjs` walks the outline of any detail marked `data-on` and fails if
-any of it falls outside the creature it belongs to — and the other three are
-recorded in the comments beside the paths that were wrong.
+mirrored with the gate while the sun at (620, 206) was not; the snowline, five
+round scallops of nearly equal depth; and the little Fuji doodled on the back,
+whose summit was a needle and whose snow cap stood outside the slopes it was
+capping — corners at ±9 units, where the slopes at that height are at ±7.9. The
+wing and the snow cap are now guarded: `test-visible.mjs` walks the outline of
+any detail marked `data-on` and fails if any of it falls outside the shape it
+belongs to, whether that shape is a mark in the cast placed by a `<use>` or a
+path drawn in place. The other three are recorded in the comments beside the
+paths that were wrong.
 
 ## Commands
 
@@ -462,14 +466,18 @@ page before the question:
   across the lake takes four seconds out of ninety-seven and sampling at tenths
   steps straight over it. It found a fish whose ring was spreading under the
   near shore, on dry washi, twice a minute and a quarter, forever.
-  It also walks every detail that says whose body it belongs to with a
+  It also walks every detail that says whose shape it belongs to with a
   `data-on` attribute: the outline of the detail is sampled, each point is
-  carried through the `<use>` that places the creature into that creature's own
-  coordinates, and the creature's parts are asked whether the point is inside
-  their fill. The heron's folded wing — one almond of a slightly lighter ink —
-  failed it by 4 units below the belly and 4 units past the back, which is not
-  a wing on a bird but a second bird sagging under the first. Every other check
-  passed it: the mark is visible, in the right place, and the right colour.
+  carried into the shape's own coordinates, and the shape is asked whether the
+  point is inside its fill. Two kinds of shape answer — a mark in the cast,
+  placed by one `<use>`, where the walk has to undo the translate, the mirror and
+  the scale; and a shape drawn in place, where the two elements' own CTMs are
+  enough. The heron's folded wing — one almond of a slightly lighter ink — failed
+  it by 4 units below the belly and 4 units past the back, which is not a wing on
+  a bird but a second bird sagging under the first. The snow cap on the little
+  Fuji doodled on the back failed it by 10 of 40 points, its lower corners
+  standing outside the slopes it was capping. Every other check passed both: the
+  marks are visible, in the right place, and the right colour.
 - `scripts/test-plate.mjs` measures every `<text>` on a face against every rule
   on that face, in the artwork's own units, and it measures it twice: once in
   the fonts the page names, once with all of them taken away. Every font the

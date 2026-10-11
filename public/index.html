@@ -3235,10 +3235,25 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <text x="66" y="524">KAWAGUCHI-KO · 35.4387° N, 138.7265° E</text>
           </g>
 
-          <!-- small fuji doodle -->
+          <!-- small fuji doodle. The summit used to be a needle: the two
+               slopes ran into each other at (0,-12) through two straight
+               segments, and the tangent broke hard enough that the top read
+               as a thorn stuck on the mountain. Fuji's top is a crater rim —
+               broad, shallow, lower in the middle — so the apex is now a
+               curve 10 units across. The snow cap had the same fault as the
+               heron's wing: its lower corners sat at ±9 where the slopes at
+               that height are at ±7.9, so the snow stuck out into the sky on
+               both sides and the mountain had two edges. Its corners now
+               come in to ±7.5, and its top sits a unit under the rim, which
+               is what leaves the rim as rock. -->
           <g transform="translate(352 470)" fill="none" stroke="#7d7260" stroke-width="1.4" opacity=".8">
-            <path d="M-40 34 C-22 30 -10 12 -4 -6 L0 -12 L4 -6 C10 12 22 30 40 34"/>
-            <path d="M-9 4 C-6 -4 -3 -9 0 -12 C3 -9 6 -4 9 4 L4 2 L0 6 L-4 2 Z" fill="#cfd8e2"/>
+            <path id="doodleFuji"
+                  d="M-40 34 C-22 30 -10 12 -5 -7 C-3 -10.5 -1 -11.5 0 -11.5
+                     C1.5 -11.5 3 -10 5 -7 C10 12 22 30 40 34"/>
+            <path data-on="doodleFuji"
+                  d="M-7.5 2 C-6 -4 -5 -5 -5 -5.8 C-3 -9.3 -1 -10.3 0 -10.3
+                     C1.5 -10.3 3 -8.8 5 -5.8 C5 -5 6 -4 7.5 2
+                     L4 1 L0 5 L-4 1 Z" fill="#cfd8e2"/>
             <path d="M-46 34 H46"/>
           </g>
 
