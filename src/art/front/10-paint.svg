@@ -250,11 +250,30 @@
             <stop offset="1"   stop-color="#ffab74" stop-opacity="0"/>
           </linearGradient>
 
-          <!-- the mountain, reused for fill + reflection + clipping -->
+          <!-- the mountain, reused for fill + reflection + clipping.
+
+               The apex is the most important two units in the picture and it
+               used to be four straight chords: (428,160) to (440,152) to
+               (452,158) to (466,152) to (478,162), which turns 58° in a single
+               two-unit step at (466,152) and 47° at (440,152) while the whole
+               flank of the mountain never turns more than 6.4°. A crater seen
+               from thirty kilometres away is not a saw tooth. The two rims here
+               are rounded shoulders that the flank runs straight into — each rim
+               is an inflection, not a corner — the floor between them is a curve
+               whose radius is fifteen units, and the two rims are two units apart
+               in height, with the higher one the summit itself and the crater
+               opening on the far side of it. That asymmetry is what makes the
+               notch read as an opening rather than a bite taken out of the top.
+               `test-visible.mjs` walks this path two units at a time and fails
+               any step that turns harder than 30°; the crater's lip is the
+               tightest thing on it at 24.5°. -->
           <path id="fujiPath" d="M150 404
             C268 386 356 296 404 196
             C412 178 420 168 428 160
-            L440 152 L452 158 L466 152 L478 162
+            C433 156.5 436 153.2 440 152.6
+            C444 152.8 448.5 156.2 452 156.2
+            C456 156.2 460 150.6 464 150.4
+            C468 150.6 473 156 478 162
             C486 170 494 182 502 200
             C548 296 636 386 754 404 Z"/>
 

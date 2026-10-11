@@ -292,6 +292,47 @@ ok(
   `${detail.n} detail(s) walked${detail.bad.length ? `: ${detail.bad.join('; ')}` : ''}`,
 );
 
+/* The mountain's own outline, walked for corners.
+
+   The apex of the whole composition used to be four straight chords — (428,160)
+   to (440,152) to (452,158) to (466,152) to (478,162) — and a turn of 58° inside
+   one two-unit step is not a crater rim seen from thirty kilometres away, it is a
+   saw. The flanks of the same path never turn harder than 6.4° in a step, so the
+   corners were the only part of the mountain that was not a curve, and they were
+   at the one place everybody looks.
+
+   So: walk the outline two units at a time and measure how hard it turns at each.
+   The shore is excluded — the mountain meets the lake at a corner and should —
+   which is what the y < 400 filter is for. What is left has to turn less than 30°
+   per step. The crater's lip is the tightest thing on the mountain, measured at
+   24.5°, and the flanks are at 6.4°; the old apex turned 58.3° and 47.2°. */
+const corners = JSON.parse(
+  await page.evaluate(`(() => {
+    const path = document.querySelector('#fujiPath');
+    const L = path.getTotalLength();
+    const step = 2;
+    let a = null, b = null, max = 0, at = null;
+    for (let d = 0; d <= L; d += step) {
+      const q = path.getPointAtLength(d);
+      if (a && b && q.y < 400 && b.y < 400 && a.y < 400) {
+        const a1 = Math.atan2(b.y - a.y, b.x - a.x);
+        const a2 = Math.atan2(q.y - b.y, q.x - b.x);
+        let t = Math.abs(a2 - a1);
+        if (t > Math.PI) t = 2 * Math.PI - t;
+        if (t > max) { max = t; at = [Math.round(b.x), Math.round(b.y)]; }
+      }
+      a = b;
+      b = q;
+    }
+    return JSON.stringify({ deg: +(max * 180 / Math.PI).toFixed(1), at });
+  })()`),
+);
+ok(
+  'the mountain outline turns nowhere harder than a curve can',
+  corners.deg < 30,
+  `${corners.deg}° in a two-unit step at (${corners.at.join(', ')})`,
+);
+
 ok('no page exceptions', page.exceptions.length === 0, `${page.exceptions.length} exception(s)`);
 
 page.close();

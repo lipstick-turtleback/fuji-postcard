@@ -210,20 +210,24 @@ that the next crop of it lands on the same rectangle. That is what makes a
 before-and-after honest: the snow cap's own box grew ten units taller the day
 its snowline was redrawn, and the two crops could not be compared at all.
 
-Five marks were found wrong this way and fixed: the heron's folded wing, an
+Six marks were found wrong this way and fixed: the heron's folded wing, an
 almond of lighter ink that hung 4 units below the belly and 4 units past the
 back edge, so the silhouette read as two birds, one sagging under the other; the
 boatman, sitting 3.5 units above his own boat with two straight chords for
 sides; the torii, lit on the inner edge of each post because the shading was
 mirrored with the gate while the sun at (620, 206) was not; the snowline, five
-round scallops of nearly equal depth; and the little Fuji doodled on the back,
-whose summit was a needle and whose snow cap stood outside the slopes it was
-capping — corners at ±9 units, where the slopes at that height are at ±7.9. The
-wing and the snow cap are now guarded: `test-visible.mjs` walks the outline of
-any detail marked `data-on` and fails if any of it falls outside the shape it
-belongs to, whether that shape is a mark in the cast placed by a `<use>` or a
-path drawn in place. The other three are recorded in the comments beside the
-paths that were wrong.
+round scallops of nearly equal depth; the little Fuji doodled on the back, whose
+summit was a needle and whose snow cap stood outside the slopes it was capping —
+corners at ±9 units, where the slopes at that height are at ±7.9; and the real
+Fuji's apex, four straight chords turning 58° in a single two-unit step at the one
+place everybody looks, with its crater drawn as a plate lying 20 units below the
+notch. The wing and the snow cap are guarded by `test-visible.mjs` walking the
+outline of any detail marked `data-on` and failing if any of it falls outside the
+shape it belongs to, whether that shape is a mark in the cast placed by a `<use>`
+or a path drawn in place. The apex is guarded by the same script walking the
+mountain's outline two units at a time and failing any step that turns harder
+than 30°: the crater's lip survives that at 24.5°, the old chords did not at
+58.3°. The rest are recorded in the comments beside the paths that were wrong.
 
 ## Commands
 

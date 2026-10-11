@@ -1922,11 +1922,30 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             <stop offset="1"   stop-color="#ffab74" stop-opacity="0"/>
           </linearGradient>
 
-          <!-- the mountain, reused for fill + reflection + clipping -->
+          <!-- the mountain, reused for fill + reflection + clipping.
+
+               The apex is the most important two units in the picture and it
+               used to be four straight chords: (428,160) to (440,152) to
+               (452,158) to (466,152) to (478,162), which turns 58° in a single
+               two-unit step at (466,152) and 47° at (440,152) while the whole
+               flank of the mountain never turns more than 6.4°. A crater seen
+               from thirty kilometres away is not a saw tooth. The two rims here
+               are rounded shoulders that the flank runs straight into — each rim
+               is an inflection, not a corner — the floor between them is a curve
+               whose radius is fifteen units, and the two rims are two units apart
+               in height, with the higher one the summit itself and the crater
+               opening on the far side of it. That asymmetry is what makes the
+               notch read as an opening rather than a bite taken out of the top.
+               `test-visible.mjs` walks this path two units at a time and fails
+               any step that turns harder than 30°; the crater's lip is the
+               tightest thing on it at 24.5°. -->
           <path id="fujiPath" d="M150 404
             C268 386 356 296 404 196
             C412 178 420 168 428 160
-            L440 152 L452 158 L466 152 L478 162
+            C433 156.5 436 153.2 440 152.6
+            C444 152.8 448.5 156.2 452 156.2
+            C456 156.2 460 150.6 464 150.4
+            C468 150.6 473 156 478 162
             C486 170 494 182 502 200
             C548 296 636 386 754 404 Z"/>
 
@@ -2467,19 +2486,29 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
               <path d="M466 250 C470 268 473 284 476 302 C481 284 485 268 489 252 Z"/>
               <path d="M520 246 C523 260 525 272 527 286 C531 272 535 258 539 248 Z"/>
             </g>
-            <!-- Summit crater: a shallow bowl, lit on the far rim. It used to
-                 be six points joined by straight lines, and at the apex of the
-                 whole composition a straight line and a sharp corner read as a
-                 cut gem rather than as the top of a volcano. Every edge here is
-                 a curve, the bowl is wider than it is tall because we see it
-                 nearly side-on, and the far rim takes the light while the near
-                 rim keeps a shadow. -->
-            <path d="M437 156 C443 149 456 146 468 149 C478 152 483 158 479 165
-                     C474 173 458 177 445 173 C435 170 431 162 437 156 Z"
+            <!-- Summit crater: the inside of the notch, in shadow, with the
+                 wall that faces the dawn lit.
+
+                 It used to be a lens 42 units wide sitting 20 units below the
+                 notch, closed by a hard arc of its own — a plate laid on the
+                 snow. The inside of a crater is only ever visible through the
+                 notch, so its upper edge is the notch: the same four curves the
+                 silhouette uses, written out again here because a fill needs its
+                 own closed path. The shadow reaches ten units under the floor of
+                 the notch and no further.
+
+                 The sun is at (620, 206) — below the summit and to the right of
+                 it — so the wall on the left of the notch faces it and takes the
+                 light, and the wall on the right faces away. The darker arc is
+                 not a rim: it is where the inner wall meets the snow below it,
+                 which is the only place the crater casts anything. -->
+            <path d="M440 152.6 C444 152.8 448.5 156.2 452 156.2
+                     C456 156.2 460 150.6 464 150.4
+                     C466 155 463 160.5 457 163 C450 165 442.5 160.5 440.5 155.6 Z"
                   fill="#93a6c2" opacity=".42"/>
-            <path d="M437 156 C444 149 457 146 469 150" fill="none" stroke="#fdfbf6"
+            <path d="M441.5 153.6 C444.5 154.8 449 156 452 156.2" fill="none" stroke="#fdfbf6"
                   stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round"/>
-            <path d="M446 173 C456 176 469 174 477 168" fill="none" stroke="#5f6d8c"
+            <path d="M443 158 C447 162 454 164.3 459.5 162" fill="none" stroke="#5f6d8c"
                   stroke-opacity=".3" stroke-width="1.2" stroke-linecap="round"/>
             <!-- fall lines down the cone -->
             <g fill="none" stroke="#ffffff" stroke-opacity=".10" stroke-width="1.3">
