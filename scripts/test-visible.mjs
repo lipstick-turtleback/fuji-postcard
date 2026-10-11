@@ -40,6 +40,16 @@
 
      node scripts/test-visible.mjs
 
+   Only the cast is measured — the use elements the data places. The drawn
+   layers were tried and the answer was not a cleaner one: the sun's rays are 45
+   lines whose individual contribution is 3/255 of brightness, because a fan of
+   pale light is built out of marks that are each meant to be barely there. At a
+   tolerance that calls those dead, the check stops meaning anything; at a
+   tolerance low enough to see them, it stops being able to call a mark dead.
+   The cast is different in kind — opaque ink placed from a data file, where a
+   number moved by hand is exactly the mistake worth catching — and it measures
+   in twenty seconds instead of nine minutes.
+
    Needs Chrome; skips, like the other browser tests, when it is not there. */
 import { setTimeout as sleep } from 'node:timers/promises';
 import { openPage, silentPage } from './cdp.mjs';
