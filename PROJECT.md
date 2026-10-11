@@ -206,6 +206,11 @@ The habits that keep paying off:
   five and the top one never moved off the floor. Both ends of the same lie. The
   ceilings are now five numbers measured from a 30-second run of the piece, and
   the check that keeps them honest samples the bars while it plays.
+- **A page can have three deliverables and verify two.** The screen and the
+  exported plate both had checks; the printed sheet had none, and printing gave
+  the gallery wall, the title, five buttons and a slider around a small picture,
+  running over two sheets. Any artefact the page can become is in scope for a
+  check, including the one that only exists when somebody presses Cmd-P.
 - **A mark that changes nothing is a mark that is not there.** The dead-rule
   habit has a twin in the data: a placement can be drawn, clipped, painted over
   and seen by nobody. The middle fish was ringing on the shore — under the near

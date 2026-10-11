@@ -1,0 +1,76 @@
+/* Paper.
+
+   Printing this page should produce the postcard, not a screenshot of a
+   website. The wall, the lamp, the gallery label and the controls are a screen;
+   the card is the thing. The sheet is the card's own shape — a postcard is 148
+   by 100 millimetres, which is the 3:2 the artwork was drawn in — and the side
+   you are looking at is the side that comes out, which the page states in
+   `data-print-face` because a stylesheet cannot reason about a transform that
+   has already been turned through 180 degrees. */
+
+@media print {
+  @page {
+    size: 148mm 100mm;
+    margin: 4mm;
+  }
+
+  body {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  /* the wall, the seigaiha, the pool of lamp-light, the grain, the vignette, the
+     studio's name, the title, the plinth label and every control */
+  .bg,
+  .topbar,
+  .masthead,
+  .plinth,
+  .footer,
+  .foil {
+    display: none;
+  }
+
+  .stage {
+    /* 148 by 100 mm of sheet less 4 mm of margin each way is 140 by 92, and the
+       card is 3:2 — so the width that fits is 136 mm, not 140. Ask for 140 and
+       the picture is 93.3 mm tall, the sheet runs over, and the bottom of the
+       lake prints on a second page. */
+    width: 136mm;
+    margin: 0;
+    perspective: none;
+  }
+
+  /* the idle sway and the pointer tilt are a screen's; on paper the card lies
+     flat, and an important declaration is what it takes to beat the transform
+     the frame loop writes inline every frame */
+  .card {
+    transform: none !important;
+  }
+
+  .face {
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .face.back {
+    display: none;
+    transform: none;
+  }
+
+  html[data-print-face="back"] .face.back {
+    display: block;
+  }
+
+  html[data-print-face="back"] .face.front {
+    display: none;
+  }
+
+  /* the artwork is the content: gradients, the paper grain and the blend modes
+     are part of it, and a printer is otherwise entitled to drop them */
+  .face svg {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

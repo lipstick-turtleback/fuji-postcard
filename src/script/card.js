@@ -173,6 +173,13 @@ const flip = () => {
   turnT0 = performance.now();
   wake();
 };
+/* Print. The stylesheet cannot tell which face is showing — the flip is a
+   transform the frame loop writes inline every frame — so the page says so, and
+   10-print.css hides the other one. Without script the front prints, which is
+   the artwork. */
+addEventListener('beforeprint', () => {
+  document.documentElement.dataset.printFace = flipped ? 'back' : 'front';
+});
 card.addEventListener('click', flip);
 document.getElementById('flip').addEventListener('click', flip);
 document.addEventListener('keydown', (e) => {

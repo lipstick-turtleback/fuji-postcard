@@ -53,6 +53,9 @@ const CSS_LAYERS = [
   ['narrow', '07-narrow.css'],
   ['quality', '08-quality.css'],
   ['height', '09-height.css'],
+  // last, because it is the only layer that answers a different medium, and it
+  // has to be able to overrule everything above it without !important
+  ['print', '10-print.css'],
 ];
 
 const css = () => {

@@ -78,6 +78,7 @@ scripts/
   test-motion.mjs      hold the page to its reduced-motion promise
   test-nojs.mjs        load the page with script switched off and see what is left
   test-keys.mjs        the page driven with Tab, Enter, Space and the arrows
+  test-print.mjs       what comes out of a printer, and how big the sheet is
   test-css.mjs         no rule selects nothing, no animation names nothing
   test-sound.mjs       the soundtrack, on a page nobody has touched
   perf.mjs             measure frame times over CDP
@@ -412,6 +413,13 @@ page before the question:
   like they do — no underline, no pointer, no key hints, and a line that says
   what is the case. The same measurements are then taken with script running and
   every one must differ, or the test is measuring the layout rather than the tier.
+- `scripts/test-print.mjs` asks the page in print media what is actually on the
+  paper, and asks Chrome for the paper itself. The wall, the studio's name, the
+  title, the plinth label and every control have to be gone; the card has to lie
+  flat even though the frame loop is writing a tilt into it every frame; the sheet
+  has to come back one page at 148 × 100 mm, which is the 3:2 the artwork was
+  drawn in; and after turning the card over, the face that prints has to be the
+  back.
 - `scripts/test-keys.mjs` drives the page with Tab, Enter, Space and the arrow
   keys and reads back what happened: which element has focus, what its focus ring
   is drawn with, what the card's angle is, what the slider's value is. Every
