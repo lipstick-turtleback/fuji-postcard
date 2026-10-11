@@ -169,6 +169,15 @@ The habits that keep paying off:
   move was a move was `git diff public/index.html` coming back empty. Paint
   order is the picture, so the fragment names sort into the drawing; a split
   that reorders is a redraw wearing a refactor's clothes.
+- **Headless Chrome stops handing frames to a page that has nothing to paint.**
+  A page whose animation loop has come to rest gets no more `requestAnimationFrame`
+  callbacks, and a test that then drives a control and reads the transform sees a
+  frozen page and reports a defect that does not exist. The frame loop is woken by
+  damage, so the harness has to move the pointer over the card before it presses a
+  key — and say why in the comment, because the page in a real browser is never in
+  that state. The same dispatch path has a second trap: `Input.dispatchKeyEvent`
+  with `key: 'Enter'` and no `text` reaches the page as a keydown and never
+  becomes the click a focused button would have produced.
 - **A button that looks live and is not is a mark that lies.** This page works
   without script — the artwork is drawn at build time, the motion is opt-in — and
   the tier had never been loaded. Script blocked, the picture was whole and a row

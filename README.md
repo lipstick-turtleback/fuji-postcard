@@ -77,6 +77,7 @@ scripts/
   test-interactions.mjs drive the buttons and shortcuts and read what happened
   test-motion.mjs      hold the page to its reduced-motion promise
   test-nojs.mjs        load the page with script switched off and see what is left
+  test-keys.mjs        the page driven with Tab, Enter, Space and the arrows
   test-css.mjs         no rule selects nothing, no animation names nothing
   test-sound.mjs       the soundtrack, on a page nobody has touched
   perf.mjs             measure frame times over CDP
@@ -400,6 +401,11 @@ page before the question:
   like they do — no underline, no pointer, no key hints, and a line that says
   what is the case. The same measurements are then taken with script running and
   every one must differ, or the test is measuring the layout rather than the tier.
+- `scripts/test-keys.mjs` drives the page with Tab, Enter, Space and the arrow
+  keys and reads back what happened: which element has focus, what its focus ring
+  is drawn with, what the card's angle is, what the slider's value is. Every
+  control has to be reachable, has to show where it is, and has to do with Enter
+  what it does with a click.
 - `scripts/test-css.mjs` asks whether the stylesheet is telling the truth about
   the page: every selector must match something that exists, and every
   `animation` must name a `@keyframes` block that exists. A stylesheet cannot

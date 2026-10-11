@@ -23,9 +23,34 @@ export const silentPage = (href) => `${href}${href.includes('?') ? '&' : '?'}sil
 
 /** A real key event, not a synthetic one: the page's shortcuts are checked by
  *  pressing keys the way a person does. */
+// key, code, virtual key code, and the text a real keypress carries. Enter
+// without its carriage return reaches the page as a keydown and never becomes
+// the click a focused button would have produced — a fact about this dispatch
+// path, not about the page.
+const NAMED = {
+  tab: ['Tab', 'Tab', 9, ''],
+  enter: ['Enter', 'Enter', 13, '\r'],
+  space: [' ', 'Space', 32, ' '],
+  escape: ['Escape', 'Escape', 27, ''],
+  arrowleft: ['ArrowLeft', 'ArrowLeft', 37, ''],
+  arrowup: ['ArrowUp', 'ArrowUp', 38, ''],
+  arrowright: ['ArrowRight', 'ArrowRight', 39, ''],
+  arrowdown: ['ArrowDown', 'ArrowDown', 40, ''],
+};
+
 export const key = async (send, k) => {
-  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: k, code: `Key${k.toUpperCase()}` });
-  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: k, code: `Key${k.toUpperCase()}` });
+  const named = NAMED[k.toLowerCase()];
+  const ev = named
+    ? {
+        key: named[0],
+        code: named[1],
+        windowsVirtualKeyCode: named[2],
+        nativeVirtualKeyCode: named[2],
+        ...(named[3] ? { text: named[3] } : {}),
+      }
+    : { key: k, code: `Key${k.toUpperCase()}`, text: k };
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', ...ev });
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', ...ev });
 };
 
 /**
