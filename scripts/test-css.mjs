@@ -61,11 +61,20 @@ const report = JSON.parse(
           rules++;
           for (const sel of r.selectorText.split(',')) {
             selectors++;
-            // the subject: the last compound selector, pseudo-classes and
-            // elements removed, because :hover on a class that exists is not
-            // a dead rule
+            /* the subject: the last compound selector, with pseudo-elements and
+               interaction states removed, because :hover on a class that exists
+               is not a dead rule.
+
+               Position is NOT removed, and used to be. An nth-child(4) on a class
+               with three members is a rule that runs on nothing, and stripping the
+               position is exactly how four such rules survived here — each with a
+               confident comment about which crest it was supposed to be out of step
+               with, and none of them ever selecting an element. */
             const subject = sel.trim().split(/\\s+/).pop() || '';
-            const base = subject.replace(/::?[a-zA-Z-]+(\\([^)]*\\))?/g, '');
+            const base = subject.replace(
+              /::[a-z-]+|:(?:hover|focus(?:-visible|-within)?|active|visited|target|any-link|link|checked|indeterminate|disabled|enabled|open|modal|placeholder-shown|user-valid|user-invalid|defined|blank)(?:\\([^)]*\\))?/g,
+              '',
+            );
             if (!base || base === '*' || base === 'html' || base === 'body') continue;
             let hit = false;
             try {

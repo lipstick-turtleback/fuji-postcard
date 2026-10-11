@@ -475,17 +475,23 @@ ok(
    pairs of twins.
 
    Adjacency is what the eye compares, so adjacency is what the rule is about:
-   within 200 CSS pixels (about 190 units of the artwork), two animated marks
-   must not share a period and neither may be a whole multiple of the other.
-   Two exclusions, both of them claims about the picture. A mark wider or
-   taller than 200 px is a surface — a mist band, the glitter path, the ray
-   field — and a surface is not a neighbour of anything. And a mark that is
-   travelling is not a neighbour either: a bird crossing the sky is next to a
-   duck for four seconds and then is not, so its period is a duration of
-   passage, not a step the eye can compare. That is measured, not guessed —
-   anything that moves more than 4 px in three seconds is a traveller. The
-   number is measured, not guessed: every mark that stays put moves 0 px in
-   that window at this scale, and a petal in transit moves 5-6.
+   two animated marks within 120 units of the artwork — a hand's width on a 900
+   unit card — must not share a period, be within 1% of one another's, and
+   neither may be a whole multiple of the other. The distance is stated in
+   artwork units and converted through the viewport's own scale, because it used
+   to be stated in CSS pixels, which made the radius change size with the test
+   window: at this viewport 200 px is 600 units, and the probe was comparing the
+   far shore of the lake to the near one and calling them neighbours.
+
+   Two exclusions, both of them claims about the picture. A mark wider or taller
+   than 200 units is a surface — a mist band, the glitter path, the ray field —
+   and a surface is not a neighbour of anything. And a mark that is travelling is
+   not a neighbour either: a bird crossing the sky is next to a duck for four
+   seconds and then is not, so its period is a duration of passage, not a step the
+   eye can compare. That is measured, not guessed — anything that moves more than
+   10 units in three seconds is a traveller. The number is measured, not guessed:
+   every mark that stays put moves 0 units in that window, and a petal in transit
+   moves 15-18.
 
    It runs in both tiers. It used to run with Enhance off only, on the grounds
    that the reeds sway in stands and the check would confuse a stand with a
@@ -497,6 +503,11 @@ ok(
    reed's period. Those were the numbers the second tier was built from, and
    nothing had ever compared them. */
 const rhythmProbe = `(async () => {
+      const svg = document.querySelector('.face.front svg');
+      const k = svg.getBoundingClientRect().width / svg.viewBox.baseVal.width;
+      const NEAR = 120 * k;
+      const SURFACE = 200 * k;
+      const TRAVELLER = 10 * k;
       const collect = () =>
         [...document.querySelectorAll('.card svg *')]
           .map((el) => {
@@ -518,21 +529,23 @@ const rhythmProbe = `(async () => {
       await new Promise((r) => setTimeout(r, 3000));
       const second = collect();
       const els = first.filter((e, i) => {
-        if (e.w > 200 || e.h > 200) return false;
+        if (e.w > SURFACE || e.h > SURFACE) return false;
         if (!second[i]) return true;
-        return Math.hypot(second[i].x - e.x, second[i].y - e.y) < 4;
+        return Math.hypot(second[i].x - e.x, second[i].y - e.y) < TRAVELLER;
       });
       const bad = [];
       for (let i = 0; i < els.length; i++)
         for (let j = i + 1; j < els.length; j++) {
           const a = els[i], b = els[j];
-          if (Math.hypot(a.x - b.x, a.y - b.y) > 200) continue;
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d > NEAR) continue;
           const [hi, lo] = a.dur > b.dur ? [a.dur, b.dur] : [b.dur, a.dur];
           const equal = Math.abs(a.dur - b.dur) < 0.01;
+          const near = !equal && (hi - lo) / hi < 0.01;
           const multiple = Math.abs(hi / lo - Math.round(hi / lo)) < 0.01 && Math.round(hi / lo) > 1;
-          if (equal || multiple)
+          if (equal || near || multiple)
             bad.push(
-              \`\${a.cls} (\${a.dur}s, \${Math.round(a.x)},\${Math.round(a.y)}) and \${b.cls} (\${b.dur}s, \${Math.round(b.x)},\${Math.round(b.y)}) \${equal ? 'share' : 'are a multiple of'} a period\`,
+              \`\${a.cls} (\${a.dur}s) and \${b.cls} (\${b.dur}s) \${equal ? 'share' : near ? 'are within 1% of' : 'are a multiple of'} a period, \${Math.round(d / k)} units apart\`,
             );
         }
       return JSON.stringify({ n: els.length, bad });

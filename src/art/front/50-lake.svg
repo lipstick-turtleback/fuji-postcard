@@ -119,7 +119,10 @@
                    short answer beside it, and the pair steps outward as the
                    path opens toward the viewer. Anything more than this stops
                    being the sun on water and becomes texture. -->
-              <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
+              <!-- The band breathes as one thing, at one period, and the period is
+                   written here rather than counted from the markup: the class is on
+                   the group, so the six rows below share it. -->
+              <g class="ripple" style="--rdur: 23s; --rdelay: -6s" stroke="#ffeed2" stroke-linecap="round" fill="none">
                 <!-- The bands widen, thicken, fade and spread as the water
                      comes toward the viewer, which is perspective and correct.
                      But the old ladder advanced by a near-constant step in

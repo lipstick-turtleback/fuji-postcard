@@ -73,7 +73,7 @@
                  the lake is being disturbed by something standing in it -->
             <g stroke="#e6dcc8" fill="none" stroke-linecap="round">
               <path class="ring" style="--rdur: 19.3s; --rdelay: -4s" d="M170 524 C174 526.4 186 526.4 190 524" stroke-opacity=".3" stroke-width="1.1"/>
-              <path class="ring" style="--rdur: 27.7s; --rdelay: -17s" d="M270 524 C274 526.4 286 526.4 290 524" stroke-opacity=".3" stroke-width="1.1"/>
+              <path class="ring" style="--rdur: 28.4s; --rdelay: -17s" d="M270 524 C274 526.4 286 526.4 290 524" stroke-opacity=".3" stroke-width="1.1"/>
               <path class="ring" style="--rdur: 23.4s; --rdelay: -11s" d="M174 528.5 C178 530 184 530 188 528.5" stroke-opacity=".16" stroke-width=".9"/>
               <path class="ring" style="--rdur: 29.2s; --rdelay: -7s" d="M274 528.5 C278 530 284 530 288 528.5" stroke-opacity=".16" stroke-width=".9"/>
             </g>
@@ -254,7 +254,7 @@
           <path data-on="heron"
                 d="M765 527 C769 524 776 525 780 529 C775 532 769 531 765 527 Z"
                 fill="#1b2338" opacity=".9"/>
-          <path class="ring" style="--rdur: 19.8s; --rdelay: -3s" d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
+          <path class="ring" style="--rdur: 18.6s; --rdelay: -3s" d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
           <g stroke="#e6dcc8" stroke-opacity=".16" stroke-width="1" fill="none" stroke-linecap="round">
             <path class="ring" style="--rdur: 29s; --rdelay: -16s" d="M763 548 C767 549.6 775 549.6 779 548"/>
             <path class="ring" style="--rdur: 35.2s; --rdelay: -8s" d="M766 552 C769 553.2 774 553.2 777 552"/>

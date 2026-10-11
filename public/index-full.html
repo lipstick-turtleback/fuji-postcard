@@ -817,51 +817,42 @@ html[data-enhance="on"] .petal {
 }
 
 .ripple {
-  animation: shimmer 17s ease-in-out infinite alternate;
+  animation: shimmer var(--rdur, 17s) ease-in-out infinite alternate;
+  animation-delay: var(--rdelay, 0s);
 }
-/* One period per crest, not a parity rule. `2n` and `3n` gave the six rows of
-   the glitter band three pairs of twins — rows two and four both at 23 s,
-   twenty-five units apart, shimmering in step, which is rule 2 broken in the
-   most literal way the page had left. Six primes, none a multiple of another,
-   and the boat's three ripples fall on the first three of them. */
-.ripple:nth-child(2) {
-  animation-duration: 23s;
-  animation-delay: -6s;
-}
-.ripple:nth-child(3) {
-  animation-duration: 29s;
-  animation-delay: -11s;
-}
-.ripple:nth-child(4) {
-  animation-duration: 19s;
-  animation-delay: -3s;
-}
-.ripple:nth-child(5) {
-  animation-duration: 25s;
-  animation-delay: -14s;
-}
-.ripple:nth-child(6) {
-  animation-duration: 31s;
-  animation-delay: -8s;
-}
-.ripple:nth-child(7) {
-  animation-duration: 17s;
-  animation-delay: -20s;
-}
+/* One period per crest, and the period written on the element it belongs to.
+
+   This block used to be seven rules that counted. nth-child(2) at 23 s,
+   nth-child(3) at 29, and so on up to nth-child(7) at 17, under a comment
+   explaining that six primes — none a multiple of another — had replaced the `2n`
+   and `3n` parity rules that once gave the glitter band three pairs of twins.
+
+   The reasoning was right and the rules were not. The class sits on the band's
+   group, not on its rows, so the group was nth-child(2) of the water and took the
+   23 s, and the four rules after it selected nothing at all. They had been
+   selecting nothing since the rows were folded into one group: four rules and a
+   paragraph of care running on an empty set, which is why nothing ever reported
+   them — the check that looks for dead rules strips pseudo-classes off the
+   selector, and an nth-child is a pseudo-class.
+
+   The band breathes as one thing, at one period, and that period is now written
+   where a rule that cannot match cannot hide it: 23 s on the group in
+   50-lake.svg. The boat's first crest is the 17 s default, and the two behind it
+   are named below. */
 /* The three ripples off the paddle are named rather than counted, because
    counting put the middle one on the same 23 s as the whole glitter band a
    hand's width away. 21 and 27 share no multiple with anything else at the
    boat: the hull is 13, the wake 19 and 25, the man 7.5. */
 .ripple.rb {
-  animation-duration: 21s;
-  animation-delay: -9s;
+  --rdur: 21s;
+  --rdelay: -9s;
 }
 .ripple.rc {
   /* 27 s was twice the period of the petal floating four units below it; 22 s
      was twice the period of the one below that. 24 s is twice nothing near it:
      the hull is 13, the wake 19 and 25, the other two crests 17 and 21. */
-  animation-duration: 24s;
-  animation-delay: -4s;
+  --rdur: 24s;
+  --rdelay: -4s;
 }
 /* The wake off the hull: slower than the ripples and it drifts, because the
    boat is moving through the water rather than sitting in still water. */
@@ -2766,7 +2757,10 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                    short answer beside it, and the pair steps outward as the
                    path opens toward the viewer. Anything more than this stops
                    being the sun on water and becomes texture. -->
-              <g class="ripple" stroke="#ffeed2" stroke-linecap="round" fill="none">
+              <!-- The band breathes as one thing, at one period, and the period is
+                   written here rather than counted from the markup: the class is on
+                   the group, so the six rows below share it. -->
+              <g class="ripple" style="--rdur: 23s; --rdelay: -6s" stroke="#ffeed2" stroke-linecap="round" fill="none">
                 <!-- The bands widen, thicken, fade and spread as the water
                      comes toward the viewer, which is perspective and correct.
                      But the old ladder advanced by a near-constant step in
@@ -2873,7 +2867,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                  the lake is being disturbed by something standing in it -->
             <g stroke="#e6dcc8" fill="none" stroke-linecap="round">
               <path class="ring" style="--rdur: 19.3s; --rdelay: -4s" d="M170 524 C174 526.4 186 526.4 190 524" stroke-opacity=".3" stroke-width="1.1"/>
-              <path class="ring" style="--rdur: 27.7s; --rdelay: -17s" d="M270 524 C274 526.4 286 526.4 290 524" stroke-opacity=".3" stroke-width="1.1"/>
+              <path class="ring" style="--rdur: 28.4s; --rdelay: -17s" d="M270 524 C274 526.4 286 526.4 290 524" stroke-opacity=".3" stroke-width="1.1"/>
               <path class="ring" style="--rdur: 23.4s; --rdelay: -11s" d="M174 528.5 C178 530 184 530 188 528.5" stroke-opacity=".16" stroke-width=".9"/>
               <path class="ring" style="--rdur: 29.2s; --rdelay: -7s" d="M274 528.5 C278 530 284 530 288 528.5" stroke-opacity=".16" stroke-width=".9"/>
             </g>
@@ -3054,7 +3048,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           <path data-on="heron"
                 d="M765 527 C769 524 776 525 780 529 C775 532 769 531 765 527 Z"
                 fill="#1b2338" opacity=".9"/>
-          <path class="ring" style="--rdur: 19.8s; --rdelay: -3s" d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
+          <path class="ring" style="--rdur: 18.6s; --rdelay: -3s" d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
           <g stroke="#e6dcc8" stroke-opacity=".16" stroke-width="1" fill="none" stroke-linecap="round">
             <path class="ring" style="--rdur: 29s; --rdelay: -16s" d="M763 548 C767 549.6 775 549.6 779 548"/>
             <path class="ring" style="--rdur: 35.2s; --rdelay: -8s" d="M766 552 C769 553.2 774 553.2 777 552"/>

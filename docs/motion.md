@@ -69,7 +69,7 @@ deleted, not tuned.
 | the far mountain's mirror              | water                                      | brightens and settles, and is slid sideways while it stretches about the waterline: 3.0 u at its far edge               | 39 s of brightness, 47.4 s of shape                   | **yes**                           |
 | the gate's reflection                  | water                                      | slid and stretched about the waterline, 3.2 u at the far edge, under the bands the surface lays across it               | 31.6 s                                                | **yes**                           |
 | what the ducks leave in it             | water, and two birds floating on the water | slid and stretched about the top of each smear: 1.04 and 0.85 u at the far edge                                         | 32, 34.6 s                                            | **yes**                           |
-| where things stand in the water        | the surface is not flat against them       | nine rings and strokes brighten and settle, each between 0.62 and 1 of itself                                           | 15.2, 18.4, 19.3, 19.8, 23.4, 27.7, 29, 29.2, 35.2 s  | **yes**                           |
+| where things stand in the water        | the surface is not flat against them       | nine rings and strokes brighten and settle, each between 0.62 and 1 of itself                                           | 15.2, 18.4, 18.6, 19.3, 23.4, 28.4, 29, 29.2, 35.2 s  | **yes**                           |
 | the bands across the gate's reflection | the surface itself                         | slide along the water, 2.8 and 2.2 u between the extremes                                                               | 27.6, 32.8 s                                          | **yes**                           |
 | reeds and grass                        | wind                                       | sway, 1.2°, one stand as one object                                                                                     | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s                  | no — Enhance                      |
 | the cherry branch                      | wind off the lake                          | rocks about its root; the far end travels 1.6 u in still air and 3.5 u in a gust, the root nothing                      | 57.5 s; 13.3 s with Enhance                           | **yes**                           |
@@ -158,8 +158,8 @@ of a fall and a slide whose periods share no factor, so the ten curves are ten
 curves.
 
 Those periods are not free. A petal that falls 85 units in 57 seconds moves two
-pixels in the three seconds the rhythm probe watches, so it is not a traveller
-and it is compared against everything within 200 css px — the wake, the glitter
+units in the three seconds the rhythm probe watches, so it is not a traveller and
+it is compared against everything within 120 units — the wake, the glitter
 crests, the petals lying on the water, the hull, the man poling it, the mist, the
 far birds. The first set put 57 next to the wake's 19, three times exactly, and
 43.8 next to a floating petal's 11, four times within a percent; both were
@@ -202,15 +202,18 @@ the shape the end of a flexing branch draws.
 
 The thirty periods — fifteen in still air and fifteen in the gust — were the
 expensive part, and the rhythm probe priced them on the first run. A flower that
-swings two thirds of a unit is not a traveller — the probe's threshold is four
-pixels in three seconds — so it is compared against everything within 200 css px,
-and the branch hangs over most of the lake: the fish rings at 97, 127 and 179 s,
-the petals drifting on the water at 73, 101, 109 and 139 s, the birds at 31.9,
-43.7 and 39 with the laminate on and 67, 89 and 113 with it off, the clouds at 46,
-62 and 38, the mist at 78 and 103, the ten falling petals at 22.8 to 58.9. The
-first set put 19.4 s under the fish's 97 — five times exactly — and 17.9 s under
-179, ten times. Both were flagged, and every period was then re-walked against
-that whole list and against the other fourteen.
+swings two thirds of a unit is not a traveller — the probe's threshold is 10 units
+in three seconds — so it is compared against what sits near it. When these were
+picked the radius was 200 css px, which at this viewport is most of the card, and
+the list it produced was the whole page: the fish rings at 97, 127 and 179 s, the
+petals drifting on the water at 73, 101, 109 and 139 s, the birds at 31.9, 43.7 and
+39 with the laminate on and 67, 89 and 113 with it off, the clouds at 46, 62 and 38,
+the mist at 78 and 103, the ten falling petals at 22.8 to 58.9. The first set put
+19.4 s under the fish's 97 — five times exactly — and 17.9 s under 179, ten times.
+Both were flagged, and every period was then re-walked against that whole list and
+against the other fourteen. The radius is 120 units now, so the list a new mark has
+to survive is shorter than the one these survived; nothing had to be re-picked,
+because a period clean against everything is clean against anything nearby.
 
 The branch and its flowers move on both tiers, and that is the same correction the
 petals got one commit earlier. They went in as a gust-tier motion — killed by the
@@ -395,8 +398,17 @@ looking:
   at the hull.
 - **The six crests of the glitter band were three pairs of twins.** Their
   periods came from `nth-child(2n)` and `nth-child(3n)`, which hands the same
-  duration to rows that are twenty-five units apart and one glance apart. Each
-  crest now has its own period: 17, 23, 29, 19, 25, 31 s.
+  duration to rows that are twenty-five units apart and one glance apart. The
+  fix — six primes, one per row — was written as seven rules that counted, and by
+  the time it was written the rows had been folded into one group: the class sat
+  on the group, the group was nth-child(2) of the water, and the four rules after
+  it selected nothing at all. The band breathes as one thing at one period, and
+  the page carried four rules and a paragraph of care about an empty set. They are
+  gone; the band's period is written on the group in the markup, and the boat's
+  three crests are named rather than counted. The dead-rule check missed them
+  because it strips pseudo-classes off a selector before asking whether anything
+  matches, and nth-child is a pseudo-class. It does not strip position any more,
+  and these four are how that was shown to matter.
 - **The ducks, the heron and the fish were not on the lake.** A CSS transform
   does not compose with a `transform` attribute, it replaces it, so a mark
   positioned by the attribute and animated by the stylesheet is positioned at
@@ -419,13 +431,31 @@ looking:
 
 The rule those three break is rule 2, and the check that catches them is
 `test-motion.mjs`: every animated mark in a face is sampled twice three seconds
-apart, and any two that stay put, are under 200 px across and within 200 px of
-each other must not share a period or be whole multiples of one another. Two
-exclusions, both claims about the picture rather than conveniences: a mark
-wider than 200 px is a surface — mist, the glitter path, the ray field — and a
-surface is not anybody's neighbour; and a mark that travels more than 8 px in
-three seconds is passing through, so its period is a duration of passage and
-not a step the eye can compare.
+apart, and any two that stay put, are under 200 units across and within 120 units
+of each other must not share a period, come within 1% of one another's, or be whole
+multiples of one another. Two exclusions, both claims about the picture rather than
+conveniences: a mark wider than 200 units is a surface — mist, the glitter path,
+the ray field — and a surface is not anybody's neighbour; and a mark that travels
+more than 10 units in three seconds is passing through, so its period is a duration
+of passage and not a step the eye can compare.
+
+The distances are stated in units of the artwork and converted through the
+viewport's own scale. They used to be stated in CSS pixels, which made the radius a
+function of the test window: at the viewport the harness uses, 200 px is 600 units,
+and the probe was comparing one shore of the lake to the other. That became visible
+the day the third rule went in — a ring at the foot of a post on the left at 29.2 s
+and an arc at a heron's legs on the right at 29 s were reported as keeping step, 491
+units apart, on opposite sides of a 900-unit picture. The radius is 120 units now, a
+hand's width on the card, and widening it back to the old reach reports four such
+pairs.
+
+The third rule is the 1%: two periods less than 1% apart are one period for anybody
+watching. The check used to allow anything that was neither exactly equal nor an
+exact multiple, so 27.6 s and 27.7 s passed — a band sliding across the surface and
+a ring brightening at the foot of a post, 50 units apart, on one clock. Two of the
+water's marks were moved off that, and setting one back makes the check say exactly
+what it found: `band (27.6s) and ring (27.8s) are within 1% of a period, 50 units
+apart`.
 
 The check runs in both tiers, and only started running in both when the excuse
 for not doing so turned out to be false. It used to stop at Enhance off, on the
