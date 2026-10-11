@@ -218,6 +218,64 @@ ok(
       : ', none invisible'
   }`,
 );
+/* A detail drawn on top of a creature has to stay inside it. The heron's
+   folded wing is one almond of a slightly lighter ink over the body, and for
+   the whole life of the bird it hung 4 units below the belly and 4 units past
+   the back — not a wing but a second bird sagging under the first. Nothing
+   that measures the mark measures that: the mark is visible, it is in the
+   right place, and it is the right colour. The question is asked of every
+   path that says whose body it belongs to with `data-on`: walk the outline of
+   the detail, map each point into the creature's own coordinates through the
+   `<use>` that places it, and ask the creature's parts whether each point is
+   inside their fill. */
+const detail = JSON.parse(
+  await page.evaluate(`(() => {
+    const bad = [];
+    let n = 0;
+    for (const el of document.querySelectorAll('[data-on]')) {
+      const name = el.getAttribute('data-on');
+      const sym = document.getElementById(name);
+      const uses = document.querySelectorAll('use[href="#' + name + '"]');
+      if (!sym || uses.length !== 1) {
+        bad.push(name + ': ' + uses.length + ' placement(s) on the page');
+        continue;
+      }
+      const parts = [...sym.querySelectorAll('path')];
+      const use = uses[0];
+      /* The detail is drawn in the plate's own coordinates and the creature is
+         drawn in the symbol's, so the walk has to carry one into the other:
+         the detail's space to the root, the root back to the group the use
+         element sits in, and the use's own transform — the translate, the
+         mirror, the scale — back again. getScreenCTM on the use is not that
+         matrix: it leaves out the transform the use carries, which is the
+         whole placement, and every point came out "outside" until it was
+         composed by hand. */
+      const placed = use.transform.baseVal.consolidate();
+      const intoTheBird = el
+        .getCTM()
+        .multiply(use.parentElement.getCTM().inverse())
+        .multiply(placed ? placed.matrix.inverse() : new DOMMatrix());
+      const L = el.getTotalLength();
+      const step = Math.max(0.5, L / 40);
+      let out = 0;
+      let seen = 0;
+      for (let s = 0; s <= L; s += step) {
+        const p = el.getPointAtLength(s).matrixTransform(intoTheBird);
+        seen++;
+        if (!parts.some((q) => q.isPointInFill(p))) out++;
+      }
+      n++;
+      if (out) bad.push(name + ': ' + out + ' of ' + seen + ' points of the detail are outside it');
+    }
+    return JSON.stringify({ n, bad });
+  })()`),
+);
+ok(
+  'every detail drawn on a creature stays inside that creature',
+  detail.bad.length === 0,
+  `${detail.n} detail(s) walked${detail.bad.length ? `: ${detail.bad.join('; ')}` : ''}`,
+);
+
 ok('no page exceptions', page.exceptions.length === 0, `${page.exceptions.length} exception(s)`);
 
 page.close();

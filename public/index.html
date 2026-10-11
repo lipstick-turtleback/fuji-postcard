@@ -2722,9 +2722,14 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           </g>
 
 <g fill="#101627" stroke="#101627"><g class="wader" style="animation-duration:37s; animation-delay:-13s"><use href="#heron" transform="translate(772 546) scale(-1 1)"></use></g></g>
-          <!-- the folded wing, said with one hairline: the body is an oval
-               and the eye needs to know which end is the back -->
-          <path d="M766 531 C774 528 782 530 786 535 C781 538 772 538 766 535 Z"
+          <!-- the folded wing: one almond of a slightly lighter ink, and it
+               has to stay inside the body it is detailing. The first version
+               hung 4 units below the belly and 4 units past the back edge,
+               which is not a wing on a bird but a second, sagging bird under
+               the first one. `data-on` says whose body it belongs to, and
+               test-visible checks that every point of it is inside that body. -->
+          <path data-on="heron"
+                d="M765 527 C769 524 776 525 780 529 C775 532 769 531 765 527 Z"
                 fill="#1b2338" opacity=".9"/>
           <path d="M748 549 h26" stroke="#e6dcc8" stroke-opacity=".18" stroke-width="1" fill="none"/>
           <g stroke="#e6dcc8" stroke-opacity=".16" stroke-width="1" fill="none" stroke-linecap="round">

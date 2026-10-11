@@ -86,6 +86,7 @@ scripts/
   test-css.mjs         no rule selects nothing, no animation names nothing
   test-sound.mjs       the soundtrack, on a page nobody has touched
   perf.mjs             measure frame times over CDP
+  look.mjs             photograph one mark, big, for the questions pixels answer
   serve.mjs            dependency-free static server
 public/
   index.html           the built page (committed, so it can be opened directly)
@@ -178,6 +179,38 @@ The split is then verifiable in a way a rewrite is not: `npm run build` after
 moving the ranges must leave `git diff public/index.html` empty. It did. The
 only diff the fragments themselves introduce is the twelve orientation
 comments above.
+
+### Working on one mark at a time
+
+The picture is already in pieces you can work on separately: eleven fragments in
+paint order, twenty marks in the cast, seven data tables that say where each
+copy of a mark stands. Three things make them less independent than they look.
+Paint order is the picture, so a fragment's name is part of its drawing and
+moving one is a redraw, not a refactor. No fragment may `<use>` anything in
+another, because the exported plate has to be one file. And every mark is
+judged against its neighbours — a reed that is right on the bank is wrong
+against the snowcap.
+
+`node scripts/look.mjs` is how one of them gets looked at. It loads the page
+with motion held off, so two runs agree pixel for pixel, and photographs one
+element at a chosen zoom:
+
+```
+node scripts/look.mjs                          the whole front, at 2×
+node scripts/look.mjs 'use[href="#heron"]' 16  the heron, at 16×
+node scripts/look.mjs --back                   the other face
+```
+
+The size comes back in css px and in the artwork's own units, because a css px
+changes when the window does and a unit does not. The crop carries a margin of
+its own, since a mark's neighbours are what give it its meaning.
+
+That is how the heron's folded wing was found: at 16× the almond of lighter ink
+that is meant to be the wing hung 4 units below the bird's belly and 4 units
+past its back edge, so the silhouette read as two birds, one sagging under the
+other. Redrawing it inside the body moved 828 pixels of 5.7 million on the card
+— 0.01% — and `test-visible.mjs` now walks the outline of any detail marked
+`data-on` and fails if any of it falls outside the creature it belongs to.
 
 ## Commands
 
@@ -420,6 +453,14 @@ page before the question:
   across the lake takes four seconds out of ninety-seven and sampling at tenths
   steps straight over it. It found a fish whose ring was spreading under the
   near shore, on dry washi, twice a minute and a quarter, forever.
+  It also walks every detail that says whose body it belongs to with a
+  `data-on` attribute: the outline of the detail is sampled, each point is
+  carried through the `<use>` that places the creature into that creature's own
+  coordinates, and the creature's parts are asked whether the point is inside
+  their fill. The heron's folded wing — one almond of a slightly lighter ink —
+  failed it by 4 units below the belly and 4 units past the back, which is not
+  a wing on a bird but a second bird sagging under the first. Every other check
+  passed it: the mark is visible, in the right place, and the right colour.
 - `scripts/test-plate.mjs` measures every `<text>` on a face against every rule
   on that face, in the artwork's own units, and it measures it twice: once in
   the fonts the page names, once with all of them taken away. Every font the

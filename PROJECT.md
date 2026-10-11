@@ -350,6 +350,18 @@ The habits that keep paying off:
   stated in the page: the slow pass runs on a freshly loaded page, and
   `data-probe` is cleared when a new window opens, because a stale median
   answers "why is this off on my machine" with a period nobody is looking at.
+- **A detail that leaves the shape it details becomes a second shape.** The
+  heron's folded wing is one almond of a slightly lighter ink over the body,
+  and it hung 4 units below the belly and 4 units past the back — so the
+  silhouette read as two birds, one sagging under the other. Every check the
+  project had passed it: the mark is visible, it is placed correctly, it is the
+  right colour, and it is not lettering, not a rule, and not in the data. What
+  found it was `scripts/look.mjs`, which photographs one element at 16× with
+  motion held off, and what keeps it found is `data-on` on the detail plus a
+  walk of its outline through the `<use>`'s transform into the creature's own
+  coordinates, asking `isPointInFill` of each point. The general shape: a mark
+  can be correct against every measurement of the whole page and still be wrong
+  against the thing it is drawn on.
 
 ## The standing goal
 
