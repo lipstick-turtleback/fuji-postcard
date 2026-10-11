@@ -43,18 +43,27 @@ something moved has seen a defect, not a success.
 **Measured, not typed.** That sentence used to be backed by the number above it —
 1.2 units — and the number had been there since before the card had creatures in
 it. `test-motion.mjs` now measures it instead: every animated mark in the default
-tier is wound to t = 0 and to half its own period, and the distance its centre
-travels between the two is read off the live box. Fifty marks stay put. The most
-travelled of them is a petal bobbing on the water, at 2.1 units a cycle; then a
-band across the gate's reflection at 2.0, another floater at 1.7, the mountain's
-mirror at 1.9. The ceiling the check enforces is six units — three times the worst
-mark on the card, and low enough that an amplitude an order too big for the scene
-is reported rather than admired: give one of the bands 14 units of drift instead of
-1.4 and it comes out as `band at 20.1 u`.
+tier is walked once around its own cycle and the distance its own transform
+carries it between the extremes is read in the artwork's units. Fifty marks stay
+put. The most travelled of them is a petal bobbing on the water, at 2.9 units a
+cycle; then another floater at 2.4, a band across the gate's reflection at 2.2.
+The ceiling the check enforces is six units — twice the worst mark on the card,
+and low enough that an amplitude an order too big for the scene is reported
+rather than admired: give one of the bands 14 units of drift instead of 1.4 and it
+comes out as `band at 21.5 u`.
+
+The walking has a trap in it. Most of these marks carry a negative
+`animation-delay`, so that they start partway into their own cycle and are never
+all at an extreme together; and `currentTime` is measured from the start of the
+animation's timeline, which for a negative delay is behind the first iteration.
+Winding 0 to one period therefore samples the wrong window and misses the
+extremes — the first version of this probe read the middle bird drifting 4.7 units
+when the data says 5.8, and the birds crossing 236 units when the keyframe says
+168. The delay has to be added back before the window is walked.
 
 Two kinds of mark are measured but not held to that ceiling. A passage is not a
 sway: the ten petals coming down travel 89 to 295 units, the four lying on the
-water slide 7 to 15, the three birds in the far sky 6.7 to 8.1, and none of those
+water slide 7 to 15, the three birds in the far sky 5.8 to 7.6, and none of those
 reads as the scene moving — it reads as that thing going somewhere. And a mark 200
 units across is a surface: 20 units of drift across a 660-unit band of mist is 3%
 of itself, which is why the mist is not judged by a number written for a duck.
@@ -85,7 +94,7 @@ deleted, not tuned.
 | the heron                              | it is alive                                | weight shift ±0.3 u                                                                                                     | 37 s                                                  | **yes**                           |
 | three places the fish came up          | something under the water                  | a ring spreads from tight to gone, two or three times per period at uneven spacing                                      | 97, 127, 179 s                                        | **yes**                           |
 | the birds                              | they are flying                            | drift along their own heading, 6.6, 5.8 and 7.6 u between the extremes of the swing                                     | 67, 89, 113 s                                         | **yes**                           |
-| the birds, crossing                    | they are flying, and the wind is up        | the same drift, 34 u over the cycle                                                                                     | 31.9, 43.7, 39 s                                      | no — Enhance                      |
+| the birds, crossing                    | they are flying, and the wind is up        | 168 u across the sky and 38 u up, 172 u along the heading, fading in and out at each end                                | 31.9, 43.7, 39 s                                      | no — Enhance                      |
 | the far mountain's mirror              | water                                      | brightens and settles, and is slid sideways while it stretches about the waterline: 3.0 u at its far edge               | 39 s of brightness, 47.4 s of shape                   | **yes**                           |
 | the gate's reflection                  | water                                      | slid and stretched about the waterline, 3.2 u at the far edge, under the bands the surface lays across it               | 31.6 s                                                | **yes**                           |
 | what the ducks leave in it             | water, and two birds floating on the water | slid and stretched about the top of each smear: 1.04 and 0.85 u at the far edge                                         | 32, 34.6 s                                            | **yes**                           |
@@ -270,6 +279,16 @@ bird — because three birds in a sky are not one bird moved three times, and th
 check reads them off the elements: three distinct (period, phase, distance)
 triples, and every distance at least 4 units from the start of the swing to its
 end. Measured on the page, the three birds travel 6.6, 5.8 and 7.6 units.
+
+The catalogue's other bird row went stale in the other direction. It said the
+crossing tier drifts "the same drift, 34 u over the cycle", while the keyframe has
+translated 168 units across the sky and 38 up since the crossing was built — five
+times the number in the document, and the document is the thing people read.
+Nothing was wrong with the birds; the sentence was. The motion test now measures
+the crossing with the laminate on and fails if any bird's glide leaves the band of
+150 to 185 units across and 30 to 45 up, which is the difference between crossing
+a sky and twitching in it, written down as a number. Putting the keyframe back to
+the document's own figure reports `across 34, 33, 33 u · up 8, 8, 8 u`.
 
 ## The lake was glass everywhere except where it wasn't
 

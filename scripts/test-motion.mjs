@@ -340,44 +340,53 @@ ok(
 
 /* "Nobody ever sees it move" is a claim about units, and the only evidence for it
    had been the numbers typed into the stylesheet. This reads them off the page
-   instead: every animated mark in the default tier is wound to t = 0 and to half
-   its own period, and the distance its centre travels between those two moments is
-   measured from the live box.
+   instead: every animated mark in the default tier is walked once around its own
+   cycle, and the distance its own transform carries it between the extremes is
+   measured in the artwork's units.
 
    Two kinds of mark are set aside, for the same reason: the motion is a passage
    rather than a sway. A petal coming down off the branch travels 89 to 295 units,
-   a petal lying on the water 7 to 15, a bird 6.7 to 8.1 — none of that is a
+   a petal lying on the water 7 to 15, a bird 5.8 to 7.6 — none of that is a
    wobble the scene could be mistaken for, it is the thing going somewhere. And a
    mark 200 units across is a surface: 20 units of drift across a 660-unit band is
    3% of itself, which is why the mist is not held to the same number as a duck.
 
-   What is left has to stay nearly still. Six units of centre travel per cycle is
-   the ceiling; the page's worst today is 4.2, a petal bobbing on the water, and
-   the ceiling is where it is so that a mark given an amplitude an order too big
-   for the scene is reported rather than admired. */
+   What is left has to stay nearly still. Six units of travel per cycle is the
+   ceiling; the page's worst today is 2.9, a petal bobbing on the water. The
+   sampling takes ten points around the cycle, so with an eased curve it reads a
+   little under the true extreme — putting 14 units of drift on one of the bands
+   reports 21.5 rather than 28 — and the ceiling is where it is so that a mark
+   given an amplitude an order too big for the scene is reported rather than
+   admired. */
 const travel = JSON.parse(
   await living.evaluate(
-    `(async () => {
-      const svg = document.querySelector('.face.front svg');
-      const k = svg.getBoundingClientRect().width / svg.viewBox.baseVal.width;
-      const raf = () => new Promise((r) => requestAnimationFrame(r));
+    `(() => {
       const rows = [];
       for (const el of document.querySelectorAll('.card svg *')) {
         const anims = el.getAnimations();
         if (!anims.length) continue;
-        const dur = parseFloat(getComputedStyle(el).animationDuration);
-        const at = async (t) => {
-          for (const a of anims) a.currentTime = t * 1000;
-          await raf();
-          const r = el.getBoundingClientRect();
-          return [r.x + r.width / 2, r.y + r.height / 2, Math.max(r.width, r.height) / k];
-        };
-        const a = await at(0);
-        const b = await at(dur / 2);
+        const s = getComputedStyle(el);
+        const dur = parseFloat(s.animationDuration);
+        // Active time is local time minus the delay, and most of these marks
+        // carry a negative delay so that they start partway into their own
+        // cycle. Winding currentTime from 0 to the period would sample the wrong
+        // window and miss the extremes of the swing — the first version of this
+        // probe read the birds drifting 4.7 units when the data says 5.8.
+        const off = parseFloat(s.animationDelay || '0s');
+        const es = [];
+        const fs = [];
+        for (let j = 0; j <= 9; j++) {
+          for (const a of anims) a.currentTime = (off + (dur * j) / 9) * 1000;
+          const t = getComputedStyle(el).transform;
+          const m = t === 'none' ? { e: 0, f: 0 } : new DOMMatrix(t);
+          es.push(m.e);
+          fs.push(m.f);
+        }
+        const bb = 'getBBox' in el ? el.getBBox() : { width: 0, height: 0 };
         rows.push({
           cls: el.getAttribute('class') || el.tagName,
-          u: Math.hypot(b[0] - a[0], b[1] - a[1]) / k,
-          side: Math.max(a[2], b[2]),
+          u: Math.hypot(Math.max(...es) - Math.min(...es), Math.max(...fs) - Math.min(...fs)),
+          side: Math.max(bb.width, bb.height),
         });
       }
       return JSON.stringify(rows);
@@ -794,6 +803,50 @@ ok(
   'and none of them keep step with the laminate on either',
   rhythmOn.bad.length === 0,
   `${rhythmOn.n} marks compared · ${rhythmOn.bad.slice(0, 3).join(' | ')}`,
+);
+/* The catalogue says the birds cross the sky when the laminate is on, and the
+   only number anyone had for that was one typed into the document — 34 units —
+   against a keyframe that translates 168 by 38. A crossing is the one motion on
+   this card that is allowed to be seen, so the number is worth pinning: it is
+   what separates birds crossing a sky from birds twitching in one, and the
+   twitching version is exactly what the last round of this document was written
+   to stop. */
+const crossing = JSON.parse(
+  await living.evaluate(
+    `(() => {
+      const rows = [];
+      for (const el of document.querySelectorAll('.card svg .bird')) {
+        const anims = el.getAnimations();
+        if (!anims.length) continue;
+        const s = getComputedStyle(el);
+        if (s.animationName !== 'glide') continue;
+        const dur = parseFloat(s.animationDuration);
+        const off = parseFloat(s.animationDelay || '0s');
+        const es = [];
+        const fs = [];
+        for (let j = 0; j <= 9; j++) {
+          for (const a of anims) a.currentTime = (off + (dur * j) / 9) * 1000;
+          const m = new DOMMatrix(getComputedStyle(el).transform);
+          es.push(m.e);
+          fs.push(m.f);
+        }
+        rows.push({
+          cls: el.getAttribute('class'),
+          across: Math.max(...es) - Math.min(...es),
+          up: Math.max(...fs) - Math.min(...fs),
+        });
+      }
+      return JSON.stringify(rows);
+    })()`,
+  ),
+);
+ok(
+  'the three birds cross the sky rather than twitch in it',
+  crossing.length === 3 &&
+    crossing.every((r) => r.across > 150 && r.across < 185 && r.up > 30 && r.up < 45),
+  `${crossing.length} birds gliding · across ${crossing.map((r) => r.across.toFixed(0)).join(', ')} u · up ${crossing
+    .map((r) => r.up.toFixed(0))
+    .join(', ')} u`,
 );
 living.close();
 finish();
