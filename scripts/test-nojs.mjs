@@ -26,6 +26,7 @@
 import { setTimeout as sleep } from 'node:timers/promises';
 import { openPage, silentPage } from './cdp.mjs';
 import { checks, skipped } from './checks.mjs';
+import { sheet } from './pdf.mjs';
 
 const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
 const { ok, finish } = checks('test-nojs');
@@ -121,6 +122,55 @@ ok(
   !live.noteShown && wide.noteShown,
   'the noscript line is gone once script runs',
 );
+
+/* The same page, printed. 10-print.css claims that without script the front
+   prints — the attribute that chooses the face is written by a `beforeprint`
+   handler that never runs here — and a claim about a tier nobody has ever
+   printed is a claim, not a fact. The sheet has to be the card and not the
+   gallery, and it has to be one sheet. */
+await page.send('Emulation.setScriptExecutionDisabled', { value: true });
+await page.send('Emulation.setEmulatedMedia', { media: 'print' });
+await page.send('Emulation.setDeviceMetricsOverride', {
+  width: 1122,
+  height: 794,
+  deviceScaleFactor: 1,
+  mobile: false,
+});
+await page.send('Page.navigate', { url: PAGE });
+await sleep(1400);
+const paper = JSON.parse(
+  await page.evaluate(`(() => {
+    const vis = (s) => {
+      const el = document.querySelector(s);
+      return !!el && el.getClientRects().length > 0;
+    };
+    return JSON.stringify({
+      front: vis('.face.front'),
+      back: vis('.face.back'),
+      furniture: ['.bg', '.topbar', '.masthead', '.plinth', '.footer', '.console', '.foil']
+        .filter(vis)
+        .join(' '),
+      face: document.documentElement.dataset.printFace || 'unset',
+    });
+  })()`),
+);
+const pdf = await page.send('Page.printToPDF', {
+  preferCSSPageSize: true,
+  printBackground: true,
+  transferMode: 'ReturnAsBase64',
+});
+const printed = sheet(Buffer.from(pdf.data, 'base64'));
+ok(
+  'printed without script, the paper is the card and nothing else',
+  paper.front && !paper.back && paper.furniture === '' && paper.face === 'unset',
+  `front ${paper.front} · back ${paper.back} · on the paper: ${paper.furniture || 'nothing'} · data-print-face ${paper.face}`,
+);
+ok(
+  'and it comes out one postcard, not two sheets',
+  printed.pages === 1 && Math.abs(printed.mm[0] - 148) < 1 && Math.abs(printed.mm[1] - 100) < 1,
+  `${printed.pages} page(s), MediaBox ${printed.mm[0].toFixed(1)} × ${printed.mm[1].toFixed(1)} mm`,
+);
+await page.send('Emulation.setEmulatedMedia', { media: '' });
 
 await page.send('Emulation.setScriptExecutionDisabled', { value: false }).catch(() => {});
 page.close();

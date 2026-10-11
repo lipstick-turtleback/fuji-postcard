@@ -22,6 +22,7 @@
 import { setTimeout as sleep } from 'node:timers/promises';
 import { openPage, silentPage } from './cdp.mjs';
 import { checks, skipped } from './checks.mjs';
+import { sheet } from './pdf.mjs';
 
 const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
 const { ok, finish } = checks('test-print');
@@ -81,18 +82,11 @@ const pdf = await send('Page.printToPDF', {
   printBackground: true,
   transferMode: 'ReturnAsBase64',
 });
-const bytes = Buffer.from(pdf.data, 'base64');
-// the objects are not in the header: a PDF's page tree sits wherever the writer
-// put it, so the whole file is searched rather than the first few kilobytes
-const pdfText = bytes.toString('latin1');
-const pages = (pdfText.match(/\/Type\s*\/Page[^s]/g) || []).length;
-const box = /\/MediaBox\s*\[\s*0\s+0\s+([\d.]+)\s+([\d.]+)/.exec(pdfText);
-// a PostScript point is 1/72 of an inch
-const mm = box ? [Number(box[1]) * 0.352778, Number(box[2]) * 0.352778] : [0, 0];
+const first = sheet(Buffer.from(pdf.data, 'base64'));
 ok(
   'the sheet is a postcard, and there is one of it',
-  pages === 1 && Math.abs(mm[0] - 148) < 1 && Math.abs(mm[1] - 100) < 1,
-  `${pages} page(s), MediaBox ${mm[0].toFixed(1)} × ${mm[1].toFixed(1)} mm`,
+  first.pages === 1 && Math.abs(first.mm[0] - 148) < 1 && Math.abs(first.mm[1] - 100) < 1,
+  `${first.pages} page(s), MediaBox ${first.mm[0].toFixed(1)} × ${first.mm[1].toFixed(1)} mm`,
 );
 
 // turn the card over and ask again: the paper should follow the picture
@@ -108,10 +102,11 @@ const shown = await evaluate(`(() => {
   const vis = (s) => document.querySelector(s).getClientRects().length > 0;
   return \`front \${vis('.face.front')} back \${vis('.face.back')}\`;
 })()`);
+const second = sheet(Buffer.from(pdf2.data, 'base64'));
 ok(
-  'the face you were looking at is the face that prints',
-  face === 'back' && shown === 'front false back true' && pdf2.data.length > 1000,
-  `data-print-face ${face} · ${shown} · ${pdf2.data.length} bytes`,
+  'the face you were looking at is the face that prints, on one sheet still',
+  face === 'back' && shown === 'front false back true' && second.pages === 1,
+  `data-print-face ${face} · ${shown} · ${second.pages} page(s), ${second.bytes} bytes`,
 );
 
 ok('no page exceptions in the print pass', exceptions.length === 0, exceptions.join(' | '));

@@ -76,6 +76,7 @@ scripts/
   test-visible.mjs     hide every placed mark in turn and see whether the page notices
   test-export.mjs      check the .svg the save button hands out, and photograph it
   png.mjs              enough of a PNG decoder to compare two of them
+  pdf.mjs              enough of a PDF reader to count sheets and measure paper
   test-interactions.mjs drive the buttons and shortcuts and read what happened
   test-motion.mjs      hold the page to its reduced-motion promise
   test-nojs.mjs        load the page with script switched off and see what is left
@@ -365,8 +366,16 @@ page before the question:
   `HTMLAnchorElement.prototype.click`), Enhance and the volume slider respond,
   and no page exception is thrown. It also throttles the CPU eight times over
   CDP and waits: the page is supposed to notice the frame rate and turn its own
-  expensive mode off, and it is checked that it does — and that it leaves the
-  laminate alone when the frames are coming. It also collects the errors the browser
+  expensive mode off. What is asserted is the page's rule and not the speed of
+  the machine — the laminate stays if the median the page measured is at or
+  under the threshold and goes if it is over — because the old version assumed
+  the unthrottled pass would be fast, and on a loaded laptop the page dropped
+  the laminate correctly, the check called that a defect, and the drop set the
+  page's override flag so the throttled pass never probed at all and read back
+  the previous window's number. The slow pass therefore runs on a freshly loaded
+  page with storage cleared, and a third check requires that `data-probe` is
+  gone while a new window is open: the recorded median belongs to the period
+  that produced it. It also collects the errors the browser
   itself raises while parsing the page — a malformed path is one of those, and
   it appears there and nowhere else.
 - `scripts/test-motion.mjs` holds the page to both of its motion promises.
@@ -432,6 +441,10 @@ page before the question:
   like they do — no underline, no pointer, no key hints, and a line that says
   what is the case. The same measurements are then taken with script running and
   every one must differ, or the test is measuring the layout rather than the tier.
+  The tier is then printed: the face that comes out has to be the front — the
+  attribute that picks the other one is written by a `beforeprint` handler that
+  never runs here — with none of the screen furniture on it, on one 148 × 100 mm
+  sheet.
 - `scripts/test-degrade.mjs` takes a feature away before the page's own script
   runs and loads the page anyway. Two of the page's dependencies are not in every
   browser — Web Audio, and `localStorage`, which throws on touch in private mode
@@ -454,7 +467,10 @@ page before the question:
   flat even though the frame loop is writing a tilt into it every frame; the sheet
   has to come back one page at 148 × 100 mm, which is the 3:2 the artwork was
   drawn in; and after turning the card over, the face that prints has to be the
-  back.
+  back, on one sheet as well. The sheet itself is measured by
+  `scripts/pdf.mjs` — enough of a PDF to count the pages and read the MediaBox —
+  which this test and the one without script now share, because a PDF's page tree
+  sits wherever the writer put it and reading the header finds nothing.
 - `scripts/test-keys.mjs` drives the page with Tab, Enter, Space and the arrow
   keys and reads back what happened: which element has focus, what its focus ring
   is drawn with, what the card's angle is, what the slider's value is. Every
