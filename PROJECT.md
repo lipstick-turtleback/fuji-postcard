@@ -200,6 +200,12 @@ The habits that keep paying off:
   collisions in a row: two with birds two hundred units up in open sky, two with
   the duck's 11.9 s at a multiple nobody would say out loud. The only honest way
   to pick a period is to write the whole list down and subtract.
+- **A meter pinned at the top is a bar drawn at full height.** The five bars
+  beside Play ran on one shared ceiling for every band, and the analyser is
+  dB-scaled over a bass-heavy mix: the low column sat at 100% for four samples in
+  five and the top one never moved off the floor. Both ends of the same lie. The
+  ceilings are now five numbers measured from a 30-second run of the piece, and
+  the check that keeps them honest samples the bars while it plays.
 - **A mark that changes nothing is a mark that is not there.** The dead-rule
   habit has a twin in the data: a placement can be drawn, clipped, painted over
   and seen by nobody. The middle fish was ringing on the shore — under the near

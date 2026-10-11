@@ -425,7 +425,10 @@ enforcing that was somebody remembering to click the buttons.
 Headless Chrome will not let anyone _hear_ the soundtrack, but with
 `--autoplay-policy=no-user-gesture-required` its `AudioContext` clock runs, so
 the graph can be measured instead: how many nodes it creates, when each was
-told to start, and whether the melody keeps its place. That is how both
+told to start, whether the melody keeps its place, and whether the five bars
+beside the Play button are measuring the sound or remembering a shape — they are
+read twelve times while the piece runs, and no column may sit pinned at the top
+while another never leaves the floor. That is how both
 soundtrack bugs were reproduced, and both are now asserted. The volume slider is
 measured at the same level: the master gain — found as the node that feeds the
 compressor, not the one at the speakers, because the one at the speakers is the

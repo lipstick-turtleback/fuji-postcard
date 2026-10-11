@@ -98,6 +98,65 @@ ok('Play starts it', (await play()) === 'true' && on > 0, `audio nodes ${on}`);
 await sound.evaluate(`document.getElementById('play').click()`);
 await sleep(900);
 ok('Play stops it', (await play()) === 'false', `audio nodes ${await src()}`);
+
+/* The five bars beside the Play button are the only thing on this page that
+   claims to be measuring something rather than remembering a shape. They are
+   driven from the analyser, and the analyser sits before the gate that ?silent
+   closes — which is the whole reason the gate is where it is — so on a muted
+   page they should still move. A meter animated by a timer instead of by signal
+   would survive a glance and not this.
+
+   The pointer goes over the card first for the reason written in PROJECT.md:
+   headless Chrome stops handing frames to a page with nothing to paint, and the
+   meter is driven by requestAnimationFrame. */
+const heights = () =>
+  sound.evaluate(
+    `[...document.querySelectorAll('#eq i')].map((b) => parseFloat(b.style.height) || 0)`,
+  );
+const fmt = (v) => v.map((x) => `${x}%`).join(' ');
+const rest = await heights();
+await sound.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 1120, y: 480 });
+await sound.evaluate(`document.getElementById('play').click()`);
+const samples = [];
+for (let i = 0; i < 12; i++) {
+  await sleep(350);
+  samples.push(await heights());
+}
+await sound.evaluate(`document.getElementById('play').click()`);
+await sleep(900);
+const settled = await heights();
+const asText = samples.map(fmt);
+ok(
+  'the meter answers the signal, not the button',
+  samples.some((s) => s.some((h) => h > 25)) &&
+    new Set(asText).size >= 3 &&
+    fmt(rest) === '10% 10% 10% 10% 10%',
+  `at rest ${fmt(rest)} · ${new Set(asText).size} different readings in ${samples.length} samples, last ${fmt(samples[samples.length - 1])}`,
+);
+
+/* And it has to have somewhere to go. A column pinned at the top is measuring
+   nothing there — it is a bar drawn at full height — and a column that never
+   leaves the floor is the same lie pointing the other way. Both were true here
+   until the ceilings were measured: the low column sat at 100% for four samples
+   in five, the top one for every one of them. */
+const perBar = rest.map((_, b) => samples.map((s) => s[b]));
+const pinned = perBar.map((v) => v.filter((x) => x >= 99.9).length);
+const highest = perBar.map((v) => Math.max(...v));
+ok(
+  'no column of the meter is pinned at the top',
+  pinned.every((n) => n <= 1),
+  `pinned samples per column: ${pinned.join(', ')} of ${samples.length}`,
+);
+ok(
+  'and the columns the music is quiet in stay quiet rather than being inflated',
+  highest[3] > 15 && highest[4] > 10 && highest[4] < 70,
+  `highest reading per column: ${highest.map((x) => `${x}%`).join(' ')}`,
+);
+ok(
+  'and the bars go back to rest when the piece does',
+  fmt(settled) === '10% 10% 10% 10% 10%',
+  fmt(settled),
+);
 const off = await src();
 await sound.send('Input.dispatchMouseEvent', {
   type: 'mousePressed',

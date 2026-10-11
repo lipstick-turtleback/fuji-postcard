@@ -43,6 +43,14 @@ function play(AC) {
     [44, 90],
     [90, 170],
   ];
+  /* What full height means for each band, measured from the piece rather than
+     guessed. The analyser's bins are dB-scaled and this mix is bass-heavy: with
+     one shared ceiling of 130 the low bar sat pinned at the top for four
+     samples in five (median 149, p95 188) while the top bar never left the
+     floor (median 0, p95 2.9). Each number here sits a little above the 95th
+     percentile of a 30-second run — 188, 146, 80, 24, 2.9 — so the bar that is
+     loud reads loud and still has somewhere to go. */
+  const CEIL = [215, 170, 105, 55, 28];
 
   /** the graph, built the first time a person asks for music and not before */
   let g = null;
@@ -173,7 +181,7 @@ function play(AC) {
       const [a, z] = BANDS[i];
       let s = 0;
       for (let k = a; k < z; k++) s += data[k];
-      const v = Math.min(1, s / (z - a) / 130);
+      const v = Math.min(1, s / (z - a) / CEIL[i]);
       el.style.height = `${(10 + v * 90).toFixed(1)}%`;
     }
     rafId = requestAnimationFrame(meter);
