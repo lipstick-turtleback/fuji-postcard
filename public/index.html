@@ -1140,7 +1140,7 @@ html[data-enhance="on"] .bird.b3 {
     transform: translate(0, 0);
   }
   to {
-    transform: translate(2px, -0.8px);
+    transform: translate(var(--dx, 2px), var(--dy, -0.8px));
   }
 }
 /* ~4s of fade at each end, so the loop point is never visible */
@@ -2630,7 +2630,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 
           <!-- Three birds, each its own shape, each its own distance: see
                src/art/gen/Birds.data.mjs for where they are. -->
-<g class="bird" stroke="#3a4463" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.75"><use href="#birdA" transform="translate(300 151)"></use></g><g class="bird b2" stroke="#3a4463" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.6"><use href="#birdB" transform="translate(356 128)"></use></g><g class="bird b3" stroke="#3a4463" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.5"><use href="#birdC" transform="translate(262 187)"></use></g>
+<g class="bird" style="--dx: 6.2px; --dy: -2.4px" stroke="#3a4463" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.75"><use href="#birdA" transform="translate(300 151)"></use></g><g class="bird b2" style="--dx: 5.4px; --dy: -2.1px" stroke="#3a4463" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.6"><use href="#birdB" transform="translate(356 128)"></use></g><g class="bird b3" style="--dx: 7px; --dy: -2.9px" stroke="#3a4463" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.5"><use href="#birdC" transform="translate(262 187)"></use></g>
 
           <!-- lake -->
           <!-- The water's edge at the far shore was the top of a rectangle,

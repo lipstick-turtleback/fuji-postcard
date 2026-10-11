@@ -64,7 +64,7 @@ deleted, not tuned.
 | the ducks                     | water                                     | ±0.4 u bob, no two in phase                                                                                             | 8.3, 11.9 s                                           | **yes**                           |
 | the heron                     | it is alive                               | weight shift ±0.3 u                                                                                                     | 37 s                                                  | **yes**                           |
 | three places the fish came up | something under the water                 | a ring spreads from tight to gone, two or three times per period at uneven spacing                                      | 97, 127, 179 s                                        | **yes**                           |
-| the birds                     | they are flying                           | drift along their heading, 2 u over the cycle                                                                           | 67, 89, 113 s                                         | **yes**                           |
+| the birds                     | they are flying                           | drift along their own heading, 6.6, 5.8 and 7.6 u between the extremes of the swing                                     | 67, 89, 113 s                                         | **yes**                           |
 | the birds, crossing           | they are flying, and the wind is up       | the same drift, 34 u over the cycle                                                                                     | 31.9, 43.7, 39 s                                      | no — Enhance                      |
 | the far tree line's mirror    | water                                     | already `reflBreathe`                                                                                                   | 39 s                                                  | yes (already)                     |
 | reeds and grass               | wind                                      | sway, 1.2°, one stand as one object                                                                                     | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s                  | no — Enhance                      |
@@ -217,6 +217,31 @@ changes how hard and never whether. A check counts them in both modes: 16 of 16
 animating with Enhance off and the same 16 with it on, each flower carrying its
 own amplitude, tilt, period and phase, and every one of the sixteen periods
 longer in still air than in the gust.
+
+## Three birds that were not going anywhere
+
+The birds have drifted since the beginning: `drift-far`, 67, 89 and 113 seconds,
+and the catalogue said so, and `WANT` in the motion test counted 3 of 3 animating
+with Enhance off, and the rhythm probe was satisfied that they were not keeping
+step with anything. Every one of those statements was true about a drift of
+**2 units**. Two units over 67 seconds is 0.03 units a second; a gull 20 units
+wide on a 900-unit card is 2.3% of the picture, and it does not visibly move at
+that rate. The birds were animated in the same sense that a photograph of a bird
+is animated.
+
+This is the same failure the petals lying on the water were, one tier over, and
+it is worth naming because the checks all passed. A mark can be exempt, counted,
+unsynchronised and still stationary for anybody looking. The fix is not a bigger
+number for its own sake: six to seven units over a minute is 0.1 units a second,
+which is still far too slow to watch and fast enough that the bird is somewhere
+else when you look back, and that is the whole of how a distant bird on a still
+morning is ever noticed.
+
+The distances are now data — `dx` and `dy` in `Birds.data.mjs`, one pair per
+bird — because three birds in a sky are not one bird moved three times, and the
+check reads them off the elements: three distinct (period, phase, distance)
+triples, and every distance at least 4 units from the start of the swing to its
+end. Measured on the page, the three birds travel 6.6, 5.8 and 7.6 units.
 
 ## Mechanism
 

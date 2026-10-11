@@ -436,7 +436,7 @@ html[data-enhance="on"] .bird.b3 {
     transform: translate(0, 0);
   }
   to {
-    transform: translate(2px, -0.8px);
+    transform: translate(var(--dx, 2px), var(--dy, -0.8px));
   }
 }
 /* ~4s of fade at each end, so the loop point is never visible */

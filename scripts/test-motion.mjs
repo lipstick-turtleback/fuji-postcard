@@ -212,6 +212,34 @@ ok(
   ),
 );
 
+/* And the drift has to be a distance, not a fact about the stylesheet. The
+   birds moved 2 units over 67 seconds, which is 0.03 units a second: every
+   check so far said the birds were animated, and on the card they stayed exactly
+   where they had been put. This asks how far each one actually goes, and it is
+   read off the element rather than the animation because the page has been open
+   for two seconds of a 67-second swing — the excursion is what the mark promises
+   between its extremes, which is what `alternate` guarantees it will make. */
+const birdDrift = JSON.parse(
+  await living.evaluate(`(() => {
+    const els = [...document.querySelectorAll('.card svg .bird')];
+    const own = new Set();
+    const reach = [];
+    for (const e of els) {
+      const s = getComputedStyle(e);
+      const dx = parseFloat(s.getPropertyValue('--dx'));
+      const dy = parseFloat(s.getPropertyValue('--dy'));
+      own.add([s.animationDuration, s.animationDelay, dx, dy].join('|'));
+      reach.push(Math.hypot(dx, dy));
+    }
+    return JSON.stringify({ n: els.length, own: own.size, reach });
+  })()`),
+);
+ok(
+  'and each bird drifts its own distance, far enough to be missed and found',
+  birdDrift.n === 3 && birdDrift.own === 3 && birdDrift.reach.every((r) => r >= 4),
+  `${birdDrift.own} different drifts · ${birdDrift.reach.map((r) => r.toFixed(1)).join(' ')} units between the extremes`,
+);
+
 /* The branch and its flowers move in still air too, at a fifth of the amplitude
    and an eighth of the speed: the air that lets a petal go also holds the branch
    up, and a branch that only moves when somebody switches the laminate on is a
