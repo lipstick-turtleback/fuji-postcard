@@ -62,8 +62,30 @@ export const key = async (send, k) => {
  * Resolves to null when Chrome is not there or does not come up. Callers are
  * expected to skip rather than fail: a machine without Chrome is not a machine
  * with a broken page, and a visual test must not turn one into a red build.
+ *
+ * Throws when the port is already serving a Chrome. That is not this browser,
+ * and attaching to it is the worst kind of pass: a test then runs against a
+ * process left behind by an earlier, crashed run, with that run's flags. It
+ * happened with 9389, where a browser started with
+ * --force-prefers-reduced-motion answered a later test that had not asked for
+ * the flag, and the page came back reporting prefers-reduced-motion as reduce
+ * and zero animations, which read like a broken build.
  */
 export async function openPage({ port, userDataDir, args = [] }) {
+  try {
+    const taken = await fetch(`http://127.0.0.1:${port}/json/version`, {
+      signal: AbortSignal.timeout(600),
+    });
+    if (taken.ok) {
+      throw new Error(
+        `cdp: port ${port} is already serving a Chrome — another test's browser, or one a crashed run left behind. Kill it or take another port.`,
+      );
+    }
+  } catch (e) {
+    if (e instanceof Error && e.message.startsWith('cdp:')) throw e;
+    // nothing listening, which is the normal case
+  }
+
   let chrome;
   try {
     chrome = spawn(CHROME, [
@@ -84,6 +106,19 @@ export async function openPage({ port, userDataDir, args = [] }) {
   } catch {
     return null;
   }
+
+  /* A test that dies with an uncaught error leaves its Chrome behind, and that
+     is not a leak of memory but a leak of the port: the next run attaches to the
+     leftover browser, gets its flags, and reports something that has nothing to
+     do with the code being tested. Killing on exit is the part a caller cannot
+     remember to do. */
+  process.on('exit', () => {
+    try {
+      chrome.kill('SIGKILL');
+    } catch {
+      /* already gone */
+    }
+  });
 
   let target = null;
   for (let i = 0; i < 120 && !target; i++) {

@@ -11,8 +11,12 @@ import { rollup } from 'rollup';
  * artefact. No bundler, no framework — the parts are plain CSS, SVG and JS,
  * each of which a linter can read on its own.
  *
- *   node scripts/build.mjs          write public/index.html
- *   node scripts/build.mjs --check  fail if the committed file is stale
+ * Two artefacts come out of one string: the annotated page, which is what the
+ * suite reads and what the artwork's reasoning lives in, and the shipped one
+ * with the reasoning taken out. See the minify step at the bottom.
+ *
+ *   node scripts/build.mjs          write both files
+ *   node scripts/build.mjs --check  fail if either committed file is stale
  */
 import { render } from 'svelte/server';
 // first, so Node can read a .svelte file when the scene asks for one
@@ -85,10 +89,11 @@ const css = () => {
    Rollup gives every module its own scope and lets the parts under
    src/script/ import each other for real. The output is one IIFE per entry,
    inlined, so the page still ships with zero runtime dependencies and still
-   opens from the file system. Rollup rather than esbuild because it prints
-   the source as it wrote it: the comments that explain why a drone is
-   anchored to the clock survive into the artefact, and this project's
-   reasoning lives in those comments. */
+   opens from the file system. Rollup rather than esbuild because it prints the
+   source as it wrote it: the comments that explain why a drone is anchored to
+   the clock survive into the annotated artefact, and this project's reasoning
+   lives in those comments. The shipped artefact takes them out — see the
+   minify step at the bottom, which is where esbuild belongs. */
 const js = async (entry) => {
   const bundle = await rollup({ input: join(src, 'script', entry) });
   const { output } = await bundle.generate({ format: 'iife' });
@@ -194,6 +199,52 @@ if (left) {
   process.exit(1);
 }
 
+/* The shipped artefact. `public/index.html` is the artwork with its reasoning
+   written beside every mark — 152 SVG comments, 55 CSS blocks, 17 KB of JS
+   comments, 35% of the file. `public/index.min.html` is the same page with the
+   reasoning taken out: comments gone, indentation gone, and the stylesheet and
+   the two bundles put through esbuild's minifier.
+
+   Both are built from the same string, in the same run, so the annotated page
+   cannot drift from the shipped one — and `test-build.mjs` compares the two
+   element by element, attribute by attribute and text node by text node, so a
+   tidy that ate a word or a minifier that rewrote a rule fails the suite rather
+   than the eyes.
+
+   The markup is tidied by hand rather than by a HTML minifier because the page
+   is an SVG drawing: every line is trimmed but the line breaks are kept, so a
+   `<text>` element's content loses its indentation and keeps its structure.
+   esbuild is used for the two things it is good at and nothing else. */
+const tidy = (markup) =>
+  markup
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line !== '')
+    .join('\n');
+
+const minOut = join(root, 'public', 'index.min.html');
+
+const minify = async (page) => {
+  const esbuild = await import('esbuild');
+  const block = /<(style|script)>([\s\S]*?)<\/\1>/g;
+  let out = '';
+  let last = 0;
+  let m = block.exec(page);
+  while (m) {
+    out += tidy(page.slice(last, m.index));
+    const code = await esbuild.transform(m[2], {
+      loader: m[1] === 'style' ? 'css' : 'js',
+      minify: true,
+      target: 'es2020',
+    });
+    out += `<${m[1]}>${code.code}</${m[1]}>`;
+    last = block.lastIndex;
+    m = block.exec(page);
+  }
+  return out + tidy(page.slice(last));
+};
+
 if (process.argv.includes('--check')) {
   if (!existsSync(out)) {
     console.error('check: public/index.html does not exist — run npm run build');
@@ -205,8 +256,25 @@ if (process.argv.includes('--check')) {
     console.error('check: public/index.html is stale — run npm run build');
     process.exit(1);
   }
+  const min = await minify(html);
+  if (!existsSync(minOut)) {
+    console.error('check: public/index.min.html does not exist — run npm run build');
+    process.exit(1);
+  }
+  if (readFileSync(minOut, 'utf8') !== min) {
+    console.error('check: public/index.min.html is stale — run npm run build');
+    process.exit(1);
+  }
+  console.log('check: public/index.min.html is up to date');
 } else {
   writeFileSync(out, html);
+  const min = await minify(html);
+  writeFileSync(minOut, min);
   const bytes = Buffer.byteLength(html);
-  console.log(`build: public/index.html — ${bytes.toLocaleString()} bytes`);
+  const minBytes = Buffer.byteLength(min);
+  console.log(
+    `build: public/index.html — ${bytes.toLocaleString()} bytes, ` +
+      `public/index.min.html — ${minBytes.toLocaleString()} bytes ` +
+      `(${((100 * minBytes) / bytes).toFixed(0)}% of it, ${((bytes - minBytes) / 1024).toFixed(0)} KB of comments and indentation taken out)`,
+  );
 }
