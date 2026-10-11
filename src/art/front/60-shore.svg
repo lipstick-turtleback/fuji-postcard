@@ -21,15 +21,24 @@
               <path d="M164 429 C194 421 266 421 296 429 L296 438 C266 430 194 430 164 438 Z"/>
               <path d="M158 420 C190 410 270 410 302 420 L302 429 C270 419 190 419 158 429 Z"/>
             </g>
-            <!-- shaded inner edges -->
+            <!-- the side of each post away from the sun, and the side it
+                 reaches. The sun is at (620, 206): up and to the right of a
+                 gate whose posts stand at x 171-185 and 275-289. So both
+                 posts are lit on their right edge and shaded on their left.
+                 They used to be shaded on the outside and lit on the inside,
+                 because the group is mirrored about x = 230 and the shading
+                 was mirrored with it — but a gate mirrors and light does not,
+                 and the effect was a gate lit from somewhere in the middle of
+                 itself. The comments said "shaded inner edges" and "lit outer
+                 edges", which is what the paths did and not what the sun
+                 does. -->
             <g fill="#8f2f20" opacity=".42">
               <path d="M171 524 L177 428 L180 428 L174 524 Z"/>
-              <path d="M289 524 L283 428 L280 428 L286 524 Z"/>
+              <path d="M275 524 L272 428 L274 428 L277.5 524 Z"/>
             </g>
-            <!-- lit outer edges, catching the low sun -->
             <g fill="#f08a5e" opacity=".5">
               <path d="M185 524 L188 428 L186 428 L182.5 524 Z"/>
-              <path d="M275 524 L272 428 L274 428 L277.5 524 Z"/>
+              <path d="M289 524 L283 428 L280 428 L286 524 Z"/>
             </g>
             <!-- the reflection is the gate itself: mirrored about the
                  waterline and compressed by the viewing angle. the water
