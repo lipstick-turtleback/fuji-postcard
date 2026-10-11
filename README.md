@@ -199,18 +199,27 @@ element at a chosen zoom:
 node scripts/look.mjs                          the whole front, at 2×
 node scripts/look.mjs 'use[href="#heron"]' 16  the heron, at 16×
 node scripts/look.mjs --back                   the other face
+node scripts/look.mjs --box=330,120,240,150 5  a region of the plate, at 5×
 ```
 
 The size comes back in css px and in the artwork's own units, because a css px
-changes when the window does and a unit does not. The crop carries a margin of
-its own, since a mark's neighbours are what give it its meaning.
+changes when the window does and a unit does not. A crop of an element carries a
+margin of its own, since a mark's neighbours are what give it its meaning; a
+crop named by `--box` gets none, because the whole point of naming a region is
+that the next crop of it lands on the same rectangle. That is what makes a
+before-and-after honest: the snow cap's own box grew ten units taller the day
+its snowline was redrawn, and the two crops could not be compared at all.
 
-That is how the heron's folded wing was found: at 16× the almond of lighter ink
-that is meant to be the wing hung 4 units below the bird's belly and 4 units
-past its back edge, so the silhouette read as two birds, one sagging under the
-other. Redrawing it inside the body moved 828 pixels of 5.7 million on the card
-— 0.01% — and `test-visible.mjs` now walks the outline of any detail marked
-`data-on` and fails if any of it falls outside the creature it belongs to.
+Four marks were found wrong this way and fixed: the heron's folded wing, an
+almond of lighter ink that hung 4 units below the belly and 4 units past the
+back edge, so the silhouette read as two birds, one sagging under the other; the
+boatman, sitting 3.5 units above his own boat with two straight chords for
+sides; the torii, lit on the inner edge of each post because the shading was
+mirrored with the gate while the sun at (620, 206) was not; and the snowline,
+five round scallops of nearly equal depth. The wing is now guarded —
+`test-visible.mjs` walks the outline of any detail marked `data-on` and fails if
+any of it falls outside the creature it belongs to — and the other three are
+recorded in the comments beside the paths that were wrong.
 
 ## Commands
 

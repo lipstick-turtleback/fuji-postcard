@@ -15,15 +15,19 @@
    box plus a margin, because a mark's neighbours are what give it its meaning:
    a reed alone is a stroke, a reed against the shore line is a place.
 
-   The size is reported in the artwork's own units as well as in css px, for
-   the same reason test-plate measures in them: the picture is 900 × 600 of
-   them, and a css px changes when the window does.
+   A region can be asked for directly, in those units, with `--box=x,y,w,h`.
+   That is what makes a before-and-after honest: a crop taken from an element's
+   own box moves when the element is redrawn — the snow cap grew ten units
+   taller the day its snowline was, and the two crops could not be compared —
+   while a crop taken from a region of the plate is the same rectangle every
+   time, whatever the drawing under it does to itself.
 
      node scripts/look.mjs                        the whole front, at 2×
      node scripts/look.mjs '#heron'               one mark, at 4×
      node scripts/look.mjs '.reed' 8              at 8×
      node scripts/look.mjs --back                 the other face
      node scripts/look.mjs '#heron' 4 heron.png   where to write it
+     node scripts/look.mjs --box=330,120,240,150 5 a region, at 5×
 
    Needs Chrome; says so and exits 2 when it is not there. */
 import { writeFileSync } from 'node:fs';
@@ -32,10 +36,19 @@ import { openPage, silentPage } from './cdp.mjs';
 
 const argv = process.argv.slice(2);
 const back = argv.includes('--back');
+const boxFlag = argv.find((a) => a.startsWith('--box='));
 const rest = argv.filter((a) => !a.startsWith('--'));
-const selector = rest[0] || (back ? '.face.back' : '.face.front');
-const scale = Number(rest[1] || (selector === '.face.front' || selector === '.face.back' ? 2 : 4));
-const out = rest[2] || '/tmp/fuji-look.png';
+let selector;
+let scale;
+let out;
+if (boxFlag) {
+  scale = Number(rest[0] || 4);
+  out = rest[1] || '/tmp/fuji-look.png';
+} else {
+  selector = rest[0] || (back ? '.face.back' : '.face.front');
+  scale = Number(rest[1] || (selector === '.face.front' || selector === '.face.back' ? 2 : 4));
+  out = rest[2] || '/tmp/fuji-look.png';
+}
 
 const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
 const page = await openPage({
@@ -62,7 +75,24 @@ if (back) {
   await sleep(1600);
 }
 
-const box = await evaluate(`(() => {
+const box = boxFlag
+  ? await evaluate(`(() => {
+     const [x, y, w, h] = ${JSON.stringify(boxFlag.slice(6).split(',').map(Number))};
+     const face = document.querySelector(${JSON.stringify(back ? '.face.back' : '.face.front')});
+     const svg = face.querySelector('svg');
+     const fr = svg.getBoundingClientRect();
+     const vb = svg.viewBox.baseVal;
+     const k = fr.width / vb.width;
+     return JSON.stringify({
+       x: fr.x + scrollX + x * k,
+       y: fr.y + scrollY + y * k,
+       w: w * k,
+       h: h * k,
+       units: vb.width / fr.width,
+       face: face.className,
+     });
+   })()`)
+  : await evaluate(`(() => {
   const el = document.querySelector(${JSON.stringify(selector)});
   if (!el) return null;
   el.scrollIntoView({ block: 'center', inline: 'center' });
@@ -88,8 +118,10 @@ if (!box) {
 const b = JSON.parse(box);
 
 // a mark's neighbours are part of it, so the crop is never tighter than the
-// mark itself: a third of its own size, and never less than 24 px
-const m = Math.max(24, Math.min(b.w, b.h) * 0.34);
+// mark itself: a third of its own size, and never less than 24 px. A region
+// asked for by number is already the crop, and gets no margin: the whole point
+// of naming one is that the next crop of it lands on the same rectangle.
+const m = boxFlag ? 0 : Math.max(24, Math.min(b.w, b.h) * 0.34);
 const clip = {
   x: b.x - m,
   y: b.y - m,
@@ -104,8 +136,9 @@ const shot = await send('Page.captureScreenshot', {
 writeFileSync(out, Buffer.from(shot.data, 'base64'));
 
 const u = b.units ? ` = ${Math.round(b.w * b.units)} × ${Math.round(b.h * b.units)} u` : '';
+const subject = boxFlag ? `region ${boxFlag.slice(6)}` : `${selector}${back ? ' (back)' : ''}`;
 console.log(
-  `look: ${selector}${back ? ' (back)' : ''} — ${Math.round(b.w)} × ${Math.round(b.h)} css px${u}, ` +
+  `look: ${subject} — ${Math.round(b.w)} × ${Math.round(b.h)} css px${u}, ` +
     `photographed at ${scale}× → ${out}`,
 );
 if (exceptions.length || consoleErrors.length)
