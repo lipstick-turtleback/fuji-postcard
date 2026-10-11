@@ -158,9 +158,31 @@ for (const [marker, fill] of Object.entries(slots)) {
   html = html.replace(line, () => text);
 }
 
+const asked = new Set();
 for (const name of [...html.matchAll(/^[ \t]*@GEN:([A-Za-z0-9_]+)@[ \t]*$/gm)].map((m) => m[1])) {
+  asked.add(name);
   const text = await gen(name);
   html = html.replace(new RegExp(`^[ \\t]*@GEN:${name}@[ \\t]*$`, 'm'), () => text);
+}
+
+/* A component sitting in src/art/gen that no marker asked for is dead source
+   that looks alive. The build reads the page for markers rather than the
+   directory for files, so an unwired stand of reeds renders nowhere and nothing
+   says so — and the picture is one file narrower than anybody thinks. Fail
+   here, where the cause is still obvious. */
+const offered = readdirSync(
+  join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'art', 'gen'),
+);
+const dead = [
+  ...offered.filter((f) => f.endsWith('.svelte')),
+  ...offered.filter((f) => f.endsWith('.data.mjs')),
+].filter((f) => !asked.has(f.replace(/\.(svelte|data\.mjs)$/, '')));
+if (dead.length) {
+  console.error(
+    `build: nothing includes ${dead.map((f) => `src/art/gen/${f}`).join(', ')} — ` +
+      `put an @GEN:${dead[0].replace(/\.(svelte|data\.mjs)$/, '')}@ line on its own line where it belongs`,
+  );
+  process.exit(1);
 }
 
 const left = html.match(/@[A-Z_]+@|@GEN:[A-Za-z0-9_]+/g);

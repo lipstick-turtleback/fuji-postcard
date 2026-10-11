@@ -163,6 +163,12 @@ mark which does not exist fails the build — `check.mjs` resolves every
 `url(#x)` and `href="#x"` against the ids the page declares, so renaming a mark
 is a build error, not a plant that quietly stops drawing.
 
+The other direction is a build error too. The build pulls components by looking
+for markers in the page, so a file in `src/art/gen/` that no marker asks for is
+dead source that looks alive — an unwired stand of reeds draws nowhere, and the
+page is one file narrower than anybody thinks. It now fails the build with the
+file named and the line to add.
+
 The split is then verifiable in a way a rewrite is not: `npm run build` after
 moving the ranges must leave `git diff public/index.html` empty. It did. The
 only diff the fragments themselves introduce is the twelve orientation
