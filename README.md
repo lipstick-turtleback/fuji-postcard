@@ -93,6 +93,7 @@ scripts/
   test-sound.mjs       the soundtrack, on a page nobody has touched
   perf.mjs             measure frame times over CDP
   look.mjs             photograph one mark, big, for the questions pixels answer
+  review.mjs           score one drawable out of 100 and list what to fix, with the numbers attached
   serve.mjs            dependency-free static server
 public/
   index.html           the built page, comments taken out — the one a host serves
@@ -255,6 +256,14 @@ moving one is a redraw, not a refactor. No fragment may `<use>` anything in
 another, because the exported plate has to be one file. And every mark is
 judged against its neighbours — a reed that is right on the bank is wrong
 against the snowcap.
+
+`node scripts/look.mjs` is how one of them gets looked at, and
+`node scripts/review.mjs` is how what is seen turns into a decision: it photographs
+one drawable at up to 8×, measures what it is painted with, whether it moves and at
+what rate, and which animated marks sit within the rhythm rule's reach of it, then
+prints the review prompt from `docs/drawable-review.md` around those numbers. The
+rubric is nine weighted criteria out of 100 and one hard rule — an issue without a
+number is a preference, and does not go on the list.
 
 `node scripts/look.mjs` is how one of them gets looked at. It loads the page
 with motion held off, so two runs agree pixel for pixel, and photographs one
