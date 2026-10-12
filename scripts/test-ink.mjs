@@ -180,11 +180,23 @@ const rules = async (face) =>
   JSON.parse(
     await evaluate(`(() => {
       const out = [];
+      // Only the marks tagged as printed rules. The whole plate was tried: the
+      // selector below, unfiltered by the class, walks every thin outline on the
+      // face, and it reports that a snow finger on the mountain's flank goes
+      // quiet for 48 units, that the lake's edge does for 13, and that the
+      // branch's underside does for 68. Those are not defects. A finger of snow
+      // over a slope of the same colour is how a finger of snow is made, and
+      // holding the scene's marks to the standard of its printing would mean
+      // either darkening the picture to satisfy a number, or turning the check
+      // off — and a check that has to be turned off was never a check.
       const sel = ${JSON.stringify(`.face.${face} svg .print-rule`)};
       for (const el of document.querySelectorAll(sel)) {
         const cs = getComputedStyle(el);
         if (!cs.stroke || cs.stroke === 'none') continue;
+        // a mark that is also filled is carried by its fill; the stroke is
+        // decoration on something that is already there
         if (cs.fill !== 'none') continue;
+        // perforations are meant to be gaps
         if (cs.strokeDasharray && cs.strokeDasharray !== 'none') continue;
         const w = parseFloat(cs.strokeWidth);
         if (!(w > 0) || w > 2.2) continue;
@@ -216,13 +228,17 @@ const rules = async (face) =>
           const pp = p.matrixTransform(mp);
           pts.push([p.x, p.y, q.x, q.y, pp.x, pp.y]);
         }
+        const tag = el.tagName.toLowerCase();
         out.push({
           face: ${JSON.stringify(face)},
           name:
-            el.tagName.toLowerCase() +
+            tag +
             ' ' +
             ((el.getAttribute('d') || '').slice(0, 12) ||
-              (el.getAttribute('x') + ',' + el.getAttribute('y') + ' ' + el.getAttribute('width') + 'x' + el.getAttribute('height'))),
+              (el.getAttribute('cx') !== null
+                ? 'r' + el.getAttribute('r') + ' at ' + el.getAttribute('cx') + ',' + el.getAttribute('cy')
+                : el.getAttribute('x') + ',' + el.getAttribute('y') +
+                  ' ' + el.getAttribute('width') + 'x' + el.getAttribute('height'))),
           w,
           len,
           pts,
@@ -245,7 +261,14 @@ const walkRules = async (face, at) => {
       // element's: the postmark's killer lines live at x -28 to 28 in a group
       // that sits at x 792, and a clip written in local numbers throws away a
       // mark that is squarely on the card.
-      if (bx < 10 || bx > 890 || by < 10 || by > 590) continue;
+      if (bx < 10 || bx > 890 || by < 10 || by > 590) {
+        // a rule that runs off the plate is a bleed, and the wall outside the
+        // card is not its ground. Kept as a break in the walk rather than
+        // skipped: a quiet stretch that continues across the edge of the card
+        // is two stretches, and the one inside the card is the one that counts.
+        seen.push({ clipped: true });
+        continue;
+      }
       const [sx, sy] = px(x, y);
       const [tx, ty] = px(x2, y2);
       const L = Math.hypot(tx - sx, ty - sy) || 1;
@@ -264,18 +287,29 @@ const walkRules = async (face, at) => {
       // reported in plate coordinates, so a failure names a place on the card
       seen.push({ cr, x: bx, y: by, here, g1, g2 });
     }
-    if (!seen.length) continue;
+    const live = seen.filter((o) => !o.clipped);
+    if (!live.length) continue;
     /* The median is not a threshold here — it is what the report quotes, and
        it is the number that tells a rule which has gone in one place from a
        rule that has been drawn quietly all the way round. */
-    const sorted = seen.map((o) => o.cr).sort((p, q) => p - q);
+    const sorted = live.map((o) => o.cr).sort((p, q) => p - q);
     const median = sorted[sorted.length >> 1];
     let run = 0;
     let worstRun = 0;
     let worstAt = null;
+    // samples are not units. The walk takes one sample per unit along a rule up
+    // to four thousand of them, so a run counted in samples means something
+    // different for every mark it measures: twelve of them is twelve units on a
+    // 60-unit rule and 2.2 units on a 748-unit one. The floor is a distance, so
+    // it is counted as one.
+    const step = r.len / Math.max(1, r.pts.length - 1);
     for (const o of seen) {
+      if (o.clipped) {
+        run = 0;
+        continue;
+      }
       if (o.cr < RULE_GONE) {
-        run++;
+        run += step;
         if (run > worstRun) {
           worstRun = run;
           worstAt = [Math.round(o.x), Math.round(o.y)];
@@ -370,7 +404,7 @@ for (const r of rows)
 for (const r of ruleRows)
   if (r.worstRun >= RULE_RUN)
     problems.push(
-      `${r.face}: the rule "${r.name}" (${r.len} u long) stops for ${r.worstRun} units around [${r.worstAt.join(', ')}] — ${r.weakest.toFixed(0)} of colour from its own ground where it stops, against ${r.median.toFixed(0)} over the rest of it, and a printed rule needs ${RULE_GONE}`,
+      `${r.face}: the rule "${r.name}" (${r.len} u long) stops for ${r.worstRun.toFixed(0)} units around [${r.worstAt.join(', ')}] — ${r.weakest.toFixed(0)} of colour from its own ground where it stops, against ${r.median.toFixed(0)} over the rest of it, and a printed rule needs ${RULE_GONE}`,
     );
 if (exceptions.length)
   problems.push(`${exceptions.length} page exception(s): ${exceptions.join(' | ')}`);
@@ -384,5 +418,5 @@ if (problems.length) {
   process.exit(1);
 }
 console.log(
-  `test-ink: ${rows.length} marks measured, all at or above ${FLOOR}:1 — faintest ${worst.join(' · ')} · ${ruleRows.length} printed rules walked end to end, all continuous — longest quiet stretch ${longestRun} u`,
+  `test-ink: ${rows.length} marks measured, all at or above ${FLOOR}:1 — faintest ${worst.join(' · ')} · ${ruleRows.length} printed rules walked end to end, all continuous — longest quiet stretch ${longestRun.toFixed(1)} u`,
 );
