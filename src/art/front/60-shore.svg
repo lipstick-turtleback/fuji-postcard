@@ -87,10 +87,16 @@
                animations on one element would fight over the same property with
                the later one winning. The wake, the ripples and the smears hang
                off the middle group rather than the inner one, because they are
-               lake and not boat. -->
+               lake and not boat.
+
+               The boat crosses 26 units — a third of its own length — in 65.8
+               seconds, which is 0.4 of a CSS pixel a second at the size this
+               card is drawn: enough that somebody watching for ten seconds sees
+               it make headway. It used to be 16 units in 163 seconds, four
+               pixels a minute, and the boat did not appear to move at all. -->
           <g
             class="drift"
-            style="animation-duration: 163s; animation-delay: -61s; --dx: -16px; --dy: 0"
+            style="animation-duration: 65.8s; animation-delay: -22s; --dx: -26px; --dy: 0"
           >
             <g class="boat">
             <g class="hull" fill="#1b2036">
@@ -157,12 +163,14 @@
 
                  All of it — the two wake arcs and the three ripples off the
                  paddle — sits in a group of its own, and that group drifts the
-                 other way at 7 units against the hull's 16. This is the water,
+                 other way at 13 units against the hull's 26. This is the water,
                  not the boat: the arcs were made where the paddle went in, and
-                 the boat has moved on. Net travel 9 units against the hull's
-                 16, which is the whole of the difference between a mark
-                 attached to a floating body and a mark the body leaves behind. -->
-            <g class="drift" style="animation-duration: 118.4s; animation-delay: -44s; --dx: 7px; --dy: 0">
+                 the boat has moved on. Net travel 13 units against the hull's
+                 26, and the arcs themselves run 0.18 of a pixel a second against
+                 the hull's 0.4, which is the whole of the difference between a
+                 mark attached to a floating body and a mark the body leaves
+                 behind. -->
+            <g class="drift" style="animation-duration: 73.8s; animation-delay: -26s; --dx: 13px; --dy: 0">
               <g class="wake" fill="none" stroke="#f2e6d4" stroke-opacity=".3" stroke-width="1.4">
                 <path d="M600 512 C618 517 646 517 662 512"/>
               </g>

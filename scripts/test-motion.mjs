@@ -114,7 +114,12 @@ const settled = JSON.parse(
     for (const c of ${JSON.stringify(WANT)}) {
       out[c] = [...document.querySelectorAll('.card svg .' + c)].map((e) => {
         const r = e.getBoundingClientRect();
-        return [Math.round(r.x + r.width / 2), Math.round(r.y + r.height / 2)];
+        // Third slot: is this mark riding a group that is going somewhere? A
+        // smear the lake keeps of a swimming duck is attached to the duck, so it
+        // travels exactly as far as the duck does, and that is the mark doing its
+        // job rather than a mark that failed to stay where the picture put it.
+        const riding = e.closest('.drift, .floater-drift') ? 1 : 0;
+        return [Math.round(r.x + r.width / 2), Math.round(r.y + r.height / 2), riding];
       });
     }
     return JSON.stringify(out);
@@ -554,7 +559,12 @@ const where = JSON.parse(
     for (const c of ${JSON.stringify(WANT)}) {
       out[c] = [...document.querySelectorAll('.card svg .' + c)].map((e) => {
         const r = e.getBoundingClientRect();
-        return [Math.round(r.x + r.width / 2), Math.round(r.y + r.height / 2)];
+        // Third slot: is this mark riding a group that is going somewhere? A
+        // smear the lake keeps of a swimming duck is attached to the duck, so it
+        // travels exactly as far as the duck does, and that is the mark doing its
+        // job rather than a mark that failed to stay where the picture put it.
+        const riding = e.closest('.drift, .floater-drift') ? 1 : 0;
+        return [Math.round(r.x + r.width / 2), Math.round(r.y + r.height / 2), riding];
       });
     }
     return JSON.stringify(out);
@@ -571,6 +581,7 @@ for (const c of Object.keys(settled)) {
     continue;
   }
   for (let i = 0; i < a.length; i++) {
+    if (a[i][2] || b[i][2]) continue;
     const d = Math.round(Math.hypot(a[i][0] - b[i][0], a[i][1] - b[i][1]));
     if (d > 8) drifted.push(`${c}[${i}] ${a[i]} -> ${b[i]}, ${d} px`);
   }

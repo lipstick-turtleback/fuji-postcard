@@ -6,39 +6,61 @@
  * and carried `set` units along as it does. `drift`/`driftDur`/`driftDelay` are
  * the petal going somewhere: a blossom that has come down on a lake and stays
  * in one place for the whole time anybody is looking is not floating, it is
- * stuck. The travel is a hand's width over a minute or more, in whatever
- * direction the air happens to be going, which is why two of them go left.
-
- * The rise used to be half a unit for all four. Half a unit is half a pixel at
- * the size this card is drawn, so the four petals were written as floating and
- * rendered as bolted down; and because they shared one number they rose and
- * fell by exactly the same amount even at their four different periods. Each
- * one now rides its own swell, and none of them is more than a couple of units
- * — a petal on a lake at dawn is not on a sea.
-
- * The four drift periods are 73, 101, 109 and 139. They are not primes picked
- * out of a list; they are what survived a subtraction. The page already moves
- * on both tiers — 78 and 103 (the mist), 67, 89 and 113 (the far birds at
- * rest), 39 (the reflection), 61 (the open water), 17, 19, 21, 23, 24, 25, 29
- * and 31 (the crests), 13 (the hull), 7.5 (the man poling), 37 (the heron),
- * 97, 127 and 179 (the fish), 23, 27, 31, 37, 41, 43, 47, 53, 57 and 59 with
- * 11 to 21 (the ten petals falling), 21.7 to 43.9 (their slides), 8.3 and 11.9
- * (the ducks), 11, 13.5, 17.5 and 23.5 (the bob these same four petals already
- * carry) — and with the laminate on, 46, 62 and 38 (the clouds), 150 (the
- * rays), 9 (the glow), 31.9, 43.7 and 39 (the birds crossing), 6.5 (the hull
- * again), and the plants' sway at 13.7, 15.1, 16.3, 19.7, 22.7 and 29.3. A
- * period is no good if it equals one of those or is an integer multiple of one
- * of them to within a percent, because the eye compares neighbours and the
- * rhythm probe compares them at a distance.
+ * stuck.
  *
- * Four of the picks that looked obvious are here as the reason they are not:
- * 67 and 89 are the birds, and the probe caught them across two hundred units
- * of open sky and water; 107 and 71 are nine and six times the duck's 11.9 to
- * within a percent; 103 is the mist; 137 is ten times the nearest reed's
- * 13.7. What is left is less elegant and works. */
+ * The numbers used to be right about distance and wrong about time, and the
+ * page looked like nothing was moving. The four petals travelled 9, 7, 12 and
+ * 10 units — a hand's width, plenty — over 73, 101, 109 and 139 seconds, which
+ * is 0.07 to 0.13 of a CSS pixel a second at the size this card is drawn: four
+ * to eight pixels in a minute of watching. The comment beside the keyframe used
+ * to say the period was "longer than anybody will watch" as if that were a
+ * virtue. It is not. Motion below the rate the eye can pick up is not gentle,
+ * it is absent, and the only thing the long period bought was a number nobody
+ * could see. What matters is not how far a petal goes or how long it takes but
+ * how fast it goes, and a floating thing should move at a few tenths of a
+ * pixel a second — slow enough to be calm, quick enough to be seen.
+ *
+ * So the distances are the same order and the periods are a third of what they
+ * were. The four now run 0.27 to 0.49 units a second: 16 units in 38.2 s, 14 in
+ * 43, 14 in 51.9, 16 in 32.5. The bobs, which were 11 to 23.5 s, are 5.5 to 8.8
+ * — a petal that rises and falls twice in fifteen seconds is a petal on water,
+ * and one that takes twenty-three is a petal glued to a board.
+ *
+ * The periods are still not free picks. The page moves on both tiers — the mist
+ * at 78 and 103, the far birds at rest at 67, 89 and 113, the reflection at 39,
+ * the open water at 61, the crests at 17, 19, 21, 23, 24, 25, 29 and 31, the
+ * man poling at 7.5, the heron at 37, the fish at 97, 127 and 179, the ten
+ * petals falling at 23 to 59 and their slides at 21.7 to 43.9, the plants' sway
+ * at 13.7 to 29.3 — and the rhythm probe compares any two marks within a hand's
+ * width of each other: they may not share a period, come within one percent of
+ * one, or stand at a whole multiple. Four drifts, four bobs and four water
+ * lines went in at once, so they were picked against each other as well as
+ * against everything already on the page, and each new clock is kept eight
+ * percent away from every other new clock in its own family even where the
+ * distance would have allowed a share. The tightest of the results is the nearer
+ * duck's drift, which lands 1.3 percent away from a neighbour, and the wake's at
+ * 3.8; the roomiest is the first petal's bob at 66 percent. None of them is a
+ * whole multiple of anything within reach, which is the part a list of primes
+ * cannot buy you. */
 export const petals = [
-  { x: 238, y: 524, rx: 5, ry: 1.7, w: 13, dur: 11, delay: -2, rise: 2.2, set: 0.9, tilt: 3, drift: 9, driftDy: 1.5, driftDur: 73, driftDelay: -23 },
-  { x: 412, y: 536, rx: 4.4, ry: 1.5, w: 12, dur: 13.5, delay: -9, rise: 1.7, set: -0.7, tilt: 2.2, drift: -7, driftDy: -1, driftDur: 101, driftDelay: -51 },
-  { x: 540, y: 520, rx: 3.8, ry: 1.3, w: 11, dur: 17.5, delay: -4, rise: 2.6, set: 1.2, tilt: 3.4, drift: 12, driftDy: 2, driftDur: 109, driftDelay: -8 },
-  { x: 668, y: 534, rx: 4.6, ry: 1.6, w: 13, dur: 23.5, delay: -15, rise: 1.6, set: -0.8, tilt: 1.8, drift: -10, driftDy: -1.5, driftDur: 139, driftDelay: -66 },
+  {
+    x: 238, y: 524, rx: 5, ry: 1.7, w: 13,
+    dur: 5.5, delay: -2, rise: 2.2, set: 0.9, tilt: 3,
+    drift: 16, driftDy: 1.5, driftDur: 38.2, driftDelay: -11,
+  },
+  {
+    x: 412, y: 536, rx: 4.4, ry: 1.5, w: 12,
+    dur: 6, delay: -3.5, rise: 1.9, set: -0.7, tilt: 2.2,
+    drift: -14, driftDy: -1, driftDur: 43, driftDelay: -20,
+  },
+  {
+    x: 540, y: 520, rx: 3.8, ry: 1.3, w: 11,
+    dur: 8.8, delay: -4, rise: 2.6, set: 1.2, tilt: 3.4,
+    drift: 14, driftDy: 2, driftDur: 51.9, driftDelay: -6,
+  },
+  {
+    x: 668, y: 534, rx: 4.6, ry: 1.6, w: 13,
+    dur: 6.6, delay: -5, rise: 1.8, set: -0.8, tilt: 1.8,
+    drift: -16, driftDy: -1.5, driftDur: 32.5, driftDelay: -9,
+  },
 ];

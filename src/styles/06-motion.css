@@ -423,9 +423,11 @@ html[data-enhance="on"] .bloom {
 
 /* The boat lies on the water, so it bobs whether or not anybody switched the
    laminate on. What Enhance changes is how lively the water is, not whether the
-   lake is alive: off, the hull comes up about a unit and rolls a third of a
-   degree over thirteen seconds; on, the same motion at twice the amplitude and
-   half the period. Two keyframe sets rather than one with a scaled amplitude,
+   lake is alive: off, the hull comes up two units and rolls four fifths of a
+   degree over 7.9 seconds — 0.28 of a CSS pixel a second, which is slow and
+   which you can see; on, the same motion at twice the amplitude and half the
+   period. It used to be a unit over thirteen seconds, which is 0.08 of a pixel a
+   second and which nobody has ever seen. Two keyframe sets rather than one with a scaled amplitude,
    because CSS cannot scale a keyframe.
 
    The bob belongs to the hull, the man and the pole — not to the whole boat.
@@ -436,28 +438,28 @@ html[data-enhance="on"] .bloom {
    the lake. A boat poled from the stern rocks about that point, so the bow
    travels further than the stern and the pole stays in the water. */
 .hull {
-  animation: bob 13s ease-in-out infinite alternate;
+  animation: bob 7.9s ease-in-out infinite alternate;
   transform-box: fill-box;
   transform-origin: 50% 100%;
 }
 html[data-enhance="on"] .hull {
   animation-name: bobLively;
-  animation-duration: 6.5s;
+  animation-duration: 4.3s;
 }
 @keyframes bob {
   from {
-    transform: translate(0, 0) rotate(-0.3deg);
+    transform: translate(0, 0) rotate(-0.4deg);
   }
   to {
-    transform: translate(0.9px, -0.9px) rotate(0.3deg);
+    transform: translate(1.1px, -2.2px) rotate(0.8deg);
   }
 }
 @keyframes bobLively {
   from {
-    transform: translate(0, 0) rotate(-0.6deg);
+    transform: translate(0, 0) rotate(-0.8deg);
   }
   to {
-    transform: translate(1.8px, -1.8px) rotate(0.6deg);
+    transform: translate(2.2px, -4.4px) rotate(1.6deg);
   }
 }
 /* The man shifts his weight while the pole stays planted. 1.1 degrees about
@@ -617,15 +619,22 @@ html[data-enhance="on"] .bird.b3 {
   }
 }
 /* And the petal going somewhere. The distance is the petal's own, written into
-   --dx and --dy by the data, and the period is longer than anybody will watch:
-   a hand's width over a minute or more, easing back and forth, so the return is
-   not a return but the next gust. Nothing here repeats at an even interval —
-   see Floaters.data.mjs for what these four periods were chosen against. */
+   --dx and --dy by the data, and what the data has to get right is the rate and
+   not the distance. These drifts used to run on periods of 73 to 163 seconds:
+   the petals, the ducks and the boat travelled a hand's width each, which is
+   plenty, and they did it at a tenth of a CSS pixel a second, which is below the
+   rate the eye picks up at all. A floating thing that slow is not calm, it is
+   simply not there, and the long period bought nothing but a number nobody could
+   see. A leg is now 32 to 96 seconds over 10 to 26 units, which puts the bodies
+   at 0.3 to 0.5 of a pixel a second and the water they leave behind at about
+   half that. The return leg is not a return but the next gust. Nothing here
+   repeats at an even interval — see Floaters.data.mjs for what these periods
+   were chosen against. */
 .floater-drift,
 .drift {
   /* The period is always written beside the mark — inline, by the data — so
      the value here is only what a drift costs if nobody says. */
-  animation: drift-on-water 101s ease-in-out infinite alternate;
+  animation: drift-on-water 44s ease-in-out infinite alternate;
 }
 @keyframes drift-on-water {
   from {
