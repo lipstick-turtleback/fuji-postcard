@@ -199,6 +199,18 @@ seed_ had no seed on it. The geometry was right, the comment was right, and the
 ink was not. Shapes inside a `clipPath` or a `mask` are not ink and are left
 alone.
 
+The wall's two textures are data URIs, and each makes a promise in a comment that
+nothing else can see. The seigaiha tile says its repeat is invisible at any zoom
+because every arc cut by one edge is finished by its twin on the opposite edge;
+`check.mjs` reads the tile back out of the built page and asks, for every circle
+that reaches past an edge, whether the twin is there with the same radius. The
+paper grain says its noise wraps across all four edges, which needs three numbers
+to agree — the tile's own width and height, the filter region pinned to exactly
+that box, and `background-size` — and the check reads all three and compares
+them. Take one corner circle out of the wave and it reports `the wave tile's arc
+at 0,0 r30 is cut by an edge and has no twin at 64,0 r30`; set `background-size`
+to 176 and it reports that the texture is being rescaled rather than repeated.
+
 The split is then verifiable in a way a rewrite is not: `npm run build` after
 moving the ranges must leave `git diff public/index.html` empty. It did. The
 only diff the fragments themselves introduce is the twelve orientation

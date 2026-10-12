@@ -259,6 +259,90 @@ for (const d of html.matchAll(/url\((['"]?)(https?:)?\/\/[^)]*\)/g))
   fail(d.index, 'external url() in CSS');
 if (/@import/.test(html)) fail(0, '@import found');
 
+/* ---- the wave tile has to actually tile -------------------------------- */
+// The comment on .bg-seigaiha claims the repeat is invisible at any zoom: every
+// arc cut by one edge of the tile is finished by its twin on the opposite edge.
+// That is a claim about a handful of numbers inside a data URI, and a claim like
+// that survives an edit exactly as long as nobody edits the numbers. So the tile
+// is read back out of the page and the claim is checked: any circle that reaches
+// past an edge must have a twin, same radius, one tile-width over.
+const waveTile = /\.bg-seigaiha\s*\{[^}]*?url\("data:image\/svg\+xml,([^"]+)"\)/.exec(html);
+if (!waveTile) {
+  fail(0, 'the seigaiha tile could not be found — the check that keeps it seamless is blind');
+} else {
+  const svg = decodeURIComponent(waveTile[1]);
+  const tw = Number(/width=['"]([\d.]+)['"]/.exec(svg)?.[1]);
+  const th = Number(/height=['"]([\d.]+)['"]/.exec(svg)?.[1]);
+  const arcs = [
+    ...svg.matchAll(/<circle\s+cx=['"]([\d.]+)['"]\s+cy=['"]([\d.]+)['"]\s+r=['"]([\d.]+)['"]/g),
+  ].map((m) => [Number(m[1]), Number(m[2]), Number(m[3])]);
+  if (!tw || !th || !arcs.length)
+    fail(
+      waveTile.index,
+      `the seigaiha tile could not be parsed (${tw} × ${th}, ${arcs.length} arcs)`,
+    );
+  const near = (a, b) => Math.abs(a - b) < 0.01;
+  for (const [cx, cy, r] of arcs) {
+    const twins = [];
+    if (cx - r < 0) twins.push([cx + tw, cy, r]);
+    if (cx + r > tw) twins.push([cx - tw, cy, r]);
+    if (cy - r < 0) twins.push([cx, cy + th, r]);
+    if (cy + r > th) twins.push([cx, cy - th, r]);
+    for (const [nx, ny, nr] of twins)
+      if (!arcs.some(([x, y, rr]) => near(x, nx) && near(y, ny) && near(rr, nr)))
+        fail(
+          waveTile.index,
+          `the wave tile's arc at ${cx},${cy} r${r} is cut by an edge and has no twin at ${nx},${ny} r${nr} — the repeat will show a seam`,
+        );
+  }
+}
+
+/* ---- and the paper fibre has to stitch --------------------------------- */
+// The grain is one 180 px tile of turbulence repeated over the whole wall. It
+// only repeats invisibly because the noise is generated with stitchTiles and the
+// filter region is pinned to exactly the tile box: change either and the wall
+// grows a visible grid of tile edges, which is the one thing a paper texture is
+// not allowed to do. Three numbers have to agree — the tile's own width and
+// height, the filter region, and background-size — and nothing but this check
+// knows they are the same three numbers.
+const grainTile = /\.bg-grain\s*\{[^}]*?url\("data:image\/svg\+xml,([^"]+)"\)/.exec(html);
+if (!grainTile) {
+  fail(0, 'the grain tile could not be found — the check that keeps it stitched is blind');
+} else {
+  const svg = decodeURIComponent(grainTile[1]);
+  const gw = Number(/<svg[^>]*\swidth=['"]([\d.]+)['"]/.exec(svg)?.[1]);
+  const gh = Number(/<svg[^>]*\sheight=['"]([\d.]+)['"]/.exec(svg)?.[1]);
+  const region =
+    /<filter[^>]*filterUnits=['"]userSpaceOnUse['"][^>]*\sx=['"]([-\d.]+)['"]\s+y=['"]([-\d.]+)['"]\s+width=['"]([\d.]+)['"]\s+height=['"]([\d.]+)['"]/.exec(
+      svg,
+    );
+  if (!gw || !gh) fail(grainTile.index, `the grain tile could not be read (${gw} × ${gh})`);
+  if (!/stitchTiles=['"]stitch['"]/.test(svg))
+    fail(grainTile.index, 'the grain is generated without stitchTiles — the tile will not wrap');
+  if (!region)
+    fail(
+      grainTile.index,
+      "the grain's filter region is not pinned to the tile box with filterUnits=userSpaceOnUse",
+    );
+  else if (
+    region[1] !== '0' ||
+    region[2] !== '0' ||
+    Number(region[3]) !== gw ||
+    Number(region[4]) !== gh
+  )
+    fail(
+      grainTile.index,
+      `the grain's filter region is ${region[3]} × ${region[4]} at ${region[1]},${region[2]} and the tile is ${gw} × ${gh} — the noise is cropped out of a larger field and the repeat shows`,
+    );
+  const sized = /\.bg-grain\s*\{[^}]*?background-size:\s*([\d.]+)px\s+([\d.]+)px/.exec(html);
+  if (!sized) fail(0, 'the grain tile has no background-size — it is being scaled, not repeated');
+  else if (Number(sized[1]) !== gw || Number(sized[2]) !== gh)
+    fail(
+      sized.index,
+      `the grain is repeated at ${sized[1]} × ${sized[2]} css px but the tile is ${gw} × ${gh} — the texture is being rescaled`,
+    );
+}
+
 /* ---- a test nobody runs is a test that does not exist ------------------- */
 // A browser test written, run by hand once, and left out of the chain reports
 // nothing to anybody ever again — it is a check in the same way a stylesheet
