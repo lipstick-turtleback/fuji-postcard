@@ -33,7 +33,7 @@ See [docs/changelog.md](docs/changelog.md) for what actually changed, in order �
 
 ## The repository
 
-The page is one file because that is the point — but one 5,300-line file is
+The page is one file because that is the point — but one 5,315-line file is
 impossible to review. So the source is split into parts, and the single file is
 the build artefact. The parts are real: the JavaScript is ES modules bundled by
 rollup into one inlined IIFE per entry, not two files dropped into two script
@@ -102,7 +102,7 @@ public/
 `src/` is the truth. Both files under `public/` are generated, in one run, from one
 string, and both are committed: the repo stays openable with a double-click, and
 `npm run check` fails if either has drifted from `src/`. `index-full.html` is the
-artwork with its argument — 164 markup comments, 60 CSS comment blocks and 35 JS
+artwork with its argument — 165 markup comments, 60 CSS comment blocks and 35 JS
 comment blocks. `index.html` is the same page with all of that taken out, the
 indentation trimmed, and the stylesheet and the two bundles put through esbuild's
 minifier: 122 KB rather than 251. The names are the point — a static host answers

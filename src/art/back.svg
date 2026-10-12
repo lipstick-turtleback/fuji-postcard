@@ -131,7 +131,15 @@
             <text x="486" y="132" font-size="10" letter-spacing="2.6">TO</text>
           </g>
           <g stroke="#a89a83" stroke-width="1" fill="none">
-            <path class="print-rule" d="M486 176 H854 M486 216 H854 M486 256 H854 M486 296 H854"/>
+            <!-- The topmost rule used to run to 854 like the other three, which
+                 took it straight through the stamp's dashed guide box — the box
+                 ends at 846 and its bottom edge is at 184, eight units under this
+                 rule — and out the other side. Two rules running eight units
+                 apart for a hundred units is not an address line and a stamp
+                 box, it is a double line. The rule stops at 712 now, fourteen
+                 units short of where the stamp area begins. The three below it
+                 are under the box and keep their full length. -->
+            <path class="print-rule" d="M486 176 H712 M486 216 H854 M486 256 H854 M486 296 H854"/>
           </g>
           <g font-family="'Snell Roundhand','Brush Script MT','Segoe Script',cursive" fill="#2f3548">
             <text x="500" y="170" font-size="24">Hana Sato</text>
@@ -198,8 +206,15 @@
             </g>
           </g>
 
-          <!-- postmark -->
-          <g transform="translate(694 160) rotate(-11)" fill="none" stroke="#4a5570" opacity=".45">
+          <!-- postmark. It used to sit clear of the stamp, eight units off its
+               lower-left corner, which is a cancellation that cancels nothing:
+               the mark exists to strike the stamp, so the ring now crosses the
+               stamp's left edge and the killer bars run over its sky. The centre
+               is at 718,128 rather than further down and right because the outer
+               ring is 42 units wide and the first address rule is at y 176 — the
+               bottom of the ring is at 170, and any lower the postmark would be
+               struck across somebody's address line. -->
+          <g transform="translate(718 128) rotate(-11)" fill="none" stroke="#4a5570" opacity=".45">
             <circle r="42" stroke-width="1.8"/>
             <circle r="35" stroke-width="1"/>
             <path d="M-35 -10 q8.75 -3 17.5 0 t17.5 0 t17.5 0 t17.5 0
@@ -223,7 +238,7 @@
                else. The town name ran past the outer ring once — at y=-18
                the ring is only 37.9 units wide either side and eleven
                letters at 1.6 tracking measured 38.5 — and stays inside. -->
-          <g transform="translate(694 160) rotate(-11)" opacity=".72" fill="#4a5570"
+          <g transform="translate(718 128) rotate(-11)" opacity=".72" fill="#4a5570"
              font-family="Georgia,serif">
             <text x="0" y="-18" text-anchor="middle" stroke="none" font-size="8.4"
                   letter-spacing="1.1">KAWAGUCHIKO</text>
