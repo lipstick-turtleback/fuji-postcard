@@ -28,6 +28,11 @@ const file = process.argv[2]
   : join(root, 'public', 'index-full.html');
 const html = readFileSync(file, 'utf8');
 const readmeFile = join(root, 'README.md');
+/* The annotated page, whichever page this run is checking. Several claims in the
+   documents are only true of that file — its comments, its length — and
+   `npm run check` runs here twice, once on each. */
+const annotated = join(root, 'public', 'index-full.html');
+const annotatedText = () => (file === annotated ? html : readFileSync(annotated, 'utf8'));
 const readme = readFileSync(readmeFile, 'utf8');
 
 const problems = [];
@@ -511,8 +516,7 @@ else {
   // The claim is about the annotated page, so it is measured from that file
   // whichever one this run is checking: `npm run check` runs here twice, and the
   // shipped page has no comments left to count.
-  const fullFile = join(root, 'public', 'index-full.html');
-  const full = file === fullFile ? html : readFileSync(fullFile, 'utf8');
+  const full = annotatedText();
   const measured = {
     markup: [...full.matchAll(/<!--/g)].length,
     css: [...(/<style>([\s\S]*?)<\/style>/g.exec(full)?.[1] ?? '').matchAll(/\/\*/g)].length,
@@ -595,6 +599,42 @@ for (const m of runner.matchAll(/^\s*'(test-[\w-]+)',$/gm))
 for (const m of chain.matchAll(/node (scripts\/[\w-]+\.mjs)/g))
   if (!existsSync(join(root, m[1])))
     problems.push(`${pkgFile}: ${m[1]} is in the npm test chain and not on disk`);
+
+/* ---- the README's counts of the suite and the page are re-measured ------ */
+// Two more numbers the README quotes and the tools already know: how many test
+// scripts the runner drives, and how long the annotated page is. Both had drifted
+// the way these do — the eighteenth test arrived and the sentence still said
+// seventeen, and the page grew past the 4,100 lines the opening paragraph names.
+const driven = [...runner.matchAll(/^\s*'(test-[\w-]+)',$/gm)].length;
+const scriptClaim = /takes the ([a-z]+) scripts/.exec(readme);
+if (!scriptClaim)
+  problems.push(
+    `${readmeFile}: the README no longer says how many test scripts the runner takes, so nothing counts them`,
+  );
+else {
+  const spelled = WORDS.indexOf(scriptClaim[1].toLowerCase());
+  if (spelled < 0)
+    problems.push(
+      `${readmeFile}: the README says "${scriptClaim[1]} scripts", which is not a count this can check`,
+    );
+  else if (spelled !== driven)
+    problems.push(
+      `${readmeFile}:${readme.slice(0, scriptClaim.index).split('\n').length}: the README says the runner takes ${scriptClaim[1]} scripts and it lists ${driven}`,
+    );
+}
+const lineClaim = /one ([\d,]+)-line file/.exec(readme);
+if (!lineClaim)
+  problems.push(
+    `${readmeFile}: the README no longer says how long the built page is, so nothing re-measures it`,
+  );
+else {
+  const lines = annotatedText().split('\n').length;
+  const claimed = Number(lineClaim[1].replace(/,/g, ''));
+  if (claimed !== lines)
+    problems.push(
+      `${readmeFile}:${readme.slice(0, lineClaim.index).split('\n').length}: the README calls it a ${lineClaim[1]}-line file and the annotated page is ${lines} lines`,
+    );
+}
 
 /* ---- and no two of them can want the same port -------------------------- */
 // The suite runs two tests at a time. Two tests on one port was invisible for as
