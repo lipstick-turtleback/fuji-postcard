@@ -432,20 +432,27 @@ rather than one line the picture passes behind. It is drawn as ink under the gil
 now — the same two rects, a dark line a little wider than the gold, because a
 printed rule has an edge and those two shoulders are what carry it across a
 bright ground. The check walks each rule once per unit and compares the pixel
-under it with the pixels just off each side, in the same frame; twelve
-consecutive steps within 20 of colour from both grounds is a rule that has
-stopped, not one that has faded. Which marks count is said by the artwork: they
-carry `class="print-rule"` where they are drawn. Guessing was tried first, and it
-cannot tell a printed rule from a line that lies across two grounds on purpose —
-the branch's dark underside is quiet against the branch for half its length
-because that is what an underside is, and the lake's edge is hidden where the
-reeds stand in front of it because that is what an edge behind things is. The
-measure is a colour distance, not a contrast ratio: the frame's rule over the
-mountain's mauve slope is 1.20:1 in luminance and plainly there, gold against
-mauve, and a luminance-only check reports a defect that does not exist. Turning
-the frame's strokes off reports `stops for 687 units … 4 of colour from its own
-ground, against 118 over the rest of it`. 10 rules walked; the longest quiet
-stretch on the card today is 1 unit.
+under it with the pixels just off each side, in the same frame; a rule that comes
+within 20 of colour of _both_ grounds for twelve consecutive units has stopped,
+not faded. Either side, not both averaged: where a rule crosses the edge of
+another mark the two sides are not the same ground at all, and averaging them
+invents a ground the rule was never drawn on. Which marks count is said by the
+artwork: they carry `class="print-rule"` where they are drawn. Guessing was tried
+first, and it cannot tell a printed rule from a line that lies across two grounds
+on purpose — the branch's dark underside is quiet against the branch for half its
+length because that is what an underside is, and the lake's edge is hidden where
+the reeds stand in front of it because that is what an edge behind things is. The
+whole plate was walked unscoped once the metric had been fixed, to see whether
+the tag was still doing work: it is. A snow finger on the mountain's flank goes
+quiet for 48 units, the lake's edge for 13, the branch's underside for 68, and
+every one of those is the mark working as drawn. The measure is a colour
+distance, not a contrast ratio: the frame's rule over the mountain's mauve slope
+is 1.20:1 in luminance and plainly there, gold against mauve, and a
+luminance-only check reports a defect that does not exist. Turning the title
+strip's inner rule off reports `stops for 255 units … 0 of colour from its own
+ground, against 12 over the rest of it`, at [63, 507] — card coordinates, so the
+report names a place on the plate rather than a place inside a rotated group. 15
+rules walked; the longest quiet stretch on the card today is 0.7 of a unit.
 
 `scripts/test-export.mjs` checks the file SAVE THE PLATE hands out. The export
 is its own program — it clones one face, gives it an xmlns and a size, and
