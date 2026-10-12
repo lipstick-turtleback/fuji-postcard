@@ -269,7 +269,7 @@ const mirrors = JSON.parse(
 );
 ok(
   'and the lake moves its reflections, not just their brightness',
-  mirrors.n === 4 && mirrors.own === 4 && mirrors.reach.every((r) => r >= 0.8),
+  mirrors.n === 7 && mirrors.own === 7 && mirrors.reach.every((r) => r >= 0.8),
   `${mirrors.n} mirrors · ${mirrors.own} different motions · ${mirrors.reach.map((r) => r.toFixed(2)).join(' ')} units at the far edge`,
 );
 

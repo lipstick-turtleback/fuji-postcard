@@ -2942,6 +2942,23 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                    only thing that says the boat is being poled at all -->
               <path d="M646 470 L648.5 471 L666 519 L663 520.5 Z"/>
             </g>
+            <!-- What the lake keeps of the boat. The two ducks each have a
+                 reflection and this one did not, which left the largest dark
+                 thing on the water as the only thing not reflected in it. It is
+                 drawn under the wake, so the pale arcs cross it the way they
+                 cross the water: a reflection here is not a copy of the hull,
+                 it is the hull broken into three widths and set on a slower
+                 clock than the boat — 29s, 36s, 41s against the hull's bob.
+                 The farthest piece is the narrowest, because that is how a
+                 reflection gives out. -->
+            <g fill="#141a2c" opacity=".17">
+              <ellipse class="reflection" style="--wob: .9px; --stretch: .05; --rdur: 29.4s; --rdelay: -7s"
+                       cx="630" cy="515" rx="21" ry="2.4"/>
+              <ellipse class="reflection" style="--wob: .8px; --stretch: .06; --rdur: 36.2s; --rdelay: -19s"
+                       cx="636" cy="521" rx="13.5" ry="1.9"/>
+              <ellipse class="reflection" style="--wob: .7px; --stretch: .05; --rdur: 44.9s; --rdelay: -31s"
+                       cx="627" cy="526" rx="7" ry="1.3"/>
+            </g>
             <!-- What the water does around the boat. Almost invisible on
                  purpose: the test is that the lake is not frozen, not that
                  you can see rings. Three arcs leave the paddle and never are

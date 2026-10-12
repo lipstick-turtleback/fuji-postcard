@@ -96,6 +96,7 @@ deleted, not tuned.
 | the birds                              | they are flying                            | drift along their own heading, 6.6, 5.8 and 7.6 u between the extremes of the swing                                     | 67, 89, 113 s                                         | **yes**                           |
 | the birds, crossing                    | they are flying, and the wind is up        | 168 u across the sky and 38 u up, 172 u along the heading, fading in and out at each end                                | 31.9, 43.7, 39 s                                      | no — Enhance                      |
 | the far mountain's mirror              | water                                      | brightens and settles, and is slid sideways while it stretches about the waterline: 3.0 u at its far edge               | 39 s of brightness, 47.4 s of shape                   | **yes**                           |
+| the boat's reflection                  | water, and a hull moving through it        | three smears slid and stretched about the top of each, the farthest the narrowest: 2.28, 2.06, 1.66 u at the far edge   | 29.4, 36.2, 44.9 s                                    | **yes**                           |
 | the gate's reflection                  | water                                      | slid and stretched about the waterline, 3.2 u at the far edge, under the bands the surface lays across it               | 31.6 s                                                | **yes**                           |
 | what the ducks leave in it             | water, and two birds floating on the water | slid and stretched about the top of each smear: 1.04 and 0.85 u at the far edge                                         | 32, 34.6 s                                            | **yes**                           |
 | where things stand in the water        | the surface is not flat against them       | nine rings and strokes brighten and settle, each between 0.62 and 1 of itself                                           | 15.2, 18.4, 18.6, 19.3, 23.4, 28.4, 29, 29.2, 35.2 s  | **yes**                           |
@@ -334,7 +335,7 @@ search had been run against a list of the calm tier's durations assembled by han
 from the marks the probe _exempts_ — and the probe exempts a mark when it is a
 traveller at the moment it looks, which a petal is only sometimes. The honest
 constraint set is not a curated list: it is every duration on the page, in both
-tiers, measured — 96 of them, because the water marks have no gust variants and so
+tiers, measured — 99 of them, because the water marks have no gust variants and so
 are compared against the gust tier's crowded low end as well (19.5 s collided with
 the boat's 6.5, 26.5 with the branch's 13.3, 31.5 with a blossom's 15.7). Re-picked
 against the measured union, all fifteen are clean in both tiers, and the probe says
