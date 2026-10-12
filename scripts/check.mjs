@@ -170,9 +170,18 @@ for (const m of markup.matchAll(tagRe)) {
 
 /* ---- how big the picture is -------------------------------------------- */
 // The docs quote this, so the tool that validates the page also says what the
-// number currently is: 834 elements on the front, 143 on the back.
+// number currently is — and the number the docs were last told is written down
+// one line below, where changing the artwork has to disagree with it. Add a mark
+// and the build fails until the claim is changed to match, which is the point: a
+// count in a document that nobody re-measures is a count that is already wrong.
+const CLAIMED = [835, 143];
 const faces = [...html.matchAll(/<svg\b[\s\S]*?<\/svg>/g)];
 const elements = faces.map((f) => [...f[0].matchAll(/<[a-zA-Z][\w:-]*/g)].length);
+if (String(elements) !== String(CLAIMED))
+  fail(
+    0,
+    `the page has ${elements.join(' + ')} svg elements and this file claims ${CLAIMED.join(' + ')} — the documents quote the claim, so change the claim, or the artwork, to say which is true`,
+  );
 
 /* ---- an id nothing points to is artwork that quietly stopped existing --- */
 // anything that can name an id: CSS selectors, querySelector/closest

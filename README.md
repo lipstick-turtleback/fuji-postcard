@@ -104,7 +104,7 @@ indentation trimmed, and the stylesheet and the two bundles put through esbuild'
 minifier: 122 KB rather than 251. The names are the point — a static host answers
 `/` with `index.html`, so the file every visitor downloads is the small one and no
 rewrite rule is needed to make that true. `test-build.mjs` proves the smaller one
-is the same document (1,125 nodes walked and compared), the same stylesheet (294
+is the same document (1,131 nodes walked and compared), the same stylesheet (294
 rules, selectors, keyframes and all) and the same picture (0 of 1,657,150 pixels
 differ).
 
@@ -458,7 +458,7 @@ and the three measure 3.24, 3.36 and 3.75. It also caught a bug in itself. The
 first version skipped a mark that painted nothing, on the grounds that the
 turned-away face cannot be measured; that is how a postmark whose type had been
 translated twice — and was off the plate — passed. A mark on the face being
-looked at that paints nothing is now a failure. 43 marks measured.
+looked at that paints nothing is now a failure. 44 marks measured.
 
 The same screenshot then walks the plate's **printed rules** end to end. The
 gilded frame is a gradient at .55, and where it crossed a pale cherry blossom the
