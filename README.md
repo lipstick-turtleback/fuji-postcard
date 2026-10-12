@@ -186,6 +186,18 @@ dead source that looks alive — an unwired stand of reeds draws nowhere, and th
 page is one file narrower than anybody thinks. It now fails the build with the
 file named and the line to add.
 
+A third direction is the one that actually bit. `check.mjs` walks the markup
+carrying what `fill` and `stroke` mean at each depth, and reports any shape that
+has neither — because both are inherited, and a group that says `fill="none"`
+says it for every descendant that does not name its own. The bent reed's head and
+the seeded tuft's two seeds set `stroke="none"` inside groups that set
+`fill="none"`, so between the two attributes they painted nothing: the reed's
+stem ended in a bare point with a short curve of tip floating above the gap where
+its head should have been, and the plant the file calls _a tuft that has gone to
+seed_ had no seed on it. The geometry was right, the comment was right, and the
+ink was not. Shapes inside a `clipPath` or a `mask` are not ink and are left
+alone.
+
 The split is then verifiable in a way a rewrite is not: `npm run build` after
 moving the ranges must leave `git diff public/index.html` empty. It did. The
 only diff the fragments themselves introduce is the twelve orientation

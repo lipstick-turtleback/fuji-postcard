@@ -2311,26 +2311,37 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           <!-- a tuft that has gone to seed: three short leaves at the base
                and two bare stalks carrying the heads. The old tufts were all
                leaves, so every clump on the shore was the same plant in the
-               same month. -->
-          <g id="tuftSeed" fill="none" stroke-linecap="round">
-            <path d="M-1 0 C-2 -5 -4 -9 -7 -12" stroke-width="1.1"/>
-            <path d="M0 0 C0 -6 0 -11 -1 -15" stroke-width="1.2"/>
-            <path d="M1 0 C3 -5 5 -8 7 -10" stroke-width="1"/>
-            <path d="M0 -1 C1 -8 2 -15 3 -21" stroke-width=".8"/>
+               same month.
+               fill="none" belongs on the stalks, not on the group. It used to
+               sit on the group, and the two seed heads — the whole reason this
+               is a different plant from the other tufts — set stroke="none" and
+               inherited the no-fill, so they painted nothing: the stalks ended
+               in bare points and the seed heads were a comment. -->
+          <g id="tuftSeed" stroke-linecap="round">
+            <path d="M-1 0 C-2 -5 -4 -9 -7 -12" fill="none" stroke-width="1.1"/>
+            <path d="M0 0 C0 -6 0 -11 -1 -15" fill="none" stroke-width="1.2"/>
+            <path d="M1 0 C3 -5 5 -8 7 -10" fill="none" stroke-width="1"/>
+            <path d="M0 -1 C1 -8 2 -15 3 -21" fill="none" stroke-width=".8"/>
             <ellipse cx="3.2" cy="-23.4" rx="1.1" ry="2.8" stroke="none" transform="rotate(9 3.2 -23.4)"/>
-            <path d="M-1 -1 C-2 -7 -3 -12 -4.6 -17" stroke-width=".7"/>
+            <path d="M-1 -1 C-2 -7 -3 -12 -4.6 -17" fill="none" stroke-width=".7"/>
             <ellipse cx="-4.9" cy="-19.2" rx=".9" ry="2.4" stroke="none" transform="rotate(-14 -4.9 -19.2)"/>
           </g>
 
           <!-- a reed that has grown too tall for its own stem and bent over
                at the top. The head hangs: weight is the one thing a reed
-               shows, and the upright and leaning reeds both hide it. -->
-          <g id="reedC" fill="none" stroke-linecap="round">
-            <path d="M0 0 C1 -12 1 -24 3 -34 C4.6 -40 7 -44 10 -46" stroke-width="1.7"/>
-            <path d="M1 -12 C4 -19 6 -25 7 -31" stroke-width="1.1"/>
-            <path d="M2 -22 C-1 -27 -4 -31 -6 -34" stroke-width="1"/>
+               shows, and the upright and leaning reeds both hide it.
+               The head is drawn, now. fill="none" sat on the group and the
+               ellipse set stroke="none", so between them the head painted
+               nothing: the stem stopped, there was a gap the width of the head
+               that should have been in it, and a short curve of tip floating
+               above that gap — a reed broken in half, in the one place the
+               drawing says weight is the point. -->
+          <g id="reedC" stroke-linecap="round">
+            <path d="M0 0 C1 -12 1 -24 3 -34 C4.6 -40 7 -44 10 -46" fill="none" stroke-width="1.7"/>
+            <path d="M1 -12 C4 -19 6 -25 7 -31" fill="none" stroke-width="1.1"/>
+            <path d="M2 -22 C-1 -27 -4 -31 -6 -34" fill="none" stroke-width="1"/>
             <ellipse cx="11.6" cy="-47.6" rx="1.7" ry="5" stroke="none" transform="rotate(122 11.6 -47.6)"/>
-            <path d="M13.6 -49.4 C15 -50 16 -50.4 17.2 -50.4" stroke-width=".8"/>
+            <path d="M13.6 -49.4 C15 -50 16 -50.4 17.2 -50.4" fill="none" stroke-width=".8"/>
           </g>
 
           <!-- the low stuff at the waterline, flattened by the water it

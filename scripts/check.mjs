@@ -126,6 +126,48 @@ for (const m of html.matchAll(/<svg\b[^>]*>/g)) {
     fail(m.index, '<svg> <title> is not wired to aria-labelledby');
 }
 
+/* ---- a shape that cannot paint ----------------------------------------- */
+// fill and stroke are inherited, and a group that says fill="none" says it for
+// every descendant that does not name its own. Two cast marks were built that
+// way: the bent reed's head and the seeded tuft's two seeds set stroke="none"
+// inside a group that set fill="none", so between the two attributes they
+// painted nothing at all. The reed's stem ended in a bare point with a short
+// curve of tip floating above the gap where its head should have been, and the
+// plant the file calls "a tuft that has gone to seed" had no seed on it. The
+// drawing was correct and the ink was not, and nothing that reads geometry can
+// tell.
+//
+// So: walk the markup carrying what fill and stroke mean at this depth, and
+// report any shape that has neither. Shapes inside a clipPath or a mask are
+// not ink and are left alone, and so is anything explicitly turned off.
+const SHAPE = new Set(['path', 'circle', 'ellipse', 'rect', 'line', 'polygon', 'polyline']);
+const NOT_INK = new Set(['clipPath', 'mask', 'filter']);
+const paintAttr = (attrs, name) => {
+  const m = new RegExp(`\\s${name}="([^"]*)"`).exec(attrs);
+  return m ? m[1] : null;
+};
+const paintStack = [{ fill: null, stroke: null, sw: null, skip: false }];
+for (const m of markup.matchAll(tagRe)) {
+  const [, closing, name, attrs, selfClose] = m;
+  if (closing) {
+    paintStack.pop();
+    continue;
+  }
+  const above = paintStack[paintStack.length - 1];
+  const skip = above.skip || NOT_INK.has(name);
+  const fill = paintAttr(attrs, 'fill') ?? above.fill;
+  const stroke = paintAttr(attrs, 'stroke') ?? above.stroke;
+  const sw = paintAttr(attrs, 'stroke-width') ?? above.sw;
+  if (!skip && SHAPE.has(name)) {
+    const off = paintAttr(attrs, 'opacity') ?? paintAttr(attrs, 'display');
+    const noFill = fill === 'none';
+    const noStroke = stroke === 'none' || (sw !== null && Number.parseFloat(sw) === 0);
+    if (off !== '0' && off !== 'none' && noFill && noStroke)
+      fail(m.index, `<${name}> can paint nothing: fill is none and stroke is none here`);
+  }
+  if (!selfClose) paintStack.push({ fill, stroke, sw, skip });
+}
+
 /* ---- how big the picture is -------------------------------------------- */
 // The docs quote this, so the tool that validates the page also says what the
 // number currently is: 791 elements on the front, 124 on the back.
