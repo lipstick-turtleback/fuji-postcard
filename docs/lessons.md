@@ -225,7 +225,7 @@ motion the page has.
 
 ## 12. One verified fix per commit, and the commit has to be self-consistent
 
-178 commits, each a sentence about a defect rather than a file name. This sitting
+201 commits, each a sentence about a defect rather than a file name. This sitting
 ended with two commits that had to be separated — a set of documentation guards and
 a change to the artwork — because the guards quote counts that the artwork changes.
 The split was made by stashing the artwork, putting the counts back to the values
@@ -249,3 +249,64 @@ shortened instead.
 **The rule:** treat a failing check as information about the picture in both
 directions. Ask what the check believed when it was written, and ask what the
 screenshot was taken with switched off.
+
+## 14. Slow is a rate, not a distance
+
+The floating marks were invisible, and the obvious diagnosis was that they did not
+travel far enough. They travelled plenty: the boat crossed 16 units and the ducks
+9 and 11, a hand's width each. What was wrong is that they did it in 163, 133.6 and
+149.9 seconds, which at the size this card is drawn is 0.07 to 0.10 of a CSS pixel
+a second — four to six pixels in a minute of watching. The stylesheet even had a
+comment saying the period was "longer than anybody will watch", written as if that
+were a virtue. It is the defect.
+
+The rule now on the page: a floating body moves at three to five tenths of a pixel
+a second, and the water it disturbs at about half that. Every period in the floating
+family was re-picked against that, and the fix was measured in pixels per second
+rather than in units per cycle, because units per cycle is the number that lied.
+
+**The rule:** when something is meant to be gentle, ask how fast it goes. Distance
+and period are inputs; the rate is the thing anybody perceives.
+
+## 15. A comment beside a number is a claim, and claims rot silently
+
+`Floaters.data.mjs` has said since the petals were last re-timed that "four drifts,
+four bobs and four water lines went in at once". The drifts existed. The bobs
+existed. The water lines had never been drawn. Nothing in the suite could notice,
+because a comment is not selected by anything and no assertion reads it — and the
+page was worse for it in exactly the way the comment described: four petals sitting
+on a lake with nothing around them, which reads as stickers.
+
+**The rule:** when a comment promises a thing the file does not do, either build the
+thing or delete the promise, in the same commit. Prose that describes an intention
+the artwork has not kept is not documentation, it is a second, quieter bug.
+
+## 16. Photograph the mark at 8×, not the card at 2×
+
+The duck was left alone for a long time because at card scale it looked like a duck.
+Photographed at eight times, it was an egg with a ball on the end and a wedge for a
+bill, its belly as round underneath as on top, and a single solid ellipse under it
+that read as a second duck lying upside down in the water. The comment on the mark
+claimed a cocked tail; the path had no tail in it.
+
+The same crop found that each duck's wake was a straight horizontal rule — `h22` —
+sitting among nothing else straight on the lake, which reads as something printed
+rather than something the bird made.
+
+**The rule:** judge a drawable at the zoom where its outline can be argued about,
+and keep the card-scale view as the check that the fix still reads at the size it
+ships.
+
+## 17. Far from everything is not the same as clear of everything
+
+The rhythm probe rejects two clocks within one percent of each other and any pair
+at a whole multiple. When the petals' water lines were timed, the picks that were
+nowhere near a neighbour's period were still refused: 55.2 s is exactly three times
+the nearer duck's ring at 18.4 s, 48 units away, and 79.5 s is exactly three times a
+glitter crest at 26.5 s, 65 units away. A number chosen to be far from the list
+landed on a multiple of something that was not on the list of things being compared
+against.
+
+**The rule:** pick a period by measuring against what the probe actually finds
+nearby, and check the multiple relation last, because it is the one a plausible
+number is most likely to hide.
