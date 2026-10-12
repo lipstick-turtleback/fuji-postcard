@@ -90,6 +90,17 @@ const box = boxFlag
        h: h * k,
        units: vb.width / fr.width,
        face: face.className,
+       // Which face is actually on screen. The data-print-face attribute is not
+       // it — that is written when the page is printed, and stays unset the
+       // whole time somebody is looking at the card. The card itself carries the
+       // flip as a rotateY, so the face is read out of its own matrix: a
+       // negative m11 is the card turned round.
+       shown: (() => {
+         const card = document.getElementById('card');
+         if (!card) return '';
+         const m = new DOMMatrixReadOnly(getComputedStyle(card).transform);
+         return m.m11 < 0 ? 'back' : 'front';
+       })(),
      });
    })()`)
   : await evaluate(`(() => {
@@ -167,6 +178,14 @@ console.log(
       ? ` (the crop was pulled back to the page: ${Math.round(w)} × ${Math.round(h)} css px)`
       : ''),
 );
+// The two faces lie on top of one another — that is what a flip card is — so a
+// region crop is mapped through one face's coordinates and photographs whichever
+// face happens to be showing. The numbers are right and the picture is of the
+// other side, which is the kind of mistake that survives an afternoon of looking.
+if (boxFlag && b.shown && b.shown !== (back ? 'back' : 'front'))
+  console.log(
+    `look: the card is showing the ${b.shown}, not the ${back ? 'back' : 'front'} — the crop is mapped through the ${back ? 'back' : 'front'}'s plate coordinates and photographs whatever is on screen. ${back ? 'Turn the card back' : 'Pass --back'} to line them up.`,
+  );
 if (exceptions.length || consoleErrors.length)
   console.log(`look: ${exceptions.length} exception(s), ${consoleErrors.length} browser error(s)`);
 close();
