@@ -383,6 +383,28 @@ for (const m of chain.matchAll(/node (scripts\/[\w-]+\.mjs)/g))
   if (!existsSync(join(root, m[1])))
     problems.push(`${pkgFile}: ${m[1]} is in the npm test chain and not on disk`);
 
+/* ---- and no two of them can want the same port -------------------------- */
+// The suite runs two tests at a time. Two tests on one port was invisible for as
+// long as the suite was a chain of &&, because the second one started after the
+// first had let go; it became a Chrome that refuses to come up the moment the
+// runner existed, and the refusal names the port and not the other test that is
+// holding it. So the ports each test opens are read out of the source and
+// compared, which is the only way this stays true without somebody remembering.
+const wantedPorts = new Map();
+for (const f of scriptsOnDisk) {
+  const src = readFileSync(join(root, 'scripts', f), 'utf8');
+  for (const m of src.matchAll(/\bport:\s*(\d{4})\b|\bPORT\s*=\s*(\d{4})\b/g)) {
+    const port = m[1] || m[2];
+    if (!wantedPorts.has(port)) wantedPorts.set(port, new Set());
+    wantedPorts.get(port).add(f);
+  }
+}
+for (const [port, files] of wantedPorts)
+  if (files.size > 1)
+    problems.push(
+      `scripts/: port ${port} is opened by ${[...files].join(' and ')} — the suite runs them at the same time, and one of them will not get a browser`,
+    );
+
 /* ---- the README's map of scripts/ has to be the directory --------------- */
 // The listing is how anyone finds their way in, and a file that is not in it is
 // a file nobody will run on purpose.

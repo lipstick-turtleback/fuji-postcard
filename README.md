@@ -318,6 +318,12 @@ test-css and test-ink both on 9389 — which was invisible in a serial suite and
 "port is already serving a Chrome" failure the moment it was not. The chain rule
 still holds with a runner in the middle: a test may be reached through the
 runner's list, and that list is checked against the directory in both directions.
+The ports are checked too: `check.mjs` reads every port each test opens out of
+its source and fails when two tests want the same one — `port 9377 is opened by
+test-build.mjs and test-plate.mjs — the suite runs them at the same time, and one
+of them will not get a browser`. The collisions that had to be fixed before the
+runner could exist were only findable by running the suite in parallel; the next
+one should be findable by running the build.
 
 ### Performance, measured
 
