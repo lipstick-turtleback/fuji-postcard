@@ -440,11 +440,15 @@ ok(
    The pairs are found by what each drift group holds, because a drift group is
    otherwise anonymous — they all carry one class and one keyframe and differ only
    in a number written beside them. A lookup that finds nothing is a failure, not
-   a pass: a check that quietly compares nothing reports success forever. */
+   a pass: a check that quietly compares nothing reports success forever. This
+   already earned its keep once: when the smear the ducks leave moved inside the
+   group that rocks them, the bird's drift group stopped holding a reflection and
+   started holding a duck, and the lookup said `nothing found` rather than going
+   quiet. */
 const driftRow = (kid) => travel.find((r) => r.cls === 'drift' && r.kids.includes(kid));
 const waterPairs = [
   ['the wake', 'wake', 'the hull', 'boat'],
-  ['the lines the ducks leave', 'ring', 'a duck', 'reflection'],
+  ['the lines the ducks leave', 'ring', 'a duck', 'duck'],
 ].map(([water, wk, body, bk]) => ({ water, body, w: driftRow(wk)?.u, b: driftRow(bk)?.u }));
 const keepingStep = waterPairs.filter(
   (p) => p.w === undefined || p.b === undefined || p.w > 0.8 * p.b,

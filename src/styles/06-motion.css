@@ -643,7 +643,15 @@ html[data-enhance="on"] .bird.b3 {
    a mark the body leaves behind, and it is the only place in the picture where
    the difference is drawn. */
 /* Two ducks, two periods. They sit eight units apart, so a shared period
-   would read as one bird reflected from the other. */
+   would read as one bird reflected from the other.
+
+   The bob itself was 0.2 by 0.4 of a unit — under half a pixel at the size the
+   card is drawn, which is the same defect the petals on the water were fixed
+   for: a number in a stylesheet and nothing the eye could find. A duck sits *in*
+   the lake, so a swell passes under it and it comes up, goes over and lies down
+   the other way. The rise, the set and the tilt are each bird's own, written by
+   the data, and both are smaller than a petal's: a petal is a leaf the air
+   pushes over, a duck is half a kilo of bird the water holds up. */
 .duck {
   animation: duck-bob 8.5s ease-in-out infinite alternate;
   transform-box: fill-box;
@@ -651,10 +659,10 @@ html[data-enhance="on"] .bird.b3 {
 }
 @keyframes duck-bob {
   from {
-    transform: translate(0, 0);
+    transform: translate(0, 0) rotate(calc(var(--tilt, 2deg) * -1));
   }
   to {
-    transform: translate(0.2px, -0.4px);
+    transform: translate(var(--set, 0.8px), calc(var(--rise, 1.8px) * -1)) rotate(var(--tilt, 2deg));
   }
 }
 /* Something under the lake came up for a second. Three of these, and the
