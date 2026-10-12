@@ -199,7 +199,12 @@ const rules = async (face) =>
         // report that says a rule stopped at [-28,-8] is pointing at a place
         // that does not exist on the card.
         const root = el.ownerSVGElement.getScreenCTM();
-        const mp = ctm.multiply(root.inverse());
+        // DOMMatrix.multiply is column-vector: a.multiply(b) applies b first.
+        // The order here is "go to the screen, then come back to the plate",
+        // and getting it the other way round produced coordinates that were
+        // neither space — the postmark's ring reported a dropout 85 units from
+        // where the postmark is.
+        const mp = root.inverse().multiply(ctm);
         // one sample per unit along the rule: a blossom is fifteen units wide,
         // and a walk that steps nine units at a time lands two samples inside
         // it and calls the gap a blip
