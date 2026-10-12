@@ -1320,7 +1320,9 @@ html[data-enhance="on"] .bird.b3 {
    see Floaters.data.mjs for what these four periods were chosen against. */
 .floater-drift,
 .drift {
-  animation: drift-on-water var(--drift-dur, 101s) ease-in-out infinite alternate;
+  /* The period is always written beside the mark — inline, by the data — so
+     the value here is only what a drift costs if nobody says. */
+  animation: drift-on-water 101s ease-in-out infinite alternate;
 }
 @keyframes drift-on-water {
   from {
