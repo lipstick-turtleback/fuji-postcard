@@ -216,22 +216,47 @@
 
           <!-- Air-mail border. A printed border is regular, so the 26-unit
                spacing is correct and stays. What a century does to it is
-               uneven: the five chevrons now take the ink at different
-               strengths, each sits a fraction off its own registration, and
-               the first has a nick where the paper was abraded down to the
-               fibre. Split from two multi-subpath shapes into five, because
-               one fill for all three reds cannot fade unevenly. -->
+               uneven: every chevron takes the ink at a different strength, each
+               sits a fraction off its own registration, and the first has a
+               nick where the paper was abraded down to the fibre. Split from
+               two multi-subpath shapes into one path per chevron, because one
+               fill for all the reds cannot fade unevenly.
+               The band runs the width of the bottom edge. It used to stop at
+               x=148, which left the right two thirds of the edge bare and made
+               the corner dash look like the whole design, while the card's own
+               description said the stripes run along the bottom edge: they run
+               along it now, and the caption is set into the band the way it is
+               set into the band on a real envelope. -->
           <g opacity=".55">
             <g fill="#c8452f">
               <path d="M26 574 l14 -12 h18 l-14 12 z" opacity=".92"/>
               <path d="M78.4 573.7 l14 -12 h18 l-14 12 z" opacity=".7"/>
               <path d="M130 574.3 l14 -12 h18 l-14 12 z" opacity=".84"/>
+              <path d="M390.3 573.9 l14 -12 h18 l-14 12 z" opacity=".72"/>
+              <path d="M441.6 574.4 l14 -12 h18 l-14 12 z" opacity=".88"/>
+              <path d="M494.2 573.6 l14 -12 h18 l-14 12 z" opacity=".64"/>
+              <path d="M545.8 574.1 l14 -12 h18 l-14 12 z" opacity=".95"/>
+              <path d="M598.4 573.8 l14 -12 h18 l-14 12 z" opacity=".8"/>
+              <path d="M649.7 574.5 l14 -12 h18 l-14 12 z" opacity=".7"/>
+              <path d="M702.3 573.7 l14 -12 h18 l-14 12 z" opacity=".86"/>
+              <path d="M753.6 574.2 l14 -12 h18 l-14 12 z" opacity=".62"/>
+              <path d="M806.1 573.9 l14 -12 h18 l-14 12 z" opacity=".9"/>
             </g>
             <g fill="#2b3a67">
               <path d="M51.7 574.2 l14 -12 h18 l-14 12 z" opacity=".78"/>
               <path d="M104.3 573.8 l14 -12 h18 l-14 12 z" opacity=".95"/>
+              <path d="M415.8 573.6 l14 -12 h18 l-14 12 z" opacity=".76"/>
+              <path d="M468.4 574.3 l14 -12 h18 l-14 12 z" opacity=".9"/>
+              <path d="M519.6 573.7 l14 -12 h18 l-14 12 z" opacity=".68"/>
+              <path d="M572.2 574.4 l14 -12 h18 l-14 12 z" opacity=".82"/>
+              <path d="M623.9 573.9 l14 -12 h18 l-14 12 z" opacity=".74"/>
+              <path d="M676.5 574.1 l14 -12 h18 l-14 12 z" opacity=".94"/>
+              <path d="M727.8 573.6 l14 -12 h18 l-14 12 z" opacity=".66"/>
+              <path d="M780.4 574.3 l14 -12 h18 l-14 12 z" opacity=".86"/>
+              <path d="M831.7 573.8 l14 -12 h18 l-14 12 z" opacity=".78"/>
             </g>
             <path d="M30 570 l6 -5 h4 l-6 5 z" fill="#efe6d4" opacity=".5"/>
+            <path d="M653 566 l5 -4.3 h3 l-5 4.3 z" fill="#efe6d4" opacity=".42"/>
           </g>
           <!-- the caption sits above the border, not in it: at y=571 its box
                ran 562.4 to 572.9, so the inner rule at 569 was printed through
