@@ -82,19 +82,30 @@ units on periods longer than the birds'. A mark attached to a floating body and
 a mark the body leaves behind are different things, and the difference is only
 ever visible in how far each one goes.
 
-The periods were picked against everything within a hand's width, which at the
-boat means the hull's 13, the man's 7.5, the wake's 19 and 25, the ripples' 17,
-21 and 24, the three smears' 29.4, 36.2 and 44.9, and the glitter band's six
-crests; at the ducks it means the bobs, the rings, the two smears, the heron,
-the fish and the four petals already crossing the water. 163 and 118.4 are what
-survived at the boat; 133.6, 149.9, 155.3 and 166.9 at the ducks. The obvious
-picks are the wrong ones, and the probe says why. At the boat: 169 is thirteen
-times the hull's own 13, 168 is eight times one ripple off the paddle and seven
-times another, 165 is twenty-two times the boatman's 7.5, and 158 and 159 are
-seven and six times two of the glitter band's crests. At the ducks: 160.3 is five
-times the nearer smear's 32, 151.9 is ten times the ring's 15.2, 172.9 is five
-times the farther smear's 34.6, 161.9 is twelve times a petal's 13.5, and 127.6
-is within a percent of a fish coming up a hundred units away.
+The periods were picked against what the rhythm probe finds within a hand's
+width, which at the boat means the hull's 13, the man's 7.5, the wake's 19 and
+25, the ripples' 17, 21 and 24, the three smears' 29.4, 36.2 and 44.9, four of
+the glitter band's crests at 15.5, 18.5, 22.6 and 26.5, two petals' bobs at 17.5
+and 23.5 and two petals' drifts at 109 and 139; at the ducks it means the bobs at
+8.3 and 11.9, the rings at 15.2 and 18.4, a petal's bob at 13.5, the two smears at
+32 and 34.6, a petal drifting on 101, and two fish coming up at 127 and 179. 163
+and 118.4 are what survived at the boat; 133.6, 149.9, 155.3 and 166.9 at the
+ducks. The obvious picks are the wrong ones, and the probe says why. At the boat:
+169 is thirteen times the hull's own 13, 168 is eight times one ripple off the
+paddle and seven times another, 165 is twenty-two times the boatman's 7.5, and 158
+and 159 are seven and six times two of the glitter band's crests. At the ducks:
+160.3 is five times the nearer smear's 32, 151.9 is ten times the ring's 15.2,
+172.9 is five times the farther smear's 34.6, 161.9 is twelve times a petal's
+13.5, and 127.6 is within a percent of a fish coming up a hundred units away.
+
+The pair is held, not just drawn. `test-motion.mjs` walks every animated mark
+around its own cycle and reads how far its own transform carries it, then
+compares the two pairs: a water mark that travels more than four fifths of the
+body that made it is reported. To be compared at all the drift groups had to be
+given an identity — they share one class, one keyframe and one rule, and differ
+only in a number written beside them — so the probe records what each group
+holds. Shown to fire by putting the wake's counter-drift back to the hull's own
+16 units: `the wake 16.0 u vs the hull 16.0 u`.
 
 Rule 2 applies to time as much as to space: **no two animated things in a
 group may share a period, and no period may be a multiple of another in the
