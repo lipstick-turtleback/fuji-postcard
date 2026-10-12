@@ -117,8 +117,14 @@
               <path d="M820 66 L828 82 C825.5 79.4 823.4 83 821 80.4 C821.2 76 820.6 71 820 66 Z"
                     fill="#dfe8f2"/>
               <circle cx="796" cy="60" r="7" fill="#f2c14e"/>
-              <text x="806" y="112" text-anchor="middle" fill="#3f5d86" font-size="9"
+              <!-- The same stamp, so the same marking: country and value on one
+                   line. The back's miniature carries the 84 too, and a stamp
+                   with a value on one face and none on the other is two
+                   different stamps pretending to be one. -->
+              <text x="800" y="112" text-anchor="middle" fill="#3f5d86" font-size="9"
                     letter-spacing="1.5" font-family="Georgia,serif">NIPPON</text>
+              <text x="833" y="112" text-anchor="middle" fill="#3f5d86" font-size="7.5"
+                    font-family="Georgia,serif">84</text>
             </g>
             <!-- Age on the stamp itself. Paper yellows where it is exposed and
                  stays paler under whatever lay on top of it, so the wash is
