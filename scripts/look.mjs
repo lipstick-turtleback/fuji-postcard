@@ -26,6 +26,7 @@
      node scripts/look.mjs '#heron'               one mark, at 4×
      node scripts/look.mjs '.reed' 8              at 8×
      node scripts/look.mjs --back                 the other face
+     node scripts/look.mjs --back 2 back.png      the other face, at 2×, under a name
      node scripts/look.mjs '#heron' 4 heron.png   where to write it
      node scripts/look.mjs --box=330,120,240,150 5 a region, at 5×
 
@@ -45,9 +46,16 @@ if (boxFlag) {
   scale = Number(rest[0] || 4);
   out = rest[1] || '/tmp/fuji-look.png';
 } else {
-  selector = rest[0] || (back ? '.face.back' : '.face.front');
-  scale = Number(rest[1] || (selector === '.face.front' || selector === '.face.back' ? 2 : 4));
-  out = rest[2] || '/tmp/fuji-look.png';
+  // A zoom is a bare number and an output is a name with an image extension, so
+  // either one may be left out without the other being guessed at. `--back 2
+  // back.png` is the back at two, not a selector called "2" — which is what the
+  // first version handed back, as a CSS syntax error from inside the page.
+  const isZoom = (a) => /^[\d.]+$/.test(a);
+  const isFile = (a) => /\.(png|jpe?g)$/i.test(a);
+  selector = rest.find((a) => !isZoom(a) && !isFile(a)) || (back ? '.face.back' : '.face.front');
+  const zoom = rest.find(isZoom);
+  scale = Number(zoom || (selector === '.face.front' || selector === '.face.back' ? 2 : 4));
+  out = rest.find(isFile) || '/tmp/fuji-look.png';
 }
 
 const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
