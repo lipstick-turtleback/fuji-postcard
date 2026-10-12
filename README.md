@@ -100,10 +100,10 @@ string, and both are committed: the repo stays openable with a double-click, and
 artwork with its argument — 152 markup comments, 55 CSS comment blocks and 17 KB
 of JS comments. `index.html` is the same page with all of that taken out, the
 indentation trimmed, and the stylesheet and the two bundles put through esbuild's
-minifier: 119 KB rather than 239. The names are the point — a static host answers
+minifier: 122 KB rather than 251. The names are the point — a static host answers
 `/` with `index.html`, so the file every visitor downloads is the small one and no
 rewrite rule is needed to make that true. `test-build.mjs` proves the smaller one
-is the same document (1,096 nodes walked and compared), the same stylesheet (296
+is the same document (1,125 nodes walked and compared), the same stylesheet (294
 rules, selectors, keyframes and all) and the same picture (0 of 1,657,150 pixels
 differ).
 
@@ -397,7 +397,7 @@ frame is a plain double rule with different names, so the back produced no rules
 and was skipped without a word. It also mapped boxes through the back's matrix,
 which is mirrored — `a` is negative — so the boxes came out inside-out. The rule
 set is now found by what a rule is: a stroked, unfilled outline, or a straight
-mark with no rise, running most of the way across the plate. 34 bands on the
+mark with no rise, running most of the way across the plate. 42 bands on the
 front, 16 on the back. The back's `PAR AVION · BY AIR MAIL` was sitting at
 y=571 with the inner rule at 569 printed through the middle of the word and the
 outer rule 0.4 units under it; it now rests above the border, 2.29 units clear.

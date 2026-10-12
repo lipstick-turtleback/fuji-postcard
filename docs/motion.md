@@ -58,8 +58,7 @@ all at an extreme together; and `currentTime` is measured from the start of the
 animation's timeline, which for a negative delay is behind the first iteration.
 Winding 0 to one period therefore samples the wrong window and misses the
 extremes — the first version of this probe read the middle bird drifting 4.7 units
-when the data says 5.8, and the birds crossing 236 units when the keyframe says
-168. The delay has to be added back before the window is walked.
+when the data says 5.8, and the birds crossing 236 units when the keyframe says 168. The delay has to be added back before the window is walked.
 
 Two kinds of mark are measured but not held to that ceiling. A passage is not a
 sway: the ten petals coming down travel 89 to 295 units, the four lying on the
@@ -570,7 +569,7 @@ before and after.
 ## What this document does not propose
 
 No animation framework, no GSAP, no runtime Svelte, no parallax layers. The
-scene is 915 static elements across the two faces — 791 on the front, 124 on
-the back — and one lighting loop; the motion it needs is thirty-odd CSS
+scene is 973 static elements across the two faces — 830 on the front, 143 on
+the back — and one lighting loop; the motion it needs is eighty-eight CSS
 animations with argued-over periods and a data table that says which one is in
 phase with what.
