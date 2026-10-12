@@ -239,6 +239,18 @@ try {
       : `node ${walk.i}: annotated «${(walk.first?.annotated || '').slice(0, 90)}» · shipped «${(walk.first?.shipped || '').slice(0, 90)}»`,
   );
 
+  /* The README quotes this count, so the test that measures it also holds the
+     document to it — the same arrangement check.mjs uses for the element counts.
+     A number in a document that nobody re-measures is a number that is already
+     wrong, and this one had drifted by three while the artwork grew: the caption
+     gained a tspan, the pole was cut in two at the waterline. */
+  const CLAIMED_NODES = 1134;
+  ok(
+    'and the node count the README quotes is the one the page has',
+    walk.a === CLAIMED_NODES,
+    `${walk.a} nodes measured, README.md claims ${CLAIMED_NODES} — change the claim, or the artwork, to say which is true`,
+  );
+
   /* The stylesheet one level in: not the text the build wrote but the rules the
    browser read out of it. What is compared is the shape of the stylesheet — the
    rule kinds, the selectors, the media and layer conditions, the animation names

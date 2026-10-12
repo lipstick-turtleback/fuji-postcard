@@ -99,15 +99,17 @@ public/
 `src/` is the truth. Both files under `public/` are generated, in one run, from one
 string, and both are committed: the repo stays openable with a double-click, and
 `npm run check` fails if either has drifted from `src/`. `index-full.html` is the
-artwork with its argument — 152 markup comments, 55 CSS comment blocks and 17 KB
-of JS comments. `index.html` is the same page with all of that taken out, the
+artwork with its argument — 165 markup comments, 58 CSS comment blocks and 35 JS
+comment blocks. `index.html` is the same page with all of that taken out, the
 indentation trimmed, and the stylesheet and the two bundles put through esbuild's
 minifier: 122 KB rather than 251. The names are the point — a static host answers
 `/` with `index.html`, so the file every visitor downloads is the small one and no
 rewrite rule is needed to make that true. `test-build.mjs` proves the smaller one
-is the same document (1,131 nodes walked and compared), the same stylesheet (294
+is the same document (1,134 nodes walked and compared), the same stylesheet (294
 rules, selectors, keyframes and all) and the same picture (0 of 1,657,150 pixels
-differ).
+differ). The counts in that sentence are the test's own output, and the test holds
+the document to them: change the artwork and the build fails until the sentence
+says what is now true.
 
 ### The front is twelve fragments, in paint order
 

@@ -492,6 +492,45 @@ else {
     );
 }
 
+/* ---- the page's own argument is counted, and the count is checked ------- */
+// The annotated page is the artwork with its reasoning attached, and the README
+// says how much reasoning that is. The numbers were 152 and 55 and a byte figure
+// that had to be rounded to be meaningful; every round of work adds comments, so
+// all three had drifted and the byte one could not be checked at all without
+// deciding what counts as a comment in a string. They are counts now, and this is
+// the measure they are checked against: `<!--` in the markup, `/*` inside the one
+// style element, `/*` inside the script elements. None of them can be spoofed by
+// the data URIs, which are percent-encoded and contain no comment opener at all.
+const commentClaim =
+  /(\d+) markup comments,\s*(\d+) CSS comment blocks and\s*(\d+) JS\s+comment blocks/.exec(readme);
+if (!commentClaim)
+  problems.push(
+    `${readmeFile}: the README no longer counts the page's comments, so nothing re-measures them`,
+  );
+else {
+  // The claim is about the annotated page, so it is measured from that file
+  // whichever one this run is checking: `npm run check` runs here twice, and the
+  // shipped page has no comments left to count.
+  const fullFile = join(root, 'public', 'index-full.html');
+  const full = file === fullFile ? html : readFileSync(fullFile, 'utf8');
+  const measured = {
+    markup: [...full.matchAll(/<!--/g)].length,
+    css: [...(/<style>([\s\S]*?)<\/style>/g.exec(full)?.[1] ?? '').matchAll(/\/\*/g)].length,
+    js: [...full.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].reduce(
+      (n, s) => n + [...s[1].matchAll(/\/\*/g)].length,
+      0,
+    ),
+  };
+  const claimed = { markup: +commentClaim[1], css: +commentClaim[2], js: +commentClaim[3] };
+  const line = readme.slice(0, commentClaim.index).split('\n').length;
+  const noun = { markup: 'markup comments', css: 'CSS comment blocks', js: 'JS comment blocks' };
+  for (const kind of ['markup', 'css', 'js'])
+    if (measured[kind] !== claimed[kind])
+      problems.push(
+        `${readmeFile}:${line}: the README says ${claimed[kind]} ${noun[kind]} and the page has ${measured[kind]} — the documents quote the count, so change the count, or the page, to say which is true`,
+      );
+}
+
 /* ---- a custom property nobody reads is a mark that stopped moving ------- */
 // Custom properties are how this page reaches across the gap between the artwork
 // and the stylesheet: the ripple's wobble, the pool's position, the card's
