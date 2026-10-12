@@ -352,6 +352,40 @@ if (!grainTile) {
     );
 }
 
+/* ---- a custom property nobody reads is a mark that stopped moving ------- */
+// Custom properties are how this page reaches across the gap between the artwork
+// and the stylesheet: the ripple's wobble, the pool's position, the card's
+// shadow, the reflection's stretch — all named values handed from one file to
+// another, some of them written in a style attribute on a shape in the artwork
+// and read in a keyframe three files away. A name written and never read is dead
+// in the way this project means: it costs nothing, says nothing, and outlives
+// the mark it was written for. A name read and never written is worse. With a
+// fallback it computes to the fallback, which is a value nobody chose for this
+// mark; without one the declaration is invalid at computed-value time and the
+// property takes its initial value — a ripple that does not wobble, a shadow
+// that does not move, and a page that looks like a calm day.
+const propWrites = new Set();
+for (const m of html.matchAll(/--([a-z][\w-]*)\s*:/g)) propWrites.add(m[1]);
+for (const m of html.matchAll(/setProperty\(\s*['"]--([\w-]+)['"]/g)) propWrites.add(m[1]);
+const propReads = new Map();
+const bareRead = new Set();
+for (const m of html.matchAll(/var\(\s*--([\w-]+)(\s*,)?/g)) {
+  propReads.set(m[1], (propReads.get(m[1]) ?? 0) + 1);
+  if (!m[2]) bareRead.add(m[1]);
+}
+for (const m of html.matchAll(/getPropertyValue\(\s*['"]--([\w-]+)['"]/g))
+  propReads.set(m[1], (propReads.get(m[1]) ?? 0) + 1);
+for (const name of propWrites)
+  if (!propReads.has(name))
+    problems.push(
+      `--${name} is written and never read — the mark it was written for is not using it`,
+    );
+for (const [name, n] of propReads)
+  if (!propWrites.has(name) && bareRead.has(name))
+    problems.push(
+      `--${name} is read ${n} time${n > 1 ? 's' : ''} with no fallback and written nowhere — those declarations are invalid at computed-value time`,
+    );
+
 /* ---- a test nobody runs is a test that does not exist ------------------- */
 // A browser test written, run by hand once, and left out of the chain reports
 // nothing to anybody ever again — it is a check in the same way a stylesheet

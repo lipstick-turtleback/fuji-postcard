@@ -212,6 +212,20 @@ them. Take one corner circle out of the wave and it reports `the wave tile's arc
 at 0,0 r30 is cut by an edge and has no twin at 64,0 r30`; set `background-size`
 to 176 and it reports that the texture is being rescaled rather than repeated.
 
+Custom properties are how the artwork talks to the stylesheet — the ripple's
+wobble, the pool's position, the card's shadow, a reflection's stretch — and a
+name can be written in a `style` attribute on a shape in one fragment and read in
+a keyframe three files away. `check.mjs` now matches every name written (in CSS,
+in an inline style, or by `setProperty`) against every name read (by `var()` or
+`getPropertyValue`). A name written and never read is dead code in the sense this
+project means: it costs nothing, says nothing, and outlives the mark it was
+written for. A name read with no fallback and written nowhere is worse, because
+CSS does not fall back to a default someone chose — the declaration is invalid at
+computed-value time and the property takes its _initial_ value, so a ripple stops
+wobbling and the page looks like a calm day. Renaming one write of `--rdelay`
+produces the first message; renaming the token `--gap-hang` produces both, and
+the second one says how many times the name is read.
+
 The split is then verifiable in a way a rewrite is not: `npm run build` after
 moving the ranges must leave `git diff public/index.html` empty. It did. The
 only diff the fragments themselves introduce is the twelve orientation
