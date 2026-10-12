@@ -15,7 +15,6 @@
   --hair: rgba(34, 32, 28, 0.17);
   --hair-soft: rgba(34, 32, 28, 0.09);
   --vermilion: #b8402c;
-  --amber: #a9762c;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   --jp: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Songti SC", serif;
 }
@@ -52,10 +51,14 @@ body {
   display: block;
 }
 .bg-wall {
+  /* The 42% stop is the wall the tokens are measured against: scripts/
+     test-contrast.mjs reads --wall as the ground under every piece of text on
+     the page, so the gradient names that fact instead of repeating a hex that
+     is free to drift away from it. */
   background: radial-gradient(
     122% 80% at 50% -8%,
     #f7f4ed 0%,
-    #ece8df 42%,
+    var(--wall) 42%,
     #ded8cc 78%,
     #d2cbbe 100%
   );
