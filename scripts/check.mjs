@@ -10,7 +10,7 @@
  *   node scripts/check.mjs                     the annotated page
  *   node scripts/check.mjs public/index.html   the shipped one
  */
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pathProblems } from './svg-check.mjs';
@@ -350,6 +350,87 @@ if (!grainTile) {
       sized.index,
       `the grain is repeated at ${sized[1]} × ${sized[2]} css px but the tile is ${gw} × ${gh} — the texture is being rescaled`,
     );
+}
+
+/* ---- the README's tree of the front is a list of files that exist ------- */
+// The section that says the front is twelve fragments prints the directory, and
+// it is the one place a reader learns where to go to change a mark. A name in it
+// that is not a name on disk sends them to a file that was never there: the cast
+// moved from one file to a directory of one file per mark, and the tree went on
+// printing `20-cast.svg` afterwards. So the tree is read back and matched to the
+// directory in both directions — every entry listed has to exist, as a file or a
+// directory according to its trailing slash, and every entry on disk has to be
+// listed — and the count in the heading has to be the number of entries under
+// it, because a heading that says twelve over a list of eleven is the same
+// mistake one line further down.
+const WORDS = [
+  'zero',
+  'one',
+  'two',
+  'three',
+  'four',
+  'five',
+  'six',
+  'seven',
+  'eight',
+  'nine',
+  'ten',
+  'eleven',
+  'twelve',
+  'thirteen',
+  'fourteen',
+  'fifteen',
+  'sixteen',
+  'seventeen',
+  'eighteen',
+  'nineteen',
+  'twenty',
+];
+const treeHead = /^### The front is ([a-z]+) fragments, in paint order\n+```/m.exec(readme);
+if (!treeHead)
+  problems.push(
+    `${readmeFile}: the README no longer has the front's fragment tree, so nothing matches it to the directory`,
+  );
+else {
+  const body = readme.slice(treeHead.index + treeHead[0].length);
+  const fence = body.indexOf('```');
+  const block = body.slice(0, fence);
+  const blockAt = treeHead.index + treeHead[0].length;
+  const listed = new Map();
+  for (const m of block.matchAll(/^ {2}([\w.-]+\/?)\s/gm))
+    listed.set(m[1], readme.slice(0, blockAt + m.index).split('\n').length);
+  if (!listed.size)
+    problems.push(
+      `${readmeFile}: the front's fragment tree lists no entries, so the check that matches it to the directory matches nothing`,
+    );
+  const spelled = WORDS.indexOf(treeHead[1]);
+  if (spelled < 0)
+    problems.push(
+      `${readmeFile}: the README says "${treeHead[1]} fragments" of the front, which is not a count this can check`,
+    );
+  else if (spelled !== listed.size)
+    problems.push(
+      `${readmeFile}:${readme.slice(0, treeHead.index).split('\n').length}: the heading says ${treeHead[1]} fragments and the tree under it lists ${listed.size}`,
+    );
+  const frontDir = join(root, 'src', 'art', 'front');
+  const onDisk = readdirSync(frontDir);
+  for (const [name, line] of listed) {
+    const wantsDir = name.endsWith('/');
+    const base = wantsDir ? name.slice(0, -1) : name;
+    if (!onDisk.includes(base))
+      problems.push(
+        `${readmeFile}:${line}: the tree lists src/art/front/${name} and there is no such ${wantsDir ? 'directory' : 'file'}`,
+      );
+    else if (wantsDir !== statSync(join(frontDir, base)).isDirectory())
+      problems.push(
+        `${readmeFile}:${line}: the tree marks src/art/front/${base} as ${wantsDir ? 'a directory' : 'a file'} and on disk it is the other one`,
+      );
+  }
+  for (const entry of onDisk)
+    if (!listed.has(entry) && !listed.has(`${entry}/`))
+      problems.push(
+        `${readmeFile}: src/art/front/${entry} is on disk and not in the README's tree of the front`,
+      );
 }
 
 /* ---- a custom property nobody reads is a mark that stopped moving ------- */

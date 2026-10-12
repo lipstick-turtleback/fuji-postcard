@@ -115,8 +115,8 @@ differ).
 src/art/front/
   00-open.svg     the <svg>, its title, its description
   10-paint.svg    every gradient, filter and mask the picture is printed with
-  20-cast.svg     the marks drawn once and placed by hand: tufts, reeds,
-                  a heron, a duck, a blossom, a bud
+  20-cast/        one file per mark, drawn once and placed by hand: tufts,
+                  reeds, a heron, a duck, a blossom, a bud
   30-sky.svg      sky, sun, its rays, high clouds
   40-mountain.svg the ridges and the mountain, each ridge lighter than the last
   50-lake.svg     far shore, mist, low clouds, birds, the water and its mirrors
@@ -233,9 +233,10 @@ comments above.
 
 ### Working on one mark at a time
 
-The picture is already in pieces you can work on separately: eleven fragments in
-paint order, twenty marks in the cast, seven data tables that say where each
-copy of a mark stands. Three things make them less independent than they look.
+The picture is already in pieces you can work on separately: twelve fragments in
+paint order, one of them the cast, which is itself twenty files, one per mark,
+and seven data tables that say where each copy of a mark stands. Three things
+make them less independent than they look.
 Paint order is the picture, so a fragment's name is part of its drawing and
 moving one is a redraw, not a refactor. No fragment may `<use>` anything in
 another, because the exported plate has to be one file. And every mark is
