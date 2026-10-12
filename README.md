@@ -316,36 +316,44 @@ intervals. Screenshots cannot tell you any of this, and `--virtual-time-budget`
 lies about it because virtual time fast-forwards the clock.
 
 The numbers on this machine, 4-second samples of 240 frames, both tiers in one
-run:
+run, with the rasterizer named because it is part of the number:
 
-| Rendering                 | mean    | median  | p95     | worst | frames over 33 ms |
-| ------------------------- | ------- | ------- | ------- | ----- | ----------------- |
-| Enhance on                | 40.6 ms | 33.4 ms | 50.1 ms | 83 ms | 237 / 240         |
-| Enhance off (the default) | 16.6 ms | 16.7 ms | 16.8 ms | 17 ms | 0 / 240           |
+| Rendering             | mean    | median  | p95     | worst | frames over 33 ms |
+| --------------------- | ------- | ------- | ------- | ----- | ----------------- |
+| GPU, Enhance on       | 16.6 ms | 16.7 ms | 16.8 ms | 17 ms | 0 / 240           |
+| GPU, Enhance off      | 16.8 ms | 16.7 ms | 16.7 ms | 33 ms | 2 / 240           |
+| software, Enhance on  | 40.2 ms | 33.4 ms | 50.1 ms | 83 ms | 239 / 240         |
+| software, Enhance off | 16.6 ms | 16.7 ms | 16.7 ms | 17 ms | 0 / 240           |
 
-The laminate is the whole cost, and the shape of the cost is worth knowing
-before anyone tries to optimise it: `mix-blend-mode` has to read the backdrop,
-so a single blended layer anywhere inside the card forces the whole 1880×1270
+On a machine that gives the browser a GPU — which is the default now, and was not
+until this was written down — both tiers hold 60 Hz and the laminate costs
+nothing anybody can see. Under `--disable-gpu` the same page on the same machine
+runs the Enhance tier at 25 fps. Everything below about the cost of blending was
+measured in that second column pair, which is the only place the cost is visible
+at all; it is still the right place to ask, because the shape of the cost is a
+property of the page rather than of one GPU, and a phone told to composite in
+software is not hypothetical.
+
+The laminate is the whole of that cost, and the shape of it is worth knowing
+before anyone tries to optimise it: `mix-blend-mode` has to read the backdrop, so
+a single blended layer anywhere inside the card forces the whole 1880×1270
 subtree to be re-composited every frame. Removing four of the five foil layers
 changes nothing. Freezing the gradients changes nothing. Holding the card still
 changes nothing. Only the presence or absence of the blend matters. The paper
-grain and the drifting water are nearly free by comparison — about 2 ms each — and the rule was
-confirmed a second time from the other direction: seven hand-drawn foxing
-blooms cost 19.6 ms with `mix-blend-mode: multiply` and 18.1 ms without it
-(both measured against the page of that day, whose quiet baseline was 18.1 ms
-before the gentle set), which is the entire difference between a comfortable
-55 fps and 42 late frames out of 240.
+grain and the drifting water are nearly free by comparison — about 2 ms each —
+and the rule was confirmed a second time from the other direction: seven
+hand-drawn foxing blooms cost 19.6 ms with `mix-blend-mode: multiply` and 18.1 ms
+without it (both measured against the page of that day, whose quiet baseline was
+18.1 ms before the gentle set).
 
 The rule has a boundary, and measuring it found the boundary wrong. The back of
 the card carries a full-bleed `multiply` rect of its own, and with the card
 flipped it runs at **16.6 ms mean, 16.7 ms median, 0 of 240 late frames — a
 locked 60**. A blended layer forces the subtree to re-composite, but on the back
-there is almost nothing animating to re-composite. The front's 18 ms is its
-mist, ripples, wake and petals, not its foil. Blend cost is a function of what
-else is moving, so "is the blend expensive" is the wrong question; "what is
-moving underneath it" is the right one.
-but they are what stand between 45 fps and a locked 60, so Enhance carries them
-too.
+there is almost nothing animating to re-composite. The front's 18 ms is its mist,
+ripples, wake and petals, not its foil. Blend cost is a function of what else is
+moving, so "is the blend expensive" is the wrong question; "what is moving
+underneath it" is the right one.
 
 So Enhance is the effects switch, and it starts off. Turn it on and the page
 samples its own frame intervals for a second and, if the **median** gap is over

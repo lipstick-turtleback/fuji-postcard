@@ -11,6 +11,15 @@
 
    What the numbers mean: 16.7 ms is one frame at 60 Hz. A mean above that
    is dropped frames; p95 is the stutter you can feel.
+
+   The rasterizer is part of the number, so it is said out loud. This used to
+   pass --disable-gpu by default, and the Enhance tier came out at 25 fps — 238
+   frames in four seconds over 33 ms. With the GPU on, the same page on the same
+   machine is 16.6 ms mean and zero frames over 33. The tier is built out of
+   composited effects, so software rasterization is not a conservative reading
+   of it, it is a different page. The GPU is the default now; PERF_SOFTWARE=1
+   asks for the software one, which is the number to compare when the machine
+   doing the measuring has no GPU to give the browser.
  */
 import { spawn } from 'node:child_process';
 import { setTimeout as sleep } from 'node:timers/promises';
@@ -28,7 +37,7 @@ const chrome = spawn(
     '--user-data-dir=/tmp/fuji-perf-profile',
     '--no-sandbox',
     '--mute-audio',
-    ...(process.env.PERF_GPU ? [] : ['--disable-gpu']),
+    ...(process.env.PERF_SOFTWARE ? ['--disable-gpu'] : []),
     '--disable-breakpad',
     '--noerrdialogs',
     '--hide-scrollbars',
@@ -99,7 +108,7 @@ const move = async (x, y) => {
   });
 };
 
-const sample = async (label) => {
+const sample = async (label, secs = seconds) => {
   const expression = `new Promise((resolve) => {
     const d = [];
     let prev = performance.now();
@@ -107,7 +116,7 @@ const sample = async (label) => {
     const tick = (t) => {
       d.push(t - prev);
       prev = t;
-      if (++n < ${Math.round(seconds * 60)}) requestAnimationFrame(tick);
+      if (++n < ${Math.round(secs * 60)}) requestAnimationFrame(tick);
       else {
         d.sort((a, b) => a - b);
         resolve({
@@ -172,6 +181,12 @@ const setEnhance = async (want) => {
   await sleep(1200);
   return r.result?.value || '?';
 };
+// A short throwaway sample. The first sample of a run carries the page's own
+// settling — the entrance, the fonts, the foil warming up — and it lands on
+// whichever tier happens to be measured first, which made the two tiers' lines
+// not comparable: Enhance off, measured first, showed a 150 ms frame and six
+// late frames every run, and Enhance on, measured second, showed none.
+await sample('warming up', 1);
 await sample(`idle, enhance ${await setEnhance(false)}`);
 await sample(`idle, enhance ${await setEnhance(true)}`);
 clearInterval(sweep);
@@ -185,7 +200,11 @@ const quality = await send('Runtime.evaluate', {
     '})()',
   returnByValue: true,
 });
-console.log(`                     rendering: ${quality.result.value}`);
+console.log(
+  `                     rendering: ${quality.result.value} · rasterizer: ${
+    process.env.PERF_SOFTWARE ? 'software (--disable-gpu)' : 'the GPU this machine has'
+  }`,
+);
 
 const metrics = await send('Performance.getMetrics');
 const m = Object.fromEntries(metrics.metrics.map((x) => [x.name, x.value]));

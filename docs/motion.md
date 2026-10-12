@@ -423,7 +423,12 @@ Enhance off, 1440 × 1150, measured by `npm run perf`:
 | the page before the water (65)    | 16.8 ms | 16.7 ms | 16.8 ms | 67 ms | 1/240       |
 | the page with the water (80)      | 16.7 ms | 16.7 ms | 16.8 ms | 33 ms | 1/240       |
 | the page today, Enhance off (85)  | 16.6 ms | 16.7 ms | 16.8 ms | 17 ms | 0/240       |
-| the page today, Enhance on (96)   | 40.6 ms | 33.4 ms | 50.1 ms | 83 ms | 237/240     |
+
+The rasterizer is part of a frame time, and it was not recorded when most of
+these rows were taken. `npm run perf` says which one it used now, and defaults to
+the machine's GPU; the rows above are comparable with each other, and the last
+two are the page as it stands.
+| the page today, Enhance on (96) | 40.6 ms | 33.4 ms | 50.1 ms | 83 ms | 237/240 |
 
 Fifteen marks went into the quiet tier with the water and nothing moved: the
 tier's cost is the card's own filters, not the number of animations, and the
