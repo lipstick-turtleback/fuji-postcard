@@ -137,6 +137,146 @@ const marks = async () =>
   );
 
 const rows = [];
+const ruleRows = [];
+
+/* A printed rule may fade. It may not stop.
+
+   The gilded frame is a gradient at .55 stroke-opacity, and where it crosses a
+   pale cherry blossom the gilt alone is barely a line at all: the frame read as
+   four segments meeting at corners rather than one line the picture passes
+   behind. Nothing in the suite could see anything of the kind, because every
+   other test asks about geometry — where a mark is, what it touches — and this
+   is a question about ink.
+
+   So the plate's printed rules are walked along their own length, once per
+   unit, and at each step the pixel under the rule is compared with the pixels
+   just off each side of it — the ground the rule is lying on, in the same
+   frame. Twelve consecutive steps on which the rule is within RULE_GONE of
+   both of its grounds is a rule that has stopped, not one that has faded.
+
+   Which marks are "printed rules" is said by the artwork, not guessed here:
+   they carry class="print-rule" where they are drawn. Guessing was tried
+   first, and it cannot tell a printed rule from a line that lies across two
+   grounds on purpose — the dark underside of the branch is quiet against the
+   branch for half its length because that is what an underside is, and the
+   lake's edge is hidden where the reeds stand in front of it, which is what an
+   edge behind things is. Both were reported as broken. A pixel measurement can
+   see that ink is missing; only the drawing knows whether that was intended.
+
+   The measure is a colour distance, not a contrast ratio. The type test above
+   uses WCAG because letterforms are legible through luminance; a line is seen
+   through colour. The frame's gilded rule over the mountain's mauve slope is
+   1.20:1 in luminance — by the ratio, gone — and it is plainly there, because
+   gold and mauve are not the same colour. Reading only brightness would have
+   reported a defect that does not exist. And there is no floor on how quiet a
+   printed rule may be overall, for the same reason the walk is short: the
+   marks in it are the ones the drawing itself calls print. */
+const RULE_GONE = 20;
+const RULE_RUN = 12;
+const colourDistance = (a, b) =>
+  Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
+
+const rules = async (face) =>
+  JSON.parse(
+    await evaluate(`(() => {
+      const out = [];
+      const sel = ${JSON.stringify(`.face.${face} svg .print-rule`)};
+      for (const el of document.querySelectorAll(sel)) {
+        const cs = getComputedStyle(el);
+        if (!cs.stroke || cs.stroke === 'none') continue;
+        if (cs.fill !== 'none') continue;
+        if (cs.strokeDasharray && cs.strokeDasharray !== 'none') continue;
+        const w = parseFloat(cs.strokeWidth);
+        if (!(w > 0) || w > 2.2) continue;
+        if (typeof el.getTotalLength !== 'function') continue;
+        const len = el.getTotalLength();
+        if (!isFinite(len) || len < 60) continue;
+        const ctm = el.getScreenCTM();
+        if (!ctm) continue;
+        // one sample per unit along the rule: a blossom is fifteen units wide,
+        // and a walk that steps nine units at a time lands two samples inside
+        // it and calls the gap a blip
+        const step = Math.min(1, len / 4000);
+        const pts = [];
+        for (let s = 0; s <= len; s += step) {
+          const p = el.getPointAtLength(s);
+          const q = el.getPointAtLength(Math.min(len, s + step));
+          pts.push([p.x, p.y, q.x, q.y]);
+        }
+        out.push({
+          face: ${JSON.stringify(face)},
+          name:
+            el.tagName.toLowerCase() +
+            ' ' +
+            ((el.getAttribute('d') || '').slice(0, 12) ||
+              (el.getAttribute('x') + ',' + el.getAttribute('y') + ' ' + el.getAttribute('width') + 'x' + el.getAttribute('height'))),
+          w,
+          len,
+          pts,
+          m: [ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f],
+        });
+      }
+      return JSON.stringify(out);
+    })()`),
+  );
+
+const walkRules = async (face, at) => {
+  for (const r of await rules(face)) {
+    const [a, b, c, d, e, f] = r.m;
+    const px = (x, y) => [(a * x + c * y + e) * SCALE, (b * x + d * y + f) * SCALE];
+    const off = (r.w / 2 + 2.5) * SCALE;
+    const seen = [];
+    for (const [x, y, x2, y2] of r.pts) {
+      // a rule that runs off the plate is a bleed, and the wall outside the
+      // card is not its ground
+      if (x < 10 || x > 890 || y < 10 || y > 590) continue;
+      const [sx, sy] = px(x, y);
+      const [tx, ty] = px(x2, y2);
+      const L = Math.hypot(tx - sx, ty - sy) || 1;
+      const nx = (-(ty - sy) / L) * off;
+      const ny = ((tx - sx) / L) * off;
+      const here = at(Math.round(sx), Math.round(sy));
+      const g1 = at(Math.round(sx + nx), Math.round(sy + ny));
+      const g2 = at(Math.round(sx - nx), Math.round(sy - ny));
+      /* A line is seen when it differs from what lies beside it — on either
+         side. Where a rule crosses the edge of another mark the two sides are
+         not the same ground at all, one bright and one dark, and averaging
+         them invents a ground the line was never drawn on: the frame's right
+         rule over the far shore's bright edge measured 1.00:1 against such an
+         average while being plainly visible against both of them. */
+      const cr = Math.max(colourDistance(here, g1), colourDistance(here, g2));
+      seen.push({ cr, x, y, here, g1, g2 });
+    }
+    if (!seen.length) continue;
+    /* The median is not a threshold here — it is what the report quotes, and
+       it is the number that tells a rule which has gone in one place from a
+       rule that has been drawn quietly all the way round. */
+    const sorted = seen.map((o) => o.cr).sort((p, q) => p - q);
+    const median = sorted[sorted.length >> 1];
+    let run = 0;
+    let worstRun = 0;
+    let worstAt = null;
+    for (const o of seen) {
+      if (o.cr < RULE_GONE) {
+        run++;
+        if (run > worstRun) {
+          worstRun = run;
+          worstAt = [Math.round(o.x), Math.round(o.y)];
+        }
+      } else run = 0;
+    }
+    ruleRows.push({
+      face,
+      name: r.name,
+      len: Math.round(r.len),
+      median,
+      weakest: sorted[0],
+      worstRun,
+      worstAt,
+    });
+  }
+};
+
 const measure = async (face) => {
   const shot = decodePng(
     Buffer.from((await send('Page.captureScreenshot', { format: 'png' })).data, 'base64'),
@@ -194,6 +334,7 @@ const measure = async (face) => {
     }
     rows.push({ ...it, bg, ink, r: ratio(ink, bg) });
   }
+  await walkRules(face, at);
 };
 
 await measure('front');
@@ -209,16 +350,22 @@ for (const r of rows)
     problems.push(
       `${r.face}: "${r.text}" (${r.size}px) is ${r.r.toFixed(2)}:1 — ink ${r.ink.join(',')} on ${r.bg.join(',')} — needs ${FLOOR}:1`,
     );
+for (const r of ruleRows)
+  if (r.worstRun >= RULE_RUN)
+    problems.push(
+      `${r.face}: the rule "${r.name}" (${r.len} u long) stops for ${r.worstRun} units around [${r.worstAt.join(', ')}] — ${r.weakest.toFixed(0)} of colour from its own ground where it stops, against ${r.median.toFixed(0)} over the rest of it, and a printed rule needs ${RULE_GONE}`,
+    );
 if (exceptions.length)
   problems.push(`${exceptions.length} page exception(s): ${exceptions.join(' | ')}`);
 
 close();
 
 const worst = rows.slice(0, 3).map((r) => `${r.text} ${r.r.toFixed(2)}`);
+const longestRun = ruleRows.reduce((m, r) => Math.max(m, r.worstRun), 0);
 if (problems.length) {
   console.error(`test-ink: ${problems.length} problem(s)\n${problems.join('\n')}`);
   process.exit(1);
 }
 console.log(
-  `test-ink: ${rows.length} marks measured, all at or above ${FLOOR}:1 — faintest ${worst.join(' · ')}`,
+  `test-ink: ${rows.length} marks measured, all at or above ${FLOOR}:1 — faintest ${worst.join(' · ')} · ${ruleRows.length} printed rules walked end to end, all continuous — longest quiet stretch ${longestRun} u`,
 );

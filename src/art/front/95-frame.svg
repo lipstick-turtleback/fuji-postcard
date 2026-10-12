@@ -9,18 +9,20 @@
   gilt alone, so the same two rects go down first as a dark line. Over the
   night sky the ink hides under the gilt and nothing changes; over the petals
   the ink is what the eye follows, and the rule stays continuous the whole way
-  round.
+  round. The ink is drawn a little wider than the gilt on purpose: a printed
+  rule has an edge, and the two dark shoulders are what carry that edge across
+  a bright ground, where a narrower line under the gold would still be swamped.
   -->
         <g fill="none" stroke="#151b2c">
-          <rect x="14" y="14" width="872" height="572" rx="4"
-                stroke-width="1.6" stroke-opacity=".38"/>
-          <rect x="21" y="21" width="858" height="558" rx="3"
-                stroke-width=".7" stroke-opacity=".24"/>
+          <rect x="14" y="14" class="print-rule" width="872" height="572" rx="4"
+                stroke-width="3.2" stroke-opacity=".5"/>
+          <rect x="21" y="21" class="print-rule" width="858" height="558" rx="3"
+                stroke-width="1.6" stroke-opacity=".35"/>
         </g>
         <g fill="none" stroke="url(#goldFrame)">
-          <rect x="14" y="14" width="872" height="572" rx="4"
+          <rect x="14" y="14" class="print-rule" width="872" height="572" rx="4"
                 stroke-width="1.6" stroke-opacity=".55"/>
-          <rect x="21" y="21" width="858" height="558" rx="3"
+          <rect x="21" y="21" class="print-rule" width="858" height="558" rx="3"
                 stroke-width=".7" stroke-opacity=".3"/>
         </g>
         <g id="edgeGlint" fill="none" stroke="url(#goldShine)" stroke-width="2"

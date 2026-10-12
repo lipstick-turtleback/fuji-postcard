@@ -151,8 +151,8 @@
                a line of type wants to sit in the first place. -->
           <g font-family="Georgia,'Times New Roman',serif">
             <g stroke="url(#gold)" opacity=".38" fill="none">
-              <path d="M118 546 H782" stroke-width=".7"/>
-              <path d="M118 546 H782" stroke="url(#goldShine)" stroke-width="1.1"
+              <path d="M118 546 H782" class="print-rule" stroke-width=".7"/>
+              <path d="M118 546 H782" class="print-rule" stroke="url(#goldShine)" stroke-width="1.1"
                     opacity=".85"/>
               <path d="M106 546 l4 -3.4 4 3.4 -4 3.4 z M786 546 l4 -3.4 4 3.4 -4 3.4 z"
                     stroke="none" fill="url(#gold)" opacity=".55"/>

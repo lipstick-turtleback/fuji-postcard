@@ -72,7 +72,7 @@ scripts/
   test-contrast.mjs    keep the palette above WCAG AA
   test-layout.mjs      drive headless Chrome at real window sizes
   test-plate.mjs       keep the lettering and the placed marks off the rules
-  test-ink.mjs         measure the contrast of the type printed on the card
+  test-ink.mjs         measure the type's contrast, and that printed rules run
   test-cast.mjs        no mark in the cast is the same mark twice
   test-visible.mjs     hide every placed mark in turn and see whether the page notices
   test-export.mjs      check the .svg the save button hands out, and photograph it
@@ -412,6 +412,28 @@ first version skipped a mark that painted nothing, on the grounds that the
 turned-away face cannot be measured; that is how a postmark whose type had been
 translated twice — and was off the plate — passed. A mark on the face being
 looked at that paints nothing is now a failure. 43 marks measured.
+
+The same screenshot then walks the plate's **printed rules** end to end. The
+gilded frame is a gradient at .55, and where it crossed a pale cherry blossom the
+gilt alone was barely a line: the frame read as four segments meeting at corners
+rather than one line the picture passes behind. It is drawn as ink under the gilt
+now — the same two rects, a dark line a little wider than the gold, because a
+printed rule has an edge and those two shoulders are what carry it across a
+bright ground. The check walks each rule once per unit and compares the pixel
+under it with the pixels just off each side, in the same frame; twelve
+consecutive steps within 20 of colour from both grounds is a rule that has
+stopped, not one that has faded. Which marks count is said by the artwork: they
+carry `class="print-rule"` where they are drawn. Guessing was tried first, and it
+cannot tell a printed rule from a line that lies across two grounds on purpose —
+the branch's dark underside is quiet against the branch for half its length
+because that is what an underside is, and the lake's edge is hidden where the
+reeds stand in front of it because that is what an edge behind things is. The
+measure is a colour distance, not a contrast ratio: the frame's rule over the
+mountain's mauve slope is 1.20:1 in luminance and plainly there, gold against
+mauve, and a luminance-only check reports a defect that does not exist. Turning
+the frame's strokes off reports `stops for 687 units … 4 of colour from its own
+ground, against 118 over the rest of it`. 10 rules walked; the longest quiet
+stretch on the card today is 1 unit.
 
 `scripts/test-export.mjs` checks the file SAVE THE PLATE hands out. The export
 is its own program — it clones one face, gives it an xmlns and a size, and
