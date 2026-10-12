@@ -266,6 +266,33 @@ mountain's outline two units at a time and failing any step that turns harder
 than 30°: the crater's lip survives that at 24.5°, the old chords did not at
 58.3°. The rest are recorded in the comments beside the paths that were wrong.
 
+Three more came after, and they were not shape faults. The back's stamp printed
+its value at y 102 when its paper ends at y 100, so the 84 sat out on the
+perforations in the card's brown rather than the stamp's blue. The boatman's pole
+was one straight piece of ink from his hand to the lake, the part under the
+surface exactly as dark as the part above it, which makes the mark that carries
+the whole action deny it: a pole in water is seen through water, and the
+submerged piece is .55 now. And two of the back's address rules ran straight
+through the little Fuji, leaving a wireframe — a rule through a picture is a rule
+through a window. The rules stop six units short of it now, because a printed
+picture has a clear zone.
+
+That last one was first fixed the other way, by filling the mountain's body with
+the paper's colour and running the rules under it, which is what a printed
+vignette physically does. It broke `test-ink`, which walks every printed rule end
+to end and reported both of them as broken — the right answer about a page that
+had quietly become a lie, since a rule you cannot see is a rule that is not
+there.
+
+The waterline is why two of those three were wrong, and it cuts both ways, which
+is why it is written down here rather than only beside the paths. A mark that
+goes _into_ the water — the pole, an oar, a hand — is seen through water below
+the surface and has to dim there. A mark that _stands_ in the water, like the
+gate's posts, is not seen through water at all: it stops at the surface, ringed
+by ripples, and what continues below is its reflection, dimmer and paler, which
+is how the torii is already drawn. Applying the first rule to the second would be
+the mistake, and at a glance they are the same picture.
+
 ## Commands
 
 ```bash
