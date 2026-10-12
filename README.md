@@ -33,7 +33,7 @@ See [docs/changelog.md](docs/changelog.md) for what actually changed, in order �
 
 ## The repository
 
-The page is one file because that is the point — but one 5,286-line file is
+The page is one file because that is the point — but one 5,300-line file is
 impossible to review. So the source is split into parts, and the single file is
 the build artefact. The parts are real: the JavaScript is ES modules bundled by
 rollup into one inlined IIFE per entry, not two files dropped into two script

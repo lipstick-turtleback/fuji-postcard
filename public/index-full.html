@@ -1129,32 +1129,42 @@ html[data-enhance="on"] .bloom {
 }
 
 /* The boat lies on the water, so it bobs whether or not anybody switched the
-   laminate on. What Enhance changes is how lively the water is, not whether
-   the lake is alive: off, the hull moves better than half a unit over
-   thirteen seconds; on, the same motion at twice the amplitude and half the
-   period. Two keyframe sets rather than one with a scaled amplitude, because
-   CSS cannot scale a keyframe. */
-.boat {
+   laminate on. What Enhance changes is how lively the water is, not whether the
+   lake is alive: off, the hull comes up about a unit and rolls a third of a
+   degree over thirteen seconds; on, the same motion at twice the amplitude and
+   half the period. Two keyframe sets rather than one with a scaled amplitude,
+   because CSS cannot scale a keyframe.
+
+   The bob belongs to the hull, the man and the pole — not to the whole boat.
+   The wake, the ripples off the pole and the smears under the hull are water,
+   and they used to ride the bob with the hull: the same mistake as a floating
+   body whose reflection stayed behind, pointed the other way. The roll is
+   hinged at the bottom of the group, which is where the boatman's pole enters
+   the lake. A boat poled from the stern rocks about that point, so the bow
+   travels further than the stern and the pole stays in the water. */
+.hull {
   animation: bob 13s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
 }
-html[data-enhance="on"] .boat {
+html[data-enhance="on"] .hull {
   animation-name: bobLively;
   animation-duration: 6.5s;
 }
 @keyframes bob {
   from {
-    transform: translate(0, 0);
+    transform: translate(0, 0) rotate(-0.3deg);
   }
   to {
-    transform: translate(1.2px, -0.6px);
+    transform: translate(0.9px, -0.9px) rotate(0.3deg);
   }
 }
 @keyframes bobLively {
   from {
-    transform: translate(0, 0);
+    transform: translate(0, 0) rotate(-0.6deg);
   }
   to {
-    transform: translate(6px, -3px);
+    transform: translate(1.8px, -1.8px) rotate(0.6deg);
   }
 }
 /* The man shifts his weight while the pole stays planted. 1.1 degrees about
@@ -1633,7 +1643,7 @@ html[data-enhance="off"] .foil {
 html[data-enhance="off"]
   .face
   svg
-  *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.boat):not(
+  *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.hull):not(
     .boatman
   ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
     .petal-sway
@@ -2981,16 +2991,20 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           </g>
 
           <!-- boat. The outer group is the boat going across the lake; the
-               inner one is the water under it. They cannot share an element: a
-               CSS transform replaces an SVG transform attribute rather than
-               composing with it, and two animations on one element would fight
-               over the same property with the later one winning. -->
+               middle one is the picture of the boat; the inner one is the hull
+               with the man and his pole, which is the part that rides the
+               water. They cannot share an element: a CSS transform replaces an
+               SVG transform attribute rather than composing with it, and two
+               animations on one element would fight over the same property with
+               the later one winning. The wake, the ripples and the smears hang
+               off the middle group rather than the inner one, because they are
+               lake and not boat. -->
           <g
             class="drift"
             style="animation-duration: 163s; animation-delay: -61s; --dx: -16px; --dy: 0"
           >
             <g class="boat">
-            <g fill="#1b2036">
+            <g class="hull" fill="#1b2036">
               <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
               <!-- The man is one group, so that later he can move on his
                    own: the hull bobs with the water and he shifts his weight
@@ -4493,7 +4507,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
         }
         const t = r.cssText;
         if (
-          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-|\.branch|\.bloom|\.ring|\.band|\.crest|\.drift/.test(
+          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.hull|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-|\.branch|\.bloom|\.ring|\.band|\.crest|\.drift/.test(
             t,
           )
         )

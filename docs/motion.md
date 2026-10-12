@@ -73,14 +73,18 @@ the default tier and going nowhere: the hull rose and fell by 1.2 units over
 thirteen seconds and the two birds by 0.4 over eight and twelve, which is a
 photograph of a boat and a bracket for a duck. They travel now — the hull 16
 units across the lake on 163 s, a third of its own length a minute; the ducks 9
-and 11 on 133.6 s and 149.9 s, each with the smear the water keeps of it in the
-same group. And the water they disturb is slower than they are, which is the
-half that makes the other half legible: the wake and the three ripples off the
-paddle are given 7 units in the other direction on 118.4 s, so they travel 9
-units while the hull travels 16, and the two lines the ducks leave run 5 and 6
-units on periods longer than the birds'. A mark attached to a floating body and
-a mark the body leaves behind are different things, and the difference is only
-ever visible in how far each one goes.
+and 11 on 133.6 s and 149.9 s. Each bird also rides a swell of its own, 1.9 units
+of rise over 2.2° of tilt for the nearer one and 1.4 units over 1.7° for the
+farther, and the smear the lake keeps of it rides with it; the hull rocks through
+1.5 units and a third of a degree, hinged where the boatman's pole enters the
+water, and the wake, the ripples off the paddle and the smears under the hull hang
+off the group outside that one, because they are lake and not boat. And the water
+they disturb is slower than they are, which is the half that makes the other half
+legible: the wake and the three ripples off the paddle are given 7 units in the
+other direction on 118.4 s, so they travel 9 units while the hull travels 16, and
+the two lines the ducks leave run 5 and 6 units on periods longer than the birds'.
+A mark attached to a floating body and a mark the body leaves behind are different
+things, and the difference is only ever visible in how far each one goes.
 
 The periods were picked against what the rhythm probe finds within a hand's
 width, which at the boat means the hull's 13, the man's 7.5, the wake's 19 and
@@ -107,6 +111,19 @@ only in a number written beside them — so the probe records what each group
 holds. Shown to fire by putting the wake's counter-drift back to the hull's own
 16 units: `the wake 16.0 u vs the hull 16.0 u`.
 
+**The lake does not turn over.** A wake, a ripple, a ring and the long swell move
+by translating, breathing and stretching, and none of them may sit inside a group
+whose animation turns it — a wake that rolls with the hull is paint on the hull,
+not water the hull sits in. A reflection is held to no such rule and rides the
+bird it is a picture of: the ducks' smears turn with the ducks, because a
+reflection is an image of the body and a wake is not. The ancestors are read off
+their keyframes rather than off a live transform, because a bob passes through the
+neutral phase twice a cycle and a check that samples one instant reports success
+whenever it happens to look at the wrong moment — the first version of this check
+did exactly that, and passed the defect it was written for. Shown to fire by
+putting the bob back on the whole boat, which is where it used to be:
+`.wake rides .boat · .ripple rides .boat`.
+
 Rule 2 applies to time as much as to space: **no two animated things in a
 group may share a period, and no period may be a multiple of another in the
 same group.** The existing set already obeys this — 46/62/38 s for clouds,
@@ -127,7 +144,7 @@ deleted, not tuned.
 | thing                                    | cause                                      | motion                                                                                                                  | period                                                | default?                          |
 | ---------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------- |
 | petals on the water                      | the water under them, and the air over it  | bob 1.6–2.6 u of rise over 1.8–3.4° of tilt, with a 0.6–1.2 u slide; and, separately, a drift of 7–12 u across the lake | bob 11, 13.5, 17.5, 23.5 s; drift 73, 101, 109, 139 s | **yes**                           |
-| the boat's hull                          | water                                      | ±0.5 u rise and fall, 0.3° roll                                                                                         | 9.5, 13 s                                             | **yes**                           |
+| the boat's hull                          | water                                      | 1.5 u of travel and 0.6° of roll, hinged where the pole enters the water                                                | 13 s                                                  | **yes**                           |
 | the boatman                              | he is rowing                               | torso rotates 1.1° about the hips, arms follow                                                                          | 7.5 s                                                 | **yes**                           |
 | the ducks                                | the swell passing under them               | ±1.9 u of rise over ±2.2° of tilt with a 0.8 u set; the farther bird ±1.4 u over ±1.7°; no two in phase                 | 8.3, 11.9 s                                           | **yes**                           |
 | the boat, crossing                       | it is being poled                          | 16 u across the lake, easing back and forth so the return is the next stroke                                            | 163 s                                                 | **yes**                           |

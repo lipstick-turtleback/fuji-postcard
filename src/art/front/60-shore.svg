@@ -80,16 +80,20 @@
           </g>
 
           <!-- boat. The outer group is the boat going across the lake; the
-               inner one is the water under it. They cannot share an element: a
-               CSS transform replaces an SVG transform attribute rather than
-               composing with it, and two animations on one element would fight
-               over the same property with the later one winning. -->
+               middle one is the picture of the boat; the inner one is the hull
+               with the man and his pole, which is the part that rides the
+               water. They cannot share an element: a CSS transform replaces an
+               SVG transform attribute rather than composing with it, and two
+               animations on one element would fight over the same property with
+               the later one winning. The wake, the ripples and the smears hang
+               off the middle group rather than the inner one, because they are
+               lake and not boat. -->
           <g
             class="drift"
             style="animation-duration: 163s; animation-delay: -61s; --dx: -16px; --dy: 0"
           >
             <g class="boat">
-            <g fill="#1b2036">
+            <g class="hull" fill="#1b2036">
               <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
               <!-- The man is one group, so that later he can move on his
                    own: the hull bobs with the water and he shifts his weight

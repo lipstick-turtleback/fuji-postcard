@@ -75,7 +75,7 @@ const WANT = [
   'wake',
   'water-b',
   'refl',
-  'boat',
+  'hull',
   'boatman',
   'duck',
   'wader',
@@ -463,6 +463,44 @@ ok(
     )
     .join(' · '),
 );
+
+/* The lake does not turn over. A wake, a ripple, a ring and the long swell move
+   by translating, breathing and stretching; none of them may sit inside a group
+   whose animation turns it, because then they would be paint on the hull rather
+   than water the hull sits in. A reflection is held to no such rule and rides the
+   bird it is a picture of — the ducks' smears turn with the ducks, and that is
+   right.
+
+   The ancestors are read off their keyframes, not off a live transform: a bob
+   passes through the neutral phase twice a cycle, and a check that samples one
+   instant reports success whenever it happens to look at the wrong moment. */
+const riding = JSON.parse(
+  await living.evaluate(`(() => {
+    const LAKE = ['wake', 'ripple', 'ring', 'water-b'];
+    const turns = (el) => {
+      for (const a of el.getAnimations()) {
+        if (!a.effect || a.effect.target !== el || typeof a.effect.getKeyframes !== 'function') continue;
+        for (const kf of a.effect.getKeyframes()) {
+          const t = kf.transform;
+          if (typeof t === 'string' && /(^|[^a-z])rotate(3d)?\\(/.test(t)) return a.effect.target;
+        }
+      }
+      return null;
+    };
+    const bad = [];
+    for (const c of LAKE)
+      for (const el of document.querySelectorAll('.face svg .' + c))
+        for (let a = el.parentElement; a && a.tagName.toLowerCase() !== 'svg'; a = a.parentElement) {
+          const at = turns(a);
+          if (at) {
+            bad.push('.' + c + ' rides .' + ((at.getAttribute('class') || at.tagName) + '').split(' ')[0]);
+            break;
+          }
+        }
+    return JSON.stringify(bad);
+  })()`),
+);
+ok('nothing that is lake rides a mark that turns', riding.length === 0, riding.join(' · '));
 
 /* The branch and its flowers move in still air too, at a fifth of the amplitude
    and an eighth of the speed: the air that lets a petal go also holds the branch

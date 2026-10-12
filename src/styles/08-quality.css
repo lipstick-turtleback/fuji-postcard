@@ -77,7 +77,7 @@ html[data-enhance="off"] .foil {
 html[data-enhance="off"]
   .face
   svg
-  *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.boat):not(
+  *:not(.mist-a):not(.mist-b):not(.ripple):not(.wake):not(.water-b):not(.refl):not(.hull):not(
     .boatman
   ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
     .petal-sway

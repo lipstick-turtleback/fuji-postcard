@@ -69,6 +69,17 @@ record, this sitting only:
 **The rule:** the negative test is not a formality after the fact. It is the half
 of the work that turns "I added a check" into "the check is wired to the thing".
 
+One entry worth more than the rest is not in that table, because it did not fire.
+The first version of the rule that no lake mark may ride a group that turns walked
+the ancestors and read their _computed_ transform. The defect was put back and the
+check passed. A bob runs through the neutral phase twice a cycle, so the check was
+right about half the time and green all the time. The version that works reads the
+ancestor's keyframes, which have no phase.
+
+**The rule, extended:** a negative test that passes is not a failed experiment, it
+is a finding about the check. Ask what the check samples, and whether the defect is
+actually present at the instant being sampled.
+
 ## 4. Two marks keeping step is a defect, because the eye counts pairs
 
 The rhythm rule: two animated marks within 120 artwork units must not share a
