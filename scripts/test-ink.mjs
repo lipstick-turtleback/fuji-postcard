@@ -193,6 +193,13 @@ const rules = async (face) =>
         if (!isFinite(len) || len < 60) continue;
         const ctm = el.getScreenCTM();
         if (!ctm) continue;
+        // Sample points are walked in the element's own space, because that is
+        // where getPointAtLength lives, and handed up a second time in the
+        // plate's: the tanzaku is rotated and the postmark is translated, and a
+        // report that says a rule stopped at [-28,-8] is pointing at a place
+        // that does not exist on the card.
+        const root = el.ownerSVGElement.getScreenCTM();
+        const mp = ctm.multiply(root.inverse());
         // one sample per unit along the rule: a blossom is fifteen units wide,
         // and a walk that steps nine units at a time lands two samples inside
         // it and calls the gap a blip
@@ -201,7 +208,8 @@ const rules = async (face) =>
         for (let s = 0; s <= len; s += step) {
           const p = el.getPointAtLength(s);
           const q = el.getPointAtLength(Math.min(len, s + step));
-          pts.push([p.x, p.y, q.x, q.y]);
+          const pp = p.matrixTransform(mp);
+          pts.push([p.x, p.y, q.x, q.y, pp.x, pp.y]);
         }
         out.push({
           face: ${JSON.stringify(face)},
@@ -226,10 +234,13 @@ const walkRules = async (face, at) => {
     const px = (x, y) => [(a * x + c * y + e) * SCALE, (b * x + d * y + f) * SCALE];
     const off = (r.w / 2 + 2.5) * SCALE;
     const seen = [];
-    for (const [x, y, x2, y2] of r.pts) {
+    for (const [x, y, x2, y2, bx, by] of r.pts) {
       // a rule that runs off the plate is a bleed, and the wall outside the
-      // card is not its ground
-      if (x < 10 || x > 890 || y < 10 || y > 590) continue;
+      // card is not its ground. The test is on the plate's coordinates, not the
+      // element's: the postmark's killer lines live at x -28 to 28 in a group
+      // that sits at x 792, and a clip written in local numbers throws away a
+      // mark that is squarely on the card.
+      if (bx < 10 || bx > 890 || by < 10 || by > 590) continue;
       const [sx, sy] = px(x, y);
       const [tx, ty] = px(x2, y2);
       const L = Math.hypot(tx - sx, ty - sy) || 1;
@@ -245,7 +256,8 @@ const walkRules = async (face, at) => {
          rule over the far shore's bright edge measured 1.00:1 against such an
          average while being plainly visible against both of them. */
       const cr = Math.max(colourDistance(here, g1), colourDistance(here, g2));
-      seen.push({ cr, x, y, here, g1, g2 });
+      // reported in plate coordinates, so a failure names a place on the card
+      seen.push({ cr, x: bx, y: by, here, g1, g2 });
     }
     if (!seen.length) continue;
     /* The median is not a threshold here — it is what the report quotes, and
