@@ -394,6 +394,12 @@ const travel = JSON.parse(
         const bb = 'getBBox' in el ? el.getBBox() : { width: 0, height: 0 };
         rows.push({
           cls: el.getAttribute('class') || el.tagName,
+          // What a group is holding, which is how a mark that has no class of
+          // its own — every drift group is just a drift — can still be named.
+          kids: [...el.children]
+            .map((c) => (c.getAttribute('class') || '').split(/s+/)[0])
+            .join(' ')
+            .trim(),
           u: Math.hypot(Math.max(...es) - Math.min(...es), Math.max(...fs) - Math.min(...fs)),
           side: Math.max(bb.width, bb.height),
         });
@@ -423,6 +429,35 @@ ok(
     .slice(1, 4)
     .map((r) => `${r.cls.split(' ')[0]} ${r.u.toFixed(1)}`)
     .join(', ')}`,
+);
+
+/* The water a moving body disturbs travels less than the body that disturbed it.
+   That is the whole of the difference between a mark attached to a floating thing
+   and a mark the thing leaves behind, and it is the half of the picture that is
+   easiest to lose: give the wake the hull's 16 units and the boat stops being
+   poled and starts being glued to its own wake.
+
+   The pairs are found by what each drift group holds, because a drift group is
+   otherwise anonymous — they all carry one class and one keyframe and differ only
+   in a number written beside them. A lookup that finds nothing is a failure, not
+   a pass: a check that quietly compares nothing reports success forever. */
+const driftRow = (kid) => travel.find((r) => r.cls === 'drift' && r.kids.includes(kid));
+const waterPairs = [
+  ['the wake', 'wake', 'the hull', 'boat'],
+  ['the lines the ducks leave', 'ring', 'a duck', 'reflection'],
+].map(([water, wk, body, bk]) => ({ water, body, w: driftRow(wk)?.u, b: driftRow(bk)?.u }));
+const keepingStep = waterPairs.filter(
+  (p) => p.w === undefined || p.b === undefined || p.w > 0.8 * p.b,
+);
+ok(
+  'the water a body disturbs travels less than the body that disturbed it',
+  keepingStep.length === 0,
+  waterPairs
+    .map(
+      (p) =>
+        `${p.water} ${p.w === undefined ? 'nothing found' : `${p.w.toFixed(1)} u`} vs ${p.body} ${p.b === undefined ? 'nothing found' : `${p.b.toFixed(1)} u`}`,
+    )
+    .join(' · '),
 );
 
 /* The branch and its flowers move in still air too, at a fifth of the amplitude
