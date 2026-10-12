@@ -611,8 +611,9 @@ html[data-enhance="on"] .bird.b3 {
    a hand's width over a minute or more, easing back and forth, so the return is
    not a return but the next gust. Nothing here repeats at an even interval —
    see Floaters.data.mjs for what these four periods were chosen against. */
-.floater-drift {
-  animation: drift-on-water 101s ease-in-out infinite alternate;
+.floater-drift,
+.drift {
+  animation: drift-on-water var(--drift-dur, 101s) ease-in-out infinite alternate;
 }
 @keyframes drift-on-water {
   from {
@@ -622,6 +623,23 @@ html[data-enhance="on"] .bird.b3 {
     transform: translate(var(--dx, 9px), var(--dy, 1px));
   }
 }
+/* The same keyframe, now doing more than carry petals. A duck that sits at one
+   point for the whole view is a bracket, and a boat that is being poled across a
+   lake and never gets anywhere is a photograph of one. So the boat runs 16 units
+   over 163 s — a third of its own length a minute, slow enough that you find the
+   motion against the reeds rather than watch it — and the two ducks run 9 and 11
+   units on their own longer clocks, each with the smear the water keeps of it in
+   the same group, because a floating thing whose reflection stayed put would be
+   the first wrong thing anybody noticed.
+
+   The water marks are the other half of the pair, and they are slower on
+   purpose. The wake under the hull is not part of the hull: it was made where
+   the paddle went in and the boat has moved on, so it gets a counter-drift of 7
+   units on a period of its own and travels 9 units while the hull travels 16.
+   The two lines the ducks leave run 5 and 6 units on periods longer than the
+   birds'. That is the difference between a mark attached to a floating body and
+   a mark the body leaves behind, and it is the only place in the picture where
+   the difference is drawn. */
 /* Two ducks, two periods. They sit eight units apart, so a shared period
    would read as one bird reflected from the other. */
 .duck {

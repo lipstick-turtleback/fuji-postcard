@@ -24,14 +24,14 @@ not break, and how change is verified here.
 | **`F`** or click the card    | turn it over: the back is a real postcard, addressed and stamped                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | **`S`** or Save the plate    | serialises the face you are looking at out of the DOM and downloads it as a standalone `.svg`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | **`M`** or Play              | a ~5-minute soundtrack: koto-ish plucks on the D hirajōshi scale, a lake drone, a dotted-eighth delay. **Nothing plays until you ask** — no autostart, and `?silent` runs the whole piece with the output closed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| **Enhance on/off**           | the effects switch, **off by default**. On adds the holographic laminate and its glow, the card's sway, a faster shower, the reeds, the birds' crossing and the paper grain — about 2.4× the frame rate. Off leaves the lake: the mist, the glitter band's six crests each on its own clock, the wake, the boat and the man poling it, two ducks, a heron, four petals lying on the water, three birds in the far sky, ten petals coming down off the branch, slowly, the branch itself swaying with every blossom on it swinging its own way, three places where something came up under the surface, and the water's own mirrors — the mountain, the gate, what the ducks leave — with the rings where the posts and the heron stand in it and the bands the surface lays across the gate |
+| **Enhance on/off**           | the effects switch, **off by default**. On adds the holographic laminate and its glow, the card's sway, a faster shower, the reeds, the birds' crossing and the paper grain — about 2.4× the frame rate. Off leaves the lake: the mist, the glitter band's six crests each on its own clock, the wake, the boat crossing the lake under a man poling it, two ducks swimming off and the lines they leave behind, a heron, four petals lying on the water, three birds in the far sky, ten petals coming down off the branch, slowly, the branch itself swaying with every blossom on it swinging its own way, three places where something came up under the surface, and the water's own mirrors — the mountain, the gate, what the ducks leave — with the rings where the posts and the heron stand in it and the bands the surface lays across the gate |
 | **`prefers-reduced-motion`** | every animation is off, and the card stops moving entirely — `.face svg *` with `!important`, not a list of names, so the promise cannot go stale and does not lapse when Enhance is switched on                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 See [docs/motion.md](docs/motion.md) for what moves in the scene, how far, how slowly, and why each of those things moves at all.
 
 ## The repository
 
-The page is one file because that is the point — but one 5,239-line file is
+The page is one file because that is the point — but one 5,276-line file is
 impossible to review. So the source is split into parts, and the single file is
 the build artefact. The parts are real: the JavaScript is ES modules bundled by
 rollup into one inlined IIFE per entry, not two files dropped into two script
@@ -99,13 +99,13 @@ public/
 `src/` is the truth. Both files under `public/` are generated, in one run, from one
 string, and both are committed: the repo stays openable with a double-click, and
 `npm run check` fails if either has drifted from `src/`. `index-full.html` is the
-artwork with its argument — 165 markup comments, 58 CSS comment blocks and 35 JS
+artwork with its argument — 164 markup comments, 59 CSS comment blocks and 35 JS
 comment blocks. `index.html` is the same page with all of that taken out, the
 indentation trimmed, and the stylesheet and the two bundles put through esbuild's
 minifier: 122 KB rather than 251. The names are the point — a static host answers
 `/` with `index.html`, so the file every visitor downloads is the small one and no
 rewrite rule is needed to make that true. `test-build.mjs` proves the smaller one
-is the same document (1,134 nodes walked and compared), the same stylesheet (294
+is the same document (1,139 nodes walked and compared), the same stylesheet (294
 rules, selectors, keyframes and all) and the same picture (0 of 1,657,150 pixels
 differ). The counts in that sentence are the test's own output, and the test holds
 the document to them: change the artwork and the build fails until the sentence
@@ -361,8 +361,8 @@ is there.
 The tests run two at a time. `scripts/run-tests.mjs` takes the eighteen scripts
 and drives them in two lanes, which is a measured answer rather than a guess, and
 both figures below come from the same suite state on this machine: two lanes give
-244 seconds of work in 125 seconds of wall and every test still takes the time it
-takes alone, while four lanes give 714 seconds of work in 407 seconds of wall,
+247 seconds of work in 127 seconds of wall and every test still takes the time it
+takes alone, while four lanes give 643 seconds of work in 398 seconds of wall,
 because each test is a Chrome with its own renderer threads and they are all
 asking for the same cores. Before the runner the suite was a chain of `&&` in
 `package.json`: 3 minutes 54 seconds of wall against 35 seconds of work, the

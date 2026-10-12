@@ -79,8 +79,16 @@
             </g>
           </g>
 
-          <!-- boat -->
-          <g class="boat">
+          <!-- boat. The outer group is the boat going across the lake; the
+               inner one is the water under it. They cannot share an element: a
+               CSS transform replaces an SVG transform attribute rather than
+               composing with it, and two animations on one element would fight
+               over the same property with the later one winning. -->
+          <g
+            class="drift"
+            style="animation-duration: 163s; animation-delay: -61s; --dx: -16px; --dy: 0"
+          >
+            <g class="boat">
             <g fill="#1b2036">
               <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
               <!-- The man is one group, so that later he can move on his
@@ -141,17 +149,28 @@
                  ripples read: as something continually setting off, not as a
                  thing pulsing. The wake under the hull breathes more slowly
                  and drifts, because the boat is moving through the water and
-                 the water is not level with it. -->
-            <g class="wake" fill="none" stroke="#f2e6d4" stroke-opacity=".3" stroke-width="1.4">
-              <path d="M600 512 C618 517 646 517 662 512"/>
+                 the water is not level with it.
+
+                 All of it — the two wake arcs and the three ripples off the
+                 paddle — sits in a group of its own, and that group drifts the
+                 other way at 7 units against the hull's 16. This is the water,
+                 not the boat: the arcs were made where the paddle went in, and
+                 the boat has moved on. Net travel 9 units against the hull's
+                 16, which is the whole of the difference between a mark
+                 attached to a floating body and a mark the body leaves behind. -->
+            <g class="drift" style="animation-duration: 118.4s; animation-delay: -44s; --dx: 7px; --dy: 0">
+              <g class="wake" fill="none" stroke="#f2e6d4" stroke-opacity=".3" stroke-width="1.4">
+                <path d="M600 512 C618 517 646 517 662 512"/>
+              </g>
+              <g class="wake wake-b" fill="none" stroke="#f2e6d4" stroke-opacity=".15" stroke-width="1.1">
+                <path d="M592 516 C612 522 650 522 670 516"/>
+              </g>
+              <g fill="none" stroke="#f2e6d4" stroke-linecap="round">
+                <path class="ripple" d="M657 521 C661 522.6 669 522.6 673 521" stroke-opacity=".26" stroke-width="1.2"/>
+                <path class="ripple rb" d="M660 525 C663 526.2 669 526.2 672 525" stroke-opacity=".2" stroke-width="1.1"/>
+                <path class="ripple rc" d="M663 529 C665.5 530 670.5 530 673 529" stroke-opacity=".14" stroke-width="1"/>
+              </g>
             </g>
-            <g class="wake wake-b" fill="none" stroke="#f2e6d4" stroke-opacity=".15" stroke-width="1.1">
-              <path d="M592 516 C612 522 650 522 670 516"/>
-            </g>
-            <g fill="none" stroke="#f2e6d4" stroke-linecap="round">
-              <path class="ripple" d="M657 521 C661 522.6 669 522.6 673 521" stroke-opacity=".26" stroke-width="1.2"/>
-              <path class="ripple rb" d="M660 525 C663 526.2 669 526.2 672 525" stroke-opacity=".2" stroke-width="1.1"/>
-              <path class="ripple rc" d="M663 529 C665.5 530 670.5 530 673 529" stroke-opacity=".14" stroke-width="1"/>
             </g>
           </g>
 
@@ -277,22 +296,11 @@
           />
 
           <!-- Two ducks in open water, between the gate and the boatman,
-               where the water is widest. -->
+               where the water is widest. The bird, the smear the lake keeps of
+               it and the ring it leaves are all in the component, because which
+               of the three travels with the bird and which is left behind is the
+               drawing, not the bookkeeping. -->
           @GEN:Ducks@
-          <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
-            <path class="ring" style="--rdur: 15.2s; --rdelay: -6s" d="M382 522 h22"/>
-            <path class="ring" style="--rdur: 18.4s; --rdelay: -14s" d="M410 528 h18"/>
-          </g>
-          <!-- and what the water keeps of them. the smears are not the ducks and
-               do not follow them: a reflection on still-ish water breaks up and
-               settles on a longer clock than the bird it comes from, so these
-               have their own periods, slower than the ducks' 8.3 and 11.9. -->
-          <g fill="#141a2c" opacity=".16">
-            <ellipse class="reflection" style="--wob: .35px; --stretch: .05; --rdur: 32s; --rdelay: -12s"
-                     cx="392" cy="524" rx="7.5" ry="1.7"/>
-            <ellipse class="reflection" style="--wob: .3px; --stretch: .045; --rdur: 34.6s; --rdelay: -25s"
-                     cx="418" cy="530" rx="6.2" ry="1.4"/>
-          </g>
 
           @GEN:Heron@
           <!-- The heron stands in the water — it has ripples around its feet,

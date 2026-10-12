@@ -61,7 +61,13 @@ ok(
 
 /* The classes the lake is made of. Each has a cause written beside it in
    06-motion.css; the tests below ask that the cause is not switched off along
-   with the laminate, and that each mark is where the picture puts it. */
+   with the laminate, and that each mark is where the picture puts it.
+
+   Both drift classes are here, and `floater-drift` was not. The list is the
+   calm tier's promise, and the promise used to cover the petal's bob but not
+   the petal crossing the water — the same shape of defect 08-quality.css
+   records for the seven petals that were killed mid-air: an exemption list
+   written from memory rather than from what the picture claims. */
 const WANT = [
   'mist-a',
   'mist-b',
@@ -74,6 +80,8 @@ const WANT = [
   'duck',
   'wader',
   'floater',
+  'floater-drift',
+  'drift',
   'bird',
   'petal',
   'petal-sway',
@@ -395,7 +403,15 @@ const travel = JSON.parse(
     { awaitPromise: true },
   ),
 );
-const PASSAGE = ['petal', 'petal-sway', 'bird', 'floater-drift'];
+/* The allow-list is a claim about the picture, not an escape hatch: these are
+   the marks that are going somewhere rather than being weathered in place. The
+   petals, the birds over the lake, the petals lying on it — and `.drift`, which
+   is now the boat crossing, the two ducks swimming off, and the wake and the
+   rings those bodies leave behind. The last two travel less than the bodies
+   that made them, which is the point of the pair: a mark attached to a floating
+   body and a mark the body leaves behind are different things, and the only
+   place the difference can be seen is in how far each one goes. */
+const PASSAGE = ['petal', 'petal-sway', 'bird', 'floater-drift', 'drift'];
 const stayPut = travel
   .filter((r) => !PASSAGE.some((c) => r.cls.split(/\s+/).includes(c)))
   .filter((r) => r.side <= 200)

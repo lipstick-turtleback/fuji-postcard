@@ -1318,8 +1318,9 @@ html[data-enhance="on"] .bird.b3 {
    a hand's width over a minute or more, easing back and forth, so the return is
    not a return but the next gust. Nothing here repeats at an even interval —
    see Floaters.data.mjs for what these four periods were chosen against. */
-.floater-drift {
-  animation: drift-on-water 101s ease-in-out infinite alternate;
+.floater-drift,
+.drift {
+  animation: drift-on-water var(--drift-dur, 101s) ease-in-out infinite alternate;
 }
 @keyframes drift-on-water {
   from {
@@ -1329,6 +1330,23 @@ html[data-enhance="on"] .bird.b3 {
     transform: translate(var(--dx, 9px), var(--dy, 1px));
   }
 }
+/* The same keyframe, now doing more than carry petals. A duck that sits at one
+   point for the whole view is a bracket, and a boat that is being poled across a
+   lake and never gets anywhere is a photograph of one. So the boat runs 16 units
+   over 163 s — a third of its own length a minute, slow enough that you find the
+   motion against the reeds rather than watch it — and the two ducks run 9 and 11
+   units on their own longer clocks, each with the smear the water keeps of it in
+   the same group, because a floating thing whose reflection stayed put would be
+   the first wrong thing anybody noticed.
+
+   The water marks are the other half of the pair, and they are slower on
+   purpose. The wake under the hull is not part of the hull: it was made where
+   the paddle went in and the boat has moved on, so it gets a counter-drift of 7
+   units on a period of its own and travels 9 units while the hull travels 16.
+   The two lines the ducks leave run 5 and 6 units on periods longer than the
+   birds'. That is the difference between a mark attached to a floating body and
+   a mark the body leaves behind, and it is the only place in the picture where
+   the difference is drawn. */
 /* Two ducks, two periods. They sit eight units apart, so a shared period
    would read as one bird reflected from the other. */
 .duck {
@@ -1592,7 +1610,16 @@ html[data-enhance="off"] .foil {
    the shore read as a painting of a lake rather than as one. `.crest` is the six
    rows of the glitter band: exempt as one group before, exempt as six rows now,
    because the band is the sun on the water and the sun does not wait for a
-   switch. */
+   switch.
+
+   `.drift` is the boat crossing the lake, the ducks swimming off, and the wake
+   and the two water lines those bodies leave behind. It is exempt because what
+   it carries is not the card being lively, it is the lake having weather: a
+   poled boat that never gets anywhere and a duck that never swims off are the
+   same lie as a lake whose rings are held still. The calm tier already pays for
+   these — four petals have been crossing the water on this one keyframe for as
+   long as the page existed, and a translate on a group that carries no filter
+   is the cheapest motion the page has. */
 html[data-enhance="off"]
   .face
   svg
@@ -1600,7 +1627,9 @@ html[data-enhance="off"]
     .boatman
   ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
     .petal-sway
-  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band):not(.crest) {
+  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band):not(.crest):not(
+    .drift
+  ) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
@@ -2941,8 +2970,16 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
             </g>
           </g>
 
-          <!-- boat -->
-          <g class="boat">
+          <!-- boat. The outer group is the boat going across the lake; the
+               inner one is the water under it. They cannot share an element: a
+               CSS transform replaces an SVG transform attribute rather than
+               composing with it, and two animations on one element would fight
+               over the same property with the later one winning. -->
+          <g
+            class="drift"
+            style="animation-duration: 163s; animation-delay: -61s; --dx: -16px; --dy: 0"
+          >
+            <g class="boat">
             <g fill="#1b2036">
               <path d="M596 498 C614 504 646 504 664 498 L658 506 C640 511 618 511 602 506 Z"/>
               <!-- The man is one group, so that later he can move on his
@@ -3003,17 +3040,28 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
                  ripples read: as something continually setting off, not as a
                  thing pulsing. The wake under the hull breathes more slowly
                  and drifts, because the boat is moving through the water and
-                 the water is not level with it. -->
-            <g class="wake" fill="none" stroke="#f2e6d4" stroke-opacity=".3" stroke-width="1.4">
-              <path d="M600 512 C618 517 646 517 662 512"/>
+                 the water is not level with it.
+
+                 All of it — the two wake arcs and the three ripples off the
+                 paddle — sits in a group of its own, and that group drifts the
+                 other way at 7 units against the hull's 16. This is the water,
+                 not the boat: the arcs were made where the paddle went in, and
+                 the boat has moved on. Net travel 9 units against the hull's
+                 16, which is the whole of the difference between a mark
+                 attached to a floating body and a mark the body leaves behind. -->
+            <g class="drift" style="animation-duration: 118.4s; animation-delay: -44s; --dx: 7px; --dy: 0">
+              <g class="wake" fill="none" stroke="#f2e6d4" stroke-opacity=".3" stroke-width="1.4">
+                <path d="M600 512 C618 517 646 517 662 512"/>
+              </g>
+              <g class="wake wake-b" fill="none" stroke="#f2e6d4" stroke-opacity=".15" stroke-width="1.1">
+                <path d="M592 516 C612 522 650 522 670 516"/>
+              </g>
+              <g fill="none" stroke="#f2e6d4" stroke-linecap="round">
+                <path class="ripple" d="M657 521 C661 522.6 669 522.6 673 521" stroke-opacity=".26" stroke-width="1.2"/>
+                <path class="ripple rb" d="M660 525 C663 526.2 669 526.2 672 525" stroke-opacity=".2" stroke-width="1.1"/>
+                <path class="ripple rc" d="M663 529 C665.5 530 670.5 530 673 529" stroke-opacity=".14" stroke-width="1"/>
+              </g>
             </g>
-            <g class="wake wake-b" fill="none" stroke="#f2e6d4" stroke-opacity=".15" stroke-width="1.1">
-              <path d="M592 516 C612 522 650 522 670 516"/>
-            </g>
-            <g fill="none" stroke="#f2e6d4" stroke-linecap="round">
-              <path class="ripple" d="M657 521 C661 522.6 669 522.6 673 521" stroke-opacity=".26" stroke-width="1.2"/>
-              <path class="ripple rb" d="M660 525 C663 526.2 669 526.2 672 525" stroke-opacity=".2" stroke-width="1.1"/>
-              <path class="ripple rc" d="M663 529 C665.5 530 670.5 530 673 529" stroke-opacity=".14" stroke-width="1"/>
             </g>
           </g>
 
@@ -3139,22 +3187,11 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
           />
 
           <!-- Two ducks in open water, between the gate and the boatman,
-               where the water is widest. -->
-<g fill="#141a2c" stroke="#141a2c"><g class="duck" style="animation-duration:8.3s; animation-delay:-2.5s"><use href="#duck" transform="translate(392 519)"></use></g><g class="duck" style="animation-duration:11.9s; animation-delay:-7s"><use href="#duck" transform="translate(418 525) scale(0.84)"></use></g></g>
-          <g stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none">
-            <path class="ring" style="--rdur: 15.2s; --rdelay: -6s" d="M382 522 h22"/>
-            <path class="ring" style="--rdur: 18.4s; --rdelay: -14s" d="M410 528 h18"/>
-          </g>
-          <!-- and what the water keeps of them. the smears are not the ducks and
-               do not follow them: a reflection on still-ish water breaks up and
-               settles on a longer clock than the bird it comes from, so these
-               have their own periods, slower than the ducks' 8.3 and 11.9. -->
-          <g fill="#141a2c" opacity=".16">
-            <ellipse class="reflection" style="--wob: .35px; --stretch: .05; --rdur: 32s; --rdelay: -12s"
-                     cx="392" cy="524" rx="7.5" ry="1.7"/>
-            <ellipse class="reflection" style="--wob: .3px; --stretch: .045; --rdur: 34.6s; --rdelay: -25s"
-                     cx="418" cy="530" rx="6.2" ry="1.4"/>
-          </g>
+               where the water is widest. The bird, the smear the lake keeps of
+               it and the ring it leaves are all in the component, because which
+               of the three travels with the bird and which is left behind is the
+               drawing, not the bookkeeping. -->
+<g class="drift" style="animation-duration:133.6s; animation-delay:-41s; --dx:9px; --dy:0.8px"><g fill="#141a2c" stroke="#141a2c"><g class="duck" style="animation-duration:8.3s; animation-delay:-2.5s"><use href="#duck" transform="translate(392 519)"></use></g></g><ellipse class="reflection" fill="#141a2c" opacity=".16" cx="392" cy="524" rx="7.5" ry="1.7" style="--wob: 0.35px; --stretch: 0.05; --rdur: 32s; --rdelay: -12s"></ellipse></g><g class="drift" style="animation-duration:155.3s; animation-delay:-120s; --dx:5px; --dy:0"><path class="ring" stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none" d="M382 522 h22" style="--rdur: 15.2s; --rdelay: -6s"></path></g><g class="drift" style="animation-duration:149.9s; animation-delay:-96s; --dx:11px; --dy:1px"><g fill="#141a2c" stroke="#141a2c"><g class="duck" style="animation-duration:11.9s; animation-delay:-7s"><use href="#duck" transform="translate(418 525) scale(0.84)"></use></g></g><ellipse class="reflection" fill="#141a2c" opacity=".16" cx="418" cy="530" rx="6.2" ry="1.4" style="--wob: 0.3px; --stretch: 0.045; --rdur: 34.6s; --rdelay: -25s"></ellipse></g><g class="drift" style="animation-duration:166.9s; animation-delay:-33s; --dx:6px; --dy:0"><path class="ring" stroke="#e6dcc8" stroke-opacity=".22" stroke-width="1" fill="none" d="M410 528 h18" style="--rdur: 18.4s; --rdelay: -14s"></path></g>
 
 <g fill="#101627" stroke="#101627"><g class="wader" style="animation-duration:37s; animation-delay:-13s"><use href="#heron" transform="translate(772 546) scale(-1 1)"></use></g></g>
           <!-- The heron stands in the water — it has ripples around its feet,
@@ -4446,7 +4483,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
         }
         const t = r.cssText;
         if (
-          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-|\.branch|\.bloom|\.ring|\.band|\.crest/.test(
+          /@keyframes|\.petal|\.cloud|\.mist|\.ripple|\.wake|\.boat|\.boatman|\.duck|\.wader|\.floater|\.fish|\.rise-|\.rays|\.glow|\.bird|\.p\d|\.water-|\.refl|\.sway-|\.branch|\.bloom|\.ring|\.band|\.crest|\.drift/.test(
             t,
           )
         )

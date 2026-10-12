@@ -64,7 +64,16 @@ html[data-enhance="off"] .foil {
    the shore read as a painting of a lake rather than as one. `.crest` is the six
    rows of the glitter band: exempt as one group before, exempt as six rows now,
    because the band is the sun on the water and the sun does not wait for a
-   switch. */
+   switch.
+
+   `.drift` is the boat crossing the lake, the ducks swimming off, and the wake
+   and the two water lines those bodies leave behind. It is exempt because what
+   it carries is not the card being lively, it is the lake having weather: a
+   poled boat that never gets anywhere and a duck that never swims off are the
+   same lie as a lake whose rings are held still. The calm tier already pays for
+   these — four petals have been crossing the water on this one keyframe for as
+   long as the page existed, and a translate on a group that carries no filter
+   is the cheapest motion the page has. */
 html[data-enhance="off"]
   .face
   svg
@@ -72,7 +81,9 @@ html[data-enhance="off"]
     .boatman
   ):not(.duck):not(.wader):not(.floater):not(.floater-drift):not(.bird):not(.petal):not(
     .petal-sway
-  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band):not(.crest) {
+  ):not(.fish):not(.branch):not(.bloom):not(.reflection):not(.ring):not(.band):not(.crest):not(
+    .drift
+  ) {
   animation: none !important;
 }
 /* The last three full-card turbulence filters. Each is a 900×600 noise field
