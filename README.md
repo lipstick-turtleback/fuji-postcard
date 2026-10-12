@@ -109,7 +109,7 @@ indentation trimmed, and the stylesheet and the two bundles put through esbuild'
 minifier: 122 KB rather than 251. The names are the point — a static host answers
 `/` with `index.html`, so the file every visitor downloads is the small one and no
 rewrite rule is needed to make that true. `test-build.mjs` proves the smaller one
-is the same document (1,142 nodes walked and compared), the same stylesheet (294
+is the same document (1,155 nodes walked and compared), the same stylesheet (294
 rules, selectors, keyframes and all) and the same picture (0 of 1,657,150 pixels
 differ). The counts in that sentence are the test's own output, and the test holds
 the document to them: change the artwork and the build fails until the sentence

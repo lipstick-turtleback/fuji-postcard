@@ -41,26 +41,39 @@
  * duck's drift, which lands 1.3 percent away from a neighbour, and the wake's at
  * 3.8; the roomiest is the first petal's bob at 66 percent. None of them is a
  * whole multiple of anything within reach, which is the part a list of primes
- * cannot buy you. */
+ * cannot buy you.
+ *
+ * The four water lines the comment above has been promising since the petals
+ * were first timed are now drawn: two shallow arcs above each petal, on their
+ * own drift group, going the same way the petal goes but at four fifths of its
+ * distance and on a longer clock. A petal alone on a flat lake is a sticker; the
+ * arcs say the surface under it is water and that the petal is the slowest thing
+ * in its own little patch of it. They are siblings of the petal's drift group,
+ * never children of the bobbing one, because the water a petal disturbs does not
+ * rise and fall with the petal — it is left behind. */
 export const petals = [
   {
     x: 238, y: 524, rx: 5, ry: 1.7, w: 13,
     dur: 5.5, delay: -2, rise: 2.2, set: 0.9, tilt: 3,
     drift: 16, driftDy: 1.5, driftDur: 38.2, driftDelay: -11,
+    line: { dx: 11, dy: 1.2, dur: 46, delay: -14, w: 20, ys: [519, 515] },
   },
   {
     x: 412, y: 536, rx: 4.4, ry: 1.5, w: 12,
     dur: 6, delay: -3.5, rise: 1.9, set: -0.7, tilt: 2.2,
     drift: -14, driftDy: -1, driftDur: 43, driftDelay: -20,
+    line: { dx: -10, dy: -0.8, dur: 54.1, delay: -27, w: 19, ys: [531, 527] },
   },
   {
     x: 540, y: 520, rx: 3.8, ry: 1.3, w: 11,
     dur: 8.8, delay: -4, rise: 2.6, set: 1.2, tilt: 3.4,
     drift: 14, driftDy: 2, driftDur: 51.9, driftDelay: -6,
+    line: { dx: 10, dy: 1.6, dur: 71, delay: -19, w: 17, ys: [515, 511] },
   },
   {
     x: 668, y: 534, rx: 4.6, ry: 1.6, w: 13,
     dur: 6.6, delay: -5, rise: 1.8, set: -0.8, tilt: 1.8,
     drift: -16, driftDy: -1.5, driftDur: 32.5, driftDelay: -9,
+    line: { dx: -12, dy: -1.2, dur: 81.3, delay: -33, w: 20, ys: [529, 525] },
   },
 ];

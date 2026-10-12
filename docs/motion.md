@@ -638,7 +638,7 @@ before and after.
 ## What this document does not propose
 
 No animation framework, no GSAP, no runtime Svelte, no parallax layers. The
-scene is 988 static elements across the two faces — 844 on the front, 144 on
+scene is 1001 static elements across the two faces — 857 on the front, 144 on
 the back — and one lighting loop; the motion it needs is ninety-one CSS
 animations with argued-over periods and a data table that says which one is in
 phase with what.

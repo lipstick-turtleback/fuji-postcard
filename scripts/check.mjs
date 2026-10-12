@@ -179,7 +179,7 @@ for (const m of markup.matchAll(tagRe)) {
 // one line below, where changing the artwork has to disagree with it. Add a mark
 // and the build fails until the claim is changed to match, which is the point: a
 // count in a document that nobody re-measures is a count that is already wrong.
-const CLAIMED = [844, 144];
+const CLAIMED = [857, 144];
 const faces = [...html.matchAll(/<svg\b[\s\S]*?<\/svg>/g)];
 const elements = faces.map((f) => [...f[0].matchAll(/<[a-zA-Z][\w:-]*/g)].length);
 if (String(elements) !== String(CLAIMED))

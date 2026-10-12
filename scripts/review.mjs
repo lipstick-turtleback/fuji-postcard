@@ -72,10 +72,11 @@ const facts = JSON.parse(
     const units = (r) => ({ x: (r.x - box.x) / k, y: (r.y - box.y) / k, w: r.width / k, h: r.height / k });
 
     // Resolve the target to the elements that actually draw it.
-    let els = [...document.querySelectorAll(${JSON.stringify(face)} + ' ' + ${JSON.stringify(flag('selector', ''))})];
+    const sel = ${JSON.stringify(flag('selector', ''))};
+    let els = sel ? [...document.querySelectorAll(${JSON.stringify(face)} + ' ' + sel)] : [];
     els = els.filter((e) => !e.closest('defs'));
-    if (!els.length && ${JSON.stringify(flag('selector', ''))}) {
-      const id = ${JSON.stringify(flag('selector', ''))}.replace(/^#/, '');
+    if (sel && !els.length) {
+      const id = sel.replace(/^#/, '');
       if (document.getElementById(id)) els = [...document.querySelectorAll('use[href="#' + id + '"]')];
     }
     const boxArg = ${JSON.stringify(flag('box', ''))};
@@ -97,7 +98,16 @@ const facts = JSON.parse(
     }
 
     const centre = { x: region.x + region.w / 2, y: region.y + region.h / 2 };
-    const subtree = els.length ? [...els[0].closest('g').querySelectorAll('*')] : [...document.querySelectorAll(${JSON.stringify(face)} + ' svg *')];
+    // The group the drawable lives in, or — when the target was given as a
+    // region rather than a selector — everything whose centre falls in it.
+    const inside = (e) => {
+      const r = e.getBoundingClientRect();
+      const cx = (r.x + r.width / 2 - box.x) / k;
+      const cy = (r.y + r.height / 2 - box.y) / k;
+      return cx >= region.x && cx <= region.x + region.w && cy >= region.y && cy <= region.y + region.h;
+    };
+    const holder = els.length ? els[0].closest('g') || els[0] : null;
+    const subtree = holder ? [...holder.querySelectorAll('*')] : [...document.querySelectorAll(${JSON.stringify(face)} + ' svg *')].filter(inside);
     const shapes = subtree.filter((e) => /^(path|circle|ellipse|rect|line|polygon|polyline|use)$/.test(e.tagName));
     const fills = new Map();
     for (const s of shapes) {
@@ -105,11 +115,16 @@ const facts = JSON.parse(
       const key = [cs.fill, cs.stroke, cs.strokeWidth, cs.opacity, cs.strokeOpacity].join(' / ');
       fills.set(key, (fills.get(key) || 0) + 1);
     }
+    // A shape with no area is only a defect if nothing is drawn along it: a
+    // horizontal ripple is a line with a zero-height box and is exactly what it
+    // claims to be.
     const flat = shapes
       .filter((s) => {
         if (!('getBBox' in s)) return false;
         const b = s.getBBox();
-        return b.width === 0 || b.height === 0;
+        if (b.width && b.height) return false;
+        const cs = getComputedStyle(s);
+        return cs.stroke === 'none' || cs.strokeWidth === '0px';
       })
       .map((s) => s.tagName + (s.getAttribute('class') ? '.' + s.getAttribute('class') : ''));
 
