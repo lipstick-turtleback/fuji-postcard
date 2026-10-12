@@ -1,6 +1,6 @@
 # Change log
 
-What actually changed, in the order it changed, taken from `git log` rather than from memory — regenerate it with `node scripts/changelog.mjs`. 178 commits between 2026-10-09 15:41 and 2026-10-12 10:26. Each entry is the commit's own subject line, unedited, because the rule since the first week was that a commit says what the defect was rather than what the file is called.
+What actually changed, in the order it changed, taken from `git log` rather than from memory — regenerate it with `node scripts/changelog.mjs`. 183 commits between 2026-10-09 15:41 and 2026-10-12 11:43. Each entry is the commit's own subject line, unedited, because the rule since the first week was that a commit says what the defect was rather than what the file is called.
 
 ## The shape of it
 
@@ -9,7 +9,7 @@ What actually changed, in the order it changed, taken from `git log` rather than
 | 2026-10-09 | 53      | 144,471 bytes                  | 3            | 2                  |
 | 2026-10-10 | 56      | 208,658 bytes                  | 13           | 47                 |
 | 2026-10-11 | 23      | 232,880 bytes                  | 17           | 47                 |
-| 2026-10-12 | 46      | 123,607 bytes                  | 18           | 47                 |
+| 2026-10-12 | 51      | 123,942 bytes                  | 18           | 47                 |
 
 The page grew to 232,880 bytes and then halved. Nothing was thrown away: `961745f` split the build into the page a name reaches for and the page a person reads — `public/index.html`, comments and indentation taken out, and `public/index-full.html`, the same document annotated. The shipped page has been about 48% of the annotated one ever since.
 
@@ -204,3 +204,8 @@ The first four commits are one HTML file typed in over an afternoon: `e15e9bb` "
 - `37af8f6` 10:20 — a custom property nothing writes
 - `8984f24` 10:25 — the water a body disturbs must travel less than the body
 - `ce007c8` 10:26 — the motion document now names the neighbours it was measured against
+- `8e52cd5` 10:46 — the change log and the lessons, in their own files
+- `2f71e8b` 11:04 — the ducks were written as floating and rendered as bolted down
+- `bcf12a5` 11:30 — the wake was riding the boat's bob, which is the same mistake upside down
+- `3efcac0` 11:43 — `--back 2 back.png` asked the page for a selector called "2"
+- `8dc3fc4` 11:43 — the back's stamp area was colliding with both of its neighbours
