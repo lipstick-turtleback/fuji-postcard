@@ -125,7 +125,15 @@
                    stylesheet used to carry four rules that pretended otherwise and
                    selected nothing. The periods are written here, where a rule that
                    cannot match cannot hide the fact. -->
-              <g stroke="#ffeed2" stroke-linecap="round" fill="none">
+              <!-- The crests are blurred, at the same 1.4 units as everything
+                   else the water holds. They used to be the only crisp marks on
+                   a lake whose mirror, mist and glitter are all soft, and crisp
+                   edges made them read as shapes laid on the water — pale
+                   stadium shapes with square-ish ends — rather than as light
+                   breaking up on a surface. Light has no edge. The ripples and
+                   the wake stay crisp: those are the water's own contour, and a
+                   contour does have one. -->
+              <g stroke="#ffeed2" stroke-linecap="round" fill="none" filter="url(#tiny)">
                 <!-- The bands widen, thicken, fade and spread as the water
                      comes toward the viewer, which is perspective and correct.
                      But the old ladder advanced by a near-constant step in
