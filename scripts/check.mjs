@@ -433,6 +433,65 @@ else {
       );
 }
 
+/* ---- the README quotes the build's own layer line ----------------------- */
+// The stylesheet section says how many CSS files there are and quotes the first
+// line the build writes. Both were true when written and both are the kind of
+// thing that goes quietly false: a tenth file, 10-print.css, arrived and the
+// count stayed at nine, and `print` joined the layer list while the quoted line
+// stayed at nine names. A quoted line that no longer matches the build is worse
+// than no quoted line, because a reader checks their own reading of the page
+// against it and concludes the page is wrong.
+const layerQuote = /`@layer ([a-z,\s]+);`/.exec(readme);
+if (!layerQuote)
+  problems.push(
+    `${readmeFile}: the README no longer quotes the @layer line, so nothing matches it to what the build writes`,
+  );
+else {
+  const quoted = layerQuote[1]
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const built = /@layer ([a-z,\s]+?);/.exec(html);
+  if (!built)
+    problems.push(
+      `${file}: the built page has no @layer statement, so the README is quoting a line nothing writes`,
+    );
+  else {
+    const written = built[1]
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const line = readme.slice(0, layerQuote.index).split('\n').length;
+    if (quoted.length !== written.length)
+      problems.push(
+        `${readmeFile}:${line}: the README quotes ${quoted.length} cascade layers and the build writes ${written.length} (${written.join(', ')})`,
+      );
+    else
+      for (let i = 0; i < written.length; i++)
+        if (quoted[i] !== written[i])
+          problems.push(
+            `${readmeFile}:${line}: the README's layer list has "${quoted[i]}" in position ${i + 1} and the build writes "${written[i]}"`,
+          );
+  }
+}
+const fileCount = /([A-Za-z]+) CSS files/.exec(readme);
+if (!fileCount)
+  problems.push(
+    `${readmeFile}: the README no longer says how many CSS files there are, so nothing counts them`,
+  );
+else {
+  const spelled = WORDS.indexOf(fileCount[1].toLowerCase());
+  const cssOnDisk = readdirSync(join(root, 'src', 'styles')).filter((f) => f.endsWith('.css'));
+  if (spelled < 0)
+    problems.push(
+      `${readmeFile}: the README says "${fileCount[1]} CSS files", which is not a count this can check`,
+    );
+  else if (spelled !== cssOnDisk.length)
+    problems.push(
+      `${readmeFile}:${readme.slice(0, fileCount.index).split('\n').length}: the README says ${fileCount[1]} CSS files and src/styles holds ${cssOnDisk.length}`,
+    );
+}
+
 /* ---- a custom property nobody reads is a mark that stopped moving ------- */
 // Custom properties are how this page reaches across the gap between the artwork
 // and the stylesheet: the ripple's wobble, the pool's position, the card's

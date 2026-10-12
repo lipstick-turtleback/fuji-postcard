@@ -139,14 +139,22 @@ clones exactly one `<svg>`.
 
 ### The stylesheet's order is written down
 
-Nine CSS files, and the build reads them in an order it writes into the page:
+Ten CSS files, and the build reads them in an order it writes into the page:
 each file becomes a cascade layer, and the first line of the stylesheet is
-`@layer wall, masthead, card, console, foil, motion, narrow, quality, height;`.
+`@layer wall, masthead, card, console, foil, motion, narrow, quality, height, print;`.
 Before that the order was a directory listing sorted by name, which is a real
 order but not a chosen one — `.card` is styled in `03-card.css` and again in
 `05-foil.css`, and a file named `07-foo.css` would have landed between motion
 and quality without anyone deciding it. A stylesheet in the directory that is
 not in the build's list fails the build instead of sorting itself in.
+
+The quoted line and the file count are checked against the build, because both
+were true when written and both went quietly false: `10-print.css` arrived and the
+sentence still said nine files, and `print` joined the layers while the quote kept
+nine names. Drop `print` from the quote and the build says the README quotes 9
+cascade layers where the build writes 10, naming all ten; rename one and it names
+the position; delete the quote and it says so, because a check that matches
+nothing reports success forever.
 
 One consequence of layers is worth knowing before reaching for them:
 `!important` reverses layer order, so between two important declarations the
