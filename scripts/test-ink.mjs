@@ -95,7 +95,9 @@ const ratio = (a, b) => {
 };
 
 const page = await openPage({
-  port: 9389,
+  // its own port: the suite runs the browser tests at once now, and this one
+  // used to sit on 9389 with test-css
+  port: 9383,
   userDataDir: '/tmp/fuji-ink-test',
   // the card sways, and a swaying card is a moving ruler
   args: ['--force-prefers-reduced-motion'],

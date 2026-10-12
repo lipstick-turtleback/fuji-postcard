@@ -270,9 +270,22 @@ const scriptsOnDisk = readdirSync(join(root, 'scripts'))
   .sort();
 const pkgFile = join(root, 'package.json');
 const chain = JSON.parse(readFileSync(pkgFile, 'utf8')).scripts.test;
-for (const f of scriptsOnDisk)
-  if (!new RegExp(`scripts/${f.replace(/\./g, '\\.')}(?=\\s|$)`).test(chain))
-    problems.push(`${pkgFile}: scripts/${f} is not in the npm test chain`);
+// The chain is allowed to reach the tests through a runner, because the runner
+// is what runs them at once. That only counts if the runner is in the chain and
+// the test is in the runner's own list — the promise is that the suite runs it,
+// not that package.json says so with its own words.
+const runnerName = 'scripts/run-tests.mjs';
+const runnerPath = join(root, runnerName);
+const runner = existsSync(runnerPath) ? readFileSync(runnerPath, 'utf8') : '';
+const runnerInChain = chain.includes(runnerName);
+for (const f of scriptsOnDisk) {
+  const inChain = new RegExp(`scripts/${f.replace(/\./g, '\\.')}(?=\\s|$)`).test(chain);
+  const inRunner = runnerInChain && new RegExp(`['"]${f.replace(/\.mjs$/, '')}['"]`).test(runner);
+  if (!inChain && !inRunner) problems.push(`${pkgFile}: scripts/${f} is not in the npm test chain`);
+}
+for (const m of runner.matchAll(/^\s*'(test-[\w-]+)',$/gm))
+  if (!existsSync(join(root, 'scripts', `${m[1]}.mjs`)))
+    problems.push(`${runnerName}: ${m[1]} is in the runner's list and not on disk`);
 for (const m of chain.matchAll(/node (scripts\/[\w-]+\.mjs)/g))
   if (!existsSync(join(root, m[1])))
     problems.push(`${pkgFile}: ${m[1]} is in the npm test chain and not on disk`);

@@ -67,6 +67,7 @@ scripts/
   cdp.mjs              the DevTools client the browser tests share
   checks.mjs           the collect-and-report shape the browser tests share
   svg-check.mjs        the path-data and dangling-<use> rules two checks share
+  run-tests.mjs        the suite itself: every test script, two lanes, one verdict
   test-build.mjs       prove the shipped page is the same document, stylesheet and picture
   test-score.mjs       verify the composition as data
   test-contrast.mjs    keep the palette above WCAG AA
@@ -291,6 +292,20 @@ page looks fine, and the thing it was written for goes back to being unverified
 run by hand and saying nothing to anybody afterwards. And every file in
 `scripts/` has to appear in the listing above, which is how anyone finds out it
 is there.
+
+The tests run two at a time. `scripts/run-tests.mjs` takes the seventeen scripts
+and drives them in two lanes, which is a measured answer rather than a guess: two
+lanes give 204 seconds of work in 116 seconds of wall and every test still takes
+the time it takes alone, while four lanes give 660 seconds of work in 403 seconds
+of wall, because each test is a Chrome with its own renderer threads and they are
+all asking for the same cores. Before the runner the suite was a chain of `&&` in
+`package.json`: 3 minutes 54 seconds of wall against 35 seconds of work, the
+machine sitting idle while a headless browser waited for a page to settle. Two
+tests had to move first — test-build and test-layout were both on port 9377,
+test-css and test-ink both on 9389 — which was invisible in a serial suite and a
+"port is already serving a Chrome" failure the moment it was not. The chain rule
+still holds with a runner in the middle: a test may be reached through the
+runner's list, and that list is checked against the directory in both directions.
 
 ### Performance, measured
 

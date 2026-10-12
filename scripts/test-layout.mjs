@@ -20,7 +20,11 @@
 import { setTimeout as sleep } from 'node:timers/promises';
 import { openPage, silentPage } from './cdp.mjs';
 
-const PORT = 9377;
+// The suite runs its browser tests at the same time, so every test owns a
+// port. This one used to share 9377 with test-build, which was invisible while
+// the suite ran one at a time and a "port is already serving a Chrome" failure
+// the moment it did not.
+const PORT = 9380;
 const PAGE = silentPage(new URL('../public/index.html', import.meta.url).href);
 
 // width, height, label. The first four are ordinary laptop and desktop
