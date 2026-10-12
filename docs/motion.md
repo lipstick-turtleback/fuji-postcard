@@ -98,6 +98,7 @@ deleted, not tuned.
 | the boat's reflection                  | water, and a hull moving through it        | three smears slid and stretched about the top of each, the farthest the narrowest: 2.28, 2.06, 1.66 u at the far edge   | 29.4, 36.2, 44.9 s                                    | **yes**                           |
 | the gate's reflection                  | water                                      | slid and stretched about the waterline, 3.2 u at the far edge, under the bands the surface lays across it               | 31.6 s                                                | **yes**                           |
 | what the ducks leave in it             | water, and two birds floating on the water | slid and stretched about the top of each smear: 1.04 and 0.85 u at the far edge                                         | 32, 34.6 s                                            | **yes**                           |
+| the heron's reflection                 | water, and a bird standing in it           | three smears — body nearest, head farthest, offset toward the side it faces: 2.12, 1.83, 1.44 u at the far edge         | 24.3, 27.9, 47.6 s                                    | **yes**                           |
 | where things stand in the water        | the surface is not flat against them       | nine rings and strokes brighten and settle, each between 0.62 and 1 of itself                                           | 15.2, 18.4, 18.6, 19.3, 23.4, 28.4, 29, 29.2, 35.2 s  | **yes**                           |
 | the bands across the gate's reflection | the surface itself                         | slide along the water, 2.8 and 2.2 u between the extremes                                                               | 27.6, 32.8 s                                          | **yes**                           |
 | the sun's path on the water            | light on water that is not standing still  | six rows of crests, each between 0.22 and 0.46 of itself, slower as the water comes nearer                              | 15.5, 18.5, 22.6, 26.5, 30.7, 34.5 s                  | **yes**                           |
@@ -334,7 +335,7 @@ search had been run against a list of the calm tier's durations assembled by han
 from the marks the probe _exempts_ — and the probe exempts a mark when it is a
 traveller at the moment it looks, which a petal is only sometimes. The honest
 constraint set is not a curated list: it is every duration on the page, in both
-tiers, measured — 99 of them, because the water marks have no gust variants and so
+tiers, measured — 102 of them, because the water marks have no gust variants and so
 are compared against the gust tier's crowded low end as well (19.5 s collided with
 the boat's 6.5, 26.5 with the branch's 13.3, 31.5 with a blossom's 15.7). Re-picked
 against the measured union, all fifteen are clean in both tiers, and the probe says
@@ -569,7 +570,7 @@ before and after.
 ## What this document does not propose
 
 No animation framework, no GSAP, no runtime Svelte, no parallax layers. The
-scene is 973 static elements across the two faces — 830 on the front, 143 on
-the back — and one lighting loop; the motion it needs is eighty-eight CSS
+scene is 977 static elements across the two faces — 834 on the front, 143 on
+the back — and one lighting loop; the motion it needs is ninety-one CSS
 animations with argued-over periods and a data table that says which one is in
 phase with what.

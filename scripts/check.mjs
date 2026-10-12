@@ -170,7 +170,7 @@ for (const m of markup.matchAll(tagRe)) {
 
 /* ---- how big the picture is -------------------------------------------- */
 // The docs quote this, so the tool that validates the page also says what the
-// number currently is: 830 elements on the front, 143 on the back.
+// number currently is: 834 elements on the front, 143 on the back.
 const faces = [...html.matchAll(/<svg\b[\s\S]*?<\/svg>/g)];
 const elements = faces.map((f) => [...f[0].matchAll(/<[a-zA-Z][\w:-]*/g)].length);
 

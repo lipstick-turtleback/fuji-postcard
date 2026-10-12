@@ -288,6 +288,23 @@
           </g>
 
           @GEN:Heron@
+          <!-- The heron stands in the water — it has ripples around its feet,
+               three of them, on three clocks — and it had no reflection, which
+               is the half of the pair that says the bird is in the lake rather
+               than painted over it. Three smears: the body nearest, the head
+               farthest, offset to the side the bird faces and broken by the
+               same slide-and-stretch the boat's reflections use. The water here
+               is shallow and a hand's width from the bank, so the reflection
+               does not reach far: it stops where the inscription's rule is
+               printed, one unit above it. -->
+          <g fill="#141a2c" opacity=".16">
+            <ellipse class="reflection" style="--wob: .8px; --stretch: .05; --rdur: 24.3s; --rdelay: -5s"
+                     cx="772" cy="549" rx="12" ry="2.6"/>
+            <ellipse class="reflection" style="--wob: .7px; --stretch: .06; --rdur: 27.9s; --rdelay: -23s"
+                     cx="766" cy="554" rx="7" ry="1.8"/>
+            <ellipse class="reflection" style="--wob: .6px; --stretch: .05; --rdur: 47.6s; --rdelay: -39s"
+                     cx="761" cy="558" rx="3.6" ry="1.2"/>
+          </g>
           <!-- the folded wing: one almond of a slightly lighter ink, and it
                has to stay inside the body it is detailing. The first version
                hung 4 units below the belly and 4 units past the back edge,

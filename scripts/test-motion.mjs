@@ -244,8 +244,9 @@ ok(
   `${birdDrift.own} different drifts · ${birdDrift.reach.map((r) => r.toFixed(1)).join(' ')} units between the extremes`,
 );
 
-/* The water holds four mirrors — the mountain, the gate, and the two smears the
-   ducks leave — and a mirror that only changes its opacity is a mirror of a
+/* The water holds ten mirrors — the mountain, the gate, the two smears the
+   ducks leave, the three the boat drags behind it, and the three under the
+   heron — and a mirror that only changes its opacity is a mirror of a
    frozen lake. Each is asked how far its own far edge actually travels: the
    sideways slide plus the stretch about the waterline, which is what the
    keyframe promises between its two extremes. The distance is measured rather
@@ -269,7 +270,7 @@ const mirrors = JSON.parse(
 );
 ok(
   'and the lake moves its reflections, not just their brightness',
-  mirrors.n === 7 && mirrors.own === 7 && mirrors.reach.every((r) => r >= 0.8),
+  mirrors.n === 10 && mirrors.own === 10 && mirrors.reach.every((r) => r >= 0.8),
   `${mirrors.n} mirrors · ${mirrors.own} different motions · ${mirrors.reach.map((r) => r.toFixed(2)).join(' ')} units at the far edge`,
 );
 
