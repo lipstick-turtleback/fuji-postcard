@@ -36,11 +36,18 @@
 </header>
 
 <div class="stage">
-  <div class="card" id="card" role="img"
-       aria-label="Illustrated postcard of Mount Fuji at dawn with a torii gate, cherry blossoms and a lake; flip to see the addressed back.">
+  <div class="card" id="card">
 
-    <!-- ============================ FRONT ============================ -->
-    <div class="face front">
+    <!-- The card used to be one role="img" with one label, which made the whole
+         of it a picture — including the back, where the words are the point. A
+         role of img is a leaf: everything under it is presentational, so the
+         message, the address, the date and the postcode were all inside the
+         sentence "flip to see the addressed back" and nothing more. The picture
+         is the front, so the front is the image; the back is text, and its text
+         is already real text in the artwork. card.js hides whichever face is
+         turned away, so what is reachable is what is showing. -->
+    <div class="face front" role="img"
+         aria-label="Illustrated postcard of Mount Fuji at dawn with a torii gate, cherry blossoms and a lake.">
 @SVG_FRONT@
 
       <div class="foil" aria-hidden="true">
@@ -54,7 +61,7 @@
     </div>
 
     <!-- ============================ BACK ============================ -->
-    <div class="face back">
+    <div class="face back" role="group" aria-label="The back of the postcard: its message and its address.">
 @SVG_BACK@
     </div>
   </div>
@@ -81,7 +88,7 @@
 
     <div class="sound" id="sound">
       <button id="play" aria-pressed="false" title="Play / pause the soundtrack (press M)">
-        <span class="glyph" id="playGlyph">▶</span>
+        <span class="glyph" id="playGlyph" aria-hidden="true">▶</span>
         <span id="playLabel">Play</span>
         <kbd aria-hidden="true">M</kbd>
       </button>

@@ -1801,11 +1801,18 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 </header>
 
 <div class="stage">
-  <div class="card" id="card" role="img"
-       aria-label="Illustrated postcard of Mount Fuji at dawn with a torii gate, cherry blossoms and a lake; flip to see the addressed back.">
+  <div class="card" id="card">
 
-    <!-- ============================ FRONT ============================ -->
-    <div class="face front">
+    <!-- The card used to be one role="img" with one label, which made the whole
+         of it a picture — including the back, where the words are the point. A
+         role of img is a leaf: everything under it is presentational, so the
+         message, the address, the date and the postcode were all inside the
+         sentence "flip to see the addressed back" and nothing more. The picture
+         is the front, so the front is the image; the back is text, and its text
+         is already real text in the artwork. card.js hides whichever face is
+         turned away, so what is reachable is what is showing. -->
+    <div class="face front" role="img"
+         aria-label="Illustrated postcard of Mount Fuji at dawn with a torii gate, cherry blossoms and a lake.">
       <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
            aria-labelledby="ttlFront"
            aria-describedby="dscFront">
@@ -3621,7 +3628,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
     </div>
 
     <!-- ============================ BACK ============================ -->
-    <div class="face back">
+    <div class="face back" role="group" aria-label="The back of the postcard: its message and its address.">
       <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
            aria-labelledby="ttlBack"
            aria-describedby="dscBack">
@@ -3955,7 +3962,7 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 
     <div class="sound" id="sound">
       <button id="play" aria-pressed="false" title="Play / pause the soundtrack (press M)">
-        <span class="glyph" id="playGlyph">▶</span>
+        <span class="glyph" id="playGlyph" aria-hidden="true">▶</span>
         <span id="playLabel">Play</span>
         <kbd aria-hidden="true">M</kbd>
       </button>
@@ -4148,8 +4155,23 @@ html[data-enhance="off"] [filter="url(#foxLarge)"] {
 
   const status = document.getElementById('status');
 
+  /* Which face assistive technology should be reading. The two faces are stacked
+     and one is rotated away, so the turned-away face's words are not on the page:
+     a reader that walked both would announce an address sitting behind the
+     picture, and read the message before it was ever turned to. */
+  const faces = {
+    front: card.querySelector('.face.front'),
+    back: card.querySelector('.face.back'),
+  };
+  const showFace = () => {
+    faces.front.setAttribute('aria-hidden', String(flipped));
+    faces.back.setAttribute('aria-hidden', String(!flipped));
+  };
+  showFace();
+
   const flip = () => {
     flipped = !flipped;
+    showFace();
     status.textContent = flipped
       ? 'The card is showing its back: the message and the address.'
       : 'The card is showing the picture.';

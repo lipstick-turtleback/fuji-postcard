@@ -42,6 +42,7 @@ const tests = [
   'test-export',
   'test-interactions',
   'test-keys',
+  'test-a11y',
   'test-motion',
   'test-css',
   'test-nojs',

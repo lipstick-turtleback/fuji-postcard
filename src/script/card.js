@@ -169,8 +169,23 @@ else addEventListener('resize', measure);
 
 const status = document.getElementById('status');
 
+/* Which face assistive technology should be reading. The two faces are stacked
+   and one is rotated away, so the turned-away face's words are not on the page:
+   a reader that walked both would announce an address sitting behind the
+   picture, and read the message before it was ever turned to. */
+const faces = {
+  front: card.querySelector('.face.front'),
+  back: card.querySelector('.face.back'),
+};
+const showFace = () => {
+  faces.front.setAttribute('aria-hidden', String(flipped));
+  faces.back.setAttribute('aria-hidden', String(!flipped));
+};
+showFace();
+
 const flip = () => {
   flipped = !flipped;
+  showFace();
   status.textContent = flipped
     ? 'The card is showing its back: the message and the address.'
     : 'The card is showing the picture.';

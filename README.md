@@ -84,6 +84,7 @@ scripts/
   test-nojs.mjs        load the page with script switched off and see what is left
   test-degrade.mjs     take a feature away before the page runs and load it anyway
   test-keys.mjs        the page driven with Tab, Enter, Space and the arrows
+  test-a11y.mjs        the accessibility tree a screen reader is handed
   test-print.mjs       what comes out of a printer, and how big the sheet is
   test-css.mjs         no rule selects nothing, no animation names nothing
   test-sound.mjs       the soundtrack, on a page nobody has touched
@@ -659,6 +660,18 @@ page before the question:
   is drawn with, what the card's angle is, what the slider's value is. Every
   control has to be reachable, has to show where it is, and has to do with Enter
   what it does with a click.
+- `scripts/test-a11y.mjs` reads the accessibility tree Chrome computes for
+  assistive technology, not the attributes the DOM claims. It found that the card
+  was one `role="img"` with one label, and a role of img is a leaf: the message,
+  the address, the date and the postcode were presentational, living inside the
+  sentence _flip to see the addressed back_. Chrome's own tree kept the text
+  anyway, so the page was not broken in every reader — it was broken in whichever
+  readers took the role at its word. The picture is now the front and the writing
+  is the back, and whichever face is turned away is out of the tree — which the
+  test checks in both directions by turning the card and reading the tree again. It also checks that every control arrives as a named thing with a
+  role, and that the two toggles carry a pressed state; the play button's name
+  used to begin with the triangle glyph, which some readers announce as "black
+  right-pointing triangle".
 - `scripts/test-css.mjs` asks whether the stylesheet is telling the truth about
   the page: every selector must match something that exists, and every
   `animation` must name a `@keyframes` block that exists. A stylesheet cannot
