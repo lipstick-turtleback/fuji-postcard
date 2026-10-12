@@ -466,8 +466,20 @@ is 1.20:1 in luminance and plainly there, gold against mauve, and a
 luminance-only check reports a defect that does not exist. Turning the title
 strip's inner rule off reports `stops for 255 units … 0 of colour from its own
 ground, against 12 over the rest of it`, at [63, 507] — card coordinates, so the
-report names a place on the plate rather than a place inside a rotated group. 15
-rules walked; the longest quiet stretch on the card today is 0.7 of a unit.
+report names a place on the plate rather than a place inside a rotated group.
+
+It is still a pixel measurement, and a pixel measurement has a size below which
+it stops meaning anything. Run at a 360 px window on a 1× screen the plate is
+0.37 device px per unit, so a 1-unit printed rule is a third of a pixel, and the
+walk reports that the frame's inner rule `stops for 312 units` — true of that
+screen, and nothing to do with the drawing: below one pixel of width what the
+sampler finds depends on where the line's centre falls between two pixel
+centres, its phase rather than its ink. So the plate's scale is a precondition
+the check states instead of an assumption it makes: a rule thinner than one
+device pixel is not walked, and the failure says what the card would have to be
+for the walk to mean what it says (`900 css px wide at 1×` for a 1-unit rule).
+The passing line names the scale it walked at. 15 rules walked at 2.09 device px
+per unit; the longest quiet stretch on the card today is 0.7 of a unit.
 
 `scripts/test-export.mjs` checks the file SAVE THE PLATE hands out. The export
 is its own program — it clones one face, gives it an xmlns and a size, and

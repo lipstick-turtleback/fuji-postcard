@@ -175,6 +175,15 @@ const ruleRows = [];
    marks in it are the ones the drawing itself calls print. */
 const RULE_GONE = 20;
 const RULE_RUN = 12;
+// A printed rule thinner than one device pixel cannot be measured by looking at
+// pixels. The walk asks whether ink is present at each step; below one pixel of
+// width there is no step at which ink could be present, and what the sampler
+// finds depends on where the line's centre falls between two pixel centres —
+// its phase, not its ink. Run at a 360 px window on a 1× screen the plate is
+// 0.37 device px per unit, and the walk reports that the frame's inner rule
+// "stops for 312 units": true, and about the screen rather than the drawing.
+// So the scale is a precondition of the walk, stated rather than assumed.
+const ruleLimits = [];
 const colourDistance = (a, b) =>
   Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
 
@@ -237,8 +246,12 @@ const rules = async (face) =>
             tag +
             ' ' +
             ((el.getAttribute('d') || '').slice(0, 12) ||
-              (el.getAttribute('cx') !== null
-                ? 'r' + el.getAttribute('r') + ' at ' + el.getAttribute('cx') + ',' + el.getAttribute('cy')
+              (tag === 'circle'
+                ? 'r' +
+                  (el.getAttribute('r') ?? '0') +
+                  (el.getAttribute('cx') !== null
+                    ? ' at ' + el.getAttribute('cx') + ',' + el.getAttribute('cy')
+                    : '')
                 : el.getAttribute('x') + ',' + el.getAttribute('y') +
                   ' ' + el.getAttribute('width') + 'x' + el.getAttribute('height'))),
           w,
@@ -254,6 +267,13 @@ const rules = async (face) =>
 const walkRules = async (face, at) => {
   for (const r of await rules(face)) {
     const [a, b, c, d, e, f] = r.m;
+    const pxPerUnit = Math.hypot(a, b) * SCALE;
+    if (r.w * pxPerUnit < 1) {
+      ruleLimits.push(
+        `${r.face}: the rule "${r.name}" is ${r.w} units and the plate is being drawn at ${pxPerUnit.toFixed(2)} device px per unit — ${r.w} × ${pxPerUnit.toFixed(2)} = ${(r.w * pxPerUnit).toFixed(2)} device px, under one pixel. The walk cannot tell ink from the rasterizer's sub-pixel policy at that size; it needs the card at least ${Math.ceil(900 / r.w / SCALE)} css px wide at ${SCALE}×.`,
+      );
+      continue;
+    }
     const px = (x, y) => [(a * x + c * y + e) * SCALE, (b * x + d * y + f) * SCALE];
     const off = (r.w / 2 + 2.5) * SCALE;
     const seen = [];
@@ -322,6 +342,7 @@ const walkRules = async (face, at) => {
       face,
       name: r.name,
       len: Math.round(r.len),
+      pxPerUnit,
       median,
       weakest: sorted[0],
       worstRun,
@@ -408,6 +429,7 @@ for (const r of ruleRows)
     problems.push(
       `${r.face}: the rule "${r.name}" (${r.len} u long) stops for ${r.worstRun.toFixed(0)} units around [${r.worstAt.join(', ')}] — ${r.weakest.toFixed(0)} of colour from its own ground where it stops, against ${r.median.toFixed(0)} over the rest of it, and a printed rule needs ${RULE_GONE}`,
     );
+problems.push(...ruleLimits);
 if (exceptions.length)
   problems.push(`${exceptions.length} page exception(s): ${exceptions.join(' | ')}`);
 
@@ -415,10 +437,11 @@ close();
 
 const worst = rows.slice(0, 3).map((r) => `${r.text} ${r.r.toFixed(2)}`);
 const longestRun = ruleRows.reduce((m, r) => Math.max(m, r.worstRun), 0);
+const plateScale = ruleRows.length ? ruleRows[0].pxPerUnit : 0;
 if (problems.length) {
   console.error(`test-ink: ${problems.length} problem(s)\n${problems.join('\n')}`);
   process.exit(1);
 }
 console.log(
-  `test-ink: ${rows.length} marks measured, all at or above ${FLOOR}:1 — faintest ${worst.join(' · ')} · ${ruleRows.length} printed rules walked end to end, all continuous — longest quiet stretch ${longestRun.toFixed(1)} u`,
+  `test-ink: ${rows.length} marks measured, all at or above ${FLOOR}:1 — faintest ${worst.join(' · ')} · ${ruleRows.length} printed rules walked end to end at ${plateScale.toFixed(2)} device px per unit, all continuous — longest quiet stretch ${longestRun.toFixed(1)} u`,
 );
