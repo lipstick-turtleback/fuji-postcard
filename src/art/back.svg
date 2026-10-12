@@ -70,7 +70,7 @@
 
           <g font-family="Georgia,'Times New Roman',serif" fill="#6f6350">
             <text x="46" y="62" font-size="15" letter-spacing="7">POST CARD</text>
-            <text x="46" y="80" font-size="9.5" letter-spacing="2.4" opacity=".82">CORRESPONDENCE CARD · 郵便はがき</text>
+            <text x="46" y="80" font-size="9.5" letter-spacing="2.4" opacity=".82">CORRESPONDENCE CARD · <tspan lang="ja">郵便はがき</tspan></text>
           </g>
 
           <!-- divider -->

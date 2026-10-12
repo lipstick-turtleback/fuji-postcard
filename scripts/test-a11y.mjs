@@ -116,6 +116,79 @@ ok(
   `${withRole(nodes, 'status').length} status regions`,
 );
 
+/* The same words, more than once. A printed line on this card is laid down as a
+   shadow, the ink, and a sweep of shine — three copies of the same text at the
+   same coordinates — and a reader with no way to tell which one is the ink reads
+   all three. The card's caption was announced four times over, each of its four
+   parts three times, until the shadow and the shine were hidden from the tree. */
+const readTwice = (ns) => {
+  const texts = ns.filter((n) => n.role?.value === 'StaticText' && (n.name?.value ?? '').trim());
+  const counts = new Map();
+  for (const t of texts) {
+    const s = t.name.value.trim();
+    counts.set(s, (counts.get(s) ?? 0) + 1);
+  }
+  return {
+    n: texts.length,
+    detail: [...counts]
+      .filter(([, c]) => c > 1)
+      .map(([s, c]) => `"${s.slice(0, 26)}" ×${c}`)
+      .join(', '),
+  };
+};
+
+/* The Japanese has to be marked as Japanese. The tanzaku carries 富士山 and
+   河口湖, the hanko one character, the caption 富嶽, the back's heading
+   郵便はがき; without a language on them a reader pronounces them with the
+   English voice it is already holding, which is not the same word.
+
+   Both of these are asked of whichever face is showing, because the face that
+   is turned away is out of the tree — a check run only while the back is up is
+   blind to everything on the front, which is exactly how the first version of
+   this test missed the caption. */
+const unmarkedJapanese = () =>
+  evaluate(`(() => {
+  const cjk = /[\\u3040-\\u30ff\\u4e00-\\u9fff]/;
+  const bad = [];
+  for (const el of document.querySelectorAll('svg text')) {
+    // The language belongs to the characters, not to the line: "CORRESPONDENCE
+    // CARD · 郵便はがき" is one <text> whose English half is marked by the page
+    // and whose Japanese half is marked by a tspan. So the walk goes to the
+    // text nodes and asks what language each run of them is sitting in.
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let tn;
+    while ((tn = walker.nextNode())) {
+      if (!cjk.test(tn.textContent)) continue;
+      if (tn.parentElement.closest('[aria-hidden="true"]')) continue;
+      const holder = tn.parentElement.closest('[lang]');
+      if (!holder || holder.getAttribute('lang') !== 'ja') bad.push(tn.textContent.trim());
+    }
+  }
+  return bad.join(', ');
+})()`);
+
+let d = readTwice(nodes);
+ok(
+  'nothing on the writing side is read twice',
+  d.detail === '',
+  `${d.n} text nodes${d.detail ? `: ${d.detail}` : ''}`,
+);
+let u = await unmarkedJapanese();
+ok('the Japanese on the writing side is marked as Japanese', u === '', u);
+
+await evaluate(`document.getElementById('flip').click()`);
+await sleep(1800);
+nodes = await tree();
+ok('the card turns back to the picture', says(nodes, PICTURE) && !says(nodes, MESSAGE));
+d = readTwice(nodes);
+ok(
+  'nothing on the picture side is read twice',
+  d.detail === '',
+  `${d.n} text nodes${d.detail ? `: ${d.detail}` : ''}`,
+);
+u = await unmarkedJapanese();
+ok('the Japanese on the picture side is marked as Japanese', u === '', u);
+
 ok('and the page threw nothing on the way', exceptions.length === 0, exceptions.join(' | '));
 close();
 finish();
