@@ -68,39 +68,41 @@ reads as the scene moving — it reads as that thing going somewhere. And a mark
 units across is a surface: 20 units of drift across a 660-unit band of mist is 3%
 of itself, which is why the mist is not judged by a number written for a duck.
 
-**The boat, the ducks, and what they leave behind.** Those marks were running in
-the default tier and going nowhere: the hull rose and fell by 1.2 units over
-thirteen seconds and the two birds by 0.4 over eight and twelve, which is a
-photograph of a boat and a bracket for a duck. They travel now — the hull 16
-units across the lake on 163 s, a third of its own length a minute; the ducks 9
-and 11 on 133.6 s and 149.9 s. Each bird also rides a swell of its own, 1.9 units
-of rise over 2.2° of tilt for the nearer one and 1.4 units over 1.7° for the
-farther, and the smear the lake keeps of it rides with it; the hull rocks through
-1.5 units and a third of a degree, hinged where the boatman's pole enters the
-water, and the wake, the ripples off the paddle and the smears under the hull hang
-off the group outside that one, because they are lake and not boat. And the water
-they disturb is slower than they are, which is the half that makes the other half
-legible: the wake and the three ripples off the paddle are given 7 units in the
-other direction on 118.4 s, so they travel 9 units while the hull travels 16, and
-the two lines the ducks leave run 5 and 6 units on periods longer than the birds'.
-A mark attached to a floating body and a mark the body leaves behind are different
-things, and the difference is only ever visible in how far each one goes.
+**The boat, the ducks, and what they leave behind.** These marks have been fixed
+twice and the second time is the one that mattered. The first fix was amplitude:
+the hull used to rise and fall by 1.2 units over thirteen seconds and the two
+birds by 0.4 over eight and twelve, which is a photograph of a boat and a bracket
+for a duck, so the numbers went up. They were still invisible, because the
+distance was never the problem. Measured at the size this card is drawn, the boat
+was crossing 16 units in 163 seconds and the ducks 9 and 11 in 133.6 and 149.9 —
+0.07 to 0.10 of a CSS pixel a second, four to six pixels in a minute of watching.
+The rule the page holds now is a rate and not a distance: a floating body moves
+at three to five tenths of a pixel a second, and the water it disturbs at about
+half that. So the hull crosses 26 units — a third of its own length — in 65.8 s,
+0.40 px/s, and rocks through 2.2 units and four fifths of a degree over 7.9 s;
+the ducks swim 18 and 24 units, about their own body length, in 57.9 and 46.8 s,
+0.31 and 0.51 px/s, and ride swells of 2.1 and 1.6 units over 2.4° and 1.9°. The
+wake and the three ripples off the paddle are given 13 units in the other
+direction on 73.8 s, so they travel 13 while the hull travels 26 and move at 0.18
+px/s against the hull's 0.40; the lines the ducks leave run 12 and 16 units on
+84.1 and 95.6 s, at 0.14 and 0.17. A mark attached to a floating body and a mark
+the body leaves behind are different things, and the difference is only ever
+visible in how far each one goes and how fast.
 
-The periods were picked against what the rhythm probe finds within a hand's
-width, which at the boat means the hull's 13, the man's 7.5, the wake's 19 and
-25, the ripples' 17, 21 and 24, the three smears' 29.4, 36.2 and 44.9, four of
-the glitter band's crests at 15.5, 18.5, 22.6 and 26.5, two petals' bobs at 17.5
-and 23.5 and two petals' drifts at 109 and 139; at the ducks it means the bobs at
-8.3 and 11.9, the rings at 15.2 and 18.4, a petal's bob at 13.5, the two smears at
-32 and 34.6, a petal drifting on 101, and two fish coming up at 127 and 179. 163
-and 118.4 are what survived at the boat; 133.6, 149.9, 155.3 and 166.9 at the
-ducks. The obvious picks are the wrong ones, and the probe says why. At the boat:
-169 is thirteen times the hull's own 13, 168 is eight times one ripple off the
-paddle and seven times another, 165 is twenty-two times the boatman's 7.5, and 158
-and 159 are seven and six times two of the glitter band's crests. At the ducks:
-160.3 is five times the nearer smear's 32, 151.9 is ten times the ring's 15.2,
-172.9 is five times the farther smear's 34.6, 161.9 is twelve times a petal's
-13.5, and 127.6 is within a percent of a fish coming up a hundred units away.
+Twenty-one clocks went in at once, and none of them is a free pick. Each was
+measured against what the rhythm probe actually finds within 120 units: at the
+boat that is 21 neighbours, at the nearer duck's wake 22, and the pick is the one
+that comes out furthest from all of them. The tightest results are the farther
+duck's drift, 1.3 percent from a neighbour, the wake's at 3.8 and the hull's bob
+at 5.1; the roomiest is the first petal's bob at 66. The rejections are the part
+a list of plausible numbers cannot tell you: 14 s was refused at the petals
+because a petal's own bob sits at 13.5, and at the boat because 27.9 is exactly
+twice a glitter crest 90 units away. Each family of new clocks is also kept eight
+percent away from every other member of its own family, however far apart, which
+is stricter than the page's rule and is the difference between a shore that
+breathes and a shore on one number. The two arcs each duck now leaves are 5 units
+apart, so they cannot share a clock either: the nearer bird's pair runs 15.2 and
+19.6 s and the farther one's 18.4 and 16.2.
 
 The pair is held, not just drawn. `test-motion.mjs` walks every animated mark
 around its own cycle and reads how far its own transform carries it, then
@@ -141,33 +143,33 @@ cycle that reverses is a breath.
 Each entry states the cause first. Rule 1: if there is no cause, the motion is
 deleted, not tuned.
 
-| thing                                    | cause                                      | motion                                                                                                                  | period                                                | default?                          |
-| ---------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------- |
-| petals on the water                      | the water under them, and the air over it  | bob 1.6–2.6 u of rise over 1.8–3.4° of tilt, with a 0.6–1.2 u slide; and, separately, a drift of 7–12 u across the lake | bob 11, 13.5, 17.5, 23.5 s; drift 73, 101, 109, 139 s | **yes**                           |
-| the boat's hull                          | water                                      | 1.5 u of travel and 0.6° of roll, hinged where the pole enters the water                                                | 13 s                                                  | **yes**                           |
-| the boatman                              | he is rowing                               | torso rotates 1.1° about the hips, arms follow                                                                          | 7.5 s                                                 | **yes**                           |
-| the ducks                                | the swell passing under them               | ±1.9 u of rise over ±2.2° of tilt with a 0.8 u set; the farther bird ±1.4 u over ±1.7°; no two in phase                 | 8.3, 11.9 s                                           | **yes**                           |
-| the boat, crossing                       | it is being poled                          | 16 u across the lake, easing back and forth so the return is the next stroke                                            | 163 s                                                 | **yes**                           |
-| the wake, and the ripples off the paddle | water, and a hull that has moved on        | 7 u in the other direction, so 9 u net against the hull's 16                                                            | 118.4 s                                               | **yes**                           |
-| the ducks, swimming                      | they are swimming                          | 9 and 11 u across the water, each with the smear the lake keeps of it in the same group                                 | 133.6, 149.9 s                                        | **yes**                           |
-| the lines the ducks leave                | water, and two birds floating on it        | 5 and 6 u — slower than the birds that made them, which is the whole point                                              | 155.3, 166.9 s                                        | **yes**                           |
-| the heron                                | it is alive                                | weight shift ±0.3 u                                                                                                     | 37 s                                                  | **yes**                           |
-| three places the fish came up            | something under the water                  | a ring spreads from tight to gone, two or three times per period at uneven spacing                                      | 97, 127, 179 s                                        | **yes**                           |
-| the birds                                | they are flying                            | drift along their own heading, 6.6, 5.8 and 7.6 u between the extremes of the swing                                     | 67, 89, 113 s                                         | **yes**                           |
-| the birds, crossing                      | they are flying, and the wind is up        | 168 u across the sky and 38 u up, 172 u along the heading, fading in and out at each end                                | 31.9, 43.7, 39 s                                      | no — Enhance                      |
-| the far mountain's mirror                | water                                      | brightens and settles, and is slid sideways while it stretches about the waterline: 3.0 u at its far edge               | 39 s of brightness, 47.4 s of shape                   | **yes**                           |
-| the boat's reflection                    | water, and a hull moving through it        | three smears slid and stretched about the top of each, the farthest the narrowest: 2.28, 2.06, 1.66 u at the far edge   | 29.4, 36.2, 44.9 s                                    | **yes**                           |
-| the gate's reflection                    | water                                      | slid and stretched about the waterline, 3.2 u at the far edge, under the bands the surface lays across it               | 31.6 s                                                | **yes**                           |
-| what the ducks leave in it               | water, and two birds floating on the water | slid and stretched about the top of each smear: 1.04 and 0.85 u at the far edge                                         | 32, 34.6 s                                            | **yes**                           |
-| the heron's reflection                   | water, and a bird standing in it           | three smears — body nearest, head farthest, offset toward the side it faces: 2.12, 1.83, 1.44 u at the far edge         | 24.3, 27.9, 47.6 s                                    | **yes**                           |
-| where things stand in the water          | the surface is not flat against them       | nine rings and strokes brighten and settle, each between 0.62 and 1 of itself                                           | 15.2, 18.4, 18.6, 19.3, 23.4, 28.4, 29, 29.2, 35.2 s  | **yes**                           |
-| the bands across the gate's reflection   | the surface itself                         | slide along the water, 2.8 and 2.2 u between the extremes                                                               | 27.6, 32.8 s                                          | **yes**                           |
-| the sun's path on the water              | light on water that is not standing still  | six rows of crests, each between 0.22 and 0.46 of itself, slower as the water comes nearer                              | 15.5, 18.5, 22.6, 26.5, 30.7, 34.5 s                  | **yes**                           |
-| reeds and grass                          | wind                                       | sway, 1.2°, one stand as one object                                                                                     | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s                  | no — Enhance                      |
-| the cherry branch                        | wind off the lake                          | rocks about its root; the far end travels 1.6 u in still air and 3.5 u in a gust, the root nothing                      | 57.5 s; 13.3 s with Enhance                           | **yes**                           |
-| the flowers on it                        | the same wind, and the branch flexing      | each swings a shallow arc, 0.16–0.35 u in still air and 0.32–0.7 u in a gust, growing with distance from the root       | 41.6–86.5 s; 10.2–36.2 s with Enhance                 | **yes**                           |
-| falling petals                           | wind off the branch                        | a fall of 85–285 u with the wind's set of −78 to +41 u, and a slide of ±6–16 u about that line                          | all ten, 22.8–58.9 s                                  | **yes**; 11.2–21.1 s with Enhance |
-| the card's laminate                      | the lamp                                   | foil, glint, grain                                                                                                      | —                                                     | no — Enhance                      |
+| thing                                                                                                                    | cause                                                | motion                                                                                                                | period                                               | default?                          |
+| ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------- |
+| bob 1.8–2.6 u of rise over 1.8–3.4° of tilt, with a 0.7–1.2 u slide; and, separately, a drift of 14–16 u across the lake | bob 5.5, 6, 6.6, 8.8 s; drift 32.5, 38.2, 43, 51.9 s |
+| 2.2 u of travel and 0.8° of roll, hinged where the pole enters the water                                                 | 7.9 s                                                |
+| the boatman                                                                                                              | he is rowing                                         | torso rotates 1.1° about the hips, arms follow                                                                        | 7.5 s                                                | **yes**                           |
+| ±2.1 u of rise over ±2.4° of tilt with a 0.9 u set; the farther bird ±1.6 u over ±1.9°; no two in phase                  | 7.2, 10.3 s                                          |
+| 26 u across the lake — a third of its own length — easing back and forth so the return is the next stroke                | 65.8 s                                               |
+| 13 u in the other direction, so 13 u net against the hull's 26                                                           | 73.8 s                                               |
+| 18 and 24 u across the water, about their own body length, each with the smears the lake keeps of it in the same group   | 57.9, 46.8 s                                         |
+| 12 and 16 u in two arcs each, the second arc on its own clock; slower than the birds that made them, which is the point  | 84.1, 95.6 s                                         |
+| the heron                                                                                                                | it is alive                                          | weight shift ±0.3 u                                                                                                   | 37 s                                                 | **yes**                           |
+| three places the fish came up                                                                                            | something under the water                            | a ring spreads from tight to gone, two or three times per period at uneven spacing                                    | 97, 127, 179 s                                       | **yes**                           |
+| the birds                                                                                                                | they are flying                                      | drift along their own heading, 6.6, 5.8 and 7.6 u between the extremes of the swing                                   | 67, 89, 113 s                                        | **yes**                           |
+| the birds, crossing                                                                                                      | they are flying, and the wind is up                  | 168 u across the sky and 38 u up, 172 u along the heading, fading in and out at each end                              | 31.9, 43.7, 39 s                                     | no — Enhance                      |
+| the far mountain's mirror                                                                                                | water                                                | brightens and settles, and is slid sideways while it stretches about the waterline: 3.0 u at its far edge             | 39 s of brightness, 47.4 s of shape                  | **yes**                           |
+| the boat's reflection                                                                                                    | water, and a hull moving through it                  | three smears slid and stretched about the top of each, the farthest the narrowest: 2.28, 2.06, 1.66 u at the far edge | 29.4, 36.2, 44.9 s                                   | **yes**                           |
+| the gate's reflection                                                                                                    | water                                                | slid and stretched about the waterline, 3.2 u at the far edge, under the bands the surface lays across it             | 31.6 s                                               | **yes**                           |
+| what the ducks leave in it                                                                                               | water, and two birds floating on the water           | slid and stretched about the top of each smear: 1.0 to 1.56 u at the far edge, five pieces across the two birds       | 30.2, 33.4, 37.1, 41.5, 48.9 s                       | **yes**                           |
+| the heron's reflection                                                                                                   | water, and a bird standing in it                     | three smears — body nearest, head farthest, offset toward the side it faces: 2.12, 1.83, 1.44 u at the far edge       | 24.3, 27.9, 47.6 s                                   | **yes**                           |
+| where things stand in the water                                                                                          | the surface is not flat against them                 | nine rings and strokes brighten and settle, each between 0.62 and 1 of itself                                         | 15.2, 18.4, 18.6, 19.3, 23.4, 28.4, 29, 29.2, 35.2 s | **yes**                           |
+| the bands across the gate's reflection                                                                                   | the surface itself                                   | slide along the water, 2.8 and 2.2 u between the extremes                                                             | 27.6, 32.8 s                                         | **yes**                           |
+| the sun's path on the water                                                                                              | light on water that is not standing still            | six rows of crests, each between 0.22 and 0.46 of itself, slower as the water comes nearer                            | 15.5, 18.5, 22.6, 26.5, 30.7, 34.5 s                 | **yes**                           |
+| reeds and grass                                                                                                          | wind                                                 | sway, 1.2°, one stand as one object                                                                                   | 13.7, 15.1, 16.3, 19.7, 22.7, 29.3 s                 | no — Enhance                      |
+| the cherry branch                                                                                                        | wind off the lake                                    | rocks about its root; the far end travels 1.6 u in still air and 3.5 u in a gust, the root nothing                    | 57.5 s; 13.3 s with Enhance                          | **yes**                           |
+| the flowers on it                                                                                                        | the same wind, and the branch flexing                | each swings a shallow arc, 0.16–0.35 u in still air and 0.32–0.7 u in a gust, growing with distance from the root     | 41.6–86.5 s; 10.2–36.2 s with Enhance                | **yes**                           |
+| falling petals                                                                                                           | wind off the branch                                  | a fall of 85–285 u with the wind's set of −78 to +41 u, and a slide of ±6–16 u about that line                        | all ten, 22.8–58.9 s                                 | **yes**; 11.2–21.1 s with Enhance |
+| the card's laminate                                                                                                      | the lamp                                             | foil, glint, grain                                                                                                    | —                                                    | no — Enhance                      |
 
 The reeds stay in Enhance. Forty-five of them swaying is the single most
 expensive thing on the page, and their motion is the one that reads as "the
@@ -636,7 +638,7 @@ before and after.
 ## What this document does not propose
 
 No animation framework, no GSAP, no runtime Svelte, no parallax layers. The
-scene is 985 static elements across the two faces — 841 on the front, 144 on
+scene is 988 static elements across the two faces — 844 on the front, 144 on
 the back — and one lighting loop; the motion it needs is ninety-one CSS
 animations with argued-over periods and a data table that says which one is in
 phase with what.

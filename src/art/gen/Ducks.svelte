@@ -33,17 +33,19 @@
       <g fill="#141a2c" stroke="#141a2c">
         <use href={`#${p.h}`} transform={t(p)}/>
       </g>
-      <ellipse
-        class="reflection"
-        fill="#141a2c"
-        stroke="none"
-        opacity=".16"
-        cx={p.refl.cx}
-        cy={p.refl.cy}
-        rx={p.refl.rx}
-        ry={p.refl.ry}
-        style={`--wob: ${p.refl.wob}px; --stretch: ${p.refl.stretch}; --rdur: ${p.refl.rdur}s; --rdelay: ${p.refl.rdelay}s`}
-      />
+      {#each p.refl as m}
+        <ellipse
+          class="reflection"
+          fill="#141a2c"
+          stroke="none"
+          opacity=".16"
+          cx={m.cx}
+          cy={m.cy}
+          rx={m.rx}
+          ry={m.ry}
+          style={`--wob: ${m.wob}px; --stretch: ${m.stretch}; --rdur: ${m.rdur}s; --rdelay: ${m.rdelay}s`}
+        />
+      {/each}
     </g>
   </g>
   <g
@@ -53,11 +55,20 @@
     <path
       class="ring"
       stroke="#e6dcc8"
-      stroke-opacity=".22"
+      stroke-opacity=".18"
       stroke-width="1"
       fill="none"
       d={p.ring.d}
       style={`--rdur: ${p.ring.dur}s; --rdelay: ${p.ring.delay}s`}
+    />
+    <path
+      class="ring"
+      stroke="#e6dcc8"
+      stroke-opacity=".13"
+      stroke-width=".9"
+      fill="none"
+      d={p.ring.d2}
+      style={`--rdur: ${p.ring.dur2}s; --rdelay: ${p.ring.delay2}s`}
     />
   </g>
 {/each}

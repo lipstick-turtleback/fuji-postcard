@@ -297,13 +297,20 @@ html[data-enhance="on"] .petal {
 .ring {
   animation: ring var(--rdur, 23s) ease-in-out infinite alternate;
   animation-delay: var(--rdelay, 0s);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
 }
+/* A ripple does not only fade: it spreads. The line widens by six percent either
+   side of its own centre as it brightens, so the arc the duck leaves is opening
+   as it goes, which is what a wake does and what a static line cannot. */
 @keyframes ring {
   from {
     opacity: 0.62;
+    transform: scaleX(0.94);
   }
   to {
     opacity: 1;
+    transform: scaleX(1.06);
   }
 }
 .band {

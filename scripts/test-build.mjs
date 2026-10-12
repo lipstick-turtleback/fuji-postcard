@@ -244,7 +244,7 @@ try {
      A number in a document that nobody re-measures is a number that is already
      wrong, and this one had drifted by three while the artwork grew: the caption
      gained a tspan, the pole was cut in two at the waterline. */
-  const CLAIMED_NODES = 1139;
+  const CLAIMED_NODES = 1142;
   ok(
     'and the node count the README quotes is the one the page has',
     walk.a === CLAIMED_NODES,

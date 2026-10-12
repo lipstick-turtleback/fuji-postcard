@@ -20,7 +20,13 @@
         style={`animation-duration:${p.dur}s; animation-delay:${p.delay}s; --rise:${p.rise}px; --set:${p.set}px; --tilt:${p.tilt}deg`}
       >
         <ellipse cx={p.x} cy={p.y} rx={p.rx} ry={p.ry}/>
-        <path d={`M${p.x - p.w / 2} ${p.y + 3} h${p.w}`} stroke="#1d2438" stroke-opacity=".28" stroke-width=".9" fill="none"/>
+        <path
+          d={`M${p.x - p.w / 2} ${p.y + 3} q ${p.w / 2} 1.5 ${p.w} 0`}
+          stroke="#1d2438"
+          stroke-opacity=".28"
+          stroke-width=".9"
+          fill="none"
+        />
       </g>
     </g>
   {/each}
