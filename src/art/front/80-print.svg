@@ -9,15 +9,40 @@
             <rect x="51" y="180" width="58" height="336" rx="2" fill="#0b1020" opacity=".16"
                   filter="url(#tiny)"/>
             <rect x="48" y="176" width="58" height="336" rx="2" fill="url(#tanzakuPaper)" opacity=".95"/>
-            <rect x="48" y="176" width="58" height="336" rx="2" fill="none" stroke="#c9b79a" stroke-width="1" opacity=".85"/>
-            <rect x="53" y="181" width="48" height="326" fill="none" stroke="#c9b79a" stroke-width=".6" opacity=".7"/>
-            <rect x="48" y="176" width="6" height="336" fill="#fffaf0" opacity=".35"/>
+            <!-- The lit edge of the strip: a pale band along the left, where
+                 the paper catches the light. It is four units wide and stops
+                 short of the inner rule at x=53. It used to be six, and ran
+                 under the rule: the rule was printed on a stripe of light, and
+                 for the eighteen units where the age wash brightened that
+                 stripe the rule was gone — 9 of colour from its own ground
+                 against 49 over the rest of it. The stripe moved, not the ink. -->
+            <rect x="48" y="176" width="4" height="336" fill="#fffaf0" opacity=".35"/>
             <!-- The strip is a separate piece of paper, so it ages separately:
                  a warm wash along the edge that faced the light, and three
                  foxing marks. It is paler than the card underneath because it
                  covered that part of the card - the paper beneath a pasted
                  strip stays protected, and this is the strip's own turn. -->
             <rect x="48" y="176" width="58" height="336" fill="url(#tanzakuAge)"/>
+            <!-- The two rules that frame the strip are printed, and they are
+                 painted after the age wash for the same reason the kanji are:
+                 the wash is what a century did to the paper, and ink is not
+                 paper. It yellows less than the fibre around it, so it is drawn
+                 over the yellowing, not under it. Under it, the inner rule
+                 disappeared for fifteen units at the bottom right corner.
+
+                 The wash was not the cause. The inner rule was .6 units wide,
+                 which at this card's scale is 0.63 of a device pixel: a line
+                 that thin does not have a width, it has a phase. Where it lands
+                 in the middle of a pixel it prints at nearly its full ink; where
+                 it straddles the boundary between two pixels it prints at a
+                 third of it. The same hairline measured 62 of colour on the left
+                 edge of this rect and 9 to 19 down its right edge, and nothing
+                 about the paper changes between those two places. A printed rule
+                 has to be at least a pixel wide before it can be a rule at all,
+                 so the inner one is a unit wide now and the outer one went with
+                 it, to keep the pair a heavy line and a light one. -->
+            <rect x="48" y="176" class="print-rule" width="58" height="336" rx="2" fill="none" stroke="#c9b79a" stroke-width="1.4" opacity=".85"/>
+            <rect x="53" y="181" class="print-rule" width="48" height="326" fill="none" stroke="#c9b79a" stroke-width="1" opacity=".75"/>
             <ellipse cx="60" cy="300" rx="4.4" ry="6.2" fill="#8a6a3c" opacity=".09"/>
             <ellipse cx="97" cy="212" rx="3.2" ry="4.4" fill="#8a6a3c" opacity=".07"/>
             <ellipse cx="88" cy="452" rx="5.6" ry="3.2" fill="#8a6a3c" opacity=".08"/>
