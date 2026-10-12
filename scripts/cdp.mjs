@@ -76,7 +76,12 @@ export async function openPage({ port, userDataDir, args = [] }) {
     const taken = await fetch(`http://127.0.0.1:${port}/json/version`, {
       signal: AbortSignal.timeout(600),
     });
-    if (taken.ok) {
+    // A 200 is not enough to call the port a Chrome. Anything that answers HTTP
+    // answers this — a test that serves its page on the port it also asked
+    // Chrome to debug on gets "port N is already serving a Chrome" from its own
+    // web server, which sends the reader off looking for a browser that does not
+    // exist. The version endpoint is the thing that actually identifies one.
+    if (taken.ok && /"Browser"\s*:/.test(await taken.text().catch(() => ''))) {
       throw new Error(
         `cdp: port ${port} is already serving a Chrome — another test's browser, or one a crashed run left behind. Kill it or take another port.`,
       );
