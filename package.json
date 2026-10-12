@@ -15,9 +15,9 @@
     "check": "node scripts/build.mjs --check && node scripts/check.mjs && node scripts/check.mjs public/index.html",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "fmt": "prettier --write \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
-    "fmt:check": "prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
-    "test": "npm run build && npm run check && node scripts/run-tests.mjs && biome check . && prettier --check \"src/**/*.css\" \"*.{json,md}\" \".github/**/*.yml\"",
+    "fmt": "prettier --write \"src/**/*.css\" \"*.{json,md}\" \"docs/**/*.md\" \".github/**/*.yml\"",
+    "fmt:check": "prettier --check \"src/**/*.css\" \"*.{json,md}\" \"docs/**/*.md\" \".github/**/*.yml\"",
+    "test": "npm run build && npm run check && node scripts/run-tests.mjs && biome check . && prettier --check \"src/**/*.css\" \"*.{json,md}\" \"docs/**/*.md\" \".github/**/*.yml\"",
     "perf": "node scripts/perf.mjs",
     "test:serial": "node scripts/run-tests.mjs --jobs=1"
   },

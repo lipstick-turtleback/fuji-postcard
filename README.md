@@ -29,6 +29,8 @@ not break, and how change is verified here.
 
 See [docs/motion.md](docs/motion.md) for what moves in the scene, how far, how slowly, and why each of those things moves at all.
 
+See [docs/changelog.md](docs/changelog.md) for what actually changed, in order — every commit's own subject line, generated from `git log` — and [docs/lessons.md](docs/lessons.md) for the other record: the rules about how the work goes, each one backed by the defect that taught it.
+
 ## The repository
 
 The page is one file because that is the point — but one 5,278-line file is
@@ -64,6 +66,7 @@ scripts/
   build.mjs            bundle the JS, render the generated parts, fill the slots
   register-svelte.mjs  teach Node to read a .svelte file, for the build only
   check.mjs            validate the built page without a browser
+  changelog.mjs        regenerate docs/changelog.md from the history, rather than keep it
   cdp.mjs              the DevTools client the browser tests share
   checks.mjs           the collect-and-report shape the browser tests share
   svg-check.mjs        the path-data and dangling-<use> rules two checks share
