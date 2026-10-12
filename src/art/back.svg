@@ -88,7 +88,17 @@
             <text x="236" y="352" font-size="24">See you in autumn.</text>
           </g>
           <g stroke="#8d8270" stroke-width=".8" opacity=".45" fill="none">
-            <path class="print-rule" d="M66 396 H410 M66 428 H410 M66 460 H410 M66 492 H410"/>
+            <!-- The two lower rules stop at x 300 rather than running to 410
+                 with the other two. The little Fuji doodle stands at 306 to 398,
+                 so those rules crossed its body and the mountain read as a
+                 wireframe — a rule through a picture is a rule through a window.
+                 Filling the body and running the rules under it is what a
+                 printed vignette actually does, and it was tried: the ink walk
+                 then reports both rules as broken, which is the right answer to
+                 the wrong question — a rule you cannot see is a rule that is not
+                 there. So the picture has a clear zone and the rules stop at its
+                 edge, six units short of the mountain's widest point. -->
+            <path class="print-rule" d="M66 396 H410 M66 428 H410 M66 460 H300 M66 492 H300"/>
           </g>
           <g font-family="Georgia,serif" font-size="10" fill="#8b7f6b" letter-spacing="1.6">
             <text x="66" y="524">KAWAGUCHI-KO · 35.4387° N, 138.7265° E</text>
